@@ -28,7 +28,7 @@ export async function getRecentCollections({
     perPage,
   };
   return api
-    .get("/api/collections/recent", {
+    .get("/collections/recent", {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
@@ -51,7 +51,7 @@ export async function getPopularCollections({
     perPage,
   };
   return api
-    .get("/api/collections/popularv2", {
+    .get("/collections/popularv2", {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
@@ -77,7 +77,7 @@ export async function searchCollections(
     orderBy,
   };
   return api
-    .get("/api/collections/search", {
+    .get("/collections/search", {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
@@ -89,7 +89,7 @@ export async function searchCollections(
 // Returns CollectionData object: https://osucollector.com/docs.html#responses-getCollectionById-200-schema
 export async function getCollection(id, cancelCallback = undefined) {
   return api
-    .get(`/api/collections/${id}`, {
+    .get(`/collections/${id}`, {
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
         : undefined,
@@ -123,7 +123,7 @@ export async function getCollectionBeatmaps(
         : undefined,
   };
   return api
-    .get(`/api/collections/${id}/beatmapsv2`, {
+    .get(`/collections/${id}/beatmapsv2`, {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
@@ -134,12 +134,12 @@ export async function getCollectionBeatmaps(
 // throws error on upload failure
 export async function uploadCollections(collections) {
   try {
-    const response = await api.post(`/api/collections/upload`, collections);
+    const response = await api.post(`/collections/upload`, collections);
     return response.data;
   } catch (error) {
     console.error(error);
     throw new Error(
-      `/api/collections/upload responded with ${error.response.status}: ${error.response.data}`
+      `/collections/upload responded with ${error.response.status}: ${error.response.data}`
     );
   }
 }
@@ -147,7 +147,7 @@ export async function uploadCollections(collections) {
 // Returns true on success
 export async function favouriteCollection(collectionId) {
   try {
-    await api.post(`/api/collections/${collectionId}/favourite`);
+    await api.post(`/collections/${collectionId}/favourite`);
     console.log(`collection ${collectionId} added to favourites`);
     return true;
   } catch (error) {
@@ -160,7 +160,7 @@ export async function favouriteCollection(collectionId) {
 // Returns true on success
 export async function unfavouriteCollection(collectionId) {
   try {
-    await api.delete(`/api/collections/${collectionId}/favourite`);
+    await api.delete(`/collections/${collectionId}/favourite`);
     console.log(`collection ${collectionId} removed from favourites`);
     return true;
   } catch (error) {
@@ -171,7 +171,7 @@ export async function unfavouriteCollection(collectionId) {
 
 export async function editCollectionDescription(collectionId, description) {
   try {
-    await api.put(`/api/collections/${collectionId}/description`, {
+    await api.put(`/collections/${collectionId}/description`, {
       description: description,
     });
     console.log("description successfully edited");
@@ -184,7 +184,7 @@ export async function editCollectionDescription(collectionId, description) {
 
 export async function renameCollection(collectionId, name) {
   try {
-    await api.put(`/api/collections/${collectionId}/rename`, { name });
+    await api.put(`/collections/${collectionId}/rename`, { name });
     console.log("collection successfully renamed");
     return true;
   } catch (error) {
@@ -195,7 +195,7 @@ export async function renameCollection(collectionId, name) {
 
 export async function deleteCollection(collectionId) {
   try {
-    await api.delete(`/api/collections/${collectionId}`);
+    await api.delete(`/collections/${collectionId}`);
     return true;
   } catch (error) {
     console.error(error);
@@ -204,7 +204,7 @@ export async function deleteCollection(collectionId) {
 }
 
 export async function downloadCollectionDb(collectionId) {
-  const route = `/api/collections/${collectionId}/collectionDb/export`;
+  const route = `/collections/${collectionId}/collectionDb/export`;
   try {
     const res = await api.get(route, {
       responseType: "arraybuffer",
@@ -228,7 +228,7 @@ export async function getUsers(
     perPage,
   };
   return api
-    .get("/api/users", {
+    .get("/users", {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
@@ -240,7 +240,7 @@ export async function getUsers(
 // Returns User object or null if 404
 export async function getUser(userId) {
   try {
-    const response = await api.get(`/api/users/${userId}`);
+    const response = await api.get(`/users/${userId}`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -253,14 +253,14 @@ export async function getUser(userId) {
 // https://osucollector.com/openapi.yaml
 // https://editor.swagger.io/
 export async function getOwnUser() {
-  const response = await api.get(`/api/users/me`);
+  const response = await api.get(`/users/me`);
   const { loggedIn, user } = response.data;
   return loggedIn ? user : null;
 }
 
 export async function getUserFavourites(userId, cancelCallback = undefined) {
   return api
-    .get(`/api/users/${userId}/favourites`, {
+    .get(`/users/${userId}/favourites`, {
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
         : undefined,
@@ -270,7 +270,7 @@ export async function getUserFavourites(userId, cancelCallback = undefined) {
 
 export async function getUserUploads(userId, cancelCallback = undefined) {
   return api
-    .get(`/api/users/${userId}/uploads`, {
+    .get(`/users/${userId}/uploads`, {
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
         : undefined,
@@ -279,7 +279,7 @@ export async function getUserUploads(userId, cancelCallback = undefined) {
 }
 export async function getMetadata(cancelCallback = undefined) {
   return api
-    .get(`/api/metadata`, {
+    .get(`/metadata`, {
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
         : undefined,
@@ -288,11 +288,11 @@ export async function getMetadata(cancelCallback = undefined) {
 }
 
 export async function submitOtp(otp, y) {
-  return await api.post(`/api/authentication/otp?otp=${otp}&y=${y}`);
+  return await api.post(`/authentication/otp?otp=${otp}&y=${y}`);
 }
 
 export async function getTwitchSubStatus(cancelCallback = undefined) {
-  const endpoint = "/api/users/me/twitchSub";
+  const endpoint = "/users/me/twitchSub";
   try {
     const response = await api.get(endpoint, {
       cancelToken: cancelCallback
@@ -316,7 +316,7 @@ export async function getTwitchSubStatus(cancelCallback = undefined) {
 }
 
 export async function linkPaypalSubscription(subscriptionId) {
-  const endpoint = "/api/payments/paypalSubscription/link";
+  const endpoint = "/payments/paypalSubscription/link";
   if (!subscriptionId) {
     throw new Error("subscriptionId is required");
   }
@@ -333,7 +333,7 @@ export async function linkPaypalSubscription(subscriptionId) {
 }
 
 export async function getPaypalSubscription(cancelCallback = undefined) {
-  const endpoint = "/api/payments/paypalSubscription";
+  const endpoint = "/payments/paypalSubscription";
   try {
     const response = await api.get(endpoint, {
       cancelToken: cancelCallback
@@ -357,7 +357,7 @@ export async function getPaypalSubscription(cancelCallback = undefined) {
 }
 
 export async function cancelPaypalSubscription() {
-  const endpoint = "/api/payments/paypalSubscription/cancel";
+  const endpoint = "/payments/paypalSubscription/cancel";
   try {
     await api.post(endpoint);
   } catch (err) {
@@ -375,12 +375,12 @@ export async function cancelPaypalSubscription() {
 
 export async function createCustomer(email) {
   try {
-    const response = await api.post(`/api/payments/createCustomer`, { email });
+    const response = await api.post(`/payments/createCustomer`, { email });
     return response.data;
   } catch (error) {
     console.error(error);
     throw new Error(
-      `/api/payments/createCustomer responded with ${
+      `/payments/createCustomer responded with ${
         error.response.status
       }: ${await error.response.text()}`
     );
@@ -389,12 +389,12 @@ export async function createCustomer(email) {
 
 export async function createSubscription() {
   try {
-    const response = await api.post(`/api/payments/createSubscription`);
+    const response = await api.post(`/payments/createSubscription`);
     return response.data;
   } catch (error) {
     console.error(error);
     throw new Error(
-      `/api/payments/createSubscription responded with ${
+      `/payments/createSubscription responded with ${
         error.response.status
       }: ${await error.response.text()}`
     );
@@ -403,7 +403,7 @@ export async function createSubscription() {
 
 export async function getSubscription(cancelCallback = undefined) {
   try {
-    const response = await api.get(`/api/payments/stripeSubscription`, {
+    const response = await api.get(`/payments/stripeSubscription`, {
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
         : undefined,
@@ -417,7 +417,7 @@ export async function getSubscription(cancelCallback = undefined) {
       return null;
     } else {
       console.error(
-        `/api/payments/createSubscription responded with ${err.response?.status}: ${err.response?.data}`
+        `/payments/createSubscription responded with ${err.response?.status}: ${err.response?.data}`
       );
       return null;
     }
@@ -425,7 +425,7 @@ export async function getSubscription(cancelCallback = undefined) {
 }
 
 export async function cancelSubscription() {
-  const endpoint = "/api/payments/cancelSubscription";
+  const endpoint = "/payments/cancelSubscription";
   try {
     const response = await api.post(endpoint);
     return response.data;
@@ -438,12 +438,12 @@ export async function cancelSubscription() {
 
 export async function unlinkTwitchAccount() {
   try {
-    const response = await api.post(`/api/users/me/unlinkTwitch`);
+    const response = await api.post(`/users/me/unlinkTwitch`);
     return response.data;
   } catch (error) {
     console.error(error);
     throw new Error(
-      `/api/users/me/unlinkTwitch responded with ${
+      `/users/me/unlinkTwitch responded with ${
         error.response.status
       }: ${await error.response.text()}`
     );
@@ -451,7 +451,7 @@ export async function unlinkTwitchAccount() {
 }
 
 export async function getInstallerURL(platform = undefined) {
-  const response = await api.get("/api/installerURL", {
+  const response = await api.get("/installerURL", {
     params: { platform },
   });
   return response.data;
@@ -459,16 +459,15 @@ export async function getInstallerURL(platform = undefined) {
 
 export async function postComment(collectionId, message) {
   try {
-    const response = await api.post(
-      `/api/collections/${collectionId}/comments`,
-      { message }
-    );
+    const response = await api.post(`/collections/${collectionId}/comments`, {
+      message,
+    });
     return response.data;
   } catch (error) {
     console.error(error);
     const response = error.response;
     throw new Error(
-      `POST /api/collections/${collectionId}/comments responded with ${
+      `POST /collections/${collectionId}/comments responded with ${
         response.status
       }: ${await response.text()}`
     );
@@ -478,7 +477,7 @@ export async function postComment(collectionId, message) {
 export async function likeComment(collectionId, commentId, remove = false) {
   try {
     const response = await api.post(
-      `/api/collections/${collectionId}/comments/${commentId}/like`,
+      `/collections/${collectionId}/comments/${commentId}/like`,
       { remove }
     );
     return response.data;
@@ -486,7 +485,7 @@ export async function likeComment(collectionId, commentId, remove = false) {
     console.error(error);
     const response = error.response;
     throw new Error(
-      `POST /api/collections/${collectionId}/comments/${commentId}/like responded with ${
+      `POST /collections/${collectionId}/comments/${commentId}/like responded with ${
         response.status
       }: ${await response.text()}`
     );
@@ -496,14 +495,14 @@ export async function likeComment(collectionId, commentId, remove = false) {
 export async function deleteComment(collectionId, commentId) {
   try {
     const response = await api.delete(
-      `/api/collections/${collectionId}/comments/${commentId}`
+      `/collections/${collectionId}/comments/${commentId}`
     );
     return response.data;
   } catch (error) {
     console.error(error);
     const response = error.response;
     throw new Error(
-      `DELETE /api/collections/${collectionId}/comments/${commentId} responded with ${
+      `DELETE /collections/${collectionId}/comments/${commentId} responded with ${
         response.status
       }: ${await response.text()}`
     );
@@ -513,14 +512,14 @@ export async function deleteComment(collectionId, commentId) {
 export async function reportComment(collectionId, commentId) {
   try {
     const response = await api.post(
-      `/api/collections/${collectionId}/comments/${commentId}/report`
+      `/collections/${collectionId}/comments/${commentId}/report`
     );
     return response.data;
   } catch (error) {
     console.error(error);
     const response = error.response;
     throw new Error(
-      `POST /api/collections/${collectionId}/comments/${commentId}/report responded with ${
+      `POST /collections/${collectionId}/comments/${commentId}/report responded with ${
         response.status
       }: ${await response.text()}`
     );
@@ -528,7 +527,7 @@ export async function reportComment(collectionId, commentId) {
 }
 
 export async function logout() {
-  const route = "/api/logout";
+  const route = "/logout";
   try {
     await api.post(route);
   } catch (error) {
@@ -539,7 +538,7 @@ export async function logout() {
 }
 
 export async function createTournament(createTournamentDto) {
-  const route = "/api/tournaments";
+  const route = "/tournaments";
   const res = await api.post(route, createTournamentDto);
   if (res.status !== 200) {
     throw new Error(`${route} responded with ${res.status}: ${res.data}`);
@@ -548,7 +547,7 @@ export async function createTournament(createTournamentDto) {
 }
 
 export async function editTournament(id, createTournamentDto) {
-  const route = `/api/tournaments/${id}`;
+  const route = `/tournaments/${id}`;
   const res = await api.patch(route, createTournamentDto);
   if (res.status !== 200) {
     throw new Error(`${route} responded with ${res.status}: ${res.data}`);
@@ -566,7 +565,7 @@ export async function getRecentTournaments(
     perPage,
   };
   return api
-    .get("/api/tournaments/recent", {
+    .get("/tournaments/recent", {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
@@ -590,7 +589,7 @@ export async function searchTournaments(
     orderBy,
   };
   return api
-    .get("/api/tournaments/search", {
+    .get("/tournaments/search", {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)
@@ -599,13 +598,11 @@ export async function searchTournaments(
     .then((res) => res.data);
 }
 export async function getTournament(id, cancelCallback = undefined) {
-  return api
-    .get(`/api/tournaments/${id}`, cancelCallback)
-    .then((res) => res.data);
+  return api.get(`/tournaments/${id}`, cancelCallback).then((res) => res.data);
 }
 export async function deleteTournament(id) {
   try {
-    const response = await api.delete(`/api/tournaments/${id}`);
+    const response = await api.delete(`/tournaments/${id}`);
     console.log("tournament successfully deleted");
     return true;
   } catch (error) {
@@ -615,7 +612,7 @@ export async function deleteTournament(id) {
 }
 
 export async function linkIrc(ircName) {
-  const route = "/api/users/me/linkIrc";
+  const route = "/users/me/linkIrc";
   try {
     const res = await api.patch(route, { ircName });
     return res.data;
@@ -627,7 +624,7 @@ export async function linkIrc(ircName) {
 }
 
 export async function updateNpCollectionId(collectionId) {
-  const route = "/api/users/me/npCollectionId";
+  const route = "/users/me/npCollectionId";
   try {
     const res = await api.patch(route, { collectionId });
     return res.data;
@@ -639,7 +636,7 @@ export async function updateNpCollectionId(collectionId) {
 }
 
 export async function favouriteTournament(tournamentId, favourited) {
-  const route = "/api/users/me/favouriteTournament";
+  const route = "/users/me/favouriteTournament";
   try {
     const res = await api.patch(route, {
       tournamentId: Number(tournamentId),
@@ -654,7 +651,7 @@ export async function favouriteTournament(tournamentId, favourited) {
 }
 
 export async function changeUser({ username, userId }) {
-  const route = "/api/users/changeUser";
+  const route = "/users/changeUser";
   const res = await api.post(route, { username, userId });
   if (res.status !== 200) {
     throw new Error(`${route} responded with ${res.status}: ${res.data}`);
