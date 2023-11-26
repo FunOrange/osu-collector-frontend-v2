@@ -11,8 +11,6 @@ import FavouriteButton from "@/components/FavouriteButton";
 function CollectionCard({ collection }) {
   if (!collection) return <div></div>;
 
-  const relativeDate = moment.unix(collection.dateUploaded._seconds).fromNow();
-
   // const favourited = user?.favourites?.includes(collection?.id);
   // const heartClicked = () => {
   //   const newFavourited = !favourited;
@@ -29,19 +27,6 @@ function CollectionCard({ collection }) {
   //   });
   // };
 
-  const difficultySpread = collection.difficultySpread ?? {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0,
-  };
-
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
   return (
@@ -53,7 +38,7 @@ function CollectionCard({ collection }) {
           data={{
             x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-              (star) => difficultySpread[star]
+              (star) => collection.difficultySpread?.[star] ?? 0
             ),
             barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) =>
               starToColor(star, true)
@@ -78,8 +63,11 @@ function CollectionCard({ collection }) {
           </small>
         )}
       </Link>
-      <Link href={href} className="flex items-center justify-between p-4 pt-0">
-        <div className="flex items-center justify-start">
+      <div className="flex items-end justify-between px-4 pb-2 ">
+        <div
+          className="flex items-center justify-start px-2 py-1 transition rounded-lg cursor-pointer hover:bg-slate-800"
+          style={{ marginLeft: "-8px" }}
+        >
           <Image
             className="mr-2 rounded-full"
             src={`https://a.ppy.sh/${collection.uploader.id}`}
@@ -87,20 +75,24 @@ function CollectionCard({ collection }) {
             height={32}
             alt={"Collection uploader avatar"}
           />
-          <div className="text-sm whitespace-nowrap">
-            {collection.uploader.username}
+          <div className="flex flex-col">
+            <div className="text-sm whitespace-nowrap">
+              {collection.uploader.username}
+            </div>
+            {collection.uploader.rank > 0 && (
+              <small className="text-xs text-slate-500">
+                #{collection.uploader.rank}
+              </small>
+            )}
           </div>
           {/* <Link href={`/users/${collection.uploader.id}/uploads`}>
               {collection.uploader.username}
             </Link> */}
-          {collection.uploader.rank > 0 && (
-            <small className="ml-1 text-slate-500">
-              #{collection.uploader.rank}
-            </small>
-          )}
         </div>
-        <small className="truncate text-slate-400">{relativeDate}</small>
-      </Link>
+        <small className="pb-2 truncate text-slate-400">
+          {moment.unix(collection.dateUploaded._seconds).fromNow()}
+        </small>
+      </div>
     </div>
   );
 }

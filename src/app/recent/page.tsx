@@ -12,19 +12,20 @@ export default async function RecentPage({
   params,
   searchParams,
 }: RecentPageProps) {
-  const recentCollections = await getRecentCollections({
+  const recent = await getRecentCollections({
     cursor: searchParams.cursor,
     perPage: 48,
-  }).then((data) => data.collections);
+  });
+  const { collections: recentCollections, hasMore, nextPageCursor } = recent;
 
   return (
     <div className="flex justify-center w-100">
       <div className="px-10 py-5 max-w-screen-2xl">
-        <div className="mb-4 rounded text-slate-100 bg-slate-800 p-7">
-          <h2 className="mb-6 text-3xl">
+        <div className="mb-4 rounded bg-slate-800 p-7">
+          <h1 className="mb-6 text-3xl">
             <Stars className="inline mb-1 mr-3 text-yellow-400" size={24} />
-            Recently Uploaded
-          </h2>
+            Recent collections
+          </h1>
           <div className="grid grid-cols-1 gap-8 mb-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {!recentCollections ? (
               <div className="text-red-500">
@@ -36,13 +37,15 @@ export default async function RecentPage({
               ))
             )}
           </div>
-          <Link
-            href={`/recent?cursor=${
-              recentCollections[recentCollections.length - 1].id
-            }`}
-          >
-            <MoreResultsButton>More results</MoreResultsButton>
-          </Link>
+          {hasMore ? (
+            <Link href={`/recent?cursor=${nextPageCursor}`}>
+              <MoreResultsButton>More results</MoreResultsButton>
+            </Link>
+          ) : (
+            <div className="text-center text-slate-400">
+              Reached end of results
+            </div>
+          )}
         </div>
       </div>
     </div>

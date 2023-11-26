@@ -72,7 +72,7 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="mb-4 rounded text-slate-100 bg-slate-800 p-7">
+        <div className="mb-4 rounded bg-slate-800 p-7">
           <h2 className="mb-6 text-3xl">
             <Fire className="inline mb-2 mr-3 text-orange-400" size={32} />
             Popular this week
@@ -90,12 +90,12 @@ export default async function HomePage() {
           </div>
           <Link href="/popular?range=week">
             <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
-              See all popular this week
+              See all popular
             </div>
           </Link>
         </div>
 
-        <div className="mb-4 rounded text-slate-100 bg-slate-800 p-7">
+        <div className="mb-4 rounded bg-slate-800 p-7">
           <h2 className="mb-6 text-3xl">
             <Stars className="inline mb-1 mr-3 text-yellow-400" size={24} />
             Recently Uploaded

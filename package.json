@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/ramda": "^0.29.9",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/styled-components": "^5.1.32",
