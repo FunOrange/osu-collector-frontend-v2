@@ -23,7 +23,7 @@ function ModeCounters({ collection }) {
               style={{ opacity: nonZero ? 0.9 : 0.2 }}
             />
             <div className={nonZero ? undefined : "text-gray-500"}>
-              {collection.modes[mode] ?? 0}
+              {collection.modes?.[mode] ?? 0}
             </div>
           </div>
         );

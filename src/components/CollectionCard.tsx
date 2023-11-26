@@ -45,7 +45,7 @@ function CollectionCard({ collection }) {
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
   return (
-    <div className="overflow-hidden transition rounded-lg shadow-lg bg-slate-700 hover:shadow-2xl">
+    <div className="flex flex-col h-full overflow-hidden transition rounded-lg shadow-lg bg-slate-700 hover:shadow-2xl">
       <Link href={href} className="overflow-hidden">
         {/* Difficulty Spread Graph */}
         <BarGraph
@@ -68,38 +68,38 @@ function CollectionCard({ collection }) {
           <FavouriteButton collection={collection} />
         </div>
       </div>
-      <Link href={href}>
-        <div className="p-4">
-          <div className="text-lg truncate">{collection.name}</div>
-          {collection.description ? (
-            <div className="truncate">{collection.description}</div>
-          ) : (
-            <small className="text-slate-500">
-              <i>no description</i>
+      <Link href={href} className="flex-grow p-4">
+        <div className="text-lg truncate">{collection.name}</div>
+        {collection.description ? (
+          <div className="text-sm line-clamp-3">{collection.description}</div>
+        ) : (
+          <small className="text-slate-500">
+            <i>no description</i>
+          </small>
+        )}
+      </Link>
+      <Link href={href} className="flex items-center justify-between p-4 pt-0">
+        <div className="flex items-center justify-start">
+          <Image
+            className="mr-2 rounded-full"
+            src={`https://a.ppy.sh/${collection.uploader.id}`}
+            width={32}
+            height={32}
+            alt={"Collection uploader avatar"}
+          />
+          <div className="text-sm whitespace-nowrap">
+            {collection.uploader.username}
+          </div>
+          {/* <Link href={`/users/${collection.uploader.id}/uploads`}>
+              {collection.uploader.username}
+            </Link> */}
+          {collection.uploader.rank > 0 && (
+            <small className="ml-1 text-slate-500">
+              #{collection.uploader.rank}
             </small>
           )}
-          <div className="flex items-center justify-between pt-4">
-            <div className="flex items-center justify-start">
-              <Image
-                className="mr-2 rounded-full"
-                src={`https://a.ppy.sh/${collection.uploader.id}`}
-                width={32}
-                height={32}
-                alt={"Collection uploader avatar"}
-              />
-              <div>{collection.uploader.username}</div>
-              {/* <Link href={`/users/${collection.uploader.id}/uploads`}>
-                <div>{collection.uploader.username}</div>
-              </Link> */}
-              {collection.uploader.rank > 0 && (
-                <small className="ml-1 text-slate-500">
-                  #{collection.uploader.rank}
-                </small>
-              )}
-            </div>
-            <small className="text-slate-400">{relativeDate}</small>
-          </div>
         </div>
+        <small className="truncate text-slate-400">{relativeDate}</small>
       </Link>
     </div>
   );
