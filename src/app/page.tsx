@@ -7,7 +7,7 @@ import {
 import Link from "next/link";
 import { Discord, Fire, Stars } from "react-bootstrap-icons";
 
-export default async function Home() {
+export default async function HomePage() {
   const metadata = await getMetadata();
   const popularCollections = await getPopularCollections({
     range: "week",
@@ -111,7 +111,7 @@ export default async function Home() {
               ))
             )}
           </div>
-          <Link href="/popular?range=week">
+          <Link href="/recent">
             <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
               See all recent
             </div>
