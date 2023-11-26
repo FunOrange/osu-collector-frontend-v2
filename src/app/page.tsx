@@ -11,9 +11,9 @@ export default async function Home() {
   const metadata = await getMetadata();
   const popularCollections = await getPopularCollections({
     range: "week",
-    perPage: 9,
+    perPage: 12,
   }).then((data) => data.collections);
-  const recentCollections = await getRecentCollections({ perPage: 9 }).then(
+  const recentCollections = await getRecentCollections({ perPage: 12 }).then(
     (data) => data.collections
   );
 
@@ -83,11 +83,9 @@ export default async function Home() {
                 There was an error retrieving collections.
               </div>
             ) : (
-              <>
-                {popularCollections.map((collection, i) => (
-                  <CollectionCard key={i} collection={collection} />
-                ))}
-              </>
+              popularCollections.map((collection, i) => (
+                <CollectionCard key={i} collection={collection} />
+              ))
             )}
           </div>
           <Link href="/popular?range=week">
@@ -108,11 +106,9 @@ export default async function Home() {
                 There was an error retrieving collections.
               </div>
             ) : (
-              <>
-                {recentCollections.map((collection, i) => (
-                  <CollectionCard key={i} collection={collection} />
-                ))}
-              </>
+              recentCollections.map((collection, i) => (
+                <CollectionCard key={i} collection={collection} />
+              ))
             )}
           </div>
           <Link href="/popular?range=week">

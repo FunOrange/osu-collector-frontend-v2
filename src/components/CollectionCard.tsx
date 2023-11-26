@@ -87,9 +87,10 @@ function CollectionCard({ collection }) {
                 height={32}
                 alt={"Collection uploader avatar"}
               />
-              <Link href={`/users/${collection.uploader.id}/uploads`}>
-                <div> {collection.uploader.username} </div>
-              </Link>
+              <div>{collection.uploader.username}</div>
+              {/* <Link href={`/users/${collection.uploader.id}/uploads`}>
+                <div>{collection.uploader.username}</div>
+              </Link> */}
               {collection.uploader.rank > 0 && (
                 <small className="ml-1 text-slate-500">
                   #{collection.uploader.rank}
