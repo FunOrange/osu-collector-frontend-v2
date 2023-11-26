@@ -98,16 +98,16 @@ export async function getCollection(id, cancelCallback = undefined) {
 }
 
 // Returns PaginatedCollectionData object: https://osucollector.com/docs.html#responses-getCollectionBeatmaps-200-schema
-export async function getCollectionBeatmaps(
-  id,
+export async function getCollectionBeatmaps({
+  collectionId,
   cursor = undefined,
   perPage = undefined,
   sortBy = undefined,
   orderBy = undefined,
   filterMin = undefined,
   filterMax = undefined,
-  cancelCallback = undefined
-) {
+  cancelCallback = undefined,
+}) {
   const params = {
     cursor,
     perPage,
@@ -123,7 +123,7 @@ export async function getCollectionBeatmaps(
         : undefined,
   };
   return api
-    .get(`/collections/${id}/beatmapsv2`, {
+    .get(`/collections/${collectionId}/beatmapsv2`, {
       params,
       cancelToken: cancelCallback
         ? new axios.CancelToken(cancelCallback)

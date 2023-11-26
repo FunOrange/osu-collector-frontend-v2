@@ -8,13 +8,9 @@ import { identity } from "ramda";
 import { formatQueryParams } from "@/utils/string-utils";
 
 interface PopularPageProps {
-  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
-export default async function PopularPage({
-  params,
-  searchParams,
-}: PopularPageProps) {
+export default async function PopularPage({ searchParams }: PopularPageProps) {
   const activeRange = match(searchParams.range)
     .with("today", () => "today")
     .with("week", () => "week")

@@ -5,13 +5,9 @@ import Link from "next/link";
 import { Stars } from "react-bootstrap-icons";
 
 interface RecentPageProps {
-  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
-export default async function RecentPage({
-  params,
-  searchParams,
-}: RecentPageProps) {
+export default async function RecentPage({ searchParams }: RecentPageProps) {
   const recent = await getRecentCollections({
     cursor: searchParams.cursor,
     perPage: 48,

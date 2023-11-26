@@ -1,6 +1,6 @@
 import { clamp } from "@/utils/number-utils";
 
-export function bpmToColor(bpm, darkMode) {
+export function bpmToColor(bpm, darkMode = true) {
   const _bpm = clamp(Math.floor(bpm / 10) * 10, 150, 300);
   if (_bpm === 150) return "#93e2ff";
   if (_bpm === 160) return "#80dbff";
