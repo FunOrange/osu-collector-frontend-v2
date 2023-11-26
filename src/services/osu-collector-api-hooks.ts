@@ -1,6 +1,4 @@
-import { useMemo } from "react";
 import axios from "axios";
-import useSWRInfinite from "swr/infinite";
 import useSWRImmutable from "swr/immutable";
 
 export const api = axios.create({

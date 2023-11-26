@@ -1,3 +1,4 @@
+import CollectionCard from "@/components/CollectionCard";
 import {
   getMetadata,
   getPopularCollections,
@@ -55,14 +56,14 @@ export default async function Home() {
           </div>
 
           <div className="flex justify-center gap-2 mb-3">
-            <div className="px-6 py-3 bg-gray-800 rounded">
+            <div className="px-6 py-3 rounded bg-slate-800">
               <div className="text-xl">
                 {metadata.userCount.toLocaleString()}
               </div>
               <div className="text-sm whitespace-nowrap">Total users</div>
             </div>
 
-            <div className="px-6 py-3 bg-gray-800 rounded">
+            <div className="px-6 py-3 rounded bg-slate-800">
               <div className="text-xl">
                 {metadata.totalCollections.toLocaleString()}
               </div>
@@ -71,12 +72,12 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className="mb-4 text-gray-100 bg-gray-800 rounded p-7">
+        <div className="mb-4 rounded text-slate-100 bg-slate-800 p-7">
           <h2 className="mb-6 text-3xl">
             <Fire className="inline mb-2 mr-3 text-orange-400" size={32} />
             Popular this week
           </h2>
-          <div className="grid grid-cols-1 gap-8 mb-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 mb-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {!popularCollections ? (
               <div className="text-red-500">
                 There was an error retrieving collections.
@@ -84,31 +85,24 @@ export default async function Home() {
             ) : (
               <>
                 {popularCollections.map((collection, i) => (
-                  <div key={i} className="h-8 bg-slate-600">
-                    {/* TODO: CollectionCard */}
-                    {/* <CollectionCard
-                  user={user}
-                  collection={collection}
-                  favouriteButtonClicked={favouriteButtonClicked}
-                /> */}
-                  </div>
+                  <CollectionCard key={i} collection={collection} />
                 ))}
               </>
             )}
           </div>
           <Link href="/popular?range=week">
-            <div className="p-3 text-center transition bg-gray-700 rounded hover:shadow-xl hover:bg-gray-600 w-100">
-              See all
+            <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
+              See all popular this week
             </div>
           </Link>
         </div>
 
-        <div className="mb-4 text-gray-100 bg-gray-800 rounded p-7">
+        <div className="mb-4 rounded text-slate-100 bg-slate-800 p-7">
           <h2 className="mb-6 text-3xl">
             <Stars className="inline mb-1 mr-3 text-yellow-400" size={24} />
             Recently Uploaded
           </h2>
-          <div className="grid grid-cols-1 gap-8 mb-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 mb-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {!recentCollections ? (
               <div className="text-red-500">
                 There was an error retrieving collections.
@@ -116,21 +110,14 @@ export default async function Home() {
             ) : (
               <>
                 {recentCollections.map((collection, i) => (
-                  <div key={i} className="h-8 bg-slate-600">
-                    {/* TODO: CollectionCard */}
-                    {/* <CollectionCard
-                  user={user}
-                  collection={collection}
-                  favouriteButtonClicked={favouriteButtonClicked}
-                /> */}
-                  </div>
+                  <CollectionCard key={i} collection={collection} />
                 ))}
               </>
             )}
           </div>
           <Link href="/popular?range=week">
-            <div className="p-3 text-center transition bg-gray-700 rounded hover:shadow-xl hover:bg-gray-600 w-100">
-              See all
+            <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
+              See all recent
             </div>
           </Link>
         </div>
