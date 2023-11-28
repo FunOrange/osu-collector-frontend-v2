@@ -102,7 +102,7 @@ export default async function CollectionPage({
                 className="grid items-start w-full gap-4 pt-4 pr-4"
                 style={{ gridTemplateColumns: "auto 1fr" }}
               >
-                <div className="flex items-center justify-start px-2 py-1 transition rounded-lg cursor-pointer hover:bg-slate-900">
+                <div className="flex justify-start px-2 py-1 mt-1 transition rounded-lg cursor-pointer first-letter:items-center hover:bg-slate-900">
                   <Image
                     className="mr-2 rounded-full"
                     src={`https://a.ppy.sh/${collection.uploader.id}`}
@@ -121,16 +121,21 @@ export default async function CollectionPage({
                     )}
                   </div>
                 </div>
-                <div
-                  className="p-4 rounded bg-slate-700"
-                  style={{ minHeight: "88px" }}
-                >
-                  {collection.description ? (
+                {collection.description ? (
+                  <div
+                    className="p-1 rounded bg-slate-700"
+                    style={{ minHeight: "88px" }}
+                  >
                     <div>{collection.description}</div>
-                  ) : (
+                  </div>
+                ) : (
+                  <div
+                    className="p-4 rounded bg-slate-700"
+                    style={{ minHeight: "88px" }}
+                  >
                     <div className="text-sm text-slate-500">No description</div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-2 pl-4 border-l border-slate-700">
