@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: process.env.OSU_COLLECTOR_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_BASE_URL,
   withCredentials: true,
 });
 
@@ -30,9 +30,7 @@ export async function getRecentCollections({
   return api
     .get("/collections/recent", {
       params,
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -53,9 +51,7 @@ export async function getPopularCollections({
   return api
     .get("/collections/popularv2", {
       params,
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -79,9 +75,7 @@ export async function searchCollections(
   return api
     .get("/collections/search", {
       params,
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -90,9 +84,7 @@ export async function searchCollections(
 export async function getCollection(id, cancelCallback = undefined) {
   return api
     .get(`/collections/${id}`, {
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -113,21 +105,13 @@ export async function getCollectionBeatmaps({
     perPage,
     sortBy,
     orderBy,
-    filterMin:
-      filterMin && ["difficulty_rating", "bpm"].includes(sortBy)
-        ? filterMin
-        : undefined,
-    filterMax:
-      filterMax && ["difficulty_rating", "bpm"].includes(sortBy)
-        ? filterMax
-        : undefined,
+    filterMin: filterMin && ["difficulty_rating", "bpm"].includes(sortBy) ? filterMin : undefined,
+    filterMax: filterMax && ["difficulty_rating", "bpm"].includes(sortBy) ? filterMax : undefined,
   };
   return api
     .get(`/collections/${collectionId}/beatmapsv2`, {
       params,
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -211,18 +195,12 @@ export async function downloadCollectionDb(collectionId) {
     });
     return res.data;
   } catch (err) {
-    throw new Error(
-      `${route} responded with ${err.response.status}: ${err.response.statusText}`
-    );
+    throw new Error(`${route} responded with ${err.response.status}: ${err.response.statusText}`);
   }
 }
 
 // Returns PaginatedUserData object
-export async function getUsers(
-  page,
-  perPage = undefined,
-  cancelCallback = undefined
-) {
+export async function getUsers(page, perPage = undefined, cancelCallback = undefined) {
   const params = {
     page,
     perPage,
@@ -230,9 +208,7 @@ export async function getUsers(
   return api
     .get("/users", {
       params,
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -257,13 +233,10 @@ export async function getOwnUser() {
   const { loggedIn, user } = response.data;
   return loggedIn ? user : null;
 }
-
 export async function getUserFavourites(userId, cancelCallback = undefined) {
   return api
     .get(`/users/${userId}/favourites`, {
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -271,18 +244,14 @@ export async function getUserFavourites(userId, cancelCallback = undefined) {
 export async function getUserUploads(userId, cancelCallback = undefined) {
   return api
     .get(`/users/${userId}/uploads`, {
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
 export async function getMetadata(cancelCallback = undefined) {
   return api
     .get(`/metadata`, {
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -295,9 +264,7 @@ export async function getTwitchSubStatus(cancelCallback = undefined) {
   const endpoint = "/users/me/twitchSub";
   try {
     const response = await api.get(endpoint, {
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     });
     return response.data.isSubbedToFunOrange;
   } catch (err) {
@@ -307,9 +274,7 @@ export async function getTwitchSubStatus(cancelCallback = undefined) {
     if (err.response.status === 404) {
       return null;
     } else {
-      console.log(
-        `${endpoint} responded with ${err.response.status}: ${err.response.data}`
-      );
+      console.log(`${endpoint} responded with ${err.response.status}: ${err.response.data}`);
       return null;
     }
   }
@@ -326,9 +291,7 @@ export async function linkPaypalSubscription(subscriptionId) {
     });
     return response.data;
   } catch (err) {
-    throw new Error(
-      `${endpoint} responded with ${err.response.status}: ${err.response.data}`
-    );
+    throw new Error(`${endpoint} responded with ${err.response.status}: ${err.response.data}`);
   }
 }
 
@@ -336,9 +299,7 @@ export async function getPaypalSubscription(cancelCallback = undefined) {
   const endpoint = "/payments/paypalSubscription";
   try {
     const response = await api.get(endpoint, {
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     });
     return response.data;
   } catch (err) {
@@ -348,9 +309,7 @@ export async function getPaypalSubscription(cancelCallback = undefined) {
     if (err.response.status === 404) {
       return null;
     } else {
-      console.log(
-        `${endpoint} responded with ${err.response.status}: ${err.response.data}`
-      );
+      console.log(`${endpoint} responded with ${err.response.status}: ${err.response.data}`);
       return null;
     }
   }
@@ -363,9 +322,7 @@ export async function cancelPaypalSubscription() {
   } catch (err) {
     if (err.response.status !== 404) {
       throw new Error(
-        `${endpoint} responded with ${err.response.status}: ${JSON.stringify(
-          err.response.data
-        )}`
+        `${endpoint} responded with ${err.response.status}: ${JSON.stringify(err.response.data)}`
       );
     } else {
       console.error(err);
@@ -404,9 +361,7 @@ export async function createSubscription() {
 export async function getSubscription(cancelCallback = undefined) {
   try {
     const response = await api.get(`/payments/stripeSubscription`, {
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     });
     return response.data;
   } catch (err) {
@@ -430,9 +385,7 @@ export async function cancelSubscription() {
     const response = await api.post(endpoint);
     return response.data;
   } catch (err) {
-    throw new Error(
-      `${endpoint} responded with ${err.response.status}: ${err.response.data}`
-    );
+    throw new Error(`${endpoint} responded with ${err.response.status}: ${err.response.data}`);
   }
 }
 
@@ -476,10 +429,9 @@ export async function postComment(collectionId, message) {
 
 export async function likeComment(collectionId, commentId, remove = false) {
   try {
-    const response = await api.post(
-      `/collections/${collectionId}/comments/${commentId}/like`,
-      { remove }
-    );
+    const response = await api.post(`/collections/${collectionId}/comments/${commentId}/like`, {
+      remove,
+    });
     return response.data;
   } catch (error) {
     console.error(error);
@@ -494,9 +446,7 @@ export async function likeComment(collectionId, commentId, remove = false) {
 
 export async function deleteComment(collectionId, commentId) {
   try {
-    const response = await api.delete(
-      `/collections/${collectionId}/comments/${commentId}`
-    );
+    const response = await api.delete(`/collections/${collectionId}/comments/${commentId}`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -511,9 +461,7 @@ export async function deleteComment(collectionId, commentId) {
 
 export async function reportComment(collectionId, commentId) {
   try {
-    const response = await api.post(
-      `/collections/${collectionId}/comments/${commentId}/report`
-    );
+    const response = await api.post(`/collections/${collectionId}/comments/${commentId}/report`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -531,9 +479,7 @@ export async function logout() {
   try {
     await api.post(route);
   } catch (error) {
-    console.error(
-      `${route} responded with ${error.response.status}: ${error.response.data}`
-    );
+    console.error(`${route} responded with ${error.response.status}: ${error.response.data}`);
   }
 }
 
@@ -567,9 +513,7 @@ export async function getRecentTournaments(
   return api
     .get("/tournaments/recent", {
       params,
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -591,9 +535,7 @@ export async function searchTournaments(
   return api
     .get("/tournaments/search", {
       params,
-      cancelToken: cancelCallback
-        ? new axios.CancelToken(cancelCallback)
-        : undefined,
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -617,9 +559,7 @@ export async function linkIrc(ircName) {
     const res = await api.patch(route, { ircName });
     return res.data;
   } catch (error) {
-    throw new Error(
-      `${route} responded with ${error.response.status}: ${error.response.data}`
-    );
+    throw new Error(`${route} responded with ${error.response.status}: ${error.response.data}`);
   }
 }
 
@@ -629,9 +569,7 @@ export async function updateNpCollectionId(collectionId) {
     const res = await api.patch(route, { collectionId });
     return res.data;
   } catch (error) {
-    console.error(
-      `${route} responded with ${error.response.status}: ${error.response.data}`
-    );
+    console.error(`${route} responded with ${error.response.status}: ${error.response.data}`);
   }
 }
 
@@ -644,9 +582,7 @@ export async function favouriteTournament(tournamentId, favourited) {
     });
     return res.data;
   } catch (error) {
-    console.error(
-      `${route} responded with ${error.response.status}: ${error.response.data}`
-    );
+    console.error(`${route} responded with ${error.response.status}: ${error.response.data}`);
   }
 }
 
