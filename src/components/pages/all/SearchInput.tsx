@@ -14,7 +14,7 @@ export default function SearchInput({ searchParams }) {
       value={userInput}
       onChange={(e) => setUserInput(e.target.value)}
       onKeyDown={(e) => {
-        if (e.key === "Enter" && userInput.trim()) {
+        if (e.key === "Enter") {
           router.push(
             `/all?${formatQueryParams(
               mergeRight(searchParams, { search: userInput.trim(), cursor: undefined })
