@@ -39,10 +39,10 @@ export function UserNav() {
       <a
         className="flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded-lg cursor-pointer text-indigo-50 hover:bg-indigo-600"
         {...match(process.env.NODE_ENV)
-          .with("production", () => ({
-            href: oauthUrl,
-            target: "_blank",
-          }))
+          // .with("production", () => ({
+          //   href: oauthUrl,
+          //   target: "_blank",
+          // }))
           .otherwise(() => ({
             onClick: otpLogin,
           }))}
