@@ -5,13 +5,13 @@
 @layer base {
   :root {
     --max-width: 1100px;
-    --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-      "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-      "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono",
+      "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono",
+      "Courier New", monospace;
 
-    --foreground-rgb: rgb(203, 213, 225);
+    --foreground-rgb: #cbd5e1;
     --foreground: 210 40% 98%;
-    --background-rgb: rgb(27, 27, 31);
+    --background-rgb: #1b1b1f;
     --background: 222.2 84% 4.9%;
 
     --card: 222.2 84% 4.9%;

@@ -40,9 +40,7 @@ function CollectionCard({ collection }) {
             y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
               (star) => collection.difficultySpread?.[star] ?? 0
             ),
-            barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) =>
-              starToColor(star, true)
-            ),
+            barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => starToColor(star, true)),
           }}
           height={100}
         />
@@ -50,7 +48,7 @@ function CollectionCard({ collection }) {
       <div className="px-4 pt-4">
         <div className="flex items-center justify-between">
           <ModeCounters collection={collection} />
-          <FavouriteButton collection={collection} />
+          <FavouriteButton collection={collection} variant="iconOnly" />
         </div>
       </div>
       <Link href={href} className="flex-grow p-4">
@@ -76,13 +74,9 @@ function CollectionCard({ collection }) {
             alt={"Collection uploader avatar"}
           />
           <div className="flex flex-col">
-            <div className="text-sm whitespace-nowrap">
-              {collection.uploader.username}
-            </div>
+            <div className="text-sm whitespace-nowrap">{collection.uploader.username}</div>
             {collection.uploader.rank > 0 && (
-              <small className="text-xs text-slate-500">
-                #{collection.uploader.rank}
-              </small>
+              <small className="text-xs text-slate-500">#{collection.uploader.rank}</small>
             )}
           </div>
           {/* <Link href={`/users/${collection.uploader.id}/uploads`}>

@@ -206,13 +206,3 @@ export default function BeatmapsetCard({
     </div>
   );
 }
-function DifficultyBadge({ stars }) {
-  return (
-    <div
-      className="py-1 text-xs text-center rounded"
-      style={{ minWidth: "64px", backgroundColor: starToColor(stars) }}
-    >
-      {stars.toFixed(2)} ★
-    </div>
-  );
-}

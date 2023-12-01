@@ -6,13 +6,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatQueryParams, getUrlSlug } from "@/utils/string-utils";
 import { bpmToColor, starToColor } from "@/utils/theme-utils";
-import FavouriteButton from "@/components/FavouriteButton";
-import { CaretDownFill, CaretUpFill, ChatFill, SortUp } from "react-bootstrap-icons";
+import { ChatFill } from "react-bootstrap-icons";
 import { identity, mergeRight } from "ramda";
-import { Pattern, isMatching, match } from "ts-pattern";
+import { Pattern, match } from "ts-pattern";
 import { groupBeatmapsets } from "@/entities/Beatmap";
 import BeatmapsetCard from "@/components/BeatmapsetCard";
 import { cn } from "@/utils/shadcn-utils";
+import FavouriteButton from "@/components/FavouriteButton";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -90,7 +90,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             </div>
           </div>
           <h1 className="mb-2 text-4xl">{collection.name}</h1>
-          <div className="grid grid-cols-2">
+          <div className="grid" style={{ gridTemplateColumns: "2fr 1fr" }}>
             <div>
               <div className="mb-2">
                 <ModeCounters collection={collection} />
@@ -118,7 +118,10 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                   </div>
                 </div>
                 {collection.description ? (
-                  <div className="p-1 rounded bg-slate-700" style={{ minHeight: "88px" }}>
+                  <div
+                    className="px-3 py-2 whitespace-pre-wrap rounded bg-slate-700"
+                    style={{ minHeight: "88px" }}
+                  >
                     <div>{collection.description}</div>
                   </div>
                 ) : (
@@ -128,16 +131,14 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                 )}
               </div>
             </div>
-            <div className="flex flex-col gap-2 pl-4 border-l border-slate-700">
+            <div className="flex flex-col justify-end gap-2 pl-4 border-l border-slate-700">
               <button className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
                 Download maps
               </button>
               <button className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
                 Add to osu
               </button>
-              <button className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
-                Favorite
-              </button>
+              <FavouriteButton collection={collection} variant="fullWidth" />
             </div>
           </div>
         </div>
