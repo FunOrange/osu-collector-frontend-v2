@@ -13,8 +13,9 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/shadcn/alert-dialog";
-import { Button, buttonVariants } from "@/components/shadcn/button";
+import { buttonVariants } from "@/components/shadcn/button";
 import { cn } from "@/utils/shadcn-utils";
+import NavbarSearch from "@/components/NavbarSearch";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -84,19 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 ))}
               </nav>
               <div className="flex items-center ml-auto space-x-4">
-                <div className="hidden md:block">
-                  <div className="relative w-full">
-                    <div className="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
-                      <Search />
-                    </div>
-                    <input
-                      type="text"
-                      className="text-sm rounded-lg block w-full ps-10 p-2.5  bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Search..."
-                      required
-                    />
-                  </div>
-                </div>
+                <NavbarSearch />
                 <UserNav />
               </div>
             </div>
