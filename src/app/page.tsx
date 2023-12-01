@@ -11,7 +11,7 @@ export default async function HomePage() {
   const [metadata, popularCollections, recentCollections] = await Promise.all([
     getMetadata(),
     getPopularCollections({
-      range: "week",
+      range: "month",
       perPage: 12,
     }).then((data) => data.collections),
     getRecentCollections({ perPage: 12 }).then((data) => data.collections),
@@ -66,7 +66,7 @@ export default async function HomePage() {
         <div className="p-2 pt-4 mb-4 rounded md:pt-7 bg-slate-800 md:p-7">
           <h2 className="mb-3 text-2xl md:mb-6 md:text-3xl">
             <Fire className="inline mb-2 mr-3 text-orange-400" size={32} />
-            Popular this week
+            Popular this month
           </h2>
           <div className="grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {!popularCollections ? (
@@ -77,7 +77,7 @@ export default async function HomePage() {
               ))
             )}
           </div>
-          <Link href="/popular?range=week">
+          <Link href="/popular?range=month">
             <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
               See all popular
             </div>
