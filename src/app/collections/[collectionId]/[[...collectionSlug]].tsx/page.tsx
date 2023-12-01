@@ -8,7 +8,7 @@ import { formatQueryParams, getUrlSlug } from "@/utils/string-utils";
 import { bpmToColor, starToColor } from "@/utils/theme-utils";
 import FavouriteButton from "@/components/FavouriteButton";
 import { CaretDownFill, CaretUpFill, ChatFill, SortUp } from "react-bootstrap-icons";
-import { identity } from "ramda";
+import { identity, mergeRight } from "ramda";
 import { match } from "ts-pattern";
 import { groupBeatmapsets } from "@/entities/Beatmap";
 import BeatmapsetCard from "@/components/BeatmapsetCard";
@@ -35,8 +35,9 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     .with("desc", identity)
     .otherwise(() => "asc");
 
-  const { beatmaps } = await api.getCollectionBeatmaps({
+  const { beatmaps, hasMore, nextPageCursor } = await api.getCollectionBeatmaps({
     collectionId: collection.id,
+    cursor: searchParams.cursor,
     perPage: 24,
   });
   const listing = groupBeatmapsets(beatmaps);
@@ -206,6 +207,19 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                 // onAudioEnd={onAudioEnd}
               />
             ))}
+            {hasMore ? (
+              <Link
+                href={`/collections/${collection.id}/${getUrlSlug(
+                  collection.name
+                )}?${formatQueryParams(mergeRight(searchParams, { cursor: nextPageCursor }))}`}
+              >
+                <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
+                  Load more
+                </div>
+              </Link>
+            ) : (
+              <div className="text-center text-slate-400">Reached end of results</div>
+            )}
           </div>
         </div>
       </div>
