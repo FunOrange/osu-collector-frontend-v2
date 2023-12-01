@@ -8,14 +8,14 @@ import Link from "next/link";
 import { Discord, Fire, Stars } from "react-bootstrap-icons";
 
 export default async function HomePage() {
-  const metadata = await getMetadata();
-  const popularCollections = await getPopularCollections({
-    range: "week",
-    perPage: 12,
-  }).then((data) => data.collections);
-  const recentCollections = await getRecentCollections({ perPage: 12 }).then(
-    (data) => data.collections
-  );
+  const [metadata, popularCollections, recentCollections] = await Promise.all([
+    getMetadata(),
+    getPopularCollections({
+      range: "week",
+      perPage: 12,
+    }).then((data) => data.collections),
+    getRecentCollections({ perPage: 12 }).then((data) => data.collections),
+  ]);
 
   return (
     <div className="flex justify-center w-100">

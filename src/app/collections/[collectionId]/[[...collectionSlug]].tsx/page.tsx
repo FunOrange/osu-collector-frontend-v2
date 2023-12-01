@@ -4,15 +4,10 @@ import ModeCounters from "@/components/ModeCounters";
 import * as api from "@/services/osu-collector-api";
 import Link from "next/link";
 import Image from "next/image";
-import { getUrlSlug } from "@/utils/string-utils";
+import { formatQueryParams, getUrlSlug } from "@/utils/string-utils";
 import { bpmToColor, starToColor } from "@/utils/theme-utils";
 import FavouriteButton from "@/components/FavouriteButton";
-import {
-  CaretDownFill,
-  CaretUpFill,
-  ChatFill,
-  SortUp,
-} from "react-bootstrap-icons";
+import { CaretDownFill, CaretUpFill, ChatFill, SortUp } from "react-bootstrap-icons";
 import { identity } from "ramda";
 import { match } from "ts-pattern";
 import { groupBeatmapsets } from "@/entities/Beatmap";
@@ -22,10 +17,7 @@ interface CollectionPageProps {
   params: { collectionId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }
-export default async function CollectionPage({
-  params,
-  searchParams,
-}: CollectionPageProps) {
+export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
   const collection = await api.getCollection(params.collectionId);
 
   const graphHeight = 160;
@@ -51,7 +43,7 @@ export default async function CollectionPage({
 
   return (
     <div className="flex justify-center w-100">
-      <div className="flex flex-col px-10 py-5 gap-7 max-w-screen-2xl">
+      <div className="flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl">
         <div className="p-4 rounded bg-slate-800">
           <div className="grid mb-4 lg:grid-cols-2 xs:grid-cols-1">
             <BarGraph
@@ -61,9 +53,7 @@ export default async function CollectionPage({
                 y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
                   (star) => collection.difficultySpread?.[star] ?? 0
                 ),
-                barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) =>
-                  starToColor(star, true)
-                ),
+                barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => starToColor(star, true)),
               }}
               height={graphHeight}
             />
@@ -72,16 +62,13 @@ export default async function CollectionPage({
                 title="bpm spread"
                 data={{
                   x: [
-                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260,
-                    270, 280, 290, 300,
+                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
                   ],
                   y: [
-                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260,
-                    270, 280, 290, 300,
+                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
                   ].map((bpm) => collection.bpmSpread?.[bpm] ?? 0),
                   barColors: [
-                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260,
-                    270, 280, 290, 300,
+                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
                   ].map((bpm) => bpmToColor(bpm, true)),
                 }}
                 height={graphHeight}
@@ -95,8 +82,7 @@ export default async function CollectionPage({
                 <ModeCounters collection={collection} />
               </div>
               <small className="text-slate-400">
-                Uploaded{" "}
-                {moment.unix(collection.dateUploaded._seconds).fromNow()}
+                Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
               </small>{" "}
               <div
                 className="grid items-start w-full gap-4 pt-4 pr-4"
@@ -111,28 +97,18 @@ export default async function CollectionPage({
                     alt={"Collection uploader avatar"}
                   />
                   <div className="flex flex-col">
-                    <div className="text-sm whitespace-nowrap">
-                      {collection.uploader.username}
-                    </div>
+                    <div className="text-sm whitespace-nowrap">{collection.uploader.username}</div>
                     {collection.uploader.rank > 0 && (
-                      <small className="text-xs text-slate-500">
-                        #{collection.uploader.rank}
-                      </small>
+                      <small className="text-xs text-slate-500">#{collection.uploader.rank}</small>
                     )}
                   </div>
                 </div>
                 {collection.description ? (
-                  <div
-                    className="p-1 rounded bg-slate-700"
-                    style={{ minHeight: "88px" }}
-                  >
+                  <div className="p-1 rounded bg-slate-700" style={{ minHeight: "88px" }}>
                     <div>{collection.description}</div>
                   </div>
                 ) : (
-                  <div
-                    className="p-4 rounded bg-slate-700"
-                    style={{ minHeight: "88px" }}
-                  >
+                  <div className="p-4 rounded bg-slate-700" style={{ minHeight: "88px" }}>
                     <div className="text-sm text-slate-500">No description</div>
                   </div>
                 )}
@@ -175,7 +151,7 @@ export default async function CollectionPage({
                       key={i}
                       href={`/collections/${collection.id}/${getUrlSlug(
                         collection.name
-                      )}?${api.formatQueryParams({
+                      )}?${formatQueryParams({
                         sortBy: value,
                         orderBy: match(orderBy)
                           .with("asc", () => "desc")
@@ -184,7 +160,7 @@ export default async function CollectionPage({
                       })}`}
                     >
                       <button
-                        className="flex items-center gap-2 px-3 py-1 text-indigo-200 bg-indigo-800 border-gray-600 rounded opacity-90"
+                        className="flex items-center gap-2 px-3 py-1 text-indigo-200 bg-indigo-800 rounded opacity-90"
                         disabled
                       >
                         {match(orderBy)
@@ -201,7 +177,7 @@ export default async function CollectionPage({
                       key={i}
                       href={`/collections/${collection.id}/${getUrlSlug(
                         collection.name
-                      )}?${api.formatQueryParams({
+                      )}?${formatQueryParams({
                         sortBy: value,
                         orderBy: match(value)
                           .with("beatmapset.artist", () => "asc")

@@ -20,7 +20,7 @@ export default function NavbarSearch() {
         onChange={(e) => setUserInput(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter" && userInput.trim()) {
-            router.push(`/all?search${encodeURIComponent(userInput.trim())}`);
+            router.push(`/all?search=${encodeURIComponent(userInput.trim())}`);
           }
         }}
       />

@@ -4,19 +4,19 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_BASE_URL,
   withCredentials: true,
 });
-
-export const formatQueryParams = (query) => {
-  try {
-    const _query = { ...query };
-    Object.keys(_query)
-      .filter((key) => _query[key] === undefined)
-      .forEach((key) => delete _query[key]);
-    return new URLSearchParams(_query).toString();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
+api.interceptors.request.use(function (config) {
+  // @ts-ignore:next-line
+  config.metadata = { startMs: Date.now() };
+  return config;
+});
+api.interceptors.response.use(function (response) {
+  console.log(
+    `${response.config.method.toUpperCase()} ${response.config.url} (${
+      Date.now() - (response.config as any).metadata.startMs
+    } ms)`
+  );
+  return response;
+});
 
 export async function getRecentCollections({
   cursor = undefined,
@@ -57,21 +57,15 @@ export async function getPopularCollections({
 }
 
 // Returns PaginatedCollectionData object: https://osucollector.com/docs.html#responses-getCollections-200-schema
-export async function searchCollections(
-  queryString,
+export async function searchCollections({
+  search,
   cursor,
   perPage = undefined,
   sortBy = undefined,
   orderBy = undefined,
-  cancelCallback = undefined
-) {
-  const params = {
-    search: queryString,
-    cursor,
-    perPage,
-    sortBy,
-    orderBy,
-  };
+  cancelCallback = undefined,
+}) {
+  const params = { search, cursor, perPage, sortBy, orderBy };
   return api
     .get("/collections/search", {
       params,

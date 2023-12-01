@@ -7,7 +7,6 @@ import { secondsToHHMMSS } from "@/utils/date-time-utils";
 import { bpmToColor, starToColor } from "@/utils/theme-utils";
 import { Beatmap } from "@/entities/Beatmap";
 import { Beatmapset } from "@/entities/Beatmapset";
-import fallbackOnError from "@/utils/misc-utils";
 
 export interface BeatmapsetCardCardProps {
   beatmapset: Beatmapset;
@@ -51,7 +50,8 @@ export default function BeatmapsetCard({
   const clipboardRef = useRef(null);
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
-  const slimcoverfallback = "/public/images/slimcoverfallback.jpg";
+  const [imageError, setImageError] = useState(false);
+  const slimcoverfallback = "/images/slimcoverfallback.jpg";
 
   return (
     <>
@@ -154,15 +154,12 @@ export default function BeatmapsetCard({
       </div> */}
 
       <div>
-        <div
-          className="grid gap-2"
-          style={{ gridTemplateColumns: "340px 1fr" }}
-        >
+        <div className="grid gap-2" style={{ gridTemplateColumns: "340px 1fr" }}>
           {/* beatmapset */}
           <div className="relative rounded bg-slate-700">
             <div className="absolute">
               <Image
-                src={beatmapset.covers.card}
+                src={imageError ? slimcoverfallback : beatmapset.covers.card}
                 alt={beatmapset.title}
                 width={340}
                 height={64}
@@ -171,20 +168,16 @@ export default function BeatmapsetCard({
                   objectFit: "cover",
                   filter: "brightness(0.5)",
                 }}
-                onError={(ev) => fallbackOnError(ev, slimcoverfallback)}
+                onError={() => setImageError(true)}
               />
             </div>
             <div className="relative z-10 py-2 pl-3 pr-1">
-              <div
-                className="grid gap-2"
-                style={{ gridTemplateColumns: "1fr 50px" }}
-              >
+              <div className="grid gap-2" style={{ gridTemplateColumns: "1fr 50px" }}>
                 <div style={{ maxWidth: "264px" }}>
                   <div
                     className="text-lg font-medium text-gray-100 truncate"
                     style={{
-                      textShadow:
-                        "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
+                      textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
                     }}
                   >
                     {beatmapset.title}
@@ -192,8 +185,7 @@ export default function BeatmapsetCard({
                   <div
                     className="text-sm font-medium text-gray-100 truncate"
                     style={{
-                      textShadow:
-                        "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
+                      textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
                     }}
                   >
                     {beatmapset.artist}
