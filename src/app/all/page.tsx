@@ -7,6 +7,7 @@ import { formatQueryParams } from "@/utils/string-utils";
 import { mergeRight } from "ramda";
 import { cn } from "@/utils/shadcn-utils";
 import { isMatching } from "ts-pattern";
+import SearchInput from "@/components/pages/all/SearchInput";
 
 interface CollectionsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -24,7 +25,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
     <div className="flex justify-center w-100">
       <div className="flex flex-col items-center gap-6 px-2 py-5 md:px-10 max-w-screen-2xl">
         <div className="flex flex-col items-center gap-3">
-          {searchParams.search && <div className="text-4xl">{searchParams.search}</div>}
+          <SearchInput searchParams={searchParams} />
           <div className="flex gap-2 text-2xl">
             <Search className="mt-1" />
             {results} results
@@ -68,7 +69,11 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
             )}
           </div>
           {hasMore ? (
-            <Link href={`/recent?cursor=${nextPageCursor}`}>
+            <Link
+              href={`/all?${formatQueryParams(
+                mergeRight(searchParams, { cursor: nextPageCursor })
+              )}`}
+            >
               <MoreResultsButton>More results</MoreResultsButton>
             </Link>
           ) : (
