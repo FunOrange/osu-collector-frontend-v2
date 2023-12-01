@@ -38,8 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         <div className="fixed top-0 z-10 flex flex-col w-full shadow-xl bg-slate-800">
-          <div className="border-b">
-            <div className="flex items-center px-1 md:px-4 h-14">
+          <div className="flex justify-between w-full px-1 md:px-4 md:pr-2 h-14">
+            <div className="flex items-center">
               <div className="block md:hidden">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -66,7 +66,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
-
               <Link href="/">
                 <div className="flex items-center px-2 py-3 cursor-pointer">
                   osu!
@@ -84,10 +83,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </Link>
                 ))}
               </nav>
-              <div className="flex items-center ml-auto space-x-4">
-                <NavbarSearch />
-                <UserNav />
-              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <NavbarSearch />
+              <UserNav />
             </div>
           </div>
         </div>

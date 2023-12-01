@@ -48,8 +48,8 @@ export function UserNav() {
           }))}
       >
         <Image width={32} height={32} src="/icons/osu-32x32.png" alt="osu!" />
-        <div className="hidden xl:block">Log in with osu!</div>
-        <div className="block xl:hidden">Log in</div>
+        <div className="hidden xl:block whitespace-nowrap">Log in with osu!</div>
+        <div className="block xl:hidden whitespace-nowrap">Log in</div>
       </a>
     );
   }

@@ -7,7 +7,7 @@ export default function NavbarSearch() {
   const router = useRouter();
   const [userInput, setUserInput] = useState("");
   return (
-    <div className="relative hidden w-full md:block">
+    <div className="relative hidden md:block">
       <div className="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
         <Search />
       </div>
