@@ -9,9 +9,10 @@ import { bpmToColor, starToColor } from "@/utils/theme-utils";
 import FavouriteButton from "@/components/FavouriteButton";
 import { CaretDownFill, CaretUpFill, ChatFill, SortUp } from "react-bootstrap-icons";
 import { identity, mergeRight } from "ramda";
-import { match } from "ts-pattern";
+import { Pattern, isMatching, match } from "ts-pattern";
 import { groupBeatmapsets } from "@/entities/Beatmap";
 import BeatmapsetCard from "@/components/BeatmapsetCard";
+import { cn } from "@/utils/shadcn-utils";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -22,25 +23,37 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
   const graphHeight = 160;
 
-  const sortBy = match(searchParams.sortBy)
+  const searchParamsSortBy = match(searchParams.sortBy)
     .with("beatmapset.artist", identity)
     .with("beatmapset.title", identity)
     .with("beatmapset.creator", identity)
     .with("difficulty_rating", identity)
     .with("bpm", identity)
     .with("hit_length", identity)
-    .otherwise(() => "beatmapset.artist");
-  const orderBy: "asc" | "desc" = match(searchParams.orderBy)
+    .otherwise(() => undefined);
+  const searchParamsOrderBy: "asc" | "desc" = match(searchParams.orderBy)
     .with("asc", identity)
     .with("desc", identity)
-    .otherwise(() => "asc");
-
+    .otherwise(() => undefined);
+  const { orderBy, sortBy } = match({ searchParamsSortBy, searchParamsOrderBy })
+    .with({ searchParamsSortBy: Pattern.string, searchParamsOrderBy: Pattern.string }, () => ({
+      sortBy: searchParamsSortBy,
+      orderBy: searchParamsOrderBy,
+    }))
+    .otherwise(() => ({
+      sortBy: "beatmap.artist",
+      orderBy: "desc",
+    }));
   const { beatmaps, hasMore, nextPageCursor } = await api.getCollectionBeatmaps({
     collectionId: collection.id,
     cursor: searchParams.cursor,
+    orderBy,
+    sortBy,
     perPage: 24,
   });
   const listing = groupBeatmapsets(beatmaps);
+
+  const pathname = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
   return (
     <div className="flex justify-center w-100">
@@ -139,61 +152,105 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             <div>Sort by:</div>
             <div className="flex gap-2">
               {[
-                ["beatmapset.artist", "Artist"],
-                ["beatmapset.title", "Title"],
-                ["beatmapset.creator", "Mapper"],
-                ["difficulty_rating", "Stars"],
-                ["bpm", "BPM"],
-                ["hit_length", "Length"],
-              ].map(([value, label], i) => {
-                if (value === sortBy) {
-                  return (
-                    <Link
-                      key={i}
-                      href={`/collections/${collection.id}/${getUrlSlug(
-                        collection.name
-                      )}?${formatQueryParams({
-                        sortBy: value,
-                        orderBy: match(orderBy)
-                          .with("asc", () => "desc")
-                          .with("desc", () => "asc")
-                          .exhaustive(),
-                      })}`}
-                    >
-                      <button
-                        className="flex items-center gap-2 px-3 py-1 text-indigo-200 bg-indigo-800 rounded opacity-90"
-                        disabled
+                {
+                  labelDefault: "Artist",
+                  labelAsc: "Artist: A-Z",
+                  labelDesc: "Artist: Z-A",
+                  sortKey: "beatmapset.artist",
+                  defaultOrderBy: "asc",
+                },
+                {
+                  labelDefault: "Title",
+                  labelAsc: "Title: A-Z",
+                  labelDesc: "Title: Z-A",
+                  sortKey: "beatmapset.title",
+                  defaultOrderBy: "asc",
+                },
+                {
+                  labelDefault: "Mapper",
+                  labelAsc: "Mapper: A-Z",
+                  labelDesc: "Mapper: Z-A",
+                  sortKey: "beatmapset.creator",
+                  defaultOrderBy: "asc",
+                },
+                {
+                  labelDefault: "Stars",
+                  labelAsc: "Stars: lowest",
+                  labelDesc: "Stars: highest",
+                  sortKey: "difficulty_rating",
+                  defaultOrderBy: "desc",
+                },
+                {
+                  labelDefault: "BPM",
+                  labelAsc: "BPM: lowest",
+                  labelDesc: "BPM: highest",
+                  sortKey: "bpm",
+                  defaultOrderBy: "desc",
+                },
+                {
+                  labelDefault: "Length",
+                  labelAsc: "Length: shortest",
+                  labelDesc: "Length: longest",
+                  sortKey: "hit_length",
+                  defaultOrderBy: "desc",
+                },
+              ]
+                .filter(Boolean)
+                .map(({ labelDefault, labelAsc, labelDesc, sortKey, defaultOrderBy }, i) =>
+                  match({ sortBy, orderBy })
+                    .with({ sortBy: sortKey, orderBy: "asc" }, () => (
+                      <Link
+                        key={i}
+                        href={`${pathname}?${formatQueryParams(
+                          mergeRight(searchParams, {
+                            sortBy: sortKey,
+                            orderBy: "desc",
+                            cursor: undefined,
+                          })
+                        )}`}
+                        className={cn(
+                          "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700",
+                          "text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700"
+                        )}
                       >
-                        {match(orderBy)
-                          .with("asc", () => <CaretUpFill />)
-                          .with("desc", () => <CaretDownFill />)
-                          .exhaustive()}
-                        {label}
-                      </button>
-                    </Link>
-                  );
-                } else {
-                  return (
-                    <Link
-                      key={i}
-                      href={`/collections/${collection.id}/${getUrlSlug(
-                        collection.name
-                      )}?${formatQueryParams({
-                        sortBy: value,
-                        orderBy: match(value)
-                          .with("beatmapset.artist", () => "asc")
-                          .with("beatmapset.title", () => "asc")
-                          .with("beatmapset.creator", () => "asc")
-                          .otherwise(() => "desc"),
-                      })}`}
-                    >
-                      <button className="flex items-center gap-2 px-3 py-1 transition border border-gray-600 rounded cursor-pointer hover:bg-slate-500 text-slate-400">
-                        {label}
-                      </button>
-                    </Link>
-                  );
-                }
-              })}
+                        {labelAsc ?? labelDefault}
+                      </Link>
+                    ))
+                    .with({ sortBy: sortKey, orderBy: "desc" }, () => (
+                      <Link
+                        key={i}
+                        href={`${pathname}?${formatQueryParams(
+                          mergeRight(searchParams, {
+                            sortBy: sortKey,
+                            orderBy: "asc",
+                            cursor: undefined,
+                          })
+                        )}`}
+                        className={cn(
+                          "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700",
+                          "text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700"
+                        )}
+                      >
+                        {labelDesc ?? labelDefault}
+                      </Link>
+                    ))
+                    .otherwise(() => (
+                      <Link
+                        href={`${pathname}?${formatQueryParams(
+                          mergeRight(searchParams, {
+                            sortBy: sortKey,
+                            orderBy: defaultOrderBy,
+                            cursor: undefined,
+                          })
+                        )}`}
+                        className={
+                          "px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700"
+                        }
+                      >
+                        {labelDefault}
+                      </Link>
+                    ))
+                )}
             </div>
           </div>
           <div className="flex flex-col gap-4">
@@ -209,9 +266,9 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             ))}
             {hasMore ? (
               <Link
-                href={`/collections/${collection.id}/${getUrlSlug(
-                  collection.name
-                )}?${formatQueryParams(mergeRight(searchParams, { cursor: nextPageCursor }))}`}
+                href={`${pathname}?${formatQueryParams(
+                  mergeRight(searchParams, { cursor: nextPageCursor })
+                )}`}
               >
                 <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
                   Load more
