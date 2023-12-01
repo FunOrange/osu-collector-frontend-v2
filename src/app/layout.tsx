@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <div
           className={cn(
-            "fixed top-0 z-10 flex flex-colshadow-xl justify-between w-full px-1 md:px-4 md:pr-2",
+            "fixed top-0 z-40 flex flex-colshadow-xl justify-between w-full px-1 md:px-4 md:pr-2",
             navbarHeight
           )}
           style={glass}
