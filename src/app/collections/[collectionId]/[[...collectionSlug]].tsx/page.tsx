@@ -10,11 +10,12 @@ import { ChatFill } from "react-bootstrap-icons";
 import { identity, mergeRight } from "ramda";
 import { Pattern, match } from "ts-pattern";
 import { groupBeatmapsets } from "@/entities/Beatmap";
-import BeatmapsetCard from "@/components/BeatmapsetCard";
+import BeatmapsetCard from "@/components/pages/collections/[collectionId]/BeatmapsetCard";
 import { cn } from "@/utils/shadcn-utils";
 import FavouriteButton from "@/components/FavouriteButton";
-import BarGraphStars from "@/components/BarGraphStars";
-import BarGraphBpm from "@/components/BarGraphBpm";
+import BarGraphStars from "@/components/pages/collections/[collectionId]/BarGraphStars";
+import BarGraphBpm from "@/components/pages/collections/[collectionId]/BarGraphBpm";
+import DownloadMapsButton from "@/components/pages/collections/[collectionId]/DownloadMapsButton";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -123,9 +124,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               </div>
             </div>
             <div className="flex flex-col justify-end gap-2 pl-4 border-l border-slate-700">
-              <button className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
-                Download maps
-              </button>
+              <DownloadMapsButton collection={collection} />
               <button className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
                 Add to osu
               </button>

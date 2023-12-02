@@ -8,7 +8,7 @@ import { bpmToColor, getContrastColor, starToColor } from "@/utils/theme-utils";
 import { Beatmap } from "@/entities/Beatmap";
 import { Beatmapset } from "@/entities/Beatmapset";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
-import BeatmapsetCardPlayButton from "@/components/BeatmapsetCardPlayButton";
+import BeatmapsetCardPlayButton from "@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton";
 
 export interface BeatmapsetCardCardProps {
   beatmapset: Beatmapset;
