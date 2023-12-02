@@ -11,22 +11,6 @@ import FavouriteButton from "@/components/FavouriteButton";
 function CollectionCard({ collection }) {
   if (!collection) return <div></div>;
 
-  // const favourited = user?.favourites?.includes(collection?.id);
-  // const heartClicked = () => {
-  //   const newFavourited = !favourited;
-  //   if (newFavourited) {
-  //     api.favouriteCollection(collection.id);
-  //   } else {
-  //     api.unfavouriteCollection(collection.id);
-  //   }
-  //   setUser({
-  //     ...user,
-  //     favourites: newFavourited
-  //       ? [...user.favourites, collection.id]
-  //       : user.favourites.filter((id) => id !== collection.id),
-  //   });
-  // };
-
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
   return (

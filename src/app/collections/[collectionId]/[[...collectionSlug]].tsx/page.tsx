@@ -13,6 +13,8 @@ import { groupBeatmapsets } from "@/entities/Beatmap";
 import BeatmapsetCard from "@/components/BeatmapsetCard";
 import { cn } from "@/utils/shadcn-utils";
 import FavouriteButton from "@/components/FavouriteButton";
+import BarGraphStars from "@/components/BarGraphStars";
+import BarGraphBpm from "@/components/BarGraphBpm";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -49,43 +51,32 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     cursor: searchParams.cursor,
     orderBy,
     sortBy,
+    filterMin: searchParams.filterMin,
+    filterMax: searchParams.filterMax,
     perPage: 24,
   });
   const listing = groupBeatmapsets(beatmaps);
 
   const pathname = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
+  const replaceQueryParams = (newParams: any) =>
+    `${pathname}?${formatQueryParams(mergeRight(searchParams, newParams))}`;
+
   return (
     <div className="flex justify-center w-100">
       <div className="flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl">
         <div className="p-4 rounded bg-slate-800">
           <div className="grid mb-4 lg:grid-cols-2 xs:grid-cols-1">
-            <BarGraph
-              title="difficulty spread"
-              data={{
-                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-                  (star) => collection.difficultySpread?.[star] ?? 0
-                ),
-                barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => starToColor(star, true)),
-              }}
+            <BarGraphStars
+              collection={collection}
               height={graphHeight}
+              replaceQueryParams={replaceQueryParams}
             />
             <div className="hidden sm:block">
-              <BarGraph
-                title="bpm spread"
-                data={{
-                  x: [
-                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
-                  ],
-                  y: [
-                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
-                  ].map((bpm) => collection.bpmSpread?.[bpm] ?? 0),
-                  barColors: [
-                    150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300,
-                  ].map((bpm) => bpmToColor(bpm, true)),
-                }}
+              <BarGraphBpm
+                collection={collection}
                 height={graphHeight}
+                replaceQueryParams={replaceQueryParams}
               />
             </div>
           </div>
@@ -202,13 +193,12 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                     .with({ sortBy: sortKey, orderBy: "asc" }, () => (
                       <Link
                         key={i}
-                        href={`${pathname}?${formatQueryParams(
-                          mergeRight(searchParams, {
-                            sortBy: sortKey,
-                            orderBy: "desc",
-                            cursor: undefined,
-                          })
-                        )}`}
+                        replace
+                        href={replaceQueryParams({
+                          sortBy: sortKey,
+                          orderBy: "desc",
+                          cursor: undefined,
+                        })}
                         className={cn(
                           "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700",
                           "text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700"
@@ -220,13 +210,12 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                     .with({ sortBy: sortKey, orderBy: "desc" }, () => (
                       <Link
                         key={i}
-                        href={`${pathname}?${formatQueryParams(
-                          mergeRight(searchParams, {
-                            sortBy: sortKey,
-                            orderBy: "asc",
-                            cursor: undefined,
-                          })
-                        )}`}
+                        replace
+                        href={replaceQueryParams({
+                          sortBy: sortKey,
+                          orderBy: "asc",
+                          cursor: undefined,
+                        })}
                         className={cn(
                           "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700",
                           "text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700"
@@ -237,13 +226,12 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                     ))
                     .otherwise(() => (
                       <Link
-                        href={`${pathname}?${formatQueryParams(
-                          mergeRight(searchParams, {
-                            sortBy: sortKey,
-                            orderBy: defaultOrderBy,
-                            cursor: undefined,
-                          })
-                        )}`}
+                        replace
+                        href={replaceQueryParams({
+                          sortBy: sortKey,
+                          orderBy: defaultOrderBy,
+                          cursor: undefined,
+                        })}
                         className={
                           "px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700"
                         }
@@ -266,11 +254,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               />
             ))}
             {hasMore ? (
-              <Link
-                href={`${pathname}?${formatQueryParams(
-                  mergeRight(searchParams, { cursor: nextPageCursor })
-                )}`}
-              >
+              <Link replace href={replaceQueryParams({ cursor: nextPageCursor })}>
                 <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
                   Load more
                 </div>
