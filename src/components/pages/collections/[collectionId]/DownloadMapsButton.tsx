@@ -11,12 +11,14 @@ import {
 import { Collection } from "@/entities/Collection";
 import { useUser } from "@/services/osu-collector-api-hooks";
 import Link from "next/link";
+import { useState } from "react";
 
 export interface DownloadMapsButtonProps {
   collection: Collection;
 }
 export default function DownloadMapsButton({ collection }: DownloadMapsButtonProps) {
   const { user } = useUser();
+  const [previewOpen, setPreviewOpen] = useState(false);
   if (user?.paidFeaturesAccess) {
     return (
       <Dialog>
@@ -44,13 +46,20 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
     );
   } else {
     return (
-      <Dialog>
+      <Dialog open={previewOpen}>
         <DialogTrigger>
-          <button className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
+          <button
+            className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
+            onClick={() => setPreviewOpen(true)}
+          >
             Download maps
           </button>
         </DialogTrigger>
-        <DownloadPreviewModal collection={collection} />
+        <DownloadPreviewModal
+          collection={collection}
+          open={previewOpen}
+          close={() => setPreviewOpen(false)}
+        />
       </Dialog>
     );
   }

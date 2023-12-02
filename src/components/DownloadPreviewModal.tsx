@@ -14,6 +14,7 @@ import Link from "next/link";
 import { getRandomFromArray } from "@/utils/array-utils";
 import { Progress } from "@/components/shadcn/progress";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { Collection } from "@/entities/Collection";
 
 enum DownloadStates {
   NotStarted = "Starting download...",
@@ -23,16 +24,25 @@ enum DownloadStates {
   Failed = "Failed",
 }
 
-function DownloadPreviewModal({ collection }) {
+export interface DownloadPreviewModalProps {
+  collection: Collection;
+  open: boolean;
+  close: () => void;
+}
+function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalProps) {
   // simulate downloads
   const [collectionDownloads, setCollectionDownloads] = useState([
     new CollectionDownload(collection),
   ]);
   const intervalRef = useRef(null);
   useEffect(() => {
-    intervalRef.current = setInterval(simulateDownload, 200);
+    if (open) {
+      collectionDownloads[0].reset(collection);
+      intervalRef.current = setInterval(simulateDownload, 200);
+    }
     return () => clearInterval(intervalRef.current);
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
   const simulateDownload = () => {
     // progress currently downloading beatmapset
     setCollectionDownloads((prev) => {
@@ -75,7 +85,7 @@ function DownloadPreviewModal({ collection }) {
   ));
 
   return (
-    <DialogContent className="max-w-4xl">
+    <DialogContent className="max-w-4xl" onPointerDownOutside={close}>
       <DialogHeader>
         <DialogTitle>Downloads (preview)</DialogTitle>
       </DialogHeader>
@@ -84,7 +94,9 @@ function DownloadPreviewModal({ collection }) {
           <h3>You are previewing an osu!Collector Desktop feature!</h3>
           <div className="flex gap-3">
             <DialogClose>
-              <Button variant="secondary">Cancel</Button>
+              <Button variant="secondary" onClick={close}>
+                Cancel
+              </Button>
             </DialogClose>
             <Link href="/client">
               <Button>Get osu!Collector Desktop</Button>
@@ -198,6 +210,24 @@ class CollectionDownload {
   url;
   errorMessage;
   constructor(collection) {
+    this.collectionId = collection.id;
+    this.uploader = collection.uploader.username;
+    this.name = collection.name;
+    this.downloadStatus = DownloadStates.Downloading;
+    this.beatmapsets = collection.beatmapsets.map((beatmapset) => ({
+      id: beatmapset.id,
+      beatmaps: beatmapset.beatmaps,
+      downloadStatus: DownloadStates.NotStarted,
+      bytesReceived: 0,
+      bytesTotal: 5e6 + Math.random() * 5e6,
+      downloadLocation: "",
+    }));
+    this.cancelTokens = new Map();
+    this.url = "";
+    this.errorMessage = undefined;
+  }
+
+  reset(collection) {
     this.collectionId = collection.id;
     this.uploader = collection.uploader.username;
     this.name = collection.name;
