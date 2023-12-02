@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Clipboard, PlayFill, StopFill } from "react-bootstrap-icons";
 import Image from "next/image";
 import { match } from "ts-pattern";
@@ -8,44 +8,13 @@ import { bpmToColor, getContrastColor, starToColor } from "@/utils/theme-utils";
 import { Beatmap } from "@/entities/Beatmap";
 import { Beatmapset } from "@/entities/Beatmapset";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
+import BeatmapsetCardPlayButton from "@/components/BeatmapsetCardPlayButton";
 
 export interface BeatmapsetCardCardProps {
   beatmapset: Beatmapset;
   beatmaps: Beatmap[];
-  playing?: boolean;
-  onPlayClick?: () => void;
 }
-export default function BeatmapsetCard({
-  beatmapset,
-  beatmaps,
-  playing,
-  onPlayClick,
-}: BeatmapsetCardCardProps) {
-  const audioRef = useRef(null);
-
-  // useEffect(() => {
-  //   const audio = new Audio(`https://b.ppy.sh/preview/${beatmapset.id}.mp3`);
-  //   audio.volume = 0.2;
-  //   audio.addEventListener("ended", onAudioEnd);
-  //   audioRef.current = audio;
-
-  //   return () => {
-  //     if (audioRef.current && !audioRef.current.paused) {
-  //       audioRef.current.pause();
-  //     }
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!audioRef.current) return;
-  //   if (playing) {
-  //     audioRef.current.play();
-  //   } else {
-  //     audioRef.current.pause();
-  //     audioRef.current.currentTime = 0;
-  //   }
-  // }, [playing]);
-
+export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardCardProps) {
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
   const [imageError, setImageError] = useState(false);
@@ -90,13 +59,7 @@ export default function BeatmapsetCard({
                   {beatmapset.artist}
                 </div>
               </div>
-              <button className="p-1 media-play-button" onClick={onPlayClick}>
-                {playing ? (
-                  <StopFill className="svg-shadow" size={40} />
-                ) : (
-                  <PlayFill className="svg-shadow" size={40} />
-                )}
-              </button>
+              <BeatmapsetCardPlayButton beatmapsetId={beatmapset.id} />
             </div>
           </div>
           <div className="p-1 text-center bg-slate-700">
