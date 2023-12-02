@@ -7,6 +7,7 @@ import { secondsToHHMMSS } from "@/utils/date-time-utils";
 import { bpmToColor, getContrastColor, starToColor } from "@/utils/theme-utils";
 import { Beatmap } from "@/entities/Beatmap";
 import { Beatmapset } from "@/entities/Beatmapset";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
 
 export interface BeatmapsetCardCardProps {
   beatmapset: Beatmapset;
@@ -45,7 +46,6 @@ export default function BeatmapsetCard({
   //   }
   // }, [playing]);
 
-  const clipboardRef = useRef(null);
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
   const [imageError, setImageError] = useState(false);
@@ -175,28 +175,23 @@ export default function BeatmapsetCard({
                   >
                     Direct
                   </a>
-                  <div
-                    ref={clipboardRef}
-                    className="p-2 transition rounded cursor-pointer hover:bg-slate-600"
-                    onClick={() => {
-                      navigator.clipboard.writeText(beatmap.id.toString());
-                      setShowCopiedToClipboard(true);
-                      setTimeout(() => setShowCopiedToClipboard(false), 1000);
-                    }}
-                  >
-                    <Clipboard size={12} />
-                  </div>
-                  {/* <Overlay
-                      target={clipboardRef.current}
-                      show={showCopiedToClipboard}
-                      placement="top"
-                    >
-                      {(props) => (
-                        <Tooltip id="overlay-example" {...props}>
-                          copied beatmap ID!
-                        </Tooltip>
-                      )}
-                    </Overlay> */}
+                  <Popover open={showCopiedToClipboard}>
+                    <PopoverTrigger>
+                      <div
+                        className="p-2 transition rounded cursor-pointer hover:bg-slate-600"
+                        onClick={() => {
+                          navigator.clipboard.writeText(beatmap.id.toString());
+                          setShowCopiedToClipboard(true);
+                          setTimeout(() => setShowCopiedToClipboard(false), 2000);
+                        }}
+                      >
+                        <Clipboard size={12} />
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent side="top" align="center" className="py-2 text-xs w-38">
+                      copied beatmap ID!
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             ))}
