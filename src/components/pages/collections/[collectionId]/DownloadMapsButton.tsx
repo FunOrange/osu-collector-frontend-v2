@@ -23,16 +23,14 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
   if (user?.paidFeaturesAccess) {
     return (
       <Dialog open={clientOpened} onOpenChange={(open) => setClientOpened(open)}>
-        <DialogTrigger>
-          <button
-            className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
-            onClick={() => {
-              window.open(`osucollector://collections/${collection.id}`, "_blank", "noreferrer");
-              setClientOpened(true);
-            }}
-          >
-            Download maps
-          </button>
+        <DialogTrigger
+          className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
+          onClick={() => {
+            window.open(`osucollector://collections/${collection.id}`, "_blank", "noreferrer");
+            setClientOpened(true);
+          }}
+        >
+          Download maps
         </DialogTrigger>
         <DialogContent onPointerDownOutside={() => setClientOpened(false)}>
           <DialogHeader>
@@ -51,13 +49,11 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
   } else {
     return (
       <Dialog open={previewOpen}>
-        <DialogTrigger>
-          <button
-            className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
-            onClick={() => setPreviewOpen(true)}
-          >
-            Download maps
-          </button>
+        <DialogTrigger
+          className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
+          onClick={() => setPreviewOpen(true)}
+        >
+          Download maps
         </DialogTrigger>
         <DownloadPreviewModal
           collection={collection}

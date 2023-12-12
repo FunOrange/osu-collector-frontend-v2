@@ -4,11 +4,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/shadcn/tooltip";
+import { Collection } from "@/entities/Collection";
 import Image from "next/image";
 import { ExclamationTriangleFill } from "react-bootstrap-icons";
 import { match } from "ts-pattern";
 
-function ModeCounters({ collection }) {
+export interface ModeCountersProps {
+  collection: Collection;
+  showUnavailable?: boolean;
+}
+function ModeCounters({ collection, showUnavailable }: ModeCountersProps) {
   return (
     <div className="flex items-center gap-3">
       {(["osu", "taiko", "mania", "fruits"] as const).map((mode) => {
@@ -35,27 +40,28 @@ function ModeCounters({ collection }) {
           </div>
         );
       })}
-      {(collection.unsubmittedBeatmapCount > 0 || collection.unknownChecksums?.length > 0) && (
-        <TooltipProvider delayDuration={0}>
-          <Tooltip>
-            <TooltipTrigger>
-              <div className="flex items-center">
-                <ExclamationTriangleFill className="mr-1" style={{ color: "#ffd966" }} />
-                {(collection.unsubmittedBeatmapCount || 0) +
-                  (collection.unknownChecksums?.length || 0)}
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              {collection.unsubmittedBeatmapCount > 0 && (
-                <div>{collection.unsubmittedBeatmapCount} unsubmitted</div>
-              )}
-              {collection.unknownChecksums?.length > 0 && (
-                <div>{collection.unknownChecksums.length} processing</div>
-              )}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
+      {showUnavailable &&
+        (collection.unsubmittedBeatmapCount > 0 || collection.unknownChecksums?.length > 0) && (
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="flex items-center">
+                  <ExclamationTriangleFill className="mr-1" style={{ color: "#ffd966" }} />
+                  {(collection.unsubmittedBeatmapCount || 0) +
+                    (collection.unknownChecksums?.length || 0)}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                {collection.unsubmittedBeatmapCount > 0 && (
+                  <div>{collection.unsubmittedBeatmapCount} unsubmitted</div>
+                )}
+                {collection.unknownChecksums?.length > 0 && (
+                  <div>{collection.unknownChecksums.length} processing</div>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
     </div>
   );
 }

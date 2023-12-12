@@ -87,7 +87,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
           <div className="grid" style={{ gridTemplateColumns: "2fr 1fr" }}>
             <div>
               <div className="mb-2">
-                <ModeCounters collection={collection} />
+                <ModeCounters collection={collection} showUnavailable />
               </div>
               <small className="text-slate-400">
                 Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
