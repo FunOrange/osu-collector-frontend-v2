@@ -16,6 +16,8 @@ import FavouriteButton from "@/components/FavouriteButton";
 import BarGraphStars from "@/components/pages/collections/[collectionId]/BarGraphStars";
 import BarGraphBpm from "@/components/pages/collections/[collectionId]/BarGraphBpm";
 import DownloadMapsButton from "@/components/pages/collections/[collectionId]/DownloadMapsButton";
+import AddToOsuButton from "@/components/pages/collections/[collectionId]/AddToOsuButton";
+import BeatmapsetListing from "@/components/pages/collections/[collectionId]/BeatmapsetListing";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -125,9 +127,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             </div>
             <div className="flex flex-col justify-end gap-2 pl-4 border-l border-slate-700">
               <DownloadMapsButton collection={collection} />
-              <button className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
-                Add to osu
-              </button>
+              <AddToOsuButton collection={collection} />
               <FavouriteButton collection={collection} variant="fullWidth" />
             </div>
           </div>
@@ -242,16 +242,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            {listing.map(({ beatmapset, beatmaps }, index) => (
-              <BeatmapsetCard
-                key={index}
-                beatmapset={beatmapset}
-                beatmaps={beatmaps}
-                // playing={currentlyPlaying === index}
-                // onPlayClick={() => onPlayClick(index)}
-                // onAudioEnd={onAudioEnd}
-              />
-            ))}
+            <BeatmapsetListing listing={listing} />
             {hasMore ? (
               <Link replace href={replaceQueryParams({ cursor: nextPageCursor })}>
                 <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">

@@ -30,8 +30,8 @@ export default function BarGraphBpm({
           orderBy: "asc",
           cursor: undefined,
           ...match(bpm)
-            .with(150, () => ({ filterMax: 160 }))
-            .with(300, () => ({ filterMin: 300 }))
+            .with(150, () => ({ filterMin: 0, filterMax: 160 }))
+            .with(300, () => ({ filterMin: 300, filterMax: null }))
             .otherwise((bpm) => ({ filterMin: bpm, filterMax: bpm + 10 })),
         })
       }

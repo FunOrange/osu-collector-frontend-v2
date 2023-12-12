@@ -34,6 +34,7 @@ export default function BarGraph({ title, data, barHref, height = "80px" }: BarG
             href={barHref(data.x[i])}
             className="self-end cursor-pointer hover:border hover:border-gray-50"
             style={barStyle(y, i)}
+            replace
           />
         ) : (
           <div key={i} className="self-end" style={barStyle(y, i)} />
@@ -45,7 +46,7 @@ export default function BarGraph({ title, data, barHref, height = "80px" }: BarG
         </div>
       ))}
       {title && (
-        <div className="text-sm col-span-full text-slate-600 justify-self-center">{title}</div>
+        <div className="text-sm col-span-full text-slate-500 justify-self-center">{title}</div>
       )}
     </div>
   );

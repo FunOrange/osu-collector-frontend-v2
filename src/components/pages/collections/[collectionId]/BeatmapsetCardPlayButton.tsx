@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { audioAtom, nowPlayingBeatmapsetIdAtom } from "@/atoms/audio-player";

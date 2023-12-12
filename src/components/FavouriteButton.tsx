@@ -14,8 +14,6 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/shadcn/alert-dialog";
-import { cn } from "@/utils/shadcn-utils";
-import { buttonVariants } from "@/components/shadcn/button";
 import Image from "next/image";
 import md5 from "md5";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

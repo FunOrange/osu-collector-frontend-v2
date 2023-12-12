@@ -19,23 +19,27 @@ export interface DownloadMapsButtonProps {
 export default function DownloadMapsButton({ collection }: DownloadMapsButtonProps) {
   const { user } = useUser();
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [clientOpened, setClientOpened] = useState(false);
   if (user?.paidFeaturesAccess) {
     return (
-      <Dialog>
+      <Dialog open={clientOpened} onOpenChange={(open) => setClientOpened(open)}>
         <DialogTrigger>
           <button
             className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
-            onClick={() => window.open(`osucollector://collections/${collection.id}`)}
+            onClick={() => {
+              window.open(`osucollector://collections/${collection.id}`, "_blank", "noreferrer");
+              setClientOpened(true);
+            }}
           >
             Download maps
           </button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent onPointerDownOutside={() => setClientOpened(false)}>
           <DialogHeader>
             <DialogTitle>Collection launched in osu!Collector desktop client!</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            Don&apos;t have the desktop client installed?
+            Don&apos;t have the desktop client installed?{" "}
             <Link href="/client" className="font-semibold hover:underline text-gray-50">
               Click here {/* TODO: link directly to download */}
             </Link>{" "}
