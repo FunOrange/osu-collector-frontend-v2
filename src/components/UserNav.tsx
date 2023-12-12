@@ -11,14 +11,17 @@ import {
 } from "@/components/shadcn/dropdown-menu";
 import { useUser } from "@/services/osu-collector-api-hooks";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import md5 from "md5";
 import { match } from "ts-pattern";
 import Link from "next/link";
+import { formatQueryParams } from "@/utils/string-utils";
 
 export function UserNav() {
   const { user, isLoading, logout } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   if (isLoading) {
     return <div className="w-32 h-10 p-5 rounded-full bg-slate-400 animate-pulse"></div>;
@@ -33,7 +36,12 @@ export function UserNav() {
       const oauthUrlWithOtp = `${oauthUrl}&state=${x}`;
       const newWindow = window.open(oauthUrlWithOtp, "_blank", "noopener,noreferrer");
       if (newWindow) newWindow.opener = null;
-      router.push("/login/enterOtp");
+      router.push(
+        "/login/enterOtp?" +
+          formatQueryParams({
+            redirectTo: pathname + searchParams.toString() ? "?" + searchParams.toString() : "",
+          })
+      );
     };
     return (
       <a

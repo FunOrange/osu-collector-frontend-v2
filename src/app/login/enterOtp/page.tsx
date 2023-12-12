@@ -3,10 +3,11 @@
 import { mutate } from "swr";
 import md5 from "md5";
 import * as api from "@/services/osu-collector-api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function EnterOtpPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const onOtpChanged = async (event) => {
     const inputString = event.target.value;
@@ -25,10 +26,14 @@ export default function EnterOtpPage() {
     try {
       await api.submitOtp(otp, y);
       mutate("/users/me");
-      router.push("/");
+      if (searchParams.get("redirectTo")) {
+        router.push(searchParams.get("redirectTo"));
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       alert("OTP is probably expired, please try to log in again.");
-      router.push("/");
+      router.push(searchParams.get("redirectTo"));
       return;
     }
   };
@@ -38,9 +43,8 @@ export default function EnterOtpPage() {
       <div className="flex flex-col items-center gap-4 p-12 rounded bg-slate-800">
         <div className="text-5xl">One time password</div>
         <div className="text-lg">
-          After authenticating through the osu! website, osu!Collector should
-          show you a one time password. Please enter it here to finish logging
-          in.
+          After authenticating through the osu! website, osu!Collector should show you a one time
+          password. Please enter it here to finish logging in.
         </div>
         <input
           type="text"
