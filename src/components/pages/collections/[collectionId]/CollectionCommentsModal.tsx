@@ -41,12 +41,12 @@ export default function CollectionCommentsModal({
       <DialogTrigger className={className}>{children}</DialogTrigger>
       <DialogContent className="flex flex-col max-w-4xl gap-0">
         <DialogHeader>
-          <DialogTitle className="mb-2">Comments ({collection.comments.length})</DialogTitle>
+          <DialogTitle className="mb-2">Comments ({collection.comments?.length || 0})</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3" style={{ height: "60vh", overflow: "auto" }}>
           {collection.comments
-            .sort((a, b) => b.date._seconds - a.date._seconds)
-            .map((comment, i) => (
+            ?.sort((a, b) => b.date._seconds - a.date._seconds)
+            ?.map((comment, i) => (
               <CollectionComment comment={comment} collectionId={collection.id} key={i} />
             ))}
         </div>

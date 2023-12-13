@@ -38,10 +38,13 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
           </div>
         ))
         .with({ hasComments: false, isLoggedIn: true }, () => (
-          <div className="flex items-center justify-center gap-2 p-4 text-center rounded cursor-pointer text-slate-500 bg-slate-800 hover:bg-slate-700">
+          <CollectionCommentsModal
+            collection={collection}
+            className="flex items-center justify-center w-full gap-2 py-3 text-center rounded cursor-pointer bg-slate-800 hover:bg-slate-700"
+          >
             <ChatFill size={20} />
             No comments. Be the first to leave a comment!
-          </div>
+          </CollectionCommentsModal>
         ))
         .with({ hasComments: false, isLoggedIn: false }, () => (
           <YouMustBeLoggedIn>
