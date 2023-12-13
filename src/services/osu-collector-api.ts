@@ -431,9 +431,7 @@ export async function likeComment(collectionId, commentId, remove = false) {
     console.error(error);
     const response = error.response;
     throw new Error(
-      `POST /collections/${collectionId}/comments/${commentId}/like responded with ${
-        response.status
-      }: ${await response.text()}`
+      `POST /collections/${collectionId}/comments/${commentId}/like responded with ${response.status}: ${response.data}`
     );
   }
 }
@@ -446,9 +444,7 @@ export async function deleteComment(collectionId, commentId) {
     console.error(error);
     const response = error.response;
     throw new Error(
-      `DELETE /collections/${collectionId}/comments/${commentId} responded with ${
-        response.status
-      }: ${await response.text()}`
+      `DELETE /collections/${collectionId}/comments/${commentId} responded with ${response.status}: ${response.data}`
     );
   }
 }

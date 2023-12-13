@@ -5,19 +5,10 @@ import * as api from "@/services/osu-collector-api";
 import { assocPath, concat, without } from "ramda";
 import { useState } from "react";
 import { match } from "ts-pattern";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/shadcn/alert-dialog";
-import Image from "next/image";
 import md5 from "md5";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formatQueryParams } from "@/utils/string-utils";
+import YouMustBeLoggedIn from "@/components/YouMustBeLoggedIn";
 
 export interface FavouriteButtonProps {
   collection: any;
@@ -116,34 +107,6 @@ export default function FavouriteButton({ collection, variant }: FavouriteButton
           })
       );
     };
-    return (
-      <>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>{favouriteButton}</AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>You must be logged in to do that</AlertDialogTitle>
-            </AlertDialogHeader>
-            <div className="flex gap-4">
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <a
-                className="flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded cursor-pointer text-indigo-50 hover:bg-indigo-600"
-                {...match(process.env.NODE_ENV)
-                  // .with("production", () => ({
-                  //   href: oauthUrl,
-                  //   target: "_blank",
-                  // }))
-                  .otherwise(() => ({
-                    onClick: otpLogin,
-                  }))}
-              >
-                <Image width={32} height={32} src="/icons/osu-32x32.png" alt="osu!" />
-                <div className="whitespace-nowrap">Log in with osu!</div>
-              </a>
-            </div>
-          </AlertDialogContent>
-        </AlertDialog>
-      </>
-    );
+    return <YouMustBeLoggedIn>{favouriteButton}</YouMustBeLoggedIn>;
   }
 }

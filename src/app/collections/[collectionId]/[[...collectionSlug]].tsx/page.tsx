@@ -18,6 +18,7 @@ import BarGraphBpm from "@/components/pages/collections/[collectionId]/BarGraphB
 import DownloadMapsButton from "@/components/pages/collections/[collectionId]/DownloadMapsButton";
 import AddToOsuButton from "@/components/pages/collections/[collectionId]/AddToOsuButton";
 import BeatmapsetListing from "@/components/pages/collections/[collectionId]/BeatmapsetListing";
+import CollectionCommentsSection from "@/components/CollectionCommentsSection";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -133,10 +134,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-2 p-4 text-center rounded cursor-pointer text-slate-500 bg-slate-800 hover:bg-slate-700">
-          <ChatFill size={20} />
-          No comments. Be the first to leave a comment!
-        </div>
+        <CollectionCommentsSection collection={collection} />
 
         <div className="flex flex-col gap-6 p-4 rounded bg-slate-800">
           <div className="flex items-center gap-6">

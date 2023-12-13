@@ -71,7 +71,7 @@ interface BpmSpread {
   300: number;
 }
 
-interface Comment {
+export interface Comment {
   date: Date;
   upvotes: number[];
   id: string;
