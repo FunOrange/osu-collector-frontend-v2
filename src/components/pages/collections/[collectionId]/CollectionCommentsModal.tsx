@@ -1,5 +1,5 @@
 "use client";
-import CollectionComment from "@/components/CollectionComment";
+import CollectionComment from "@/components/pages/collections/[collectionId]/CollectionComment";
 import YouMustBeLoggedIn from "@/components/YouMustBeLoggedIn";
 import { Button } from "@/components/shadcn/button";
 import {

@@ -1,5 +1,5 @@
 "use client";
-import CollectionCommentLikeButton from "@/components/CollectionCommentLikeButton";
+import CollectionCommentLikeButton from "@/components/pages/collections/[collectionId]/CollectionCommentLikeButton";
 import { Comment } from "@/entities/Collection";
 import { useUser } from "@/services/osu-collector-api-hooks";
 import moment from "moment";

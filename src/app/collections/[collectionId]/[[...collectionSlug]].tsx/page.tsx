@@ -18,7 +18,7 @@ import BarGraphBpm from "@/components/pages/collections/[collectionId]/BarGraphB
 import DownloadMapsButton from "@/components/pages/collections/[collectionId]/DownloadMapsButton";
 import AddToOsuButton from "@/components/pages/collections/[collectionId]/AddToOsuButton";
 import BeatmapsetListing from "@/components/pages/collections/[collectionId]/BeatmapsetListing";
-import CollectionCommentsSection from "@/components/CollectionCommentsSection";
+import CollectionCommentsSection from "@/components/pages/collections/[collectionId]/CollectionCommentsSection";
 
 interface CollectionPageProps {
   params: { collectionId: string };

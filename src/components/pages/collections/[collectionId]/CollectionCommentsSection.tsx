@@ -4,9 +4,9 @@ import { ChatFill } from "react-bootstrap-icons";
 import * as api from "@/services/osu-collector-api";
 import { useUser } from "@/services/osu-collector-api-hooks";
 import { match } from "ts-pattern";
-import CollectionComment from "@/components/CollectionComment";
+import CollectionComment from "@/components/pages/collections/[collectionId]/CollectionComment";
 import YouMustBeLoggedIn from "@/components/YouMustBeLoggedIn";
-import CollectionCommentsModal from "@/components/CollectionCommentsModal";
+import CollectionCommentsModal from "@/components/pages/collections/[collectionId]/CollectionCommentsModal";
 import { useState } from "react";
 
 export interface CollectionCommentsSectionProps {
