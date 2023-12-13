@@ -5,7 +5,7 @@
       "name": "osu!Collector",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000/collections/44/speed-practice"
+      "url": "http://localhost:3000/collections/920/Arles"
     },
     {
       "name": "server-side",

@@ -1,16 +1,12 @@
 import moment from "moment";
-import BarGraph from "@/components/BarGraph";
 import ModeCounters from "@/components/ModeCounters";
 import * as api from "@/services/osu-collector-api";
 import Link from "next/link";
 import Image from "next/image";
 import { formatQueryParams, getUrlSlug } from "@/utils/string-utils";
-import { bpmToColor, starToColor } from "@/utils/theme-utils";
-import { ChatFill } from "react-bootstrap-icons";
 import { identity, mergeRight } from "ramda";
 import { Pattern, match } from "ts-pattern";
 import { groupBeatmapsets } from "@/entities/Beatmap";
-import BeatmapsetCard from "@/components/pages/collections/[collectionId]/BeatmapsetCard";
 import { cn } from "@/utils/shadcn-utils";
 import FavouriteButton from "@/components/FavouriteButton";
 import BarGraphStars from "@/components/pages/collections/[collectionId]/BarGraphStars";
@@ -19,6 +15,9 @@ import DownloadMapsButton from "@/components/pages/collections/[collectionId]/Do
 import AddToOsuButton from "@/components/pages/collections/[collectionId]/AddToOsuButton";
 import BeatmapsetListing from "@/components/pages/collections/[collectionId]/BeatmapsetListing";
 import CollectionCommentsSection from "@/components/pages/collections/[collectionId]/CollectionCommentsSection";
+import EditableCollectionName from "@/components/pages/collections/[collectionId]/EditableCollectionName";
+import CollectionDeleteButton from "@/components/pages/collections/[collectionId]/CollectionDeleteButton";
+import EditableCollectionDescription from "@/components/pages/collections/[collectionId]/EditableCollectionDescription";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -37,7 +36,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     .with("bpm", identity)
     .with("hit_length", identity)
     .otherwise(() => undefined);
-  const searchParamsOrderBy: "asc" | "desc" = match(searchParams.orderBy)
+  const searchParamsOrderBy = match(searchParams.orderBy)
     .with("asc", identity)
     .with("desc", identity)
     .otherwise(() => undefined);
@@ -84,7 +83,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               />
             </div>
           </div>
-          <h1 className="mb-2 text-4xl">{collection.name}</h1>
+          <EditableCollectionName collection={collection} />
           <div className="grid" style={{ gridTemplateColumns: "2fr 1fr" }}>
             <div>
               <div className="mb-2">
@@ -112,21 +111,11 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                     )}
                   </div>
                 </div>
-                {collection.description ? (
-                  <div
-                    className="px-3 py-2 whitespace-pre-wrap rounded bg-slate-700"
-                    style={{ minHeight: "88px" }}
-                  >
-                    <div>{collection.description}</div>
-                  </div>
-                ) : (
-                  <div className="p-4 rounded bg-slate-700" style={{ minHeight: "88px" }}>
-                    <div className="text-sm text-slate-500">No description</div>
-                  </div>
-                )}
+                <EditableCollectionDescription collection={collection} />
               </div>
             </div>
             <div className="flex flex-col justify-end gap-2 pl-4 border-l border-slate-700">
+              <CollectionDeleteButton collection={collection} />
               <DownloadMapsButton collection={collection} />
               <AddToOsuButton collection={collection} />
               <FavouriteButton collection={collection} variant="fullWidth" />
