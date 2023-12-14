@@ -1,4 +1,4 @@
-export const getUrlSlug = (str) => encodeURIComponent(str?.replace(/ /g, "-"));
+export const getUrlSlug = (str: string) => encodeURIComponent(str?.replace(/ /g, "-"));
 
 export const s = (count: number, single = "", plural = "s") => (count === 1 ? single : plural);
 

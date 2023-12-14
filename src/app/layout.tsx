@@ -17,6 +17,7 @@ import { buttonVariants } from "@/components/shadcn/button";
 import { cn } from "@/utils/shadcn-utils";
 import NavbarSearch from "@/components/NavbarSearch";
 import { Toaster } from "@/components/shadcn/toaster";
+import UploadButton from "@/components/UploadButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -101,6 +102,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <div className="flex items-center gap-2">
             <NavbarSearch />
+            <UploadButton />
             <UserNav />
           </div>
         </div>
