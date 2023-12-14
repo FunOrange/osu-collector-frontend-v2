@@ -10,41 +10,85 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/shadcn/dropdown-menu";
 import { useState } from "react";
+import { ThreeDotsVertical } from "react-bootstrap-icons";
+import * as api from "@/services/osu-collector-api";
+import { useRouter } from "next/navigation";
 
 export interface AddToOsuButtonProps {
   collection: Collection;
 }
 export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
+  const router = useRouter();
   const { user } = useUser();
   const [open, setOpen] = useState(false);
 
   return user ? (
-    <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-      <DialogTrigger>
-        <button
+    <div className="flex w-full">
+      <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+        <DialogTrigger
+          className="w-full p-3 text-center transition rounded rounded-r-none bg-slate-700 hover:shadow-xl hover:bg-slate-600"
           onClick={() => {
             window.open(`osucollector://collections/${collection.id}`, "_blank", "noreferrer");
-            setOpen(true);
           }}
-          className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
         >
           Add to osu
-        </button>
-      </DialogTrigger>
-      <DialogContent onPointerDownOutside={() => setOpen(false)}>
-        <DialogHeader>
-          <DialogTitle>Collection launched in osu!Collector desktop client!</DialogTitle>
-        </DialogHeader>
-        <DialogDescription>
-          Don&apos;t have the desktop client installed?{" "}
-          <Link href="/client" className="font-semibold hover:underline text-gray-50">
-            Click here
-          </Link>{" "}
-          to download it.
-        </DialogDescription>
-      </DialogContent>
-    </Dialog>
+        </DialogTrigger>
+        <DialogContent onPointerDownOutside={() => setOpen(false)}>
+          <DialogHeader>
+            <DialogTitle>Collection launched in osu!Collector desktop client!</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>
+            Don&apos;t have the desktop client installed?{" "}
+            <Link href="/client" className="font-semibold hover:underline text-gray-50">
+              Click here
+            </Link>{" "}
+            to download it.
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          asChild
+          className="h-full transition rounded rounded-l-none cursor-pointer bg-slate-700 hover:shadow-xl hover:bg-slate-600"
+        >
+          <div className="flex items-center">
+            <ThreeDotsVertical className="mx-2" />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56" align="end" forceMount sideOffset={0}>
+          <DropdownMenuItem
+            onClick={async () => {
+              if (!user?.paidFeaturesAccess) {
+                return router.push("/client");
+              }
+
+              const data = await api
+                .downloadCollectionDb(collection.id)
+                .catch((err) => alert(err.message));
+              if (!data) return;
+
+              const url = window.URL.createObjectURL(new Blob([data]));
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `${collection.uploader.username} - ${collection.name}.db`;
+              document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
+              a.click();
+              a.remove();
+            }}
+          >
+            Download as collection.db
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   ) : (
     <Link
       href="/client"
