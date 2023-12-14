@@ -18,6 +18,7 @@ import CollectionCommentsSection from "@/components/pages/collections/[collectio
 import EditableCollectionName from "@/components/pages/collections/[collectionId]/EditableCollectionName";
 import CollectionDeleteButton from "@/components/pages/collections/[collectionId]/CollectionDeleteButton";
 import EditableCollectionDescription from "@/components/pages/collections/[collectionId]/EditableCollectionDescription";
+import CollectionUpdateButton from "@/components/pages/collections/[collectionId]/CollectionUpdateButton";
 
 interface CollectionPageProps {
   params: { collectionId: string };
@@ -119,6 +120,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               <DownloadMapsButton collection={collection} />
               <AddToOsuButton collection={collection} />
               <FavouriteButton collection={collection} variant="fullWidth" />
+              <CollectionUpdateButton collection={collection} />
             </div>
           </div>
         </div>

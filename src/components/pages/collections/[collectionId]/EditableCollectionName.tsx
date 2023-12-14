@@ -4,11 +4,13 @@ import { Collection } from "@/entities/Collection";
 import { useUser } from "@/services/osu-collector-api-hooks";
 import { useState } from "react";
 import * as api from "@/services/osu-collector-api";
+import { useToast } from "@/components/shadcn/use-toast";
 
 export interface EditableCollectionNameProps {
   collection: Collection;
 }
 export default function EditableCollectionName({ collection }: EditableCollectionNameProps) {
+  const { toast } = useToast();
   const { user } = useUser();
   const [editing, setEditing] = useState(false);
 
@@ -19,6 +21,7 @@ export default function EditableCollectionName({ collection }: EditableCollectio
     if (userInput && userInput !== collectionName) {
       api.renameCollection(collection.id, userInput);
       setCollectionName(userInput);
+      toast({ title: "Collection successfully updated" });
     }
     setEditing(false);
     setUserInput(undefined);

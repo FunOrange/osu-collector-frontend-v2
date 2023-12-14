@@ -1,5 +1,7 @@
 export const getUrlSlug = (str) => encodeURIComponent(str?.replace(/ /g, "-"));
 
+export const s = (count: number, single = "", plural = "s") => (count === 1 ? single : plural);
+
 export const formatQueryParams = (query) => {
   try {
     const _query = { ...query };

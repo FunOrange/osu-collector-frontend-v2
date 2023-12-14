@@ -16,6 +16,7 @@ import {
 import { buttonVariants } from "@/components/shadcn/button";
 import { cn } from "@/utils/shadcn-utils";
 import NavbarSearch from "@/components/NavbarSearch";
+import { Toaster } from "@/components/shadcn/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -104,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
         <div className={navbarSpacer}>{children}</div>
+        <Toaster />
       </body>
     </html>
   );
