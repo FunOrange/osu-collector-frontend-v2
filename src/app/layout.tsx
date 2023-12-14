@@ -35,10 +35,10 @@ const navItems = [
 ];
 
 const glass = {
-  background: "rgba(30, 41, 59, 0.90)",
+  background: "rgba(22, 25, 31, 0.8)",
   boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-  backdropFilter: "blur(7.5px)",
-  border: "1px solid rgba(30, 41, 59, 1)",
+  backdropFilter: "blur(8.5px)",
+  borderBottom: "1px solid rgba(35, 41, 53)",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
