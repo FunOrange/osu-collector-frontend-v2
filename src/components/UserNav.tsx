@@ -74,7 +74,7 @@ export function UserNav() {
         >
           <Avatar className="w-8 h-8">
             <AvatarImage src={user.osuweb.avatar_url} alt="@shadcn" />
-            <AvatarFallback>F</AvatarFallback>
+            <AvatarFallback>{user.osuweb.username[0].toLocaleUpperCase()}</AvatarFallback>
           </Avatar>
           {user.osuweb.username}
         </button>
