@@ -1,3 +1,4 @@
+import { formatQueryParams } from "@/utils/string-utils";
 import axios from "axios";
 
 export const api = axios.create({
@@ -11,9 +12,11 @@ api.interceptors.request.use(function (config) {
 });
 api.interceptors.response.use(function (response) {
   console.log(
-    `${response.config.method.toUpperCase()} ${response.config.url} (${
-      Date.now() - (response.config as any).metadata.startMs
-    } ms)`
+    `${response.config.method.toUpperCase()} ${response.config.url}${
+      formatQueryParams(response.config.params)
+        ? "?" + formatQueryParams(response.config.params)
+        : ""
+    } (${Date.now() - (response.config as any).metadata.startMs} ms)`
   );
   return response;
 });

@@ -36,9 +36,9 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId }: BeatmapsetCar
   return (
     <button className="p-1 media-play-button" onClick={onPlayClick}>
       {playing ? (
-        <StopFill className="svg-shadow" size={40} />
+        <StopFill className="text-white svg-shadow" size={40} />
       ) : (
-        <PlayFill className="svg-shadow" size={40} />
+        <PlayFill className="text-white svg-shadow" size={40} />
       )}
     </button>
   );

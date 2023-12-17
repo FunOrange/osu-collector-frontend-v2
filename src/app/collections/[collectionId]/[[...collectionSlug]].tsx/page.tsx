@@ -47,8 +47,8 @@ export default async function CollectionPage({ params, searchParams }: Collectio
       orderBy: searchParamsOrderBy,
     }))
     .otherwise(() => ({
-      sortBy: "beatmap.artist",
-      orderBy: "desc",
+      sortBy: "beatmapset.artist",
+      orderBy: "asc",
     }));
   const { beatmaps, hasMore, nextPageCursor } = await api.getCollectionBeatmaps({
     collectionId: collection.id,

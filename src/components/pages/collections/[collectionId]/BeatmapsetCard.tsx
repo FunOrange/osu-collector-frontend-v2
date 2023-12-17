@@ -19,51 +19,76 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
 
   const [imageError, setImageError] = useState(false);
   const slimcoverfallback = "/images/slimcoverfallback.jpg";
+  const [imageHovered, setImageHovered] = useState(false);
+  console.debug("imageHovered", imageHovered);
 
   return (
     <div>
       <div className="grid gap-2" style={{ gridTemplateColumns: "340px 1fr" }}>
         {/* beatmapset */}
-        <div className="relative rounded bg-slate-700">
+        <div className="relative rounded">
           <div className="absolute">
             <Image
               src={imageError ? slimcoverfallback : beatmapset.covers.card}
               alt={beatmapset.title}
               width={340}
-              height={64}
+              height={84}
+              className="rounded"
               style={{
-                height: "64px",
+                transition: "filter 0.1s",
+                height: "84px",
                 objectFit: "cover",
-                filter: "brightness(0.5)",
+                filter: `brightness(${imageHovered ? 1 : 0.35})`,
               }}
               onError={() => setImageError(true)}
             />
           </div>
-          <div className="relative z-10 py-2 pl-3 pr-1">
+          <div
+            className="relative z-10 py-2 pl-3 pr-1"
+            onMouseEnter={() => setImageHovered(true)}
+            onMouseLeave={() => setImageHovered(false)}
+          >
             <div className="grid gap-2" style={{ gridTemplateColumns: "1fr 50px" }}>
-              <div style={{ maxWidth: "264px" }}>
-                <div
-                  className="text-lg font-medium text-gray-100 truncate"
-                  style={{
-                    textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
-                  }}
-                >
-                  {beatmapset.title}
+              <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target="_blank">
+                <div style={{ maxWidth: "264px" }}>
+                  <div
+                    className="text-lg font-medium text-white truncate"
+                    style={{
+                      textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
+                    }}
+                  >
+                    {beatmapset.title}
+                  </div>
+                  <div
+                    className="text-sm font-medium text-gray-100 truncate"
+                    style={{
+                      textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
+                    }}
+                  >
+                    {beatmapset.artist}
+                  </div>
+                  <div className="text-sm font-medium text-gray-100 truncate">
+                    <span
+                      className="text-slate-200 opacity-70"
+                      style={{
+                        textShadow:
+                          "2px 2px 2px #00000071, 2px 2px 2px #00000071, 2px 2px 2px #00000071",
+                      }}
+                    >
+                      Mapped by
+                    </span>{" "}
+                    <span
+                      style={{
+                        textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
+                      }}
+                    >
+                      {beatmapset.creator}
+                    </span>
+                  </div>
                 </div>
-                <div
-                  className="text-sm font-medium text-gray-100 truncate"
-                  style={{
-                    textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
-                  }}
-                >
-                  {beatmapset.artist}
-                </div>
-              </div>
+              </a>
               <BeatmapsetCardPlayButton beatmapsetId={beatmapset.id} />
             </div>
-          </div>
-          <div className="p-1 text-center bg-slate-700">
-            <small>Mapped by {beatmapset.creator}</small>
           </div>
         </div>
         {/* diffs */}
