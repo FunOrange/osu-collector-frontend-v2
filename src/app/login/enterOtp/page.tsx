@@ -39,7 +39,7 @@ export default function EnterOtpPage() {
   };
 
   return (
-    <div className="flex items-center justify-center w-100 h-[90vh]">
+    <div className="flex items-center justify-center w-full h-[90vh]">
       <div className="flex flex-col items-center gap-4 p-12 rounded bg-slate-800">
         <div className="text-5xl">One time password</div>
         <div className="text-lg">

@@ -46,7 +46,7 @@ export default function UploadCollectionModal({ children }: UploadCollectionModa
   const [localCollections, setLocalCollections] = useState(undefined);
   // #endregion local collection.db
 
-  const { collections: remoteCollections } = useUserUploads(user.id);
+  const { collections: remoteCollections } = useUserUploads(user?.id);
   const isUploaded = (collection) =>
     remoteCollections?.map((c) => c.name).includes(collection?.name);
 

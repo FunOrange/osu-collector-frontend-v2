@@ -373,7 +373,7 @@ export async function getSubscription(cancelCallback = undefined) {
   }
 }
 
-export async function cancelSubscription() {
+export async function cancelStripeSubscription() {
   const endpoint = "/payments/cancelSubscription";
   try {
     const response = await api.post(endpoint);

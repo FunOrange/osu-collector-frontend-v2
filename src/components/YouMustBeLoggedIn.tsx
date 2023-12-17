@@ -13,11 +13,13 @@ import md5 from "md5";
 import { formatQueryParams } from "@/utils/string-utils";
 import { Button } from "@/components/shadcn/button";
 import Image from "next/image";
+import { useUser } from "@/services/osu-collector-api-hooks";
 
 export interface YouMustBeLoggedInProps {
   children: ReactNode;
 }
 export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) {
+  const { user } = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -40,35 +42,39 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
   };
 
   const [open, setOpen] = useState(false);
-  return (
-    <Dialog open={open} onOpenChange={(o) => setOpen(o)}>
-      <DialogTrigger asChild onClick={() => setOpen(true)}>
-        {children}
-      </DialogTrigger>
-      <DialogContent onPointerDownOutside={() => setOpen(false)}>
-        <DialogHeader>
-          <DialogTitle>You must be logged in to do that</DialogTitle>
-        </DialogHeader>
-        <div className="flex gap-4">
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <a
-            className="flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded cursor-pointer text-indigo-50 hover:bg-indigo-600"
-            {...match(process.env.NODE_ENV)
-              // .with("production", () => ({
-              //   href: oauthUrl,
-              //   target: "_blank",
-              // }))
-              .otherwise(() => ({
-                onClick: otpLogin,
-              }))}
-          >
-            <Image width={32} height={32} src="/icons/osu-32x32.png" alt="osu!" />
-            <div className="whitespace-nowrap">Log in with osu!</div>
-          </a>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
+  if (user) {
+    return children;
+  } else if (!user) {
+    return (
+      <Dialog open={open} onOpenChange={(o) => setOpen(o)}>
+        <DialogTrigger asChild onClick={() => setOpen(true)}>
+          {children}
+        </DialogTrigger>
+        <DialogContent onPointerDownOutside={() => setOpen(false)}>
+          <DialogHeader>
+            <DialogTitle>You must be logged in to do that</DialogTitle>
+          </DialogHeader>
+          <div className="flex gap-4">
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <a
+              className="flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded cursor-pointer text-indigo-50 hover:bg-indigo-600"
+              {...match(process.env.NODE_ENV)
+                // .with("production", () => ({
+                //   href: oauthUrl,
+                //   target: "_blank",
+                // }))
+                .otherwise(() => ({
+                  onClick: otpLogin,
+                }))}
+            >
+              <Image width={32} height={32} src="/icons/osu-32x32.png" alt="osu!" />
+              <div className="whitespace-nowrap">Log in with osu!</div>
+            </a>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 }

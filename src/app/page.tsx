@@ -18,7 +18,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="flex justify-center w-100">
+    <div className="flex justify-center w-full">
       <div className="px-2 py-5 md:px-10 max-w-screen-2xl">
         <div className="p-4 mb-4 text-center rounded bg-sky-900 text-sky-200">
           <Discord className="inline mb-1 mr-2" size={20} />
@@ -78,7 +78,7 @@ export default async function HomePage() {
             )}
           </div>
           <Link href="/popular?range=month">
-            <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
+            <div className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
               See all popular
             </div>
           </Link>
@@ -99,7 +99,7 @@ export default async function HomePage() {
             )}
           </div>
           <Link href="/recent">
-            <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
+            <div className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
               See all recent
             </div>
           </Link>

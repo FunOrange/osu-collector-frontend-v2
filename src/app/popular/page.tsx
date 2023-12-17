@@ -26,7 +26,7 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
   const { collections: popularCollections, hasMore, nextPageCursor } = popular;
 
   return (
-    <div className="flex justify-center w-100">
+    <div className="flex justify-center w-full">
       <div className="px-2 py-5 md:px-10 max-w-screen-2xl">
         <div className="p-4 mb-4 rounded bg-slate-800 md:p-7">
           <div

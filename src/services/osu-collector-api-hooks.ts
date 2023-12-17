@@ -67,3 +67,26 @@ export function useTournament(id) {
   if (error) console.error(error);
   return { tournament: data, tournamentError: error, mutateTournament: mutate };
 }
+
+export const useTwitchSubcription = () => {
+  const { data: isSubbedToFunOrange, ...rest } = useSWRImmutable("/users/me/twitchSub", (url) =>
+    api.get(url).then((res) => res.data.isSubbedToFunOrange)
+  );
+  return { isSubbedToFunOrange, ...rest };
+};
+
+export const usePaypalSubscription = () => {
+  const { data: paypalSubscription, ...rest } = useSWRImmutable(
+    "/payments/paypalSubscription",
+    (url) => api.get(url).then((res) => res.data)
+  );
+  return { paypalSubscription, ...rest };
+};
+
+export const useStripeSubscription = () => {
+  const { data: stripeSubscription, ...rest } = useSWRImmutable(
+    "/payments/stripeSubscription",
+    (url) => api.get(url).then((res) => res.data)
+  );
+  return { stripeSubscription, ...rest };
+};

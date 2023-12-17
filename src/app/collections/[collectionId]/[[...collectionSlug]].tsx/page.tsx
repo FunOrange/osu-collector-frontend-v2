@@ -67,7 +67,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     `${pathname}?${formatQueryParams(mergeRight(searchParams, newParams))}`;
 
   return (
-    <div className="flex justify-center w-100">
+    <div className="flex justify-center w-full">
       <div className="flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl">
         <div className="p-4 rounded bg-slate-800">
           <div className="grid mb-4 lg:grid-cols-2 xs:grid-cols-1">
@@ -234,7 +234,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             <BeatmapsetListing listing={listing} />
             {hasMore ? (
               <Link replace href={replaceQueryParams({ cursor: nextPageCursor })}>
-                <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-100">
+                <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-full">
                   Load more
                 </div>
               </Link>
