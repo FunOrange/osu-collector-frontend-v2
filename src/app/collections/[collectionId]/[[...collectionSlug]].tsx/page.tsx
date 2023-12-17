@@ -92,12 +92,12 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               </div>
               <small className="text-slate-400">
                 Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
-              </small>{" "}
+              </small>
               <div
                 className="grid items-start w-full gap-4 pt-4 pr-4"
                 style={{ gridTemplateColumns: "auto 1fr" }}
               >
-                <div className="flex justify-start px-2 py-1 mt-1 transition rounded-lg cursor-pointer first-letter:items-center hover:bg-slate-900">
+                <div className="flex items-center justify-start px-2 py-1 mt-1 transition rounded-lg cursor-pointer first-letter:items-center hover:bg-slate-900">
                   <Image
                     className="mr-2 rounded-full"
                     src={`https://a.ppy.sh/${collection.uploader.id}`}
@@ -234,7 +234,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             <BeatmapsetListing listing={listing} />
             {hasMore ? (
               <Link replace href={replaceQueryParams({ cursor: nextPageCursor })}>
-                <div className="p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600 w-full">
+                <div className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
                   Load more
                 </div>
               </Link>
