@@ -9,6 +9,7 @@ import { Beatmap } from "@/entities/Beatmap";
 import { Beatmapset } from "@/entities/Beatmapset";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
 import BeatmapsetCardPlayButton from "@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton";
+import { cn } from "@/utils/shadcn-utils";
 
 export interface BeatmapsetCardCardProps {
   beatmapset: Beatmapset;
@@ -27,21 +28,23 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
       <div className="grid gap-2" style={{ gridTemplateColumns: "340px 1fr" }}>
         {/* beatmapset */}
         <div className="relative rounded">
-          <div className="absolute">
-            <Image
-              src={imageError ? slimcoverfallback : beatmapset.covers.card}
-              alt={beatmapset.title}
-              width={340}
-              height={84}
-              className="rounded"
-              style={{
-                transition: "filter 0.1s",
-                height: "84px",
-                objectFit: "cover",
-                filter: `brightness(${imageHovered ? 1 : 0.35})`,
-              }}
-              onError={() => setImageError(true)}
-            />
+          <div className="absolute overflow-hidden rounded">
+            <div className={cn(imageHovered ? undefined : "blur-sm")}>
+              <Image
+                src={imageError ? slimcoverfallback : beatmapset.covers.card}
+                alt={beatmapset.title}
+                width={340}
+                height={84}
+                className="rounded"
+                style={{
+                  transition: "filter 0.1s",
+                  height: "84px",
+                  objectFit: "cover",
+                  filter: `brightness(${imageHovered ? 1 : 0.5})`,
+                }}
+                onError={() => setImageError(true)}
+              />
+            </div>
           </div>
           <div
             className="relative z-10 py-2 pl-3 pr-1"
