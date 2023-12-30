@@ -1,3 +1,4 @@
+import { Uploader } from "@/entities/Uploader";
 import { FirestoreDate } from "@/types";
 
 export interface Collection {
@@ -24,12 +25,6 @@ export interface Collection {
   favouritedBy: number[];
   favourites: number;
   comments: Comment[];
-}
-
-interface Uploader {
-  avatarURL: string;
-  id: number;
-  username: string;
 }
 
 interface Modes {

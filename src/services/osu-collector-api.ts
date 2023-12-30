@@ -494,11 +494,11 @@ export async function editTournament(id, createTournamentDto) {
   return res.data;
 }
 
-export async function getRecentTournaments(
+export async function getRecentTournaments({
   cursor = undefined,
   perPage = undefined,
-  cancelCallback = undefined
-) {
+  cancelCallback = undefined,
+}) {
   const params = {
     cursor,
     perPage,

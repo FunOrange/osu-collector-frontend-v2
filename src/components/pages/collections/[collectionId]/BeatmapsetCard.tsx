@@ -21,7 +21,6 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
   const [imageError, setImageError] = useState(false);
   const slimcoverfallback = "/images/slimcoverfallback.jpg";
   const [imageHovered, setImageHovered] = useState(false);
-  console.debug("imageHovered", imageHovered);
 
   return (
     <div>

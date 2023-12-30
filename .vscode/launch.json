@@ -5,7 +5,7 @@
       "name": "osu!Collector",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000/collections/920/Arles"
+      "url": "http://localhost:3000/tournaments"
     },
     {
       "name": "server-side",
