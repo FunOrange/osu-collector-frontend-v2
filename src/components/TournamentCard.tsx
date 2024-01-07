@@ -17,20 +17,25 @@ function TournamentCard({ tournament }: TournamentCardProps) {
     .otherwise(() => moment());
 
   return (
-    <div className={`relative flex flex-col justify-end rounded-lg h-[${height}px] bg-gray-950`}>
-      <div className={`absolute rounded-lg overflow-hidden w-full h-[${height}px]`}>
-        <Link href={`/tournaments/${tournament.id}/${getUrlSlug(tournament.name)}`}>
-          <ImageWithFallback
-            src={tournament.banner}
-            fallbackSrc={"/images/slimcoverfallback.jpg"}
-            alt={tournament.name}
-            className="rounded-lg brightness-90 hover:brightness-110"
-            style={{ transition: "filter 0.1s", objectFit: "cover" }}
-            fill
-            sizes="100vw"
-          />
-        </Link>
-      </div>
+    <div
+      className={`relative flex flex-col justify-end rounded-lg bg-gray-950`}
+      style={{ height: `${height}px` }}
+    >
+      <Link
+        href={`/tournaments/${tournament.id}/${getUrlSlug(tournament.name)}`}
+        className={`absolute rounded-lg overflow-hidden w-full `}
+        style={{ height: `${height}px` }}
+      >
+        <ImageWithFallback
+          src={tournament.banner}
+          fallbackSrc={"/images/slimcoverfallback.jpg"}
+          alt={tournament.name}
+          className="rounded-lg brightness-90 hover:brightness-110"
+          style={{ transition: "filter 0.1s", objectFit: "cover" }}
+          fill
+          sizes="100vw"
+        />
+      </Link>
       <div className="relative z-10 py-2 pl-3 pr-1 bg-opacity-50 rounded-b-lg bg-gray-950">
         <div className="flex justify-between">
           <div
