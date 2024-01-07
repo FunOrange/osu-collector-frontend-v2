@@ -13,11 +13,11 @@ interface TournamentsPageProps {
 export default async function TournamentsPage({ searchParams }: TournamentsPageProps) {
   const { tournaments, hasMore, nextPageCursor } = await (async () => {
     if (searchParams.search) {
-      const { tournaments, hasMore, nextPageCursor } = await api.searchCollections({
-        search: searchParams.search ?? "",
-        cursor: searchParams.cursor,
-        sortBy: searchParams.sortBy ?? "_text_match",
-        orderBy: searchParams.orderBy ?? "desc",
+      const { tournaments, hasMore, nextPageCursor } = await api.searchTournaments({
+        search: (searchParams.search as string) ?? "",
+        cursor: searchParams.cursor as string,
+        sortBy: (searchParams.sortBy as string) ?? "_text_match",
+        orderBy: (searchParams.orderBy as string) ?? "desc",
         perPage: 48,
       });
       return { tournaments, hasMore, nextPageCursor };
@@ -50,7 +50,7 @@ export default async function TournamentsPage({ searchParams }: TournamentsPageP
           </div>
           {hasMore ? (
             <Link
-              href={`/all?${formatQueryParams(
+              href={`/tournaments?${formatQueryParams(
                 mergeRight(searchParams, { cursor: nextPageCursor })
               )}`}
             >

@@ -1,6 +1,6 @@
 "use client";
 import { formatQueryParams } from "@/utils/string-utils";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { mergeRight } from "ramda";
 import { useState } from "react";
 import { Search } from "react-bootstrap-icons";
@@ -10,6 +10,7 @@ export interface SearchInputProps {
   withIcon?: boolean;
 }
 export default function SearchInput({ searchParams, withIcon }: SearchInputProps) {
+  const pathname = usePathname();
   const router = useRouter();
   const [userInput, setUserInput] = useState(searchParams.search as string);
   if (withIcon) {
@@ -26,7 +27,7 @@ export default function SearchInput({ searchParams, withIcon }: SearchInputProps
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               router.push(
-                `/all?${formatQueryParams(
+                `${pathname}?${formatQueryParams(
                   mergeRight(searchParams, { search: userInput.trim(), cursor: undefined })
                 )}`
               );
@@ -45,7 +46,7 @@ export default function SearchInput({ searchParams, withIcon }: SearchInputProps
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           router.push(
-            `/all?${formatQueryParams(
+            `${pathname}?${formatQueryParams(
               mergeRight(searchParams, { search: userInput.trim(), cursor: undefined })
             )}`
           );

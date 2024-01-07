@@ -511,20 +511,15 @@ export async function getRecentTournaments({
     .then((res) => res.data);
 }
 export async function searchTournaments(
-  queryString,
-  cursor,
-  perPage = undefined,
-  sortBy = undefined,
-  orderBy = undefined,
+  params: {
+    search: string;
+    cursor: string | number;
+    perPage: string | number;
+    sortBy: string;
+    orderBy: string;
+  },
   cancelCallback = undefined
 ) {
-  const params = {
-    search: queryString,
-    cursor,
-    perPage,
-    sortBy,
-    orderBy,
-  };
   return api
     .get("/tournaments/search", {
       params,
