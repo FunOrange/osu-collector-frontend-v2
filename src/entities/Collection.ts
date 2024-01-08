@@ -67,7 +67,7 @@ interface BpmSpread {
 }
 
 export interface Comment {
-  date: Date;
+  date: FirestoreTimestamp;
   upvotes: number[];
   id: string;
   message: string;
