@@ -23,7 +23,7 @@ function TournamentCard({ tournament }: TournamentCardProps) {
     >
       <Link
         href={`/tournaments/${tournament.id}/${getUrlSlug(tournament.name)}`}
-        className={`absolute rounded-lg overflow-hidden w-full `}
+        className="absolute w-full overflow-hidden rounded-lg"
         style={{ height: `${height}px` }}
       >
         <ImageWithFallback

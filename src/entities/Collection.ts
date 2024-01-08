@@ -1,13 +1,13 @@
 import { Uploader } from "@/entities/Uploader";
-import { FirestoreDate } from "@/types";
+import { FirestoreTimestamp } from "@/types";
 
 export interface Collection {
-  dateUploaded: FirestoreDate;
+  dateUploaded: FirestoreTimestamp;
   uploader: Uploader;
   name: string;
   id: number;
   beatmapCount: number;
-  dateLastModified: FirestoreDate;
+  dateLastModified: FirestoreTimestamp;
   unsubmittedBeatmapCount: number;
   unknownChecksums: any[];
   beatmapsets: {
@@ -73,9 +73,4 @@ export interface Comment {
   message: string;
   userId: number;
   username: string;
-}
-
-interface Date {
-  _seconds: number;
-  _nanoseconds: number;
 }

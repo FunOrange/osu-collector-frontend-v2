@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Clipboard, PlayFill, StopFill } from "react-bootstrap-icons";
+import { Clipboard } from "react-bootstrap-icons";
 import Image from "next/image";
 import { match } from "ts-pattern";
 import { secondsToHHMMSS } from "@/utils/date-time-utils";

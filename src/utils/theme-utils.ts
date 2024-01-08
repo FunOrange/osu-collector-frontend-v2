@@ -1,4 +1,5 @@
 import { clamp } from "@/utils/number-utils";
+import { match } from "ts-pattern";
 
 export function bpmToColor(bpm, darkMode = true) {
   const _bpm = clamp(Math.floor(bpm / 10) * 10, 150, 300);
@@ -35,6 +36,20 @@ export function starToColor(star, darkMode = false) {
   if (_star === 10) return darkMode ? "#fff" : "#000000";
   return darkMode ? "#fff" : "#000000";
 }
+
+export function modToColor(mod: string) {
+  return match(mod.toLowerCase())
+    .with("nm", () => "#2191CD")
+    .with("hd", () => "#BDA542")
+    .with("hr", () => "#CD334F")
+    .with("dt", () => "#B44DC0")
+    .with("ez", () => "#4dc04f")
+    .with("fl", () => "radial-gradient(circle, rgba(85,85,85,1) 0%, rgba(0,0,0,1) 70%)")
+    .with("fm", () => "#888")
+    .with("tb", () => "#111")
+    .otherwise(() => "#111");
+}
+
 // Convert hex color to RGB
 export function hexToRgb(hex) {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;

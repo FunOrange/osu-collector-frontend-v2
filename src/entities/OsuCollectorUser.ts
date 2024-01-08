@@ -1,4 +1,5 @@
 import { OsuUser } from "@/entities/OsuUser";
+import { FirestoreTimestamp } from "@/types";
 
 export interface OsuCollectorUser {
   ircName: string;
@@ -17,7 +18,7 @@ interface Private {
   stripeSubscriptionId: string;
   twitchError: boolean;
   twitchToken: TwitchToken;
-  subscriptionExpiryDate: SubscriptionExpiryDate;
+  subscriptionExpiryDate: FirestoreTimestamp;
   paypalSubscriptionId: string;
   stripeCustomer: StripeCustomer;
 }
@@ -35,11 +36,6 @@ interface TwitchToken {
   obtainmentTimestamp: number;
   accessToken: string;
   refreshToken: string;
-}
-
-interface SubscriptionExpiryDate {
-  _seconds: number;
-  _nanoseconds: number;
 }
 
 interface StripeCustomer {
