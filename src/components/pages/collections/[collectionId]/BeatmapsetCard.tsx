@@ -16,7 +16,7 @@ export interface BeatmapsetCardCardProps {
   beatmaps: Beatmap[];
 }
 export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardCardProps) {
-  const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
+  const [showCopiedToClipboard, setShowCopiedToClipboard] = useState<number[]>([]);
 
   const [imageError, setImageError] = useState(false);
   const slimcoverfallback = "/images/slimcoverfallback.jpg";
@@ -153,26 +153,25 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
 
                 <div className="flex items-center gap-1 ms-auto">
                   <a
-                    href={beatmap.url}
-                    target="blank"
-                    className="px-2 py-1 text-sm transition rounded ms-auto hover:bg-slate-600"
-                  >
-                    Website
-                  </a>
-                  <a
                     className="px-2 py-1 text-sm transition rounded ms-auto hover:bg-slate-600"
                     href={`osu://b/${beatmap.id}`}
                   >
                     Direct
                   </a>
-                  <Popover open={showCopiedToClipboard}>
+                  <Popover open={showCopiedToClipboard.includes(beatmap.id)}>
                     <PopoverTrigger>
                       <div
                         className="p-2 transition rounded cursor-pointer hover:bg-slate-600"
                         onClick={() => {
                           navigator.clipboard.writeText(beatmap.id.toString());
-                          setShowCopiedToClipboard(true);
-                          setTimeout(() => setShowCopiedToClipboard(false), 2000);
+                          setShowCopiedToClipboard((prev) => [...prev, beatmap.id]);
+                          setTimeout(
+                            () =>
+                              setShowCopiedToClipboard((prev) =>
+                                prev.filter((id) => id !== beatmap.id)
+                              ),
+                            2000
+                          );
                         }}
                       >
                         <Clipboard size={12} />
