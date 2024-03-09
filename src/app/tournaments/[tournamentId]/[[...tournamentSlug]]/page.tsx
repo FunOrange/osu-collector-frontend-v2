@@ -85,29 +85,29 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   Uploaded {moment.unix(tournament.dateUploaded._seconds).fromNow()}
                 </small>
                 <div
-                  className="grid items-start w-full gap-4 pt-2"
+                  className="grid items-center w-full gap-4 pt-2"
                   style={{ gridTemplateColumns: "auto 1fr" }}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="text-slate-400">Uploader</div>
+                  <div className="py-2 pr-6 border-r border-slate-700 text-slate-400">Uploader</div>
+                  <div className="flex items-center gap-1">
                     <UserChip
                       userId={tournament.uploader.id}
                       username={tournament.uploader.username}
                       rank={tournament.uploader.rank}
                     />
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-slate-400">Organizers</div>
-                    <div className="flex items-center gap-1">
-                      {tournament.organizers.map((organizer, i) => (
-                        <UserChip
-                          key={i}
-                          userId={organizer.id}
-                          username={organizer.username}
-                          rank={undefined}
-                        />
-                      ))}
-                    </div>
+                  <div className="py-2 pr-6 border-r border-slate-700 text-slate-400">
+                    Organizers
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {tournament.organizers.map((organizer, i) => (
+                      <UserChip
+                        key={i}
+                        userId={organizer.id}
+                        username={organizer.username}
+                        rank={undefined}
+                      />
+                    ))}
                   </div>
                 </div>
                 <div
@@ -148,7 +148,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
         </div>
 
         {/* <TournamentCommentsSection collection={collection} /> */}
-        <div className="p-4 rounded bg-slate-800" style={{ minHeight: "calc(100vh - 56px)" }}>
+        <div className="rounded bg-slate-800" style={{ minHeight: "calc(100vh - 56px)" }}>
           <TournamentMappool tournament={tournament} />
         </div>
       </div>

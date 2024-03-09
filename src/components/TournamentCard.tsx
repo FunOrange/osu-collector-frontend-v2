@@ -47,20 +47,8 @@ function TournamentCard({ tournament }: TournamentCardProps) {
             {tournament.name}
           </div>
           <div className="text-sm font-medium text-gray-100 truncate">
-            <span
-              className="text-slate-200"
-              style={{
-                textShadow: "2px 2px 2px #00000071, 2px 2px 2px #00000071, 2px 2px 2px #00000071",
-              }}
-            >
-              Uploaded
-            </span>{" "}
-            <span
-              style={{
-                textShadow: "2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000",
-              }}
-            >
-              {dateUploaded.fromNow()}
+            <span className="text-slate-200">
+              Uploaded {dateUploaded.fromNow()} by {tournament.uploader.username}
             </span>
           </div>
         </div>

@@ -17,6 +17,7 @@ import { Clipboard } from "react-bootstrap-icons";
 import { match } from "ts-pattern";
 import { secondsToHHMMSS } from "@/utils/date-time-utils";
 import { getContrastColor, modToColor, starToColor } from "@/utils/theme-utils";
+import TabSwitcher from "@/components/universal/TabSwitcher";
 
 export interface TournamentMappoolProps {
   tournament: Tournament;
@@ -28,71 +29,50 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
 
   return (
     <Provider>
-      <div>
-        <div className="flex flex-wrap">
-          {tournament.rounds.map((round, i) => (
-            <Button
-              key={i}
-              onClick={() => setCurrentRound(round.round)}
-              // variant="ghost"
-              className="rounded-b-none rounded-t-2xl"
-              disabled={round.round === currentRound}
-            >
-              {round.round}
-            </Button>
-          ))}
-        </div>
-        <div className="flex flex-col gap-2">
-          {round.mods.map((mod, j) => (
-            <React.Fragment key={j}>
-              {mod.maps.map((beatmap, k) => {
-                let moddedBeatmap;
-                if (typeof beatmap === "object") {
-                  moddedBeatmap = { ...beatmap };
-                  if (mod.mod.toLowerCase() === "hr") {
-                    moddedBeatmap.cs = Math.round((beatmap.cs + 1.2) * 10) / 10;
-                    moddedBeatmap.ar = Math.round(10 * calculateARWithHR(beatmap.ar)) / 10;
-                    moddedBeatmap.accuracy =
-                      Math.round(10 * calculateODWithHR(beatmap.accuracy)) / 10;
-                  }
-                  if (mod.mod.toLowerCase() === "dt") {
-                    moddedBeatmap.ar = Math.round(10 * calculateARWithDT(beatmap.ar)) / 10;
-                    moddedBeatmap.accuracy =
-                      Math.round(10 * calculateODWithDT(beatmap.accuracy)) / 10;
-                    moddedBeatmap.bpm = Math.round(beatmap.bpm * 1.5);
-                  }
+      <div className="flex flex-wrap">
+        <TabSwitcher
+          items={tournament.rounds.map((round) => ({ label: round.round, value: round.round }))}
+          value={currentRound}
+          onChange={setCurrentRound}
+        />
+      </div>
+      <div className="flex flex-col gap-2 p-4 bg-slate-800">
+        {round.mods.map((mod, j) => (
+          <React.Fragment key={j}>
+            {mod.maps.map((beatmap, k) => {
+              let moddedBeatmap;
+              if (typeof beatmap === "object") {
+                moddedBeatmap = { ...beatmap };
+                if (mod.mod.toLowerCase() === "hr") {
+                  moddedBeatmap.cs = Math.round((beatmap.cs + 1.2) * 10) / 10;
+                  moddedBeatmap.ar = Math.round(10 * calculateARWithHR(beatmap.ar)) / 10;
+                  moddedBeatmap.accuracy =
+                    Math.round(10 * calculateODWithHR(beatmap.accuracy)) / 10;
                 }
-                return (
-                  <MappoolBeatmap
-                    key={k}
-                    mod={mod.mod}
-                    modIndex={k + 1}
-                    beatmap={moddedBeatmap || beatmap}
-                    // onPlayClick={() => onPlayClick(j, k)}
-                    // onAudioEnd={onAudioEnd}
-                    // className="mb-1"
-                    // playing={isEqual(currentlyPlaying, [round, j, k])}
-                  />
-                );
-              })}
-            </React.Fragment>
-          ))}
-        </div>
+                if (mod.mod.toLowerCase() === "dt") {
+                  moddedBeatmap.ar = Math.round(10 * calculateARWithDT(beatmap.ar)) / 10;
+                  moddedBeatmap.accuracy =
+                    Math.round(10 * calculateODWithDT(beatmap.accuracy)) / 10;
+                  moddedBeatmap.bpm = Math.round(beatmap.bpm * 1.5);
+                }
+              }
+              return (
+                <MappoolBeatmap
+                  key={k}
+                  mod={mod.mod}
+                  modIndex={k + 1}
+                  beatmap={moddedBeatmap || beatmap}
+                />
+              );
+            })}
+          </React.Fragment>
+        ))}
       </div>
     </Provider>
   );
 }
 
-function MappoolBeatmap({
-  key,
-  mod,
-  modIndex,
-  beatmap,
-  // onPlayClick,
-  // onAudioEnd,
-  // className,
-  // playing,
-}) {
+function MappoolBeatmap({ key, mod, modIndex, beatmap }) {
   const [imageHovered, setImageHovered] = useState(false);
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState<number[]>([]);
 
@@ -205,7 +185,7 @@ function MappoolBeatmap({
       {!beatmapBeingProcessed && (
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="text-xl">{`[${beatmap?.version}]`}</div>
+            <div className="text-2xl">{`[${beatmap?.version}]`}</div>
             <div
               className="px-2 text-sm font-bold rounded-sm"
               style={{
