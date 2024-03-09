@@ -9,12 +9,15 @@ import md5 from "md5";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { formatQueryParams } from "@/utils/string-utils";
 import YouMustBeLoggedIn from "@/components/YouMustBeLoggedIn";
+import { Collection } from "@/entities/Collection";
+import { Tournament } from "@/entities/Tournament";
 
-export interface FavouriteButtonProps {
-  collection: any;
+export type FavouriteButtonProps = {
+  collection?: Collection;
+  tournament?: Tournament;
   variant: "iconOnly" | "fullWidth";
-}
-export default function FavouriteButton({ collection, variant }: FavouriteButtonProps) {
+};
+export default function FavouriteButton({ collection, tournament, variant }: FavouriteButtonProps) {
   const { user, mutate } = useUser();
   const favourited = user?.favourites?.includes(collection.id) ?? false;
   const router = useRouter();

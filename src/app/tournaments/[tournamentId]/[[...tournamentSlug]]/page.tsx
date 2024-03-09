@@ -11,10 +11,11 @@ import { cn } from "@/utils/shadcn-utils";
 import FavouriteButton from "@/components/FavouriteButton";
 import ImageWithFallback from "@/components/universal/ImageWithFallback";
 import TournamentMappool from "@/components/pages/tournaments/[tournamentId]/TournamentMappool";
+import TournamentDeleteButton from "@/components/pages/tournaments/[tournamentId]/TournamentDeleteButton";
+import AddTournamentToOsuButton from "@/components/pages/tournaments/[tournamentId]/AddTournamentToOsuButton";
+import DownloadMapsButton from "@/components/pages/collections/[collectionId]/DownloadMapsButton";
 // import BarGraphStars from "@/components/pages/collections/[collectionId]/BarGraphStars";
 // import BarGraphBpm from "@/components/pages/collections/[collectionId]/BarGraphBpm";
-// import DownloadMapsButton from "@/components/pages/collections/[collectionId]/DownloadMapsButton";
-// import AddToOsuButton from "@/components/pages/collections/[collectionId]/AddToOsuButton";
 // import BeatmapsetListing from "@/components/pages/collections/[collectionId]/BeatmapsetListing";
 // import TournamentCommentsSection from "@/components/pages/collections/[collectionId]/TournamentCommentsSection";
 // import EditableTournamentName from "@/components/pages/collections/[collectionId]/EditableTournamentName";
@@ -137,11 +138,11 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                 </div>
               </div>
               <div className="flex flex-col justify-end gap-2 pl-4 border-l border-slate-700">
-                {/* <TournamentDeleteButton collection={collection} />
-                <DownloadMapsButton collection={collection} />
-                <AddToOsuButton collection={collection} />
-                <FavouriteButton collection={collection} variant="fullWidth" />
-                <TournamentUpdateButton collection={collection} /> */}
+                <TournamentDeleteButton tournament={tournament} />
+                <DownloadMapsButton tournament={tournament} />
+                <AddTournamentToOsuButton tournament={tournament} />
+                <FavouriteButton tournament={tournament} variant="fullWidth" />
+                <TournamentUpdateButton tournament={tournament} />
               </div>
             </div>
           </div>
