@@ -117,7 +117,7 @@ export function UserNav() {
               Favourites
             </DropdownMenuItem>
           </Link>
-          <Link href="/subscription/status">
+          <Link href="/billing">
             <DropdownMenuItem>
               <CreditCard className="w-4 h-4 mr-2" />
               Billing
