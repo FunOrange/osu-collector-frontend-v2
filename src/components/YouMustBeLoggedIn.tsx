@@ -33,12 +33,12 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
     const oauthUrlWithOtp = `${oauthUrl}&state=${x}`;
     const newWindow = window.open(oauthUrlWithOtp, "_blank", "noopener,noreferrer");
     if (newWindow) newWindow.opener = null;
-    router.push(
-      "/login/enterOtp?" +
-        formatQueryParams({
-          redirectTo: pathname + searchParams.toString() ? "?" + searchParams.toString() : "",
-        })
-    );
+
+    const redirectTo = searchParams.toString()
+      ? `${pathname}?${searchParams.toString()}`
+      : pathname;
+    router.push("/login/enterOtp?" + formatQueryParams({ redirectTo }));
+    console.debug("redirectTo", redirectTo);
   };
 
   const [open, setOpen] = useState(false);
@@ -61,6 +61,7 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
             <a
               className="flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded cursor-pointer text-indigo-50 hover:bg-indigo-600"
               {...match(process.env.NODE_ENV)
+                // TODO: uncomment before pushing to production
                 // .with("production", () => ({
                 //   href: oauthUrl,
                 //   target: "_blank",

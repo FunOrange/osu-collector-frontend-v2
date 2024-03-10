@@ -1,27 +1,16 @@
-import moment from "moment";
-import ModeCounters from "@/components/ModeCounters";
+import FavouriteButton from "@/components/FavouriteButton";
+import DownloadMapsButton from "@/components/pages/tournaments/[tournamentId]/DownloadMapsButton";
+import AddTournamentToOsuButton from "@/components/pages/tournaments/[tournamentId]/AddTournamentToOsuButton";
+import TournamentDeleteButton from "@/components/pages/tournaments/[tournamentId]/TournamentDeleteButton";
+import TournamentUpdateButton from "@/components/pages/tournaments/[tournamentId]/TournamentUpdateButton";
+import TournamentMappool from "@/components/pages/tournaments/[tournamentId]/TournamentMappool";
+import ImageWithFallback from "@/components/universal/ImageWithFallback";
 import * as api from "@/services/osu-collector-api";
-import Link from "next/link";
-import Image from "next/image";
 import { formatQueryParams, getUrlSlug } from "@/utils/string-utils";
+import moment from "moment";
+import Image from "next/image";
 import { identity, mergeRight } from "ramda";
 import { Pattern, match } from "ts-pattern";
-import { groupBeatmapsets } from "@/entities/Beatmap";
-import { cn } from "@/utils/shadcn-utils";
-import FavouriteButton from "@/components/FavouriteButton";
-import ImageWithFallback from "@/components/universal/ImageWithFallback";
-import TournamentMappool from "@/components/pages/tournaments/[tournamentId]/TournamentMappool";
-import TournamentDeleteButton from "@/components/pages/tournaments/[tournamentId]/TournamentDeleteButton";
-import AddTournamentToOsuButton from "@/components/pages/tournaments/[tournamentId]/AddTournamentToOsuButton";
-import DownloadMapsButton from "@/components/pages/collections/[collectionId]/DownloadMapsButton";
-// import BarGraphStars from "@/components/pages/collections/[collectionId]/BarGraphStars";
-// import BarGraphBpm from "@/components/pages/collections/[collectionId]/BarGraphBpm";
-// import BeatmapsetListing from "@/components/pages/collections/[collectionId]/BeatmapsetListing";
-// import TournamentCommentsSection from "@/components/pages/collections/[collectionId]/TournamentCommentsSection";
-// import EditableTournamentName from "@/components/pages/collections/[collectionId]/EditableTournamentName";
-// import TournamentDeleteButton from "@/components/pages/collections/[collectionId]/TournamentDeleteButton";
-// import EditableTournamentDescription from "@/components/pages/collections/[collectionId]/EditableTournamentDescription";
-// import TournamentUpdateButton from "@/components/pages/collections/[collectionId]/TournamentUpdateButton";
 
 interface TournamentPageProps {
   params: { tournamentId: string };
@@ -86,10 +75,10 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   Uploaded {moment.unix(tournament.dateUploaded._seconds).fromNow()}
                 </small>
                 <div
-                  className="grid items-center w-full gap-4 pt-2"
+                  className="grid items-center w-full pt-2 gap-x-4 gap-y-1"
                   style={{ gridTemplateColumns: "auto 1fr" }}
                 >
-                  <div className="py-2 pr-6 border-r border-slate-700 text-slate-400">Uploader</div>
+                  <div className="py-2 pr-6 border-r border-slate-700 text-slate-200">Uploader</div>
                   <div className="flex items-center gap-1">
                     <UserChip
                       userId={tournament.uploader.id}
@@ -97,7 +86,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                       rank={tournament.uploader.rank}
                     />
                   </div>
-                  <div className="py-2 pr-6 border-r border-slate-700 text-slate-400">
+                  <div className="py-2 pr-6 border-r border-slate-700 text-slate-200">
                     Organizers
                   </div>
                   <div className="flex items-center gap-1">
@@ -142,7 +131,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                 <DownloadMapsButton tournament={tournament} />
                 <AddTournamentToOsuButton tournament={tournament} />
                 <FavouriteButton tournament={tournament} variant="fullWidth" />
-                <TournamentUpdateButton tournament={tournament} />
+                <TournamentUpdateButton />
               </div>
             </div>
           </div>

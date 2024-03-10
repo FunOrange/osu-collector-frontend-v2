@@ -63,14 +63,13 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
         </DialogTrigger>
         <DialogContent onPointerDownOutside={() => setPreviewOpened(false)}>
           <DialogHeader>
-            <DialogTitle>Preview</DialogTitle>
+            <DialogTitle>Import mappool collections (preview)</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            Don&apos;t have the desktop client installed?{" "}
-            <Link href="/client" className="font-semibold hover:underline text-gray-50">
-              Click here
-            </Link>{" "}
-            to download it.
+            <div className="grid" style={{ gridTemplateColumns: "3fr 7fr" }}>
+              <div></div>
+              <div></div>
+            </div>
           </DialogDescription>
         </DialogContent>
       </Dialog>

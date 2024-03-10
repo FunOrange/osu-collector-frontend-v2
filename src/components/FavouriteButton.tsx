@@ -19,7 +19,10 @@ export type FavouriteButtonProps = {
 };
 export default function FavouriteButton({ collection, tournament, variant }: FavouriteButtonProps) {
   const { user, mutate } = useUser();
-  const favourited = user?.favourites?.includes(collection.id) ?? false;
+  const favourited =
+    user?.favourites?.includes(collection?.id) ??
+    user?.favouriteTournaments?.includes(tournament?.id) ??
+    false;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -29,7 +32,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
   const onClick = async () => {
     if (!user) return;
 
-    if (favourited) {
+    if (collection && favourited) {
       await mutate(api.unfavouriteCollection(collection.id) as any, {
         optimisticData: (data) =>
           assocPath(
@@ -39,12 +42,32 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
           ),
         populateCache: false,
       });
-    } else {
+    } else if (collection && !favourited) {
       await mutate(api.favouriteCollection(collection.id) as any, {
         optimisticData: (data) =>
           assocPath(
             ["user", "favourites"],
             concat([collection.id], data.user.favourites ?? []),
+            data
+          ),
+        populateCache: false,
+      });
+    } else if (tournament && favourited) {
+      await mutate(api.favouriteTournament(tournament.id, true) as any, {
+        optimisticData: (data) =>
+          assocPath(
+            ["user", "favouriteTournaments"],
+            concat([tournament.id], data.user.favouriteTournaments ?? []),
+            data
+          ),
+        populateCache: false,
+      });
+    } else if (tournament && !favourited) {
+      await mutate(api.favouriteTournament(tournament.id, false) as any, {
+        optimisticData: (data) =>
+          assocPath(
+            ["user", "favouriteTournaments"],
+            concat([tournament.id], data.user.favouriteTournaments ?? []),
             data
           ),
         populateCache: false,
@@ -70,7 +93,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           />
-          <div>{collection?.favourites}</div>
+          {collection && <div>{collection.favourites}</div>}
         </div>
       );
     })
@@ -89,7 +112,8 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
-          Favorite{favourited ? "d" : ""} ({collection.favourites})
+          Favorite{favourited ? "d" : ""}
+          {collection && ` (${collection.favourites})`}
         </button>
       );
     })
@@ -98,22 +122,6 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
   if (user) {
     return favouriteButton;
   } else if (!user) {
-    const clientId = process.env.NEXT_PUBLIC_OSU_CLIENT_ID;
-    const callback = encodeURIComponent(process.env.NEXT_PUBLIC_OSU_OAUTH_CALLBACK);
-    const oauthUrl = `https://osu.ppy.sh/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${callback}`;
-    const otpLogin = () => {
-      const x = md5(Date.now());
-      localStorage.setItem("authX", x);
-      const oauthUrlWithOtp = `${oauthUrl}&state=${x}`;
-      const newWindow = window.open(oauthUrlWithOtp, "_blank", "noopener,noreferrer");
-      if (newWindow) newWindow.opener = null;
-      router.push(
-        "/login/enterOtp?" +
-          formatQueryParams({
-            redirectTo: pathname + searchParams.toString() ? "?" + searchParams.toString() : "",
-          })
-      );
-    };
     return <YouMustBeLoggedIn>{favouriteButton}</YouMustBeLoggedIn>;
   }
 }
