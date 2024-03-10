@@ -6,7 +6,11 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/shadcn/dropdown-menu";
 import { useUser } from "@/services/osu-collector-api-hooks";
@@ -16,6 +20,7 @@ import md5 from "md5";
 import { match } from "ts-pattern";
 import Link from "next/link";
 import { formatQueryParams } from "@/utils/string-utils";
+import { CreditCard, Heart, Upload, User } from "lucide-react";
 
 export function UserNav() {
   const { user, isLoading, logout } = useUser();
@@ -36,9 +41,11 @@ export function UserNav() {
       const oauthUrlWithOtp = `${oauthUrl}&state=${x}`;
       const newWindow = window.open(oauthUrlWithOtp, "_blank", "noopener,noreferrer");
       if (newWindow) newWindow.opener = null;
+
       const redirectTo = searchParams.toString()
         ? `${pathname}?${searchParams.toString()}`
         : pathname;
+      router.push("/login/enterOtp?" + formatQueryParams({ redirectTo }));
     };
     return (
       <a
@@ -67,7 +74,7 @@ export function UserNav() {
           className={`relative flex items-center gap-2 p-1 pr-4 transition rounded-full text-gray-50 font-semibold ${
             user.paidFeaturesAccess
               ? "bg-pink-500 hover:bg-pink-400"
-              : "bg-slate-700 hover:bg-slate-600"
+              : "bg-slate-600 hover:bg-slate-600"
           }`}
         >
           <Avatar className="w-8 h-8">
@@ -88,14 +95,33 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href={`/users/${user.id}/uploads`}>
-            <DropdownMenuItem>Your uploads</DropdownMenuItem>
-          </Link>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <Upload className="w-4 h-4 mr-2" />
+              <span>My uploads</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <Link href={`/users/${user.id}/collections`}>
+                  <DropdownMenuItem>Collections</DropdownMenuItem>
+                </Link>
+                <Link href={`/users/${user.id}/tournaments`}>
+                  <DropdownMenuItem>Tournaments</DropdownMenuItem>
+                </Link>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
           <Link href={`/users/${user.id}/favourites`}>
-            <DropdownMenuItem>Favourites</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Heart className="w-4 h-4 mr-2" />
+              Favourites
+            </DropdownMenuItem>
           </Link>
-          <Link href="subscription/status">
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+          <Link href="/subscription/status">
+            <DropdownMenuItem>
+              <CreditCard className="w-4 h-4 mr-2" />
+              Billing
+            </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

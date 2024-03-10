@@ -96,7 +96,7 @@ export default function CheckoutPage({}: CheckoutPageProps) {
 
   return (
     <div className="flex flex-col items-center justify-center gap-8 mt-8">
-      <div className="w-full max-w-xl p-4 text-center rounded shadow m-w-2xl bg-slate-800">
+      <div className="w-full max-w-xl p-4 text-center rounded shadow m-w-2xl bg-slate-700">
         <h1 className="mb-2 text-3xl font-semibold text-slate-50">Desktop Client Subscription</h1>
         <p>
           $1.99 per month
@@ -105,7 +105,7 @@ export default function CheckoutPage({}: CheckoutPageProps) {
         </p>
       </div>
 
-      <div className="w-full max-w-xl rounded shadow bg-slate-800">
+      <div className="w-full max-w-xl rounded shadow bg-slate-700">
         <div className="px-5 py-4 my-4 text-center shadow-sm">
           <h5 className="mb-4 text-lg text-slate-50">Pay with card</h5>
           <form onSubmit={handleFormSubmit}>

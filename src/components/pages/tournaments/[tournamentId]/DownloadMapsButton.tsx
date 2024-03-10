@@ -24,7 +24,7 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
     return (
       <Dialog open={clientOpened} onOpenChange={(open) => setClientOpened(open)}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
+          className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500"
           onClick={() => {
             window.open(`osucollector://tournaments/${tournament.id}`, "_blank", "noreferrer");
             setClientOpened(true);
@@ -50,7 +50,7 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
     return (
       <Dialog open={previewOpen}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600"
+          className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500"
           onClick={() => setPreviewOpen(true)}
         >
           Download maps

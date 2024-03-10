@@ -49,8 +49,8 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
   const bannerHeight = 330;
   return (
     <div className="flex justify-center w-full">
-      <div className="flex flex-col w-full max-w-screen-xl px-2 py-5 md:px-10 gap-7">
-        <div className="rounded bg-slate-800">
+      <div className="flex flex-col w-full max-w-screen-xl gap-2 px-2 py-5 md:px-10">
+        <div className="rounded bg-slate-700">
           <div className="relative" style={{ height: `${bannerHeight}px` }}>
             <div
               className="absolute w-full overflow-hidden rounded-t-lg"
@@ -108,14 +108,14 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   <a target="_blank" href={tournament.link} className="underline truncate">
                     {tournament.link}
                   </a>
-                  <div>Spreadsheet:</div>
+                  {/* <div>Spreadsheet:</div>
                   {false ? (
                     <a target="_blank" href={tournament.downloadUrl} className="underline truncate">
                       {tournament.downloadUrl}
                     </a>
                   ) : (
                     <div className="text-slate-500">No spreadsheet link provided.</div>
-                  )}
+                  )} */}
                   <div>Mappool download:</div>
                   {tournament?.downloadUrl ? (
                     <a target="_blank" href={tournament.downloadUrl} className="underline truncate">
@@ -138,7 +138,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
         </div>
 
         {/* <TournamentCommentsSection collection={collection} /> */}
-        <div className="rounded bg-slate-800" style={{ minHeight: "calc(100vh - 56px)" }}>
+        <div className="rounded bg-slate-900" style={{ minHeight: "calc(100vh - 56px)" }}>
           <TournamentMappool tournament={tournament} />
         </div>
       </div>

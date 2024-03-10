@@ -85,12 +85,20 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
     <CollectionDownloadCard key={index} collectionDownload={collectionDownload} />
   ));
 
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setOverlayVisible(false);
+      setTimeout(() => setOverlayVisible(true), 1000);
+    }
+  }, [open]);
+
   return (
     <DialogContent className="max-w-4xl" onPointerDownOutside={close}>
       <DialogHeader>
         <DialogTitle>Downloads (preview)</DialogTitle>
       </DialogHeader>
-      <PreviewOverlay>
+      <PreviewOverlay className={overlayVisible ? undefined : "opacity-0"}>
         <div className="horizontalStrip">
           <h3>You are previewing an osu!Collector Desktop feature!</h3>
           <div className="flex gap-3">
@@ -171,8 +179,6 @@ function CollectionDownloadCard({ collectionDownload }) {
 }
 
 function BeatmapsetDownloadCard({ mapsetDownload }) {
-  const [showError, setShowError] = useState(false);
-
   const megaBytesReceived = mapsetDownload.bytesReceived / 1000000;
   const megaBytesTotal = mapsetDownload.bytesTotal / 1000000;
   const progress = 100 * (mapsetDownload.bytesReceived / mapsetDownload.bytesTotal);
@@ -254,6 +260,7 @@ class CollectionDownload {
 }
 
 const PreviewOverlay = styled.div`
+  transition: opacity 0.4s;
   position: absolute;
   display: flex;
   justify-content: center;

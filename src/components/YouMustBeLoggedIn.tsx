@@ -38,7 +38,6 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
       ? `${pathname}?${searchParams.toString()}`
       : pathname;
     router.push("/login/enterOtp?" + formatQueryParams({ redirectTo }));
-    console.debug("redirectTo", redirectTo);
   };
 
   const [open, setOpen] = useState(false);

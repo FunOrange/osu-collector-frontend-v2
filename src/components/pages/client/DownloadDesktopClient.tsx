@@ -19,7 +19,7 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
   });
 
   return (
-    <div className="w-full max-w-6xl p-6 rounded bg-slate-700">
+    <div className="w-full max-w-6xl p-6 rounded bg-slate-600">
       <div className="mb-2">
         <h2 className="text-2xl font-semibold text-slate-50 whitespace-nowrap" id="download">
           Download osu!Collector Desktop
@@ -35,7 +35,7 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
       </div>
       <div className="flex gap-2">
         <Button
-          className="bg-slate-800"
+          className="bg-slate-700"
           variant="important"
           disabled={!user?.paidFeaturesAccess}
           onClick={downloadWindowsInstaller}
@@ -45,7 +45,7 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
           Windows 64-bit
         </Button>
         <Button
-          className="bg-slate-800"
+          className="bg-slate-700"
           variant="important"
           disabled={!user?.paidFeaturesAccess}
           onClick={downloadLinuxInstaller}

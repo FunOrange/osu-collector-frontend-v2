@@ -1,7 +1,6 @@
 import moment from "moment";
 import BarGraph from "@/components/BarGraph";
 import ModeCounters from "@/components/ModeCounters";
-import * as api from "@/services/osu-collector-api";
 import Link from "next/link";
 import Image from "next/image";
 import { getUrlSlug } from "@/utils/string-utils";
@@ -14,7 +13,7 @@ function CollectionCard({ collection }) {
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
   return (
-    <div className="flex flex-col h-full overflow-hidden transition rounded-lg shadow-lg bg-slate-700 hover:shadow-2xl">
+    <div className="flex flex-col h-full overflow-hidden transition rounded-lg shadow-lg bg-slate-800 hover:shadow-xl">
       <Link href={href} className="overflow-hidden">
         {/* Difficulty Spread Graph */}
         <BarGraph
@@ -47,7 +46,7 @@ function CollectionCard({ collection }) {
       </Link>
       <div className="flex items-end justify-between px-4 pb-2 ">
         <div
-          className="flex items-center justify-start px-2 py-1 transition rounded-lg cursor-pointer hover:bg-slate-800"
+          className="flex items-center justify-start px-2 py-1 transition rounded-lg cursor-pointer hover:bg-slate-700"
           style={{ marginLeft: "-8px" }}
         >
           <Image

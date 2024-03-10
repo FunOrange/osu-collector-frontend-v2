@@ -51,19 +51,19 @@ export default async function HomePage() {
           </div>
 
           <div className="flex flex-col justify-center gap-4 mb-3 md:flex-row">
-            <div className="px-4 py-3 rounded md:px-6 bg-slate-800">
+            <div className="px-4 py-3 rounded md:px-6 bg-slate-700">
               <div className="text-xl">{metadata.userCount.toLocaleString()}</div>
               <div className="text-sm whitespace-nowrap">Total users</div>
             </div>
 
-            <div className="px-4 py-3 rounded md:px-6 bg-slate-800">
+            <div className="px-4 py-3 rounded md:px-6 bg-slate-700">
               <div className="text-xl">{metadata.totalCollections.toLocaleString()}</div>
               <div className="text-sm whitespace-nowrap">Total collections</div>
             </div>
           </div>
         </div>
 
-        <div className="p-2 pt-4 mb-4 rounded md:pt-7 bg-slate-800 md:p-7">
+        <div className="p-2 pt-4 mb-4 rounded md:pt-7 bg-slate-700 md:p-7">
           <h2 className="mb-3 text-2xl md:mb-6 md:text-3xl">
             <Fire className="inline mb-2 mr-3 text-orange-400" size={32} />
             Popular this month
@@ -78,13 +78,13 @@ export default async function HomePage() {
             )}
           </div>
           <Link href="/popular?range=month">
-            <div className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
+            <div className="w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600">
               See all popular
             </div>
           </Link>
         </div>
 
-        <div className="p-2 pt-4 mb-4 rounded md:pt-7 bg-slate-800 md:p-7">
+        <div className="p-2 pt-4 mb-4 rounded md:pt-7 bg-slate-700 md:p-7">
           <h2 className="mb-3 text-2xl md:mb-6 md:text-3xl">
             <Stars className="inline mb-1 mr-3 text-yellow-400" size={24} />
             Recently Uploaded
@@ -99,7 +99,7 @@ export default async function HomePage() {
             )}
           </div>
           <Link href="/recent">
-            <div className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
+            <div className="w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600">
               See all recent
             </div>
           </Link>

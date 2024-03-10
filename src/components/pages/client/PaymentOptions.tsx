@@ -67,7 +67,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
     >
       <div className="grid w-full grid-cols-1 gap-8 md:gap-2 md:grid-cols-2">
         <div className="w-full">
-          <div className="p-6 rounded-t bg-slate-700" style={{ minHeight: "286px" }}>
+          <div className="p-6 rounded-t bg-slate-600" style={{ minHeight: "286px" }}>
             <div className="mb-4 text-xl">
               Option 1: <span className="italic">free with Twitch Prime</span>
               <Twitch className="inline ml-2 text-purple-500" size={24} />
@@ -138,7 +138,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
         </div>
 
         <div className="w-full">
-          <div className="p-6 rounded-t bg-slate-700" style={{ minHeight: "286px" }}>
+          <div className="p-6 rounded-t bg-slate-600" style={{ minHeight: "286px" }}>
             <div className="mb-10 text-xl">Option 2: $1.99 monthly subscription</div>
             <div className="flex flex-col gap-3">
               {user ? (

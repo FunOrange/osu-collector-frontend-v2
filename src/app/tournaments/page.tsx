@@ -36,7 +36,7 @@ export default async function TournamentsPage({ searchParams }: TournamentsPageP
         <div className="flex flex-col items-center gap-3">
           <SearchInput searchParams={searchParams} withIcon />
         </div>
-        <div className="w-full p-4 mb-4 rounded max-w-screen-2xl bg-slate-800 md:p-7">
+        <div className="w-full p-4 mb-4 rounded max-w-screen-2xl bg-slate-700 md:p-7">
           <h1 className="mb-6 text-3xl">
             <TrophyFill className="inline mb-1 mr-3 text-yellow-400" size={24} />
             Tournaments

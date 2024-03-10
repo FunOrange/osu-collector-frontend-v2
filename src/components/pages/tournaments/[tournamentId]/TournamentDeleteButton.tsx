@@ -37,7 +37,7 @@ export default function TournamentDeleteButton({ tournament }: TournamentDeleteB
     return (
       <>
         <Dialog open={showConfirmation} onOpenChange={(open) => setShowConfirmation(open)}>
-          <DialogTrigger className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-rose-800">
+          <DialogTrigger className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-rose-800">
             Delete tournament
           </DialogTrigger>
           <DialogContent>
@@ -63,7 +63,7 @@ export default function TournamentDeleteButton({ tournament }: TournamentDeleteB
             <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="inline-flex px-4 py-3 transition-colors rounded bg-slate-700 hover:bg-slate-600"
+                className="inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600"
               >
                 Back to home
               </Link>

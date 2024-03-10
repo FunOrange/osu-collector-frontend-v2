@@ -34,7 +34,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
     <div className="flex w-full">
       <Dialog open={desktopClientOpened} onOpenChange={(open) => setDesktopClientOpened(open)}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded rounded-r-none bg-slate-700 hover:shadow-xl hover:bg-slate-600"
+          className="w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500"
           onClick={() => {
             window.open(`osucollector://tournaments/${tournament.id}`, "_blank", "noreferrer");
           }}
@@ -58,7 +58,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
   ) : (
     <div className="flex w-full">
       <Dialog open={previewOpened} onOpenChange={(open) => setPreviewOpened(open)}>
-        <DialogTrigger className="w-full p-3 text-center transition rounded rounded-r-none bg-slate-700 hover:shadow-xl hover:bg-slate-600">
+        <DialogTrigger className="w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500">
           Add mappool to osu
         </DialogTrigger>
         <DialogContent onPointerDownOutside={() => setPreviewOpened(false)}>

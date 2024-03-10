@@ -69,7 +69,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
   return (
     <div className="flex justify-center w-full">
       <div className="flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl">
-        <div className="p-4 rounded bg-slate-800">
+        <div className="p-4 rounded bg-slate-700">
           <div className="grid mb-4 lg:grid-cols-2 xs:grid-cols-1">
             <BarGraphStars
               collection={collection}
@@ -127,7 +127,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
         <CollectionCommentsSection collection={collection} />
 
-        <div className="flex flex-col gap-6 p-4 rounded bg-slate-800">
+        <div className="flex flex-col gap-6 p-4 rounded bg-slate-700">
           <div className="flex items-center gap-6">
             <div>Sort by:</div>
             <div className="flex gap-2">
@@ -188,7 +188,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                           cursor: undefined,
                         })}
                         className={cn(
-                          "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700",
+                          "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600",
                           "text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700"
                         )}
                       >
@@ -205,7 +205,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                           cursor: undefined,
                         })}
                         className={cn(
-                          "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700",
+                          "px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600",
                           "text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700"
                         )}
                       >
@@ -221,7 +221,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                           cursor: undefined,
                         })}
                         className={
-                          "px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700"
+                          "px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600"
                         }
                       >
                         {labelDefault}
@@ -234,7 +234,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             <BeatmapsetListing listing={listing} />
             {hasMore ? (
               <Link replace href={replaceQueryParams({ cursor: nextPageCursor })}>
-                <div className="w-full p-3 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-slate-600">
+                <div className="w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600">
                   Load more
                 </div>
               </Link>

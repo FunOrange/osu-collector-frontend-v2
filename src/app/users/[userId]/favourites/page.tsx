@@ -26,7 +26,7 @@ export default async function UserFavouritesPage({
   return (
     <div className="flex justify-center w-full">
       <div className="px-2 py-5 md:px-10 max-w-screen-2xl">
-        <div className="p-4 mb-4 rounded bg-slate-800 md:p-7">
+        <div className="p-4 mb-4 rounded bg-slate-700 md:p-7">
           <h1 className="flex items-center gap-4 mb-6">
             <Avatar className="w-12 h-12">
               <AvatarImage src={pageUser.osuweb.avatar_url} alt="@shadcn" />

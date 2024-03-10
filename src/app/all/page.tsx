@@ -31,7 +31,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
             {results} results
           </div>
         </div>
-        <div className="p-4 mb-4 rounded bg-slate-800 md:p-7">
+        <div className="p-4 mb-4 rounded bg-slate-700 md:p-7">
           <div className="flex flex-wrap items-center gap-2 mb-6">
             {[
               searchParams.search
@@ -39,7 +39,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
                 : undefined,
               { label: "Popular", sortBy: "favourites", orderBy: "desc" },
               { label: "Newest", sortBy: "dateUploaded", orderBy: "desc" },
-              { label: "Oldest", sortBy: "dateUploaded", orderBy: "asc" },
+              // { label: "Oldest", sortBy: "dateUploaded", orderBy: "asc" }, // FIXME: uncomment once backend returns correct data
               { label: "osu!std", sortBy: "osuCount", orderBy: "desc" },
               { label: "taiko", sortBy: "taikoCount", orderBy: "desc" },
               { label: "mania", sortBy: "maniaCount", orderBy: "desc" },
@@ -51,7 +51,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
                   key={i}
                   href={`/all?${formatQueryParams(mergeRight(searchParams, { sortBy, orderBy }))}`}
                   className={cn(
-                    "px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-700",
+                    "px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600",
                     isMatching({ sortBy, orderBy })(searchParams)
                       ? "text-indigo-200 bg-indigo-800 opacity-90 pointer-events-none border-indigo-800"
                       : undefined

@@ -59,7 +59,7 @@ export default function DesktopClientPage() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center w-full gap-8 px-2 py-16 bg-slate-800">
+      <div className="flex flex-col items-center w-full gap-8 px-2 py-16 bg-slate-700">
         <DownloadDesktopClient />
 
         <div className="w-full max-w-6xl py-6 rounded">

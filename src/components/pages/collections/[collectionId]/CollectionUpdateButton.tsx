@@ -85,7 +85,7 @@ export default function CollectionUpdateButton({
     return (
       <>
         <Dialog open={showModal} onOpenChange={(open) => setShowModal(open)}>
-          <DialogTrigger className="w-full p-2 text-center transition rounded bg-slate-700 hover:shadow-xl hover:bg-cyan-700">
+          <DialogTrigger className="w-full p-2 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-cyan-700">
             <div>
               Reupload collection
               <div className="text-xs text-slate-400">
@@ -116,7 +116,7 @@ export default function CollectionUpdateButton({
                     </div>
                   ))
                   .with({ loaded: true, hasCollection: true }, () => (
-                    <div className="p-4 rounded bg-slate-800">
+                    <div className="p-4 rounded bg-slate-700">
                       {" "}
                       <div>
                         {localCount} beatmaps{" "}
@@ -131,7 +131,7 @@ export default function CollectionUpdateButton({
                     </div>
                   ))
                   .with({ loaded: true, hasCollection: false }, () => (
-                    <div className="p-4 rounded bg-slate-800">
+                    <div className="p-4 rounded bg-slate-700">
                       <div className="mb-4 font-semibold text-red-500">
                         You do not have a collection named {remoteCollection.name}
                       </div>
@@ -152,7 +152,7 @@ export default function CollectionUpdateButton({
               </div>
               <div>
                 <div className="mb-1 text-lg font-semibold">On osu!Collector:</div>
-                <div className="p-4 rounded bg-slate-800">
+                <div className="p-4 rounded bg-slate-700">
                   <span className="mr-2">{remoteCount} beatmaps</span>
                   <span className="text-slate-500">
                     (updated {moment(remoteCollection?.dateLastModified?._seconds * 1000).fromNow()}
@@ -185,7 +185,7 @@ export default function CollectionUpdateButton({
             <div className="flex items-center gap-2">
               <Link
                 href="/"
-                className="inline-flex px-4 py-3 transition-colors rounded bg-slate-700 hover:bg-slate-600"
+                className="inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600"
               >
                 Back to home
               </Link>

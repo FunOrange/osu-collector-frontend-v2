@@ -39,21 +39,21 @@ export default function EditableCollectionDescription({
   return match(conditions)
     .with({ isUploader: false, editing: false, hasDescription: true }, () => (
       <div
-        className="px-3 py-2 whitespace-pre-wrap rounded bg-slate-700"
+        className="px-3 py-2 whitespace-pre-wrap rounded bg-slate-800"
         style={{ minHeight: "88px" }}
       >
         <div>{collection.description}</div>
       </div>
     ))
     .with({ isUploader: false, editing: false, hasDescription: false }, () => (
-      <div className="p-4 rounded bg-slate-700" style={{ minHeight: "88px" }}>
+      <div className="p-4 rounded bg-slate-800" style={{ minHeight: "88px" }}>
         <div className="text-sm text-slate-500">No description</div>
       </div>
     ))
     .with({ isUploader: true, editing: false, hasDescription: true }, () => (
       <div
         className={cn(
-          "px-3 py-2 whitespace-pre-wrap rounded bg-slate-700",
+          "px-3 py-2 whitespace-pre-wrap rounded bg-slate-800",
           "cursor-pointer hover:bg-slate-600"
         )}
         style={{ minHeight: "208px" }}
@@ -64,7 +64,7 @@ export default function EditableCollectionDescription({
     ))
     .with({ isUploader: true, editing: false, hasDescription: false }, () => (
       <div
-        className={cn("p-4 rounded bg-slate-700", "cursor-pointer hover:bg-slate-600")}
+        className={cn("p-4 rounded bg-slate-800", "cursor-pointer hover:bg-slate-600")}
         style={{ minHeight: "208px" }}
         onClick={() => setEditing(true)}
       >

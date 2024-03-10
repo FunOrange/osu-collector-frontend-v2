@@ -29,14 +29,14 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
 
   return (
     <Provider>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap rounded-t bg-slate-700">
         <TabSwitcher
           items={tournament.rounds.map((round) => ({ label: round.round, value: round.round }))}
           value={currentRound}
           onChange={setCurrentRound}
         />
       </div>
-      <div className="flex flex-col gap-2 p-4 bg-slate-800">
+      <div className="flex flex-col gap-2 p-4">
         {round.mods.map((mod, j) => (
           <React.Fragment key={j}>
             {mod.maps.map((beatmap, k) => {
@@ -185,7 +185,7 @@ function MappoolBeatmap({ key, mod, modIndex, beatmap }) {
       {!beatmapBeingProcessed && (
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="text-2xl">{`[${beatmap?.version}]`}</div>
+            <div className="text-xl">{`[${beatmap?.version}]`}</div>
             <div
               className="px-2 text-sm font-bold rounded-sm"
               style={{
@@ -197,17 +197,17 @@ function MappoolBeatmap({ key, mod, modIndex, beatmap }) {
             </div>
           </div>
           <div className="flex gap-2">
-            <div className={cn("px-2 rounded-sm bg-slate-600")}>{duration}</div>
-            <div className={cn("px-2 rounded-sm bg-slate-600")}>{Math.round(beatmap.bpm)} bpm</div>
-            <div className={cn("px-2 rounded-sm bg-slate-600")}>
+            <div className={cn("px-2 rounded-sm bg-slate-700")}>{duration}</div>
+            <div className={cn("px-2 rounded-sm bg-slate-700")}>{Math.round(beatmap.bpm)} bpm</div>
+            <div className={cn("px-2 rounded-sm bg-slate-700")}>
               {hr && diffUp}
               CS {beatmap.cs}
             </div>
-            <div className={cn("px-2 bg-slate-600 rounded-sm")}>
+            <div className={cn("px-2 bg-slate-700 rounded-sm")}>
               {(dt || hr) && diffUp}
               AR {beatmap.ar}
             </div>
-            <div className={cn("px-2 rounded-sm bg-slate-600")}>
+            <div className={cn("px-2 rounded-sm bg-slate-700")}>
               {(dt || hr) && diffUp}
               OD {beatmap.accuracy}
             </div>
@@ -217,7 +217,11 @@ function MappoolBeatmap({ key, mod, modIndex, beatmap }) {
       {beatmapBeingProcessed && (
         <div className="text-slate-500">
           Beatmap not in database.{" "}
-          <a href={`https://osu.ppy.sh/b/${beatmap}`} target="_blank" className="text-blue-300">
+          <a
+            href={`https://osu.ppy.sh/b/${beatmap}`}
+            target="_blank"
+            className="text-blue-300 underline"
+          >
             Go to beatmap page
           </a>
         </div>

@@ -20,7 +20,7 @@ export default function SearchInput({ searchParams, withIcon }: SearchInputProps
           <Search size={20} />
         </div>
         <input
-          className="px-3 py-3 text-xl border rounded-md pl-11 border-slate-700 bg-slate-800 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground"
+          className="px-3 py-3 text-xl border rounded-md pl-11 border-slate-700 bg-slate-700 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground"
           placeholder="Search tournaments..."
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
@@ -39,7 +39,7 @@ export default function SearchInput({ searchParams, withIcon }: SearchInputProps
   }
   return (
     <input
-      className="px-3 py-2 text-2xl text-center border rounded-md border-slate-700 bg-slate-800 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground"
+      className="px-3 py-2 text-2xl text-center border rounded-md border-slate-700 bg-slate-700 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground"
       placeholder="Search..."
       value={userInput}
       onChange={(e) => setUserInput(e.target.value)}

@@ -95,7 +95,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
         </div>
         {/* diffs */}
         <div>
-          <div className="rounded bg-slate-700">
+          <div className="rounded bg-slate-800">
             {beatmaps.map((beatmap) => (
               <div
                 key={beatmap.id}

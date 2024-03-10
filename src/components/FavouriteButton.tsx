@@ -99,7 +99,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
     })
     .with("fullWidth", () => {
       const { bg, fg } = match({ favourited, hovered })
-        .with({ favourited: false, hovered: false }, () => ({ bg: "#334155", fg: "#cbd5e1" }))
+        .with({ favourited: false, hovered: false }, () => ({ bg: "#475569", fg: "#cbd5e1" }))
         .with({ favourited: false, hovered: true }, () => ({ bg: "#db2777", fg: "#cbd5e1" }))
         .with({ favourited: true, hovered: false }, () => ({ bg: "#f472b6", fg: "#111827" }))
         .with({ favourited: true, hovered: true }, () => ({ bg: "#f9a8d4", fg: "#111827" }))
