@@ -1,3 +1,4 @@
+import { cn } from "@/utils/shadcn-utils";
 import Link from "next/link";
 
 export interface BarGraphProps {
@@ -9,8 +10,15 @@ export interface BarGraphProps {
   };
   height?: string | number;
   barHref?: (x: any) => string;
+  className?: string;
 }
-export default function BarGraph({ title, data, barHref, height = "80px" }: BarGraphProps) {
+export default function BarGraph({
+  title,
+  data,
+  barHref,
+  height = "80px",
+  className,
+}: BarGraphProps) {
   const length = data.x.length;
   const maxValue = Math.max(...data.y);
   const barStyle = (y, i) => ({
@@ -20,7 +28,7 @@ export default function BarGraph({ title, data, barHref, height = "80px" }: BarG
   });
   return (
     <div
-      className="grid w-full px-8 pt-4 pb-1 gap-x-2 bg-slate-950"
+      className={cn("grid w-full px-8 pt-4 pb-1 gap-x-2 bg-slate-950", className)}
       style={{
         height,
         gridTemplateColumns: `repeat(${length}, minmax(0, 1fr))`,

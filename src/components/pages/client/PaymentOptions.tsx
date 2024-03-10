@@ -86,11 +86,15 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                   </YouMustBeLoggedIn>
                 ) : user?.private?.linkedTwitchAccount ? (
                   <div className="flex">
-                    <Button className="w-full rounded-r-none" variant="outline" disabled>
+                    <Button
+                      className="w-full rounded-r-none bg-background"
+                      variant="outline"
+                      disabled
+                    >
                       Already linked: {user.private.linkedTwitchAccount.displayName}
                     </Button>
                     <Button
-                      className="rounded-l-none"
+                      className="rounded-l-none bg-background"
                       variant="outline"
                       onClick={unlinkTwitchAccount}
                       loading={unlinkingTwitchAccount}
