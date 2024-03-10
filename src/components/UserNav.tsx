@@ -20,7 +20,7 @@ import md5 from "md5";
 import { match } from "ts-pattern";
 import Link from "next/link";
 import { formatQueryParams } from "@/utils/string-utils";
-import { CreditCard, Heart, Upload, User } from "lucide-react";
+import { CreditCard, Heart, Upload } from "lucide-react";
 
 export function UserNav() {
   const { user, isLoading, logout } = useUser();
@@ -102,21 +102,32 @@ export function UserNav() {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <Link href={`/users/${user.id}/collections`}>
+                <Link href={`/users/${user.id}/uploads/collections`}>
                   <DropdownMenuItem>Collections</DropdownMenuItem>
                 </Link>
-                <Link href={`/users/${user.id}/tournaments`}>
+                <Link href={`/users/${user.id}/uploads/tournaments`}>
                   <DropdownMenuItem>Tournaments</DropdownMenuItem>
                 </Link>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
           </DropdownMenuSub>
-          <Link href={`/users/${user.id}/favourites`}>
-            <DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
               <Heart className="w-4 h-4 mr-2" />
-              Favourites
-            </DropdownMenuItem>
-          </Link>
+              <span>Favourites</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <Link href={`/users/${user.id}/favourites/collections`}>
+                  <DropdownMenuItem>Collections</DropdownMenuItem>
+                </Link>
+                <Link href={`/users/${user.id}/favourites/tournaments`}>
+                  <DropdownMenuItem>Tournaments</DropdownMenuItem>
+                </Link>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+
           <Link href="/billing">
             <DropdownMenuItem>
               <CreditCard className="w-4 h-4 mr-2" />

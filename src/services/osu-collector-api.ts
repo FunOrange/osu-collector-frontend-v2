@@ -230,9 +230,17 @@ export async function getOwnUser() {
   const { loggedIn, user } = response.data;
   return loggedIn ? user : null;
 }
-export async function getUserFavourites(userId, cancelCallback = undefined) {
+export async function getUserFavouriteCollections(userId, cancelCallback = undefined) {
   return api
-    .get(`/users/${userId}/favourites`, {
+    .get(`/users/${userId}/favourites/collections`, {
+      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
+    })
+    .then((res) => res.data);
+}
+
+export async function getUserFavouriteTournaments(userId, cancelCallback = undefined) {
+  return api
+    .get(`/users/${userId}/favourites/tournaments`, {
       cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
