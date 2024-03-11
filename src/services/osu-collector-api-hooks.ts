@@ -37,7 +37,7 @@ export function useCancellableSWRImmutable(key, query = undefined) {
 }
 
 export function useCollection(id) {
-  const { data, error, mutate } = useSWRImmutable(`/api/collections/${id}`, (url) =>
+  const { data, error, mutate } = useSWRImmutable(`/collections/${id}`, (url) =>
     api.get(url).then((res) => res.data)
   );
   if (error) console.error(error);
@@ -46,7 +46,7 @@ export function useCollection(id) {
 
 export function useUserUploads(userId) {
   const { data, error, mutate } = useSWRImmutable(
-    userId ? `/api/users/${userId}/uploads` : null,
+    userId ? `/users/${userId}/uploads` : null,
     (url) => api.get(url).then((res) => res.data)
   );
   if (error) console.error(error);
@@ -58,10 +58,10 @@ export function useUserUploads(userId) {
   };
 }
 
-export const useMetadata = () => useCancellableSWRImmutable(`/api/metadata`);
+export const useMetadata = () => useCancellableSWRImmutable(`/metadata`);
 
 export function useTournament(id) {
-  const { data, error, mutate } = useSWRImmutable(`/api/tournaments/${id}`, (url) =>
+  const { data, error, mutate } = useSWRImmutable(`/tournaments/${id}`, (url) =>
     api.get(url).then((res) => res.data)
   );
   if (error) console.error(error);
@@ -76,17 +76,53 @@ export const useTwitchSubcription = () => {
 };
 
 export const usePaypalSubscription = () => {
+  const { user } = useUser();
   const { data: paypalSubscription, ...rest } = useSWRImmutable(
     "/payments/paypalSubscription",
     (url) => api.get(url).then((res) => res.data)
   );
-  return { paypalSubscription, ...rest };
+  const isPaypalSubscriptionInEffect =
+    new Date(user?.private?.subscriptionExpiryDate?._seconds * 1000) > new Date() ||
+    paypalSubscription?.status.toLowerCase() === "active";
+  const canCancelPaypalSubscription = paypalSubscription?.status?.toLowerCase() === "active";
+  const paypalEndDate = new Date(
+    paypalSubscription?.billing_info.next_billing_time ||
+      user?.private?.subscriptionExpiryDate?._seconds * 1000
+  );
+  const paypalEndDateVerb =
+    new Date() > paypalEndDate
+      ? "Ended"
+      : paypalSubscription?.status.toLowerCase() === "active"
+      ? "Renews"
+      : "Ends";
+  return {
+    paypalSubscription,
+    isPaypalSubscriptionInEffect,
+    canCancelPaypalSubscription,
+    paypalEndDate,
+    paypalEndDateVerb,
+    ...rest,
+  };
 };
 
 export const useStripeSubscription = () => {
+  const { user } = useUser();
   const { data: stripeSubscription, ...rest } = useSWRImmutable(
     "/payments/stripeSubscription",
     (url) => api.get(url).then((res) => res.data)
   );
-  return { stripeSubscription, ...rest };
+  const stripeEndDate = ["canceled", "past_due", "incomplete", "incomplete_expired"].includes(
+    stripeSubscription?.status
+  )
+    ? new Date(user?.private?.subscriptionExpiryDate?._seconds * 1000)
+    : new Date(stripeSubscription?.current_period_end * 1000);
+  const stripeEndDateVerb =
+    new Date() > stripeEndDate
+      ? "Ended"
+      : stripeSubscription?.cancel_at_period_end
+      ? "Ends"
+      : stripeSubscription?.status.toLowerCase() === "active"
+      ? "Renews"
+      : "Ends";
+  return { stripeSubscription, stripeEndDate, stripeEndDateVerb, ...rest };
 };
