@@ -1,4 +1,5 @@
 import { OsuCollectorUser } from "@/entities/OsuCollectorUser";
+import { StripeSubscription } from "@/entities/stripe/StripeSubscription";
 import useSubmit from "@/hooks/useSubmit";
 import axios from "axios";
 import useSWRImmutable from "swr/immutable";
@@ -107,7 +108,7 @@ export const usePaypalSubscription = () => {
 
 export const useStripeSubscription = () => {
   const { user } = useUser();
-  const { data: stripeSubscription, ...rest } = useSWRImmutable(
+  const { data: stripeSubscription, ...rest } = useSWRImmutable<StripeSubscription>(
     "/payments/stripeSubscription",
     (url) => api.get(url).then((res) => res.data)
   );
@@ -124,5 +125,14 @@ export const useStripeSubscription = () => {
       : stripeSubscription?.status.toLowerCase() === "active"
       ? "Renews"
       : "Ends";
-  return { stripeSubscription, stripeEndDate, stripeEndDateVerb, ...rest };
+  const canCancelStripeSubscription =
+    stripeSubscription?.status?.toLowerCase() !== "canceled" &&
+    !stripeSubscription?.cancel_at_period_end;
+  return {
+    stripeSubscription,
+    stripeEndDate,
+    stripeEndDateVerb,
+    canCancelStripeSubscription,
+    ...rest,
+  };
 };
