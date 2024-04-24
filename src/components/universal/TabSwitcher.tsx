@@ -7,7 +7,7 @@ export interface TabSwitcherProps {
 }
 export default function TabSwitcher({ items, value, onChange }: TabSwitcherProps) {
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row flex-wrap items-center">
       {items.map((item) => {
         const isActive = item.value === value;
         return (
