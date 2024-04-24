@@ -16,6 +16,7 @@ import { getRandomFromArray } from "@/utils/array-utils";
 import { Progress } from "@/components/shadcn/progress";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Collection } from "@/entities/Collection";
+import DesktopFeaturePreviewOverlay from "@/components/DesktopFeaturePreviewOverlay";
 
 enum DownloadStates {
   NotStarted = "Starting download...",
@@ -98,21 +99,7 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
       <DialogHeader>
         <DialogTitle>Downloads (preview)</DialogTitle>
       </DialogHeader>
-      <PreviewOverlay className={overlayVisible ? undefined : "opacity-0"}>
-        <div className="horizontalStrip">
-          <h3>You are previewing an osu!Collector Desktop feature!</h3>
-          <div className="flex gap-3">
-            <DialogClose>
-              <Button variant="secondary" onClick={close}>
-                Cancel
-              </Button>
-            </DialogClose>
-            <Link href="/client">
-              <Button>Get osu!Collector Desktop</Button>
-            </Link>
-          </div>
-        </div>
-      </PreviewOverlay>
+      <DesktopFeaturePreviewOverlay visible={overlayVisible} />
       <DialogDescription style={{ height: "80vh", overflow: "hidden" }}>
         <div>osu! should automatically open all .osz files once they are finished downloading.</div>
         <div className="mb-3">
@@ -258,37 +245,5 @@ class CollectionDownload {
     );
   }
 }
-
-const PreviewOverlay = styled.div`
-  transition: opacity 0.4s;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  backdrop-filter: blur(1px);
-  .horizontalStrip {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 160px;
-    color: white;
-    /* background: linear-gradient(
-      0deg,
-      rgba(2, 0, 36, 0) 0%,
-      rgba(0, 0, 0, 0.8015581232492998) 20%,
-      rgba(0, 0, 0, 0.8) 80%,
-      rgba(0, 0, 0, 0) 100%
-    ); */
-    background-color: rgba(0, 0, 0, 0.8);
-    -webkit-box-shadow: 0px 0px 15px 5px #000;
-    box-shadow: 0px 0px 15px 5px #000;
-  }
-`;
 
 export default DownloadPreviewModal;
