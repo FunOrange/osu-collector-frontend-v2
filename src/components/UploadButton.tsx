@@ -56,7 +56,7 @@ export default function UploadButton({}: UploadButtonProps) {
                 <h2 className="text-xl font-semibold">Collection</h2>
               </button>
 
-              <Link href="/tournaments/upload">
+              <Link href="/tournaments/upload" onClick={() => setMakingSelection(false)}>
                 <button className="w-full px-4 transition-colors border py-14 rounded-xl hover:bg-slate-600">
                   <Trophy className="inline mb-2" size={48} />
                   <h2 className="text-xl font-semibold">Tournament Mappool</h2>
