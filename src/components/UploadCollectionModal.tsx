@@ -21,15 +21,21 @@ import { useToast } from "@/components/shadcn/use-toast";
 import { cn } from "@/utils/shadcn-utils";
 import { propertyEquals } from "@/utils/object-utils";
 import { Checkbox } from "@/components/shadcn/checkbox";
+import { DialogProps } from "@radix-ui/react-alert-dialog";
 
 export interface UploadCollectionModalProps {
-  children: ReactNode;
+  children?: ReactNode;
+  open: boolean;
+  onOpenChange: DialogProps["onOpenChange"];
 }
-export default function UploadCollectionModal({ children }: UploadCollectionModalProps) {
+export default function UploadCollectionModal({
+  children,
+  open,
+  onOpenChange,
+}: UploadCollectionModalProps) {
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useUser();
-  const [open, setOpen] = useState(false);
 
   // #region local collection.db
   const [filename, setFilename] = useState("");
@@ -60,12 +66,12 @@ export default function UploadCollectionModal({ children }: UploadCollectionModa
     const collections = await api.uploadCollections([selectedCollection]);
     router.push(`/collections/${collections[0].id}/${getUrlSlug(collections[0].name)}`);
     toast({ title: "Collection uploaded!", description: "Redirecting to collection page..." });
-    setOpen(false);
+    onOpenChange(false);
   });
   const uploadDisabled = uploading || !selectedCollection;
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="max-w-4xl">
         <DialogHeader>

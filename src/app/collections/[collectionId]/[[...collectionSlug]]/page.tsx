@@ -241,7 +241,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
           <div className="flex flex-col gap-4">
             <BeatmapsetListing listing={listing} />
             {hasMore ? (
-              <Link replace href={replaceQueryParams({ cursor: nextPageCursor })}>
+              <Link href={replaceQueryParams({ cursor: nextPageCursor })}>
                 <div className="w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600">
                   Load more
                 </div>

@@ -29,27 +29,23 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
 
   const [hovered, setHovered] = useState(false);
 
+  const [localOffset, setLocalOffset] = useState(0);
+  const favouriteCount = collection?.favourites + localOffset;
   const onClick = async () => {
     if (!user) return;
 
     if (collection && favourited) {
+      setLocalOffset((prev) => prev - 1);
       await mutate(api.unfavouriteCollection(collection.id) as any, {
         optimisticData: (data) =>
-          assocPath(
-            ["user", "favourites"],
-            without([collection.id], data.user.favourites ?? []),
-            data
-          ),
+          assocPath(["user", "favourites"], without([collection.id], user?.favourites ?? []), data),
         populateCache: false,
       });
     } else if (collection && !favourited) {
+      setLocalOffset((prev) => prev + 1);
       await mutate(api.favouriteCollection(collection.id) as any, {
         optimisticData: (data) =>
-          assocPath(
-            ["user", "favourites"],
-            concat([collection.id], data.user.favourites ?? []),
-            data
-          ),
+          assocPath(["user", "favourites"], concat([collection.id], user?.favourites ?? []), data),
         populateCache: false,
       });
     } else if (tournament && favourited) {
@@ -93,7 +89,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           />
-          {collection && <div>{collection.favourites}</div>}
+          {collection && <div>{favouriteCount}</div>}
         </div>
       );
     })
@@ -113,7 +109,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
           onMouseLeave={() => setHovered(false)}
         >
           Favorite{favourited ? "d" : ""}
-          {collection && ` (${collection.favourites})`}
+          {collection && ` (${favouriteCount})`}
         </button>
       );
     })
