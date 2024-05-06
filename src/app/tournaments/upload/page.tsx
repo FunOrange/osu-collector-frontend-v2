@@ -3,10 +3,11 @@ import { Button } from "@/components/shadcn/button";
 import { Input } from "@/components/shadcn/input";
 import { Tournament } from "@/entities/Tournament";
 import * as api from "@/services/osu-collector-api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import mappoolTemplate from "@/app/tournaments/upload/mappoolTemplate";
 import Image from "next/image";
 import { Label } from "@/components/shadcn/label";
+import { Textarea } from "@/components/shadcn/textarea";
 
 interface TournamentsPageProps {
   tournament?: Tournament;
@@ -14,13 +15,9 @@ interface TournamentsPageProps {
 export default function TournamentsPage({ tournament }: TournamentsPageProps) {
   const title = tournament ? "Edit tournament" : "Create tournament";
 
-  const tournamentDraft = JSON.parse(localStorage.getItem("Create Tournament Draft"));
-
   const [organizer, setOrganizer] = useState("");
-  const [organizers, setOrganizers] = useState(tournamentDraft?.organizers || []);
-  const [mappoolText, setMappoolText] = useState(
-    tournamentDraft?.mappoolText || (tournament === null ? "" : mappoolTemplate)
-  );
+  const [organizers, setOrganizers] = useState([]);
+  const [mappoolText, setMappoolText] = useState(tournament === null ? "" : mappoolTemplate);
   const addOrganizer = () => {
     setOrganizer("");
     const organizerId = Number(organizer);
@@ -29,15 +26,25 @@ export default function TournamentsPage({ tournament }: TournamentsPageProps) {
     }
   };
 
+  useEffect(() => {
+    const tournamentDraft = JSON.parse(localStorage.getItem("Create Tournament Draft"));
+    if (tournamentDraft?.organizers) setOrganizers(tournamentDraft?.organizers);
+    if (tournamentDraft?.mappoolText) setMappoolText(tournamentDraft?.mappoolText);
+  }, []);
+
   return (
     <div className="flex justify-center w-full">
       <div className="w-full max-w-screen-lg p-4 m-5 rounded bg-slate-700 md:p-7">
         <h1 className="mb-6 text-3xl">{title}</h1>
 
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col mb-6 gap-y-4">
           <div>
             <Label htmlFor="tournament-name">Tournament name</Label>
-            <Input type="text" id="tournament-name" />
+            <Input
+              className="border-transparent focus:border-transparent focus:ring-0"
+              type="text"
+              id="tournament-name"
+            />
           </div>
 
           <div>
@@ -62,15 +69,14 @@ export default function TournamentsPage({ tournament }: TournamentsPageProps) {
           </div>
 
           <div>
-            <div className="mb-1">
-              <span className="mr-2">Mappool Download URL </span>
-              <span className="text-sm text-slate-500">Optional</span>
-            </div>
-            <Input />
+            <Label htmlFor="mappool-download-url">
+              Mappool Download URL <span className="text-sm text-slate-500">Optional</span>
+            </Label>
+            <Input type="text" id="mappool-download-url" />
           </div>
 
-          <div className="mb-3">
-            <div className="mb-1">Tournament Organizers</div>
+          <div>
+            <div className="pb-1">Tournament Organizers</div>
             <div className="flex">
               <div className="flex mr-4">
                 <Input
@@ -81,7 +87,7 @@ export default function TournamentsPage({ tournament }: TournamentsPageProps) {
                 <Input
                   placeholder="123456"
                   value={organizer}
-                  className="w-20 rounded-none"
+                  className="z-10 w-20 rounded-none"
                   // onKeyPress={organizerKeyPress}
                   // onChange={(e) => {
                   //   const value = e.target.value.trim();
@@ -121,10 +127,35 @@ export default function TournamentsPage({ tournament }: TournamentsPageProps) {
                 </div>
               ))}
             </div>
-            <div className="text-slate-500">
+            <div className="text-sm text-slate-500">
               Optional: Organizers have permission to make changes to this tournament
             </div>
           </div>
+
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              // value={value}
+              // onChange={(e) => setUserInput(e.target.value)}
+              autoFocus
+              style={{ minHeight: "100px" }}
+            />
+          </div>
+        </div>
+
+        <div>
+          <h2 className="mb-2 text-2xl">Mappool</h2>
+          <div className="text-sm text-slate-500">
+            A mappool template is provided below. Please modify it to include the maps in the
+            tournament.
+          </div>
+          <Textarea
+            rows={mappoolText.split(/\r\n|\r|\n/).length}
+            value={mappoolText}
+            // onChange={(e) => setUserInput(e.target.value)}
+            autoFocus
+            style={{ minHeight: "100px" }}
+          />
         </div>
       </div>
     </div>
