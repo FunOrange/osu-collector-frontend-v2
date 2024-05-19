@@ -1,5 +1,5 @@
-import { OsuUser } from "@/entities/OsuUser";
-import { FirestoreTimestamp } from "@/types";
+import { OsuUser } from '@/entities/OsuUser';
+import { FirestoreTimestamp } from '@/types';
 
 export interface OsuCollectorUser {
   ircName: string;

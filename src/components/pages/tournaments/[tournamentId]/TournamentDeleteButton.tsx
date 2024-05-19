@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/shadcn/button";
+'use client';
+import { Button } from '@/components/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -7,15 +7,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Tournament } from "@/entities/Tournament";
-import useSubmit from "@/hooks/useSubmit";
-import { useUser } from "@/services/osu-collector-api-hooks";
-import { DialogClose } from "@radix-ui/react-dialog";
-import * as api from "@/services/osu-collector-api";
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+} from '@/components/shadcn/dialog';
+import { Tournament } from '@/entities/Tournament';
+import useSubmit from '@/hooks/useSubmit';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import { DialogClose } from '@radix-ui/react-dialog';
+import * as api from '@/services/osu-collector-api';
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export interface TournamentDeleteButtonProps {
   tournament: Tournament;
@@ -36,18 +36,18 @@ export default function TournamentDeleteButton({ tournament }: TournamentDeleteB
     return (
       <>
         <Dialog open={showConfirmation} onOpenChange={(open) => setShowConfirmation(open)}>
-          <DialogTrigger className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-rose-800">
+          <DialogTrigger className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-rose-800'>
             Delete tournament
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Are you sure you wish to delete this tournament?</DialogTitle>
             </DialogHeader>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <DialogClose>
-                <Button variant="outline">Cancel</Button>
+                <Button variant='outline'>Cancel</Button>
               </DialogClose>
-              <Button variant="destructive" onClick={deleteTournament} loading={deleting}>
+              <Button variant='destructive' onClick={deleteTournament} loading={deleting}>
                 Delete
               </Button>
             </div>
@@ -55,14 +55,14 @@ export default function TournamentDeleteButton({ tournament }: TournamentDeleteB
         </Dialog>
 
         <Dialog open={tournamentDeleted} onOpenChange={(open) => setTournamentDeleted(open)}>
-          <DialogContent onPointerDownOutside={() => router.push("/tournaments")}>
+          <DialogContent onPointerDownOutside={() => router.push('/tournaments')}>
             <DialogHeader>
               <DialogTitle>Tournament successfully deleted.</DialogTitle>
             </DialogHeader>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Link
-                href="/"
-                className="inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600"
+                href='/'
+                className='inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600'
               >
                 Back to home
               </Link>

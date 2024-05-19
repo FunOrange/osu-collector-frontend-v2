@@ -44,11 +44,11 @@ interface Availability {
 
 interface Covers {
   slimcover: string;
-  "cover@2x": string;
+  'cover@2x': string;
   list: string;
   cover: string;
-  "list@2x": string;
-  "card@2x": string;
+  'list@2x': string;
+  'card@2x': string;
   card: string;
-  "slimcover@2x": string;
+  'slimcover@2x': string;
 }

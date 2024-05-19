@@ -90,16 +90,7 @@ export interface Address {
 }
 
 export interface Card {
-  brand:
-    | "amex"
-    | "diners"
-    | "discover"
-    | "eftpos_au"
-    | "jcb"
-    | "mastercard"
-    | "unionpay"
-    | "visa"
-    | "unknown";
+  brand: 'amex' | 'diners' | 'discover' | 'eftpos_au' | 'jcb' | 'mastercard' | 'unionpay' | 'visa' | 'unknown';
   checks: Checks;
   country: string;
   display_brand: string;

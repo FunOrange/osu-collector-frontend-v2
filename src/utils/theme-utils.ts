@@ -1,60 +1,60 @@
-import { clamp } from "@/utils/number-utils";
-import { match } from "ts-pattern";
+import { clamp } from '@/utils/number-utils';
+import { match } from 'ts-pattern';
 
 export function bpmToColor(bpm, darkMode = true) {
   const _bpm = clamp(Math.floor(bpm / 10) * 10, 150, 300);
-  if (_bpm === 150) return "#93e2ff";
-  if (_bpm === 160) return "#80dbff";
-  if (_bpm === 170) return "#6bd3fe";
-  if (_bpm === 180) return "#55cbff";
-  if (_bpm === 190) return "#39c3ff";
-  if (_bpm === 200) return "#00bbff";
-  if (_bpm === 210) return "#00a8ea";
-  if (_bpm === 220) return "#0095d6";
-  if (_bpm === 230) return "#0082c2";
-  if (_bpm === 240) return "#0070ae";
-  if (_bpm === 250) return "#005f9b";
-  if (_bpm === 260) return "#004e88";
-  if (_bpm === 270) return "#003e76";
-  if (_bpm === 280) return "#002e64";
-  if (_bpm === 290) return "#002052";
-  if (_bpm === 300) return darkMode ? "#fff" : "#000000";
-  return "#000000";
+  if (_bpm === 150) return '#93e2ff';
+  if (_bpm === 160) return '#80dbff';
+  if (_bpm === 170) return '#6bd3fe';
+  if (_bpm === 180) return '#55cbff';
+  if (_bpm === 190) return '#39c3ff';
+  if (_bpm === 200) return '#00bbff';
+  if (_bpm === 210) return '#00a8ea';
+  if (_bpm === 220) return '#0095d6';
+  if (_bpm === 230) return '#0082c2';
+  if (_bpm === 240) return '#0070ae';
+  if (_bpm === 250) return '#005f9b';
+  if (_bpm === 260) return '#004e88';
+  if (_bpm === 270) return '#003e76';
+  if (_bpm === 280) return '#002e64';
+  if (_bpm === 290) return '#002052';
+  if (_bpm === 300) return darkMode ? '#fff' : '#000000';
+  return '#000000';
 }
 
 export function starToColor(star, darkMode = false) {
   const _star = clamp(Math.floor(star), 1, 10);
-  if (_star === 1) return "#6EFF79";
-  if (_star === 2) return "#4FC0FF";
-  if (_star === 3) return "#F8DA5E";
-  if (_star === 4) return "#FF7F68";
-  if (_star === 5) return "#FF4E6F";
-  if (_star === 6) return "#A653B0";
-  if (_star === 7) return "#3B38B2";
-  if (_star === 8) return darkMode ? "#fff" : "#000000";
-  if (_star === 9) return darkMode ? "#fff" : "#000000";
-  if (_star === 10) return darkMode ? "#fff" : "#000000";
-  return darkMode ? "#fff" : "#000000";
+  if (_star === 1) return '#6EFF79';
+  if (_star === 2) return '#4FC0FF';
+  if (_star === 3) return '#F8DA5E';
+  if (_star === 4) return '#FF7F68';
+  if (_star === 5) return '#FF4E6F';
+  if (_star === 6) return '#A653B0';
+  if (_star === 7) return '#3B38B2';
+  if (_star === 8) return darkMode ? '#fff' : '#000000';
+  if (_star === 9) return darkMode ? '#fff' : '#000000';
+  if (_star === 10) return darkMode ? '#fff' : '#000000';
+  return darkMode ? '#fff' : '#000000';
 }
 
 export function modToColor(mod: string) {
   return match(mod.toLowerCase())
-    .with("nm", () => "#2191CD")
-    .with("hd", () => "#BDA542")
-    .with("hr", () => "#CD334F")
-    .with("dt", () => "#B44DC0")
-    .with("ez", () => "#4dc04f")
-    .with("fl", () => "radial-gradient(circle, rgba(85,85,85,1) 0%, rgba(0,0,0,1) 70%)")
-    .with("fm", () => "#888")
-    .with("tb", () => "#111")
-    .otherwise(() => "#111");
+    .with('nm', () => '#2191CD')
+    .with('hd', () => '#BDA542')
+    .with('hr', () => '#CD334F')
+    .with('dt', () => '#B44DC0')
+    .with('ez', () => '#4dc04f')
+    .with('fl', () => 'radial-gradient(circle, rgba(85,85,85,1) 0%, rgba(0,0,0,1) 70%)')
+    .with('fm', () => '#888')
+    .with('tb', () => '#111')
+    .otherwise(() => '#111');
 }
 
 // Convert hex color to RGB
 export function hexToRgb(hex) {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
-    hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b)
+    hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b),
   );
 
   return result
@@ -137,7 +137,7 @@ export function hslToRgb(hsl) {
 export function getContrastColor(originalColor) {
   const originalRgb = hexToRgb(originalColor);
   if (!originalRgb) {
-    console.error("Invalid color format");
+    console.error('Invalid color format');
     return null;
   }
 

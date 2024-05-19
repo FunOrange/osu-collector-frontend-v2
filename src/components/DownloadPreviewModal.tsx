@@ -1,29 +1,24 @@
-"use client";
+'use client';
 /* eslint-disable no-unused-vars */
-import {
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/shadcn/dialog";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import previewBeatmaps from "@/utils/downloadPreviewBeatmaps.json";
-import { Button } from "@/components/shadcn/button";
-import Image from "next/image";
-import Link from "next/link";
-import { getRandomFromArray } from "@/utils/array-utils";
-import { Progress } from "@/components/shadcn/progress";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { Collection } from "@/entities/Collection";
-import DesktopFeaturePreviewOverlay from "@/components/DesktopFeaturePreviewOverlay";
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/shadcn/dialog';
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import previewBeatmaps from '@/utils/downloadPreviewBeatmaps.json';
+import { Button } from '@/components/shadcn/button';
+import Image from 'next/image';
+import Link from 'next/link';
+import { getRandomFromArray } from '@/utils/array-utils';
+import { Progress } from '@/components/shadcn/progress';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { Collection } from '@/entities/Collection';
+import DesktopFeaturePreviewOverlay from '@/components/DesktopFeaturePreviewOverlay';
 
 enum DownloadStates {
-  NotStarted = "Starting download...",
-  Downloading = "Downloading...",
-  Finished = "Finished",
-  Cancelled = "Cancelled",
-  Failed = "Failed",
+  NotStarted = 'Starting download...',
+  Downloading = 'Downloading...',
+  Finished = 'Finished',
+  Cancelled = 'Cancelled',
+  Failed = 'Failed',
 }
 
 export interface DownloadPreviewModalProps {
@@ -33,9 +28,7 @@ export interface DownloadPreviewModalProps {
 }
 function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalProps) {
   // simulate downloads
-  const [collectionDownloads, setCollectionDownloads] = useState([
-    new CollectionDownload(collection),
-  ]);
+  const [collectionDownloads, setCollectionDownloads] = useState([new CollectionDownload(collection)]);
   const intervalRef = useRef(null);
   useEffect(() => {
     if (open) {
@@ -51,17 +44,17 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
       const _collectionDownloads = [...prev];
       const collectionDownload = collectionDownloads[0];
       let currentBeatmapset = collectionDownload.beatmapsets.find(
-        (beatmapset) => beatmapset.downloadStatus === DownloadStates.Downloading
+        (beatmapset) => beatmapset.downloadStatus === DownloadStates.Downloading,
       );
       if (!currentBeatmapset) {
         currentBeatmapset = collectionDownload.beatmapsets.find(
-          (beatmapset) => beatmapset.downloadStatus === DownloadStates.NotStarted
+          (beatmapset) => beatmapset.downloadStatus === DownloadStates.NotStarted,
         );
         if (currentBeatmapset) {
           currentBeatmapset.downloadStatus = DownloadStates.Downloading;
           const randomBeatmap = getRandomFromArray(previewBeatmaps);
           currentBeatmapset.url = `https://osz-dl.nyc3.cdn.digitaloceanspaces.com/${encodeURIComponent(
-            `${randomBeatmap.beatmapset.id} ${randomBeatmap.beatmapset.artist} - ${randomBeatmap.beatmapset.title}`
+            `${randomBeatmap.beatmapset.id} ${randomBeatmap.beatmapset.artist} - ${randomBeatmap.beatmapset.title}`,
           )}`;
           currentBeatmapset.filename = `${randomBeatmap.beatmapset.id} ${randomBeatmap.beatmapset.artist} - ${randomBeatmap.beatmapset.title}`;
         }
@@ -69,7 +62,7 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
       if (currentBeatmapset) {
         currentBeatmapset.bytesReceived = Math.min(
           currentBeatmapset.bytesReceived + 1.6 * 1e6,
-          currentBeatmapset.bytesTotal
+          currentBeatmapset.bytesTotal,
         );
         if (currentBeatmapset.bytesReceived >= currentBeatmapset.bytesTotal) {
           currentBeatmapset.downloadStatus = DownloadStates.Finished;
@@ -95,21 +88,19 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
   }, [open]);
 
   return (
-    <DialogContent className="max-w-4xl" onPointerDownOutside={close}>
+    <DialogContent className='max-w-4xl' onPointerDownOutside={close}>
       <DialogHeader>
         <DialogTitle>Downloads (preview)</DialogTitle>
       </DialogHeader>
       <DesktopFeaturePreviewOverlay visible={overlayVisible} />
-      <DialogDescription style={{ height: "80vh", overflow: "hidden" }}>
+      <DialogDescription style={{ height: '80vh', overflow: 'hidden' }}>
         <div>osu! should automatically open all .osz files once they are finished downloading.</div>
-        <div className="mb-3">
-          If it doesn&apos;t, you may need to press F5 at the song select screen.
-        </div>
+        <div className='mb-3'>If it doesn&apos;t, you may need to press F5 at the song select screen.</div>
         {collections.length > 0 ? (
           collections
         ) : (
-          <div className="py-4">
-            <h5 className="text-center text-secondary">No downloads</h5>
+          <div className='py-4'>
+            <h5 className='text-center text-secondary'>No downloads</h5>
           </div>
         )}
       </DialogDescription>
@@ -120,47 +111,44 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
 function CollectionDownloadCard({ collectionDownload }) {
   const totalBeatmapsets = collectionDownload.beatmapsets?.length;
   const finishedDownloads = collectionDownload.beatmapsets?.filter(
-    (mapset) => mapset.downloadStatus === DownloadStates.Finished
+    (mapset) => mapset.downloadStatus === DownloadStates.Finished,
   ).length;
   const visibleDownloads = collectionDownload.beatmapsets?.filter(
     (mapset) =>
-      mapset.downloadStatus !== DownloadStates.NotStarted &&
-      mapset.downloadStatus !== DownloadStates.Cancelled
+      mapset.downloadStatus !== DownloadStates.NotStarted && mapset.downloadStatus !== DownloadStates.Cancelled,
   );
   const statusText =
     collectionDownload.downloadStatus === DownloadStates.NotStarted
-      ? "Pending..."
+      ? 'Pending...'
       : collectionDownload.downloadStatus === DownloadStates.Downloading
-      ? `Downloading: ${visibleDownloads.length} of ${totalBeatmapsets}`
-      : collectionDownload.downloadStatus === DownloadStates.Finished
-      ? `Downloaded ${finishedDownloads} of ${totalBeatmapsets}`
-      : collectionDownload.downloadStatus === DownloadStates.Cancelled
-      ? `Downloaded ${finishedDownloads} of ${totalBeatmapsets}`
-      : "";
+        ? `Downloading: ${visibleDownloads.length} of ${totalBeatmapsets}`
+        : collectionDownload.downloadStatus === DownloadStates.Finished
+          ? `Downloaded ${finishedDownloads} of ${totalBeatmapsets}`
+          : collectionDownload.downloadStatus === DownloadStates.Cancelled
+            ? `Downloaded ${finishedDownloads} of ${totalBeatmapsets}`
+            : '';
   const inProgress =
     collectionDownload.downloadStatus !== DownloadStates.Finished &&
     collectionDownload.downloadStatus !== DownloadStates.Cancelled;
   return (
     <div>
-      <div className="flex items-center justify-between mb-1">
-        <div className="px-0">
-          <h5 className="mb-0 text-lg text-slate-100">
-            {collectionDownload.uploader && collectionDownload.uploader + " - "}
+      <div className='flex items-center justify-between mb-1'>
+        <div className='px-0'>
+          <h5 className='mb-0 text-lg text-slate-100'>
+            {collectionDownload.uploader && collectionDownload.uploader + ' - '}
             {collectionDownload.name}
           </h5>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="text-right">{statusText}</div>
-          <div className="pr-0">
-            <Button className="align-middle" variant="outline" size="sm">
-              {inProgress ? "Stop all" : "Clear"}
+        <div className='flex items-center gap-4'>
+          <div className='text-right'>{statusText}</div>
+          <div className='pr-0'>
+            <Button className='align-middle' variant='outline' size='sm'>
+              {inProgress ? 'Stop all' : 'Clear'}
             </Button>
           </div>
         </div>
       </div>
-      {visibleDownloads?.map((mapset) => (
-        <BeatmapsetDownloadCard key={mapset.id} mapsetDownload={mapset} />
-      ))}
+      {visibleDownloads?.map((mapset) => <BeatmapsetDownloadCard key={mapset.id} mapsetDownload={mapset} />)}
     </div>
   );
 }
@@ -171,20 +159,19 @@ function BeatmapsetDownloadCard({ mapsetDownload }) {
   const progress = 100 * (mapsetDownload.bytesReceived / mapsetDownload.bytesTotal);
 
   return (
-    <div className="my-1">
-      <div className="flex items-center rounded bg-slate-700">
+    <div className='my-1'>
+      <div className='flex items-center rounded bg-slate-700'>
         <div>
-          <Image className="py-2 mx-2" src="/icons/osz.png" alt="osz" width={32} height={32} />
+          <Image className='py-2 mx-2' src='/icons/osz.png' alt='osz' width={32} height={32} />
         </div>
-        <div className="w-full px-2 py-2 border-l border-l-slate-600">
-          <p className="mb-0">{mapsetDownload.filename}</p>
+        <div className='w-full px-2 py-2 border-l border-l-slate-600'>
+          <p className='mb-0'>{mapsetDownload.filename}</p>
           {mapsetDownload.downloadStatus === DownloadStates.Downloading && (
             <>
-              <p className="text-slate-500" style={{ fontSize: 13 }}>
-                {megaBytesReceived.toFixed(1)} MB of {megaBytesTotal.toFixed(1)} MB (
-                {Math.round(progress) || 0}%)
+              <p className='text-slate-500' style={{ fontSize: 13 }}>
+                {megaBytesReceived.toFixed(1)} MB of {megaBytesTotal.toFixed(1)} MB ({Math.round(progress) || 0}%)
               </p>
-              <div className="mb-1 text-xs truncate text-slate-500">{mapsetDownload.url}</div>
+              <div className='mb-1 text-xs truncate text-slate-500'>{mapsetDownload.url}</div>
               <Progress value={progress} />
             </>
           )}
@@ -214,10 +201,10 @@ class CollectionDownload {
       downloadStatus: DownloadStates.NotStarted,
       bytesReceived: 0,
       bytesTotal: 5e6 + Math.random() * 5e6,
-      downloadLocation: "",
+      downloadLocation: '',
     }));
     this.cancelTokens = new Map();
-    this.url = "";
+    this.url = '';
     this.errorMessage = undefined;
   }
 
@@ -232,17 +219,15 @@ class CollectionDownload {
       downloadStatus: DownloadStates.NotStarted,
       bytesReceived: 0,
       bytesTotal: 5e6 + Math.random() * 5e6,
-      downloadLocation: "",
+      downloadLocation: '',
     }));
     this.cancelTokens = new Map();
-    this.url = "";
+    this.url = '';
     this.errorMessage = undefined;
   }
 
   getBeatmapsetsNotStarted() {
-    return this.beatmapsets.filter(
-      (beatmapset) => beatmapset.downloadStatus === DownloadStates.NotStarted
-    );
+    return this.beatmapsets.filter((beatmapset) => beatmapset.downloadStatus === DownloadStates.NotStarted);
   }
 }
 

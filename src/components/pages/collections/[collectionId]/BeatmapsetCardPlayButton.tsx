@@ -1,8 +1,8 @@
-"use client";
-import { useState, useEffect } from "react";
-import { useAtom } from "jotai";
-import { audioAtom, nowPlayingBeatmapsetIdAtom } from "@/atoms/audio-player";
-import { PlayFill, StopFill } from "react-bootstrap-icons";
+'use client';
+import { useState, useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { audioAtom, nowPlayingBeatmapsetIdAtom } from '@/atoms/audio-player';
+import { PlayFill, StopFill } from 'react-bootstrap-icons';
 
 export interface BeatmapsetCardPlayButtonProps {
   beatmapsetId: number;
@@ -15,8 +15,8 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId }: BeatmapsetCar
 
   useEffect(() => {
     const onAudioEnd = () => setGlobalPlaying(false);
-    audio.addEventListener("ended", onAudioEnd);
-    return () => audio.removeEventListener("ended", onAudioEnd);
+    audio.addEventListener('ended', onAudioEnd);
+    return () => audio.removeEventListener('ended', onAudioEnd);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -35,14 +35,14 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId }: BeatmapsetCar
   };
 
   const style = {
-    filter: "drop-shadow(0 1px 2px rgb(0 0 0)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06))",
+    filter: 'drop-shadow(0 1px 2px rgb(0 0 0)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06))',
   };
   return (
-    <button className="p-1 media-play-button" onClick={onPlayClick}>
+    <button className='p-1 media-play-button' onClick={onPlayClick}>
       {playing ? (
-        <StopFill className="text-white" style={style} size={40} />
+        <StopFill className='text-white' style={style} size={40} />
       ) : (
-        <PlayFill className="text-white" style={style} size={40} />
+        <PlayFill className='text-white' style={style} size={40} />
       )}
     </button>
   );

@@ -1,4 +1,4 @@
-import { cn } from "@/utils/shadcn-utils";
+import { cn } from '@/utils/shadcn-utils';
 
 export interface TabSwitcherProps {
   items: { label: string; value: string }[];
@@ -7,7 +7,7 @@ export interface TabSwitcherProps {
 }
 export default function TabSwitcher({ items, value, onChange }: TabSwitcherProps) {
   return (
-    <div className="flex flex-row flex-wrap items-center">
+    <div className='flex flex-row flex-wrap items-center'>
       {items.map((item) => {
         const isActive = item.value === value;
         return (
@@ -16,18 +16,15 @@ export default function TabSwitcher({ items, value, onChange }: TabSwitcherProps
               key={item.value}
               onClick={() => onChange(item.value)}
               className={cn(
-                "px-4 pt-4 pb-3 text-sm transition-all",
+                'px-4 pt-4 pb-3 text-sm transition-all',
                 isActive
-                  ? "border-slate-50 border-b-4 text-slate-50 font-medium"
-                  : "border-slate-600 border-b text-slate-300"
+                  ? 'border-slate-50 border-b-4 text-slate-50 font-medium'
+                  : 'border-slate-600 border-b text-slate-300',
               )}
             >
               {item.label}
             </button>
-            <button
-              className="pt-4 pb-3 text-sm font-medium border-b-4"
-              style={{ width: 0, opacity: 0 }}
-            >
+            <button className='pt-4 pb-3 text-sm font-medium border-b-4' style={{ width: 0, opacity: 0 }}>
               a {/* hack to make the height consistent during border width changes */}
             </button>
           </>

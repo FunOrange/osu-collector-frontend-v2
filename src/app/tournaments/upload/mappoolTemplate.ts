@@ -1,4 +1,4 @@
-import { Tournament } from "@/entities/Tournament";
+import { Tournament } from '@/entities/Tournament';
 
 export const mappoolTemplate = `# Lines beginning with '#' are ignored
 
@@ -194,7 +194,7 @@ https://osu.ppy.sh/beatmapsets/1306570#osu/2823535
 
 export function parseMappool(text: string) {
   const lines = text
-    .split("\n")
+    .split('\n')
     .filter((line) => line.trim().length > 0) // filter blank lines
     .filter((line) => !/^#/.test(line)); // filter comments
 
@@ -265,8 +265,8 @@ export function getMappoolTextFromTournament(tournament: Tournament) {
       for (const map of mod.maps) {
         lines.push(map.url);
       }
-      lines.push("");
+      lines.push('');
     }
   }
-  return lines.join("\n");
+  return lines.join('\n');
 }

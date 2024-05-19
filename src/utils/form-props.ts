@@ -1,5 +1,5 @@
-import { mergeLeft, omit } from "ramda";
-import { Dispatch, SetStateAction } from "react";
+import { mergeLeft, omit } from 'ramda';
+import { Dispatch, SetStateAction } from 'react';
 
 type PropConfig = {
   validateOnBlur?: boolean;
@@ -86,7 +86,7 @@ export const formItemPropsGeneric = <T>(context: { errors: { [P in keyof T]?: st
   const { errors } = context;
   return (fieldName: keyof T) => ({
     style: { margin: 0 },
-    validateStatus: errors[fieldName] ? "error" : undefined,
+    validateStatus: errors[fieldName] ? 'error' : undefined,
     help: errors[fieldName] || undefined,
   });
 };

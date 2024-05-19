@@ -1,5 +1,5 @@
-"use client";
-import DownloadPreviewModal from "@/components/DownloadPreviewModal";
+'use client';
+import DownloadPreviewModal from '@/components/DownloadPreviewModal';
 import {
   Dialog,
   DialogContent,
@@ -7,11 +7,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Tournament } from "@/entities/Tournament";
-import { useUser } from "@/services/osu-collector-api-hooks";
-import Link from "next/link";
-import { useState } from "react";
+} from '@/components/shadcn/dialog';
+import { Tournament } from '@/entities/Tournament';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export interface DownloadMapsButtonProps {
   tournament: Tournament;
@@ -24,9 +24,9 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
     return (
       <Dialog open={clientOpened} onOpenChange={(open) => setClientOpened(open)}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500"
+          className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => {
-            window.open(`osucollector://tournaments/${tournament.id}`, "_blank", "noreferrer");
+            window.open(`osucollector://tournaments/${tournament.id}`, '_blank', 'noreferrer');
             setClientOpened(true);
           }}
         >
@@ -37,10 +37,10 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
             <DialogTitle>Tournament opened in osu!Collector desktop client!</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            Don&apos;t have the desktop client installed?{" "}
-            <Link href="/client" className="font-semibold hover:underline text-gray-50">
+            Don&apos;t have the desktop client installed?{' '}
+            <Link href='/client' className='font-semibold hover:underline text-gray-50'>
               Click here{/* TODO: link directly to download */}
-            </Link>{" "}
+            </Link>{' '}
             to download it.
           </DialogDescription>
         </DialogContent>
@@ -50,7 +50,7 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
     return (
       <Dialog open={previewOpen}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500"
+          className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => setPreviewOpen(true)}
         >
           Download maps
@@ -60,13 +60,13 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
             // @ts-ignore:next-line
             id: `T${tournament.id}`,
             // @ts-ignore:next-line
-            uploader: "",
+            uploader: '',
             name: tournament.name,
             // @ts-ignore:next-line
             beatmapsets: tournament.rounds
               ?.map((round) => round.mods.map((mod) => mod.maps))
               ?.flat(2)
-              ?.filter((beatmap) => typeof beatmap === "object"),
+              ?.filter((beatmap) => typeof beatmap === 'object'),
           }}
           open={previewOpen}
           close={() => setPreviewOpen(false)}

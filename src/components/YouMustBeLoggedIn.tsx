@@ -1,19 +1,13 @@
-"use client";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/shadcn/dialog";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ReactNode, useState } from "react";
-import { match } from "ts-pattern";
-import md5 from "md5";
-import { formatQueryParams } from "@/utils/string-utils";
-import { Button } from "@/components/shadcn/button";
-import Image from "next/image";
-import { useUser } from "@/services/osu-collector-api-hooks";
+'use client';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/shadcn/dialog';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ReactNode, useState } from 'react';
+import { match } from 'ts-pattern';
+import md5 from 'md5';
+import { formatQueryParams } from '@/utils/string-utils';
+import { Button } from '@/components/shadcn/button';
+import Image from 'next/image';
+import { useUser } from '@/services/osu-collector-api-hooks';
 
 export interface YouMustBeLoggedInProps {
   children: ReactNode;
@@ -29,15 +23,13 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
   const oauthUrl = `https://osu.ppy.sh/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${callback}`;
   const otpLogin = () => {
     const x = md5(Date.now());
-    localStorage.setItem("authX", x);
+    localStorage.setItem('authX', x);
     const oauthUrlWithOtp = `${oauthUrl}&state=${x}`;
-    const newWindow = window.open(oauthUrlWithOtp, "_blank", "noopener,noreferrer");
+    const newWindow = window.open(oauthUrlWithOtp, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
 
-    const redirectTo = searchParams.toString()
-      ? `${pathname}?${searchParams.toString()}`
-      : pathname;
-    router.push("/login/enterOtp?" + formatQueryParams({ redirectTo }));
+    const redirectTo = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+    router.push('/login/enterOtp?' + formatQueryParams({ redirectTo }));
   };
 
   const [open, setOpen] = useState(false);
@@ -53,12 +45,12 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
           <DialogHeader>
             <DialogTitle>You must be logged in to do that</DialogTitle>
           </DialogHeader>
-          <div className="flex gap-4">
-            <Button variant="outline" onClick={() => setOpen(false)}>
+          <div className='flex gap-4'>
+            <Button variant='outline' onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <a
-              className="flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded cursor-pointer text-indigo-50 hover:bg-indigo-600"
+              className='flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded cursor-pointer text-indigo-50 hover:bg-indigo-600'
               {...match(process.env.NODE_ENV)
                 // TODO: uncomment before pushing to production
                 // .with("production", () => ({
@@ -69,8 +61,8 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
                   onClick: otpLogin,
                 }))}
             >
-              <Image width={32} height={32} src="/icons/osu-32x32.png" alt="osu!" />
-              <div className="whitespace-nowrap">Log in with osu!</div>
+              <Image width={32} height={32} src='/icons/osu-32x32.png' alt='osu!' />
+              <div className='whitespace-nowrap'>Log in with osu!</div>
             </a>
           </div>
         </DialogContent>

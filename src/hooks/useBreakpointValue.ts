@@ -1,5 +1,5 @@
-import useViewportWidth from "@/hooks/useViewportWidth";
-import breakpoints from "@/theme/breakpoints";
+import useViewportWidth from '@/hooks/useViewportWidth';
+import breakpoints from '@/theme/breakpoints';
 
 export const useBreakpointValue = <TValue>(values: {
   [T in keyof typeof breakpoints]?: TValue;

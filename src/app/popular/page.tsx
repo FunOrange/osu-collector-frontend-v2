@@ -1,23 +1,23 @@
-import CollectionCard from "@/components/CollectionCard";
-import MoreResultsButton from "@/components/MoreResultsButton";
-import { getPopularCollections } from "@/services/osu-collector-api";
-import Link from "next/link";
-import { Fire } from "react-bootstrap-icons";
-import { match } from "ts-pattern";
-import { identity } from "ramda";
-import { formatQueryParams } from "@/utils/string-utils";
+import CollectionCard from '@/components/CollectionCard';
+import MoreResultsButton from '@/components/MoreResultsButton';
+import { getPopularCollections } from '@/services/osu-collector-api';
+import Link from 'next/link';
+import { Fire } from 'react-bootstrap-icons';
+import { match } from 'ts-pattern';
+import { identity } from 'ramda';
+import { formatQueryParams } from '@/utils/string-utils';
 
 interface PopularPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 export default async function PopularPage({ searchParams }: PopularPageProps) {
   const activeRange = match(searchParams.range)
-    .with("today", () => "today")
-    .with("week", () => "week")
-    .with("month", () => "month")
-    .with("year", () => "year")
-    .with("alltime", () => "alltime")
-    .otherwise(() => "week");
+    .with('today', () => 'today')
+    .with('week', () => 'week')
+    .with('month', () => 'month')
+    .with('year', () => 'year')
+    .with('alltime', () => 'alltime')
+    .otherwise(() => 'week');
   const popular = await getPopularCollections({
     range: activeRange,
     cursor: searchParams.cursor,
@@ -26,27 +26,24 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
   const { collections: popularCollections, hasMore, nextPageCursor } = popular;
 
   return (
-    <div className="flex justify-center w-full">
-      <div className="px-2 py-5 md:px-10 max-w-screen-2xl">
-        <div className="p-4 mb-4 rounded bg-slate-700 md:p-7">
-          <div
-            className="flex items-center justify-between gap-2 mb-6"
-            style={{ maxWidth: "740px" }}
-          >
-            <h1 className="mt-2 text-3xl">
-              <Fire className="inline mb-2 mr-3 text-orange-400" size={32} />
+    <div className='flex justify-center w-full'>
+      <div className='px-2 py-5 md:px-10 max-w-screen-2xl'>
+        <div className='p-4 mb-4 rounded bg-slate-700 md:p-7'>
+          <div className='flex items-center justify-between gap-2 mb-6' style={{ maxWidth: '740px' }}>
+            <h1 className='mt-2 text-3xl'>
+              <Fire className='inline mb-2 mr-3 text-orange-400' size={32} />
               Popular collections
             </h1>
-            <div className="flex items-center gap-2">
-              {["today", "week", "month", "year", "alltime"].map((range, i) => {
+            <div className='flex items-center gap-2'>
+              {['today', 'week', 'month', 'year', 'alltime'].map((range, i) => {
                 const label = match(range)
-                  .with("alltime", () => "all time")
+                  .with('alltime', () => 'all time')
                   .otherwise(identity);
                 if (range === activeRange) {
                   return (
                     <button
                       key={i}
-                      className="px-3 py-1 border rounded border-rose-800 bg-rose-800 text-rose-300 opacity-90"
+                      className='px-3 py-1 border rounded border-rose-800 bg-rose-800 text-rose-300 opacity-90'
                       disabled
                     >
                       {label}
@@ -55,7 +52,7 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
                 } else {
                   return (
                     <Link key={i} href={`/popular?range=${range}`}>
-                      <button className="px-3 py-1 transition border border-gray-600 rounded cursor-pointer hover:bg-slate-500 text-slate-200">
+                      <button className='px-3 py-1 transition border border-gray-600 rounded cursor-pointer hover:bg-slate-500 text-slate-200'>
                         {label}
                       </button>
                     </Link>
@@ -64,13 +61,11 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
               })}
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className='grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {!popularCollections ? (
-              <div className="text-red-500">There was an error retrieving collections.</div>
+              <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (
-              popularCollections.map((collection, i) => (
-                <CollectionCard key={i} collection={collection} />
-              ))
+              popularCollections.map((collection, i) => <CollectionCard key={i} collection={collection} />)
             )}
           </div>
           {hasMore ? (
@@ -83,7 +78,7 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
               <MoreResultsButton>More results</MoreResultsButton>
             </Link>
           ) : (
-            <div className="text-center text-slate-400">Reached end of results</div>
+            <div className='text-center text-slate-400'>Reached end of results</div>
           )}
         </div>
       </div>

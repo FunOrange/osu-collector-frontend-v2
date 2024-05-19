@@ -1,9 +1,9 @@
-import { OsuCollectorUser } from "@/entities/OsuCollectorUser";
-import { StripeSubscription } from "@/entities/stripe/StripeSubscription";
-import useSubmit from "@/hooks/useSubmit";
-import axios from "axios";
-import useSWRImmutable from "swr/immutable";
-import { match } from "ts-pattern";
+import { OsuCollectorUser } from '@/entities/OsuCollectorUser';
+import { StripeSubscription } from '@/entities/stripe/StripeSubscription';
+import useSubmit from '@/hooks/useSubmit';
+import axios from 'axios';
+import useSWRImmutable from 'swr/immutable';
+import { match } from 'ts-pattern';
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_BASE_URL,
@@ -12,8 +12,8 @@ export const api = axios.create({
 
 export function useUser() {
   type Response = { loggedIn: true; user: OsuCollectorUser } | { loggedIn: false; user: null };
-  const { data, mutate, ...rest } = useSWRImmutable<Response>("/users/me", (url) =>
-    api.get(url).then((res) => res.data)
+  const { data, mutate, ...rest } = useSWRImmutable<Response>('/users/me', (url) =>
+    api.get(url).then((res) => res.data),
   );
   const user = match(data)
     .with({ loggedIn: true }, ({ user }) => user)
@@ -21,7 +21,7 @@ export function useUser() {
     .exhaustive();
 
   const [logout] = useSubmit(async () => {
-    await api.post("/logout");
+    await api.post('/logout');
     mutate();
   });
 
@@ -31,24 +31,21 @@ export function useUser() {
 export function useCancellableSWRImmutable(key, query = undefined) {
   const source = axios.CancelToken.source();
   const { data, error } = useSWRImmutable(key, (url) =>
-    api.get(url, { params: query, cancelToken: source.token }).then((res) => res.data)
+    api.get(url, { params: query, cancelToken: source.token }).then((res) => res.data),
   );
   if (error) console.error(error);
   return { data, error, loading: !data, cancelToken: source };
 }
 
 export function useCollection(id) {
-  const { data, error, mutate } = useSWRImmutable(`/collections/${id}`, (url) =>
-    api.get(url).then((res) => res.data)
-  );
+  const { data, error, mutate } = useSWRImmutable(`/collections/${id}`, (url) => api.get(url).then((res) => res.data));
   if (error) console.error(error);
   return { collection: data, collectionError: error, mutateCollection: mutate };
 }
 
 export function useUserUploads(userId) {
-  const { data, error, mutate } = useSWRImmutable(
-    userId ? `/users/${userId}/uploads` : null,
-    (url) => api.get(url).then((res) => res.data)
+  const { data, error, mutate } = useSWRImmutable(userId ? `/users/${userId}/uploads` : null, (url) =>
+    api.get(url).then((res) => res.data),
   );
   if (error) console.error(error);
   return {
@@ -62,40 +59,32 @@ export function useUserUploads(userId) {
 export const useMetadata = () => useCancellableSWRImmutable(`/metadata`);
 
 export function useTournament(id) {
-  const { data, error, mutate } = useSWRImmutable(`/tournaments/${id}`, (url) =>
-    api.get(url).then((res) => res.data)
-  );
+  const { data, error, mutate } = useSWRImmutable(`/tournaments/${id}`, (url) => api.get(url).then((res) => res.data));
   if (error) console.error(error);
   return { tournament: data, tournamentError: error, mutateTournament: mutate };
 }
 
 export const useTwitchSubcription = () => {
-  const { data: isSubbedToFunOrange, ...rest } = useSWRImmutable("/users/me/twitchSub", (url) =>
-    api.get(url).then((res) => res.data.isSubbedToFunOrange)
+  const { data: isSubbedToFunOrange, ...rest } = useSWRImmutable('/users/me/twitchSub', (url) =>
+    api.get(url).then((res) => res.data.isSubbedToFunOrange),
   );
   return { isSubbedToFunOrange, ...rest };
 };
 
 export const usePaypalSubscription = () => {
   const { user } = useUser();
-  const { data: paypalSubscription, ...rest } = useSWRImmutable(
-    "/payments/paypalSubscription",
-    (url) => api.get(url).then((res) => res.data)
+  const { data: paypalSubscription, ...rest } = useSWRImmutable('/payments/paypalSubscription', (url) =>
+    api.get(url).then((res) => res.data),
   );
   const isPaypalSubscriptionInEffect =
     new Date(user?.private?.subscriptionExpiryDate?._seconds * 1000) > new Date() ||
-    paypalSubscription?.status.toLowerCase() === "active";
-  const canCancelPaypalSubscription = paypalSubscription?.status?.toLowerCase() === "active";
+    paypalSubscription?.status.toLowerCase() === 'active';
+  const canCancelPaypalSubscription = paypalSubscription?.status?.toLowerCase() === 'active';
   const paypalEndDate = new Date(
-    paypalSubscription?.billing_info.next_billing_time ||
-      user?.private?.subscriptionExpiryDate?._seconds * 1000
+    paypalSubscription?.billing_info.next_billing_time || user?.private?.subscriptionExpiryDate?._seconds * 1000,
   );
   const paypalEndDateVerb =
-    new Date() > paypalEndDate
-      ? "Ended"
-      : paypalSubscription?.status.toLowerCase() === "active"
-      ? "Renews"
-      : "Ends";
+    new Date() > paypalEndDate ? 'Ended' : paypalSubscription?.status.toLowerCase() === 'active' ? 'Renews' : 'Ends';
   return {
     paypalSubscription,
     isPaypalSubscriptionInEffect,
@@ -109,25 +98,24 @@ export const usePaypalSubscription = () => {
 export const useStripeSubscription = () => {
   const { user } = useUser();
   const { data: stripeSubscription, ...rest } = useSWRImmutable<StripeSubscription>(
-    "/payments/stripeSubscription",
-    (url) => api.get(url).then((res) => res.data)
+    '/payments/stripeSubscription',
+    (url) => api.get(url).then((res) => res.data),
   );
-  const stripeEndDate = ["canceled", "past_due", "incomplete", "incomplete_expired"].includes(
-    stripeSubscription?.status
+  const stripeEndDate = ['canceled', 'past_due', 'incomplete', 'incomplete_expired'].includes(
+    stripeSubscription?.status,
   )
     ? new Date(user?.private?.subscriptionExpiryDate?._seconds * 1000)
     : new Date(stripeSubscription?.current_period_end * 1000);
   const stripeEndDateVerb =
     new Date() > stripeEndDate
-      ? "Ended"
+      ? 'Ended'
       : stripeSubscription?.cancel_at_period_end
-      ? "Ends"
-      : stripeSubscription?.status.toLowerCase() === "active"
-      ? "Renews"
-      : "Ends";
+        ? 'Ends'
+        : stripeSubscription?.status.toLowerCase() === 'active'
+          ? 'Renews'
+          : 'Ends';
   const canCancelStripeSubscription =
-    stripeSubscription?.status?.toLowerCase() !== "canceled" &&
-    !stripeSubscription?.cancel_at_period_end;
+    stripeSubscription?.status?.toLowerCase() !== 'canceled' && !stripeSubscription?.cancel_at_period_end;
   return {
     stripeSubscription,
     stripeEndDate,

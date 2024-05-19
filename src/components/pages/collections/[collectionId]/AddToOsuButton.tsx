@@ -1,7 +1,7 @@
-"use client";
-import { Collection } from "@/entities/Collection";
-import Link from "next/link";
-import { useUser } from "@/services/osu-collector-api-hooks";
+'use client';
+import { Collection } from '@/entities/Collection';
+import Link from 'next/link';
+import { useUser } from '@/services/osu-collector-api-hooks';
 import {
   Dialog,
   DialogContent,
@@ -9,17 +9,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/shadcn/dialog";
+} from '@/components/shadcn/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/shadcn/dropdown-menu";
-import { useState } from "react";
-import { ThreeDotsVertical } from "react-bootstrap-icons";
-import * as api from "@/services/osu-collector-api";
-import { useRouter } from "next/navigation";
+} from '@/components/shadcn/dropdown-menu';
+import { useState } from 'react';
+import { ThreeDotsVertical } from 'react-bootstrap-icons';
+import * as api from '@/services/osu-collector-api';
+import { useRouter } from 'next/navigation';
 
 export interface AddToOsuButtonProps {
   collection: Collection;
@@ -30,12 +30,12 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
   const [open, setOpen] = useState(false);
 
   return user ? (
-    <div className="flex w-full">
+    <div className='flex w-full'>
       <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500"
+          className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => {
-            window.open(`osucollector://collections/${collection.id}`, "_blank", "noreferrer");
+            window.open(`osucollector://collections/${collection.id}`, '_blank', 'noreferrer');
           }}
         >
           Add to osu
@@ -45,10 +45,10 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
             <DialogTitle>Collection launched in osu!Collector desktop client!</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            Don&apos;t have the desktop client installed?{" "}
-            <Link href="/client" className="font-semibold hover:underline text-gray-50">
+            Don&apos;t have the desktop client installed?{' '}
+            <Link href='/client' className='font-semibold hover:underline text-gray-50'>
               Click here
-            </Link>{" "}
+            </Link>{' '}
             to download it.
           </DialogDescription>
         </DialogContent>
@@ -57,26 +57,24 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
       <DropdownMenu>
         <DropdownMenuTrigger
           asChild
-          className="h-full transition rounded rounded-l-none cursor-pointer bg-slate-600 hover:shadow-xl hover:bg-slate-500"
+          className='h-full transition rounded rounded-l-none cursor-pointer bg-slate-600 hover:shadow-xl hover:bg-slate-500'
         >
-          <div className="flex items-center">
-            <ThreeDotsVertical className="mx-2" />
+          <div className='flex items-center'>
+            <ThreeDotsVertical className='mx-2' />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount sideOffset={0}>
+        <DropdownMenuContent className='w-56' align='end' forceMount sideOffset={0}>
           <DropdownMenuItem
             onClick={async () => {
               if (!user?.paidFeaturesAccess) {
-                return router.push("/client");
+                return router.push('/client');
               }
 
-              const data = await api
-                .downloadCollectionDb(collection.id)
-                .catch((err) => alert(err.message));
+              const data = await api.downloadCollectionDb(collection.id).catch((err) => alert(err.message));
               if (!data) return;
 
               const url = window.URL.createObjectURL(new Blob([data]));
-              const a = document.createElement("a");
+              const a = document.createElement('a');
               a.href = url;
               a.download = `${collection.uploader.username} - ${collection.name}.db`;
               document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
@@ -91,8 +89,8 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
     </div>
   ) : (
     <Link
-      href="/client"
-      className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500"
+      href='/client'
+      className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
     >
       Add to osu
     </Link>

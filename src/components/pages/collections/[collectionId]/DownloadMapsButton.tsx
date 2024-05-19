@@ -1,5 +1,5 @@
-"use client";
-import DownloadPreviewModal from "@/components/DownloadPreviewModal";
+'use client';
+import DownloadPreviewModal from '@/components/DownloadPreviewModal';
 import {
   Dialog,
   DialogContent,
@@ -7,11 +7,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Collection } from "@/entities/Collection";
-import { useUser } from "@/services/osu-collector-api-hooks";
-import Link from "next/link";
-import { useState } from "react";
+} from '@/components/shadcn/dialog';
+import { Collection } from '@/entities/Collection';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export interface DownloadMapsButtonProps {
   collection: Collection;
@@ -24,9 +24,9 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
     return (
       <Dialog open={clientOpened} onOpenChange={(open) => setClientOpened(open)}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500"
+          className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => {
-            window.open(`osucollector://collections/${collection.id}`, "_blank", "noreferrer");
+            window.open(`osucollector://collections/${collection.id}`, '_blank', 'noreferrer');
             setClientOpened(true);
           }}
         >
@@ -37,10 +37,10 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
             <DialogTitle>Collection launched in osu!Collector desktop client!</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            Don&apos;t have the desktop client installed?{" "}
-            <Link href="/client" className="font-semibold hover:underline text-gray-50">
+            Don&apos;t have the desktop client installed?{' '}
+            <Link href='/client' className='font-semibold hover:underline text-gray-50'>
               Click here{/* TODO: link directly to download */}
-            </Link>{" "}
+            </Link>{' '}
             to download it.
           </DialogDescription>
         </DialogContent>
@@ -50,16 +50,12 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
     return (
       <Dialog open={previewOpen}>
         <DialogTrigger
-          className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500"
+          className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => setPreviewOpen(true)}
         >
           Download maps
         </DialogTrigger>
-        <DownloadPreviewModal
-          collection={collection}
-          open={previewOpen}
-          close={() => setPreviewOpen(false)}
-        />
+        <DownloadPreviewModal collection={collection} open={previewOpen} close={() => setPreviewOpen(false)} />
       </Dialog>
     );
   }

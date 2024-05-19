@@ -1,23 +1,23 @@
-import { Button } from "@/components/shadcn/button";
-import { DialogClose } from "@radix-ui/react-dialog";
-import Link from "next/link";
-import styled from "styled-components";
+import { Button } from '@/components/shadcn/button';
+import { DialogClose } from '@radix-ui/react-dialog';
+import Link from 'next/link';
+import styled from 'styled-components';
 
 export interface DesktopFeaturePreviewOverlayProps {
   visible: boolean;
 }
 export default function DesktopFeaturePreviewOverlay({ visible }) {
   return (
-    <PreviewOverlay className={visible ? undefined : "opacity-0"}>
-      <div className="horizontalStrip">
+    <PreviewOverlay className={visible ? undefined : 'opacity-0'}>
+      <div className='horizontalStrip'>
         <h3>You are previewing an osu!Collector Desktop feature!</h3>
-        <div className="flex gap-3" style={{ pointerEvents: "all" }}>
+        <div className='flex gap-3' style={{ pointerEvents: 'all' }}>
           <DialogClose>
-            <Button variant="secondary" onClick={close}>
+            <Button variant='secondary' onClick={close}>
               Cancel
             </Button>
           </DialogClose>
-          <Link href="/client">
+          <Link href='/client'>
             <Button>Get osu!Collector Desktop</Button>
           </Link>
         </div>

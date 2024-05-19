@@ -1,6 +1,6 @@
-"use client";
-import YouMustBeLoggedIn from "@/components/YouMustBeLoggedIn";
-import { Button } from "@/components/shadcn/button";
+'use client';
+import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
+import { Button } from '@/components/shadcn/button';
 import {
   Dialog,
   DialogClose,
@@ -9,23 +9,23 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Skeleton } from "@/components/shadcn/skeleton";
-import { useToast } from "@/components/shadcn/use-toast";
-import useSubmit from "@/hooks/useSubmit";
-import * as api from "@/services/osu-collector-api";
+} from '@/components/shadcn/dialog';
+import { Skeleton } from '@/components/shadcn/skeleton';
+import { useToast } from '@/components/shadcn/use-toast';
+import useSubmit from '@/hooks/useSubmit';
+import * as api from '@/services/osu-collector-api';
 import {
   usePaypalSubscription,
   useStripeSubscription,
   useTwitchSubcription,
   useUser,
-} from "@/services/osu-collector-api-hooks";
-import { cn } from "@/utils/shadcn-utils";
-import moment from "moment";
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { match } from "ts-pattern";
+} from '@/services/osu-collector-api-hooks';
+import { cn } from '@/utils/shadcn-utils';
+import moment from 'moment';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { match } from 'ts-pattern';
 
 interface BillingPageProps {}
 export default function BillingPage({}: BillingPageProps) {
@@ -53,7 +53,7 @@ export default function BillingPage({}: BillingPageProps) {
   const [cancelPaypalSubscription, cancellingPaypalSubscription] = useSubmit(async () => {
     try {
       await api.cancelPaypalSubscription();
-      toast({ title: "Subscription cancelled" });
+      toast({ title: 'Subscription cancelled' });
     } finally {
       mutateUser();
       mutatePaypalSubscription();
@@ -72,8 +72,8 @@ export default function BillingPage({}: BillingPageProps) {
     mutate: mutateStripeSubscription,
   } = useStripeSubscription();
   const stripeSubscriptionStatus =
-    stripeSubscription?.status === "active" && stripeSubscription?.cancel_at_period_end
-      ? "Active until end of billing period"
+    stripeSubscription?.status === 'active' && stripeSubscription?.cancel_at_period_end
+      ? 'Active until end of billing period'
       : stripeSubscription?.status?.toUpperCase();
   const showStripePaymentMethod = Boolean(stripeSubscription?.default_payment_method?.card);
 
@@ -81,7 +81,7 @@ export default function BillingPage({}: BillingPageProps) {
   const [cancelStripeSubscription, cancellingStripeSubscription] = useSubmit(async () => {
     try {
       await api.cancelStripeSubscription();
-      toast({ title: "Subscription cancelled" });
+      toast({ title: 'Subscription cancelled' });
     } finally {
       mutateUser();
       mutateStripeSubscription();
@@ -91,77 +91,64 @@ export default function BillingPage({}: BillingPageProps) {
   // #endregion stripe
 
   return (
-    <div className="flex justify-center w-full mt-8 mb-16">
-      <div className="flex flex-col gap-10">
+    <div className='flex justify-center w-full mt-8 mb-16'>
+      <div className='flex flex-col gap-10'>
         <div>
-          <div className="mb-1 text-lg text-white">Billing</div>
-          <div className="text-sm">
-            For inquiries please message FunOrange in the{" "}
-            <a href="https://discord.gg/WZMQjwF5Vr" className="text-blue-500 hover:underline">
+          <div className='mb-1 text-lg text-white'>Billing</div>
+          <div className='text-sm'>
+            For inquiries please message FunOrange in the{' '}
+            <a href='https://discord.gg/WZMQjwF5Vr' className='text-blue-500 hover:underline'>
               osu!Collector discord
             </a>
-            . Alternatively you can send an email to{" "}
-            <a href="mailto:funorange@osucollector.com" className="text-blue-500 hover:underline">
+            . Alternatively you can send an email to{' '}
+            <a href='mailto:funorange@osucollector.com' className='text-blue-500 hover:underline'>
               funorange@osucollector.com
             </a>
             .
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <div className="w-full max-w-screen-lg">
-            <h1 className="text-2xl">Twitch Sub</h1>
-            <div className="text-sm text-slate-400">
-              An osu!Collector subscription can be obtained by subbing to FunOrange on Twitch.
-              Existing Twitch Prime users can use a <span className="text-white">prime sub</span>{" "}
-              for no additional cost.
+        <div className='flex flex-col gap-6'>
+          <div className='w-full max-w-screen-lg'>
+            <h1 className='text-2xl'>Twitch Sub</h1>
+            <div className='text-sm text-slate-400'>
+              An osu!Collector subscription can be obtained by subbing to FunOrange on Twitch. Existing Twitch Prime
+              users can use a <span className='text-white'>prime sub</span> for no additional cost.
             </div>
           </div>
 
-          <div className="flex gap-16 px-5 py-6 rounded bg-slate-700">
+          <div className='flex gap-16 px-5 py-6 rounded bg-slate-700'>
             <Skeleton loading={twitchLoading}>
               <div>
-                <div className="mb-1 text-xs text-slate-400">TWITCH ACCOUNT</div>
+                <div className='mb-1 text-xs text-slate-400'>TWITCH ACCOUNT</div>
                 {!user && (
                   <YouMustBeLoggedIn>
-                    <Button
-                      size="sm"
-                      variant="important"
-                      className="font-bold text-white h-7 bg-cyan-600"
-                    >
+                    <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
                       Link Twitch account
                     </Button>
                   </YouMustBeLoggedIn>
                 )}
                 {user && !user?.private?.linkedTwitchAccount && (
                   <Button
-                    size="sm"
-                    variant="important"
-                    className={cn(
-                      "h-7",
-                      !user?.paidFeaturesAccess ? "bg-cyan-600 font-bold text-white" : ""
-                    )}
+                    size='sm'
+                    variant='important'
+                    className={cn('h-7', !user?.paidFeaturesAccess ? 'bg-cyan-600 font-bold text-white' : '')}
                     asChild
                   >
-                    <a href="https://id.twitch.tv/oauth2/authorize?client_id=q0uygwcj9cplrb0sb20x7fthkc4wcd&redirect_uri=https%3A%2F%2Fosucollector.com%2Fauthentication%2Ftwitch&response_type=code&scope=user:read:subscriptions">
+                    <a href='https://id.twitch.tv/oauth2/authorize?client_id=q0uygwcj9cplrb0sb20x7fthkc4wcd&redirect_uri=https%3A%2F%2Fosucollector.com%2Fauthentication%2Ftwitch&response_type=code&scope=user:read:subscriptions'>
                       Link Twitch Account
                     </a>
                   </Button>
                 )}
                 {user?.private?.linkedTwitchAccount && (
-                  <div className="flex">
-                    <Button
-                      size="sm"
-                      className="w-full h-8 rounded-r-none bg-background"
-                      variant="outline"
-                      disabled
-                    >
+                  <div className='flex'>
+                    <Button size='sm' className='w-full h-8 rounded-r-none bg-background' variant='outline' disabled>
                       {user.private.linkedTwitchAccount.displayName}
                     </Button>
                     <Button
-                      size="sm"
-                      className="h-8 rounded-l-none bg-background"
-                      variant="outline"
+                      size='sm'
+                      className='h-8 rounded-l-none bg-background'
+                      variant='outline'
                       onClick={unlinkTwitchAccount}
                       loading={unlinkingTwitchAccount}
                     >
@@ -173,19 +160,15 @@ export default function BillingPage({}: BillingPageProps) {
             </Skeleton>
             <Skeleton loading={twitchLoading}>
               <div>
-                <div className="mb-1 text-xs text-slate-400">STATUS</div>
+                <div className='mb-1 text-xs text-slate-400'>STATUS</div>
                 {user?.private?.twitchError && Boolean(user?.private?.linkedTwitchAccount) ? (
-                  <div className="text-red-400">
-                    Please unlink your Twitch account and try again.
-                  </div>
+                  <div className='text-red-400'>Please unlink your Twitch account and try again.</div>
                 ) : !user?.private?.linkedTwitchAccount ? (
-                  <div className="text-slate-500">Twitch account not linked</div>
+                  <div className='text-slate-500'>Twitch account not linked</div>
                 ) : !isSubbedToFunOrange ? (
-                  <div className="text-slate-500">Not subbed to FunOrange</div>
+                  <div className='text-slate-500'>Not subbed to FunOrange</div>
                 ) : isSubbedToFunOrange ? (
-                  <div className="px-3 py-1 text-sm font-semibold bg-green-600 rounded text-slate-50">
-                    Subbed
-                  </div>
+                  <div className='px-3 py-1 text-sm font-semibold bg-green-600 rounded text-slate-50'>Subbed</div>
                 ) : undefined}
               </div>
             </Skeleton>
@@ -193,16 +176,16 @@ export default function BillingPage({}: BillingPageProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <div className="w-full max-w-screen-lg">
-            <h1 className="text-2xl">PayPal</h1>
+        <div className='flex flex-col gap-6'>
+          <div className='w-full max-w-screen-lg'>
+            <h1 className='text-2xl'>PayPal</h1>
           </div>
 
-          <div className="rounded bg-slate-700">
-            <div className="border-b border-slate-600">
-              <div className="flex items-center justify-between px-5 py-3">
-                <div className="text-lg">Current Plan</div>
-                <div className="flex gap-3">
+          <div className='rounded bg-slate-700'>
+            <div className='border-b border-slate-600'>
+              <div className='flex items-center justify-between px-5 py-3'>
+                <div className='text-lg'>Current Plan</div>
+                <div className='flex gap-3'>
                   {!paypalLoading && (
                     <>
                       {canCancelPaypalSubscription && (
@@ -211,7 +194,7 @@ export default function BillingPage({}: BillingPageProps) {
                           onOpenChange={(open) => setShowCancelPaypalConfirmationModal(open)}
                         >
                           <DialogTrigger asChild>
-                            <Button size="sm" variant="destructive" className="h-7">
+                            <Button size='sm' variant='destructive' className='h-7'>
                               Cancel subscription
                             </Button>
                           </DialogTrigger>
@@ -222,12 +205,12 @@ export default function BillingPage({}: BillingPageProps) {
                             <DialogDescription>
                               Are you sure you would like to cancel your subscription?
                             </DialogDescription>
-                            <div className="flex items-center gap-2">
+                            <div className='flex items-center gap-2'>
                               <DialogClose>
-                                <Button variant="outline">Cancel</Button>
+                                <Button variant='outline'>Cancel</Button>
                               </DialogClose>
                               <Button
-                                variant="destructive"
+                                variant='destructive'
                                 onClick={cancelPaypalSubscription}
                                 loading={cancellingPaypalSubscription}
                               >
@@ -238,22 +221,13 @@ export default function BillingPage({}: BillingPageProps) {
                         </Dialog>
                       )}
                       {user && !user?.paidFeaturesAccess && (
-                        <Button
-                          size="sm"
-                          variant="important"
-                          className="font-bold text-white h-7 bg-cyan-600"
-                          asChild
-                        >
-                          <Link href="/client#option-2-credit-card">Subscribe</Link>
+                        <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600' asChild>
+                          <Link href='/client#option-2-credit-card'>Subscribe</Link>
                         </Button>
                       )}
                       {!user && (
                         <YouMustBeLoggedIn>
-                          <Button
-                            size="sm"
-                            variant="important"
-                            className="font-bold text-white h-7 bg-cyan-600"
-                          >
+                          <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
                             Subscribe
                           </Button>
                         </YouMustBeLoggedIn>
@@ -263,56 +237,52 @@ export default function BillingPage({}: BillingPageProps) {
                 </div>
               </div>
             </div>
-            <div className="px-5 py-6">
-              <div className="grid grid-cols-3 gap-y-5 gap-x-4">
+            <div className='px-5 py-6'>
+              <div className='grid grid-cols-3 gap-y-5 gap-x-4'>
                 <Skeleton loading={paypalLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">PAYPAL EMAIL</div>
-                    <div className="text-lg">
-                      {paypalSubscription?.subscriber?.email_address || "-"}
-                    </div>
+                    <div className='mb-1 text-xs text-slate-400'>PAYPAL EMAIL</div>
+                    <div className='text-lg'>{paypalSubscription?.subscriber?.email_address || '-'}</div>
                   </div>
                 </Skeleton>
                 <div />
                 <div />
                 <Skeleton loading={paypalLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">STATUS</div>
-                    <div className="text-lg">
-                      {paypalSubscription?.status?.toUpperCase() || "-"}
+                    <div className='mb-1 text-xs text-slate-400'>STATUS</div>
+                    <div className='text-lg'>{paypalSubscription?.status?.toUpperCase() || '-'}</div>
+                  </div>
+                </Skeleton>
+                <Skeleton loading={paypalLoading}>
+                  <div>
+                    <div className='mb-1 text-xs text-slate-400'>BILLING CYCLE</div>
+                    <div className='text-lg'>
+                      {paypalSubscription?.status?.toLowerCase() === 'active' ? 'Monthly' : '-'}
                     </div>
                   </div>
                 </Skeleton>
                 <Skeleton loading={paypalLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">BILLING CYCLE</div>
-                    <div className="text-lg">
-                      {paypalSubscription?.status?.toLowerCase() === "active" ? "Monthly" : "-"}
+                    <div className='mb-1 text-xs text-slate-400'>PLAN COST</div>
+                    <div className='text-lg'>
+                      {paypalSubscription?.status?.toLowerCase() === 'active' ? '$1.99 USD' : '-'}
                     </div>
                   </div>
                 </Skeleton>
                 <Skeleton loading={paypalLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">PLAN COST</div>
-                    <div className="text-lg">
-                      {paypalSubscription?.status?.toLowerCase() === "active" ? "$1.99 USD" : "-"}
-                    </div>
-                  </div>
-                </Skeleton>
-                <Skeleton loading={paypalLoading}>
-                  <div>
-                    <div className="mb-1 text-xs text-slate-400">REFERENCE #</div>
-                    <div className="text-lg">{paypalSubscription?.id || "-"}</div>
+                    <div className='mb-1 text-xs text-slate-400'>REFERENCE #</div>
+                    <div className='text-lg'>{paypalSubscription?.id || '-'}</div>
                   </div>
                 </Skeleton>
                 <Skeleton loading={paypalLoading}>
                   {paypalSubscription && (
                     <div>
-                      <div className="mb-1 text-xs text-slate-400">CREATED ON</div>
-                      <div className="text-lg">
+                      <div className='mb-1 text-xs text-slate-400'>CREATED ON</div>
+                      <div className='text-lg'>
                         {paypalSubscription?.create_time
-                          ? moment(paypalSubscription.create_time).format("MMMM Do, YYYY")
-                          : "-"}
+                          ? moment(paypalSubscription.create_time).format('MMMM Do, YYYY')
+                          : '-'}
                       </div>
                     </div>
                   )}
@@ -320,11 +290,9 @@ export default function BillingPage({}: BillingPageProps) {
                 <Skeleton loading={paypalLoading}>
                   {paypalSubscription && (
                     <div>
-                      <div className="mb-1 text-xs uppercase text-slate-400">
-                        {paypalEndDateVerb} ON
-                      </div>
-                      <div className="text-lg">
-                        {paypalEndDate ? moment(paypalEndDate).format("MMMM Do, YYYY") : "-"}
+                      <div className='mb-1 text-xs uppercase text-slate-400'>{paypalEndDateVerb} ON</div>
+                      <div className='text-lg'>
+                        {paypalEndDate ? moment(paypalEndDate).format('MMMM Do, YYYY') : '-'}
                       </div>
                     </div>
                   )}
@@ -334,16 +302,16 @@ export default function BillingPage({}: BillingPageProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <div className="w-full max-w-screen-lg">
-            <h1 className="text-2xl">Credit Card</h1>
+        <div className='flex flex-col gap-6'>
+          <div className='w-full max-w-screen-lg'>
+            <h1 className='text-2xl'>Credit Card</h1>
           </div>
 
-          <div className="rounded bg-slate-700">
-            <div className="border-b border-slate-600">
-              <div className="flex items-center justify-between px-5 py-3">
-                <div className="text-lg">Current Plan</div>
-                <div className="flex gap-3">
+          <div className='rounded bg-slate-700'>
+            <div className='border-b border-slate-600'>
+              <div className='flex items-center justify-between px-5 py-3'>
+                <div className='text-lg'>Current Plan</div>
+                <div className='flex gap-3'>
                   {!stripeLoading && (
                     <>
                       {canCancelStripeSubscription && (
@@ -352,7 +320,7 @@ export default function BillingPage({}: BillingPageProps) {
                           onOpenChange={(open) => setShowCancelStripeConfirmationModal(open)}
                         >
                           <DialogTrigger asChild>
-                            <Button size="sm" variant="destructive" className="h-7">
+                            <Button size='sm' variant='destructive' className='h-7'>
                               Cancel subscription
                             </Button>
                           </DialogTrigger>
@@ -363,12 +331,12 @@ export default function BillingPage({}: BillingPageProps) {
                             <DialogDescription>
                               Are you sure you would like to cancel your subscription?
                             </DialogDescription>
-                            <div className="flex items-center gap-2">
+                            <div className='flex items-center gap-2'>
                               <DialogClose>
-                                <Button variant="outline">Cancel</Button>
+                                <Button variant='outline'>Cancel</Button>
                               </DialogClose>
                               <Button
-                                variant="destructive"
+                                variant='destructive'
                                 onClick={cancelStripeSubscription}
                                 loading={cancellingStripeSubscription}
                               >
@@ -379,22 +347,13 @@ export default function BillingPage({}: BillingPageProps) {
                         </Dialog>
                       )}
                       {user && !user?.paidFeaturesAccess && (
-                        <Button
-                          size="sm"
-                          variant="important"
-                          className="font-bold text-white h-7 bg-cyan-600"
-                          asChild
-                        >
-                          <Link href="/payments/checkout">Subscribe</Link>
+                        <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600' asChild>
+                          <Link href='/payments/checkout'>Subscribe</Link>
                         </Button>
                       )}
                       {!user && (
                         <YouMustBeLoggedIn>
-                          <Button
-                            size="sm"
-                            variant="important"
-                            className="font-bold text-white h-7 bg-cyan-600"
-                          >
+                          <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
                             Subscribe
                           </Button>
                         </YouMustBeLoggedIn>
@@ -404,57 +363,50 @@ export default function BillingPage({}: BillingPageProps) {
                 </div>
               </div>
             </div>
-            <div className="px-5 py-6">
-              <div className="grid grid-cols-3 gap-y-5 gap-x-4">
+            <div className='px-5 py-6'>
+              <div className='grid grid-cols-3 gap-y-5 gap-x-4'>
                 <Skeleton loading={stripeLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">STATUS</div>
-                    <div className="text-lg">{stripeSubscriptionStatus || "-"}</div>
+                    <div className='mb-1 text-xs text-slate-400'>STATUS</div>
+                    <div className='text-lg'>{stripeSubscriptionStatus || '-'}</div>
                   </div>
                 </Skeleton>
                 <Skeleton loading={stripeLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">BILLING CYCLE</div>
-                    <div className="text-lg">
-                      {stripeSubscription?.status === "active" &&
-                      !stripeSubscription?.cancel_at_period_end
-                        ? "Monthly"
-                        : "-"}
+                    <div className='mb-1 text-xs text-slate-400'>BILLING CYCLE</div>
+                    <div className='text-lg'>
+                      {stripeSubscription?.status === 'active' && !stripeSubscription?.cancel_at_period_end
+                        ? 'Monthly'
+                        : '-'}
                     </div>
                   </div>
                 </Skeleton>
                 <Skeleton loading={stripeLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">PLAN COST</div>
-                    <div className="text-lg">
-                      {stripeSubscription?.status === "active" ? "$1.99 USD" : "-"}
-                    </div>
+                    <div className='mb-1 text-xs text-slate-400'>PLAN COST</div>
+                    <div className='text-lg'>{stripeSubscription?.status === 'active' ? '$1.99 USD' : '-'}</div>
                   </div>
                 </Skeleton>
                 <Skeleton loading={stripeLoading}>
                   <div>
-                    <div className="mb-1 text-xs text-slate-400">REFERENCE #</div>
-                    <div className="text-lg">{stripeSubscription?.id || "-"}</div>
+                    <div className='mb-1 text-xs text-slate-400'>REFERENCE #</div>
+                    <div className='text-lg'>{stripeSubscription?.id || '-'}</div>
                   </div>
                 </Skeleton>
                 <Skeleton loading={stripeLoading}>
                   {stripeSubscription && (
                     <div>
-                      <div className="mb-1 text-xs text-slate-400">CREATED ON</div>
-                      <div className="text-lg">
-                        {moment.unix(stripeSubscription.created).format("MMMM Do, YYYY")}
-                      </div>
+                      <div className='mb-1 text-xs text-slate-400'>CREATED ON</div>
+                      <div className='text-lg'>{moment.unix(stripeSubscription.created).format('MMMM Do, YYYY')}</div>
                     </div>
                   )}
                 </Skeleton>
                 <Skeleton loading={stripeLoading}>
                   {stripeSubscription && (
                     <div>
-                      <div className="mb-1 text-xs uppercase text-slate-400">
-                        {stripeEndDateVerb} ON
-                      </div>
-                      <div className="text-lg">
-                        {stripeEndDate ? moment(stripeEndDate).format("MMMM Do, YYYY") : "-"}
+                      <div className='mb-1 text-xs uppercase text-slate-400'>{stripeEndDateVerb} ON</div>
+                      <div className='text-lg'>
+                        {stripeEndDate ? moment(stripeEndDate).format('MMMM Do, YYYY') : '-'}
                       </div>
                     </div>
                   )}
@@ -463,28 +415,28 @@ export default function BillingPage({}: BillingPageProps) {
             </div>
           </div>
           {showStripePaymentMethod && (
-            <div className="rounded bg-slate-700">
-              <div className="border-b border-slate-600">
-                <div className="px-5 py-3 text-lg">Payment Method</div>
+            <div className='rounded bg-slate-700'>
+              <div className='border-b border-slate-600'>
+                <div className='px-5 py-3 text-lg'>Payment Method</div>
               </div>
-              <div className="flex justify-between w-full p-5">
-                <div className="flex items-start gap-3">
+              <div className='flex justify-between w-full p-5'>
+                <div className='flex items-start gap-3'>
                   {(() => {
                     const { brand, display_brand, last4, exp_month, exp_year } =
                       stripeSubscription?.default_payment_method?.card ?? {};
                     const src = match(brand)
-                      .with("visa", () => "/icons/credit-cards/visa.png")
-                      .with("mastercard", () => "/icons/credit-cards/mastercard.png")
-                      .with("amex", () => "/icons/credit-cards/amex.png")
-                      .with("discover", () => "/icons/credit-cards/discover.png")
-                      .with("diners", () => "/icons/credit-cards/diners.png")
-                      .with("jcb", () => "/icons/credit-cards/jcb.png")
+                      .with('visa', () => '/icons/credit-cards/visa.png')
+                      .with('mastercard', () => '/icons/credit-cards/mastercard.png')
+                      .with('amex', () => '/icons/credit-cards/amex.png')
+                      .with('discover', () => '/icons/credit-cards/discover.png')
+                      .with('diners', () => '/icons/credit-cards/diners.png')
+                      .with('jcb', () => '/icons/credit-cards/jcb.png')
                       .otherwise(() => undefined);
                     const withoutLast4 = match(brand)
-                      .with("amex", () => "**** ****** *")
-                      .otherwise(() => "**** **** **** ");
+                      .with('amex', () => '**** ****** *')
+                      .otherwise(() => '**** **** **** ');
                     return (
-                      <div className="flex items-start gap-3">
+                      <div className='flex items-start gap-3'>
                         {src && <Image src={src} alt={brand} width={64} height={40} />}
                         <div>
                           {!src && <div>{display_brand}</div>}
@@ -492,7 +444,7 @@ export default function BillingPage({}: BillingPageProps) {
                             {withoutLast4}
                             {last4}
                           </div>
-                          <div className="text-xs text-slate-400">
+                          <div className='text-xs text-slate-400'>
                             Expiry on {exp_month}/{exp_year}
                           </div>
                         </div>
@@ -500,20 +452,19 @@ export default function BillingPage({}: BillingPageProps) {
                     );
                   })()}
                 </div>
-                <div className="ml-6">
+                <div className='ml-6'>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button size="sm">Change</Button>
+                      <Button size='sm'>Change</Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogTitle>Notice</DialogTitle>
                       <DialogDescription>
-                        If you&apos;d like to change your payment method, please cancel your
-                        subscription, then create a new subscription with the new payment method
-                        after the old subscription ends.
+                        If you&apos;d like to change your payment method, please cancel your subscription, then create a
+                        new subscription with the new payment method after the old subscription ends.
                       </DialogDescription>
                       <DialogClose>
-                        <Button variant="outline">Ok</Button>
+                        <Button variant='outline'>Ok</Button>
                       </DialogClose>
                     </DialogContent>
                   </Dialog>

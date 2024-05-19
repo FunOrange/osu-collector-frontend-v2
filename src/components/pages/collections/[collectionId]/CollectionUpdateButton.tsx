@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/shadcn/button";
+'use client';
+import { Button } from '@/components/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -7,30 +7,28 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Collection } from "@/entities/Collection";
-import useSubmit from "@/hooks/useSubmit";
-import { useUser } from "@/services/osu-collector-api-hooks";
-import { DialogClose } from "@radix-ui/react-dialog";
-import * as api from "@/services/osu-collector-api";
-import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import moment from "moment";
-import { equals } from "ramda";
-import { useDropzone } from "react-dropzone";
-import { parseCollectionDb } from "@/services/osu-collection-db";
-import { match } from "ts-pattern";
-import { s } from "@/utils/string-utils";
-import { unorderedArrayEquals } from "@/utils/array-utils";
-import { useToast } from "@/components/shadcn/use-toast";
+} from '@/components/shadcn/dialog';
+import { Collection } from '@/entities/Collection';
+import useSubmit from '@/hooks/useSubmit';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import { DialogClose } from '@radix-ui/react-dialog';
+import * as api from '@/services/osu-collector-api';
+import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import moment from 'moment';
+import { equals } from 'ramda';
+import { useDropzone } from 'react-dropzone';
+import { parseCollectionDb } from '@/services/osu-collection-db';
+import { match } from 'ts-pattern';
+import { s } from '@/utils/string-utils';
+import { unorderedArrayEquals } from '@/utils/array-utils';
+import { useToast } from '@/components/shadcn/use-toast';
 
 export interface CollectionUpdateButtonProps {
   collection: Collection;
 }
-export default function CollectionUpdateButton({
-  collection: remoteCollection,
-}: CollectionUpdateButtonProps) {
+export default function CollectionUpdateButton({ collection: remoteCollection }: CollectionUpdateButtonProps) {
   const { user } = useUser();
   const router = useRouter();
   const { toast } = useToast();
@@ -53,16 +51,14 @@ export default function CollectionUpdateButton({
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   const [localCollections, setLocalCollections] = useState(null);
-  const localCollection = localCollections?.find(
-    (collection) => collection.name === remoteCollection.name
-  );
+  const localCollection = localCollections?.find((collection) => collection.name === remoteCollection.name);
   const localCount = localCollection?.beatmapChecksums?.length;
   const remoteCount = remoteChecksums?.length;
   const localAdditions = localCollection?.beatmapChecksums?.filter(
-    (checksum) => !remoteChecksums.includes(checksum)
+    (checksum) => !remoteChecksums.includes(checksum),
   ).length;
   const localRemovals = remoteChecksums?.filter(
-    (checksum) => !localCollection?.beatmapChecksums.includes(checksum)
+    (checksum) => !localCollection?.beatmapChecksums.includes(checksum),
   ).length;
   useEffect(() => {
     if (showModal) {
@@ -75,7 +71,7 @@ export default function CollectionUpdateButton({
   const [upload, uploading] = useSubmit(async () => {
     await api.uploadCollections([localCollection]);
     setShowModal(false);
-    toast({ title: "Collection successfully updated" });
+    toast({ title: 'Collection successfully updated' });
     router.refresh();
   });
   const uploadDisabled = !localCollection || isIdentical || uploading;
@@ -84,63 +80,56 @@ export default function CollectionUpdateButton({
     return (
       <>
         <Dialog open={showModal} onOpenChange={(open) => setShowModal(open)}>
-          <DialogTrigger className="w-full p-2 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-cyan-700">
+          <DialogTrigger className='w-full p-2 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-cyan-700'>
             <div>
               Reupload collection
-              <div className="text-xs text-slate-400">
+              <div className='text-xs text-slate-400'>
                 updated {moment(remoteCollection?.dateLastModified?._seconds * 1000).fromNow()}
               </div>
             </div>
           </DialogTrigger>
-          <DialogContent className="max-w-screen-lg">
+          <DialogContent className='max-w-screen-lg'>
             <DialogHeader>
-              <DialogTitle className="text-3xl">
-                Reupload collection: {remoteCollection.name}
-              </DialogTitle>
+              <DialogTitle className='text-3xl'>Reupload collection: {remoteCollection.name}</DialogTitle>
             </DialogHeader>
-            <div className="grid grid-cols-2 gap-8">
+            <div className='grid grid-cols-2 gap-8'>
               <div>
-                <div className="mb-1 text-lg font-semibold">On your computer:</div>
+                <div className='mb-1 text-lg font-semibold'>On your computer:</div>
                 {match({
                   loaded: Array.isArray(localCollections),
                   hasCollection: Boolean(localCollection),
                 })
                   .with({ loaded: false }, () => (
                     <div
-                      className="p-8 text-center transition border border-dashed rounded cursor-pointer border-slate-700 hover:bg-slate-600"
+                      className='p-8 text-center transition border border-dashed rounded cursor-pointer border-slate-700 hover:bg-slate-600'
                       {...getRootProps()}
                     >
                       <input {...getInputProps()} />
-                      <span>{isDragActive ? "Drop the file here" : "Open collection.db"}...</span>
+                      <span>{isDragActive ? 'Drop the file here' : 'Open collection.db'}...</span>
                     </div>
                   ))
                   .with({ loaded: true, hasCollection: true }, () => (
-                    <div className="p-4 rounded bg-slate-700">
-                      {" "}
+                    <div className='p-4 rounded bg-slate-700'>
+                      {' '}
                       <div>
-                        {localCount} beatmaps{" "}
-                        {isIdentical && <span className="ml-1 text-slate-500">(no change)</span>}
+                        {localCount} beatmaps {isIdentical && <span className='ml-1 text-slate-500'>(no change)</span>}
                       </div>
-                      {localAdditions > 0 && (
-                        <div className="text-green-500">+{localAdditions} added beatmap(s)</div>
-                      )}
-                      {localRemovals > 0 && (
-                        <div className="text-red-500">-{localRemovals} removed beatmap(s)</div>
-                      )}
+                      {localAdditions > 0 && <div className='text-green-500'>+{localAdditions} added beatmap(s)</div>}
+                      {localRemovals > 0 && <div className='text-red-500'>-{localRemovals} removed beatmap(s)</div>}
                     </div>
                   ))
                   .with({ loaded: true, hasCollection: false }, () => (
-                    <div className="p-4 rounded bg-slate-700">
-                      <div className="mb-4 font-semibold text-red-500">
+                    <div className='p-4 rounded bg-slate-700'>
+                      <div className='mb-4 font-semibold text-red-500'>
                         You do not have a collection named {remoteCollection.name}
                       </div>
                       <div>
                         Found {localCollections.length} collection{s(localCollections.length)}:
                       </div>
-                      <ul className="text-sm text-slate-400">
+                      <ul className='text-sm text-slate-400'>
                         {localCollections.map((collection) => (
                           <li key={collection.name}>
-                            <span className="text-cyan-500">{collection.name}</span>{" "}
+                            <span className='text-cyan-500'>{collection.name}</span>{' '}
                             {collection.beatmapChecksums?.length} beatmaps
                           </li>
                         ))}
@@ -150,26 +139,20 @@ export default function CollectionUpdateButton({
                   .exhaustive()}
               </div>
               <div>
-                <div className="mb-1 text-lg font-semibold">On osu!Collector:</div>
-                <div className="p-4 rounded bg-slate-700">
-                  <span className="mr-2">{remoteCount} beatmaps</span>
-                  <span className="text-slate-500">
-                    (updated {moment(remoteCollection?.dateLastModified?._seconds * 1000).fromNow()}
-                    )
+                <div className='mb-1 text-lg font-semibold'>On osu!Collector:</div>
+                <div className='p-4 rounded bg-slate-700'>
+                  <span className='mr-2'>{remoteCount} beatmaps</span>
+                  <span className='text-slate-500'>
+                    (updated {moment(remoteCollection?.dateLastModified?._seconds * 1000).fromNow()})
                   </span>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <DialogClose>
-                <Button variant="outline">Cancel</Button>
+                <Button variant='outline'>Cancel</Button>
               </DialogClose>
-              <Button
-                variant="important"
-                onClick={upload}
-                loading={uploading}
-                disabled={uploadDisabled}
-              >
+              <Button variant='important' onClick={upload} loading={uploading} disabled={uploadDisabled}>
                 Submit
               </Button>
             </div>
@@ -177,14 +160,14 @@ export default function CollectionUpdateButton({
         </Dialog>
 
         <Dialog open={collectionDeleted} onOpenChange={(open) => setCollectionDeleted(open)}>
-          <DialogContent onPointerDownOutside={() => router.push("/")}>
+          <DialogContent onPointerDownOutside={() => router.push('/')}>
             <DialogHeader>
               <DialogTitle>Collection successfully deleted.</DialogTitle>
             </DialogHeader>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Link
-                href="/"
-                className="inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600"
+                href='/'
+                className='inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600'
               >
                 Back to home
               </Link>

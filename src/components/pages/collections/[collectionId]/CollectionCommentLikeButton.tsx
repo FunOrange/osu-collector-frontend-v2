@@ -1,19 +1,16 @@
-import YouMustBeLoggedIn from "@/components/YouMustBeLoggedIn";
-import { Comment } from "@/entities/Collection";
-import { useUser } from "@/services/osu-collector-api-hooks";
-import { useState } from "react";
-import { HandThumbsUpFill } from "react-bootstrap-icons";
-import { match } from "ts-pattern";
-import * as api from "@/services/osu-collector-api";
+import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
+import { Comment } from '@/entities/Collection';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import { useState } from 'react';
+import { HandThumbsUpFill } from 'react-bootstrap-icons';
+import { match } from 'ts-pattern';
+import * as api from '@/services/osu-collector-api';
 
 export interface CollectionCommentLikeButtonProps {
   collectionId: number;
   comment: Comment;
 }
-export default function CollectionCommentLikeButton({
-  collectionId,
-  comment,
-}: CollectionCommentLikeButtonProps) {
+export default function CollectionCommentLikeButton({ collectionId, comment }: CollectionCommentLikeButtonProps) {
   const { user } = useUser();
   const [localLikeOffset, setLocalLikeOffset] = useState<-1 | -0.01 | 0 | 0.01 | 1>(0);
 
@@ -36,19 +33,18 @@ export default function CollectionCommentLikeButton({
         .with(0, () => (!comment.upvotes.includes(user.id) ? (1 as const) : (-1 as const)))
         .with(0.01, () => 1 as const)
         .with(1, () => 0.01 as const)
-        .exhaustive()
+        .exhaustive(),
     );
   };
 
   if (user) {
     return (
-      <div className="flex items-center gap-1 text-sm cursor-pointer" onClick={onClick}>
+      <div className='flex items-center gap-1 text-sm cursor-pointer' onClick={onClick}>
         <HandThumbsUpFill
           size={14}
           className={
-            (localLikeOffset === 0 && comment.upvotes.includes(user.id)) ||
-            [-0.01, 1].includes(localLikeOffset)
-              ? "text-sky-600"
+            (localLikeOffset === 0 && comment.upvotes.includes(user.id)) || [-0.01, 1].includes(localLikeOffset)
+              ? 'text-sky-600'
               : undefined
           }
         />
@@ -58,7 +54,7 @@ export default function CollectionCommentLikeButton({
   } else {
     return (
       <YouMustBeLoggedIn>
-        <div className="flex items-center gap-1 text-sm cursor-pointer">
+        <div className='flex items-center gap-1 text-sm cursor-pointer'>
           <HandThumbsUpFill size={14} />
           {comment.upvotes.length}
         </div>

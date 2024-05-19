@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/shadcn/button";
+'use client';
+import { Button } from '@/components/shadcn/button';
 import {
   Dialog,
   DialogContent,
@@ -7,15 +7,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/shadcn/dialog";
-import { Collection } from "@/entities/Collection";
-import useSubmit from "@/hooks/useSubmit";
-import { useUser } from "@/services/osu-collector-api-hooks";
-import { DialogClose } from "@radix-ui/react-dialog";
-import * as api from "@/services/osu-collector-api";
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+} from '@/components/shadcn/dialog';
+import { Collection } from '@/entities/Collection';
+import useSubmit from '@/hooks/useSubmit';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import { DialogClose } from '@radix-ui/react-dialog';
+import * as api from '@/services/osu-collector-api';
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export interface CollectionDeleteButtonProps {
   collection: Collection;
@@ -36,18 +36,18 @@ export default function CollectionDeleteButton({ collection }: CollectionDeleteB
     return (
       <>
         <Dialog open={showConfirmation} onOpenChange={(open) => setShowConfirmation(open)}>
-          <DialogTrigger className="w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-rose-800">
+          <DialogTrigger className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-rose-800'>
             Delete collection
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Are you sure you wish to delete this collection?</DialogTitle>
             </DialogHeader>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <DialogClose>
-                <Button variant="outline">Cancel</Button>
+                <Button variant='outline'>Cancel</Button>
               </DialogClose>
-              <Button variant="destructive" onClick={deleteCollection} loading={deleting}>
+              <Button variant='destructive' onClick={deleteCollection} loading={deleting}>
                 Delete
               </Button>
             </div>
@@ -55,14 +55,14 @@ export default function CollectionDeleteButton({ collection }: CollectionDeleteB
         </Dialog>
 
         <Dialog open={collectionDeleted} onOpenChange={(open) => setCollectionDeleted(open)}>
-          <DialogContent onPointerDownOutside={() => router.push("/")}>
+          <DialogContent onPointerDownOutside={() => router.push('/')}>
             <DialogHeader>
               <DialogTitle>Collection successfully deleted.</DialogTitle>
             </DialogHeader>
-            <div className="flex items-center gap-2">
+            <div className='flex items-center gap-2'>
               <Link
-                href="/"
-                className="inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600"
+                href='/'
+                className='inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600'
               >
                 Back to home
               </Link>

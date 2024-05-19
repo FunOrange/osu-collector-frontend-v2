@@ -1,4 +1,4 @@
-import { Beatmapset } from "@/entities/Beatmapset";
+import { Beatmapset } from '@/entities/Beatmapset';
 
 export interface Beatmap {
   difficulty_rating: number;
@@ -9,7 +9,7 @@ export interface Beatmap {
   failtimes: Failtimes;
   passcount: number;
   drain: number;
-  mode: "osu" | "taiko" | "mania" | "fruits";
+  mode: 'osu' | 'taiko' | 'mania' | 'fruits';
   is_scoreable: boolean;
   playcount: number;
   max_combo: number;
@@ -53,9 +53,7 @@ export const groupBeatmapsets = (beatmaps: Beatmap[]) => {
     } else if (beatmap.beatmapset.id === currentGroup.beatmapset.id) {
       currentGroup.beatmaps.push(beatmap);
     } else {
-      currentGroup.beatmaps.sort(
-        (a, b) => b.difficulty_rating - a.difficulty_rating
-      );
+      currentGroup.beatmaps.sort((a, b) => b.difficulty_rating - a.difficulty_rating);
       groups.push(currentGroup);
       currentGroup = {
         beatmapset: beatmap.beatmapset,

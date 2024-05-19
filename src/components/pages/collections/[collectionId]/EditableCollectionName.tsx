@@ -1,10 +1,10 @@
-"use client";
-import { Input } from "@/components/shadcn/input";
-import { Collection } from "@/entities/Collection";
-import { useUser } from "@/services/osu-collector-api-hooks";
-import { useState } from "react";
-import * as api from "@/services/osu-collector-api";
-import { useToast } from "@/components/shadcn/use-toast";
+'use client';
+import { Input } from '@/components/shadcn/input';
+import { Collection } from '@/entities/Collection';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import { useState } from 'react';
+import * as api from '@/services/osu-collector-api';
+import { useToast } from '@/components/shadcn/use-toast';
 
 export interface EditableCollectionNameProps {
   collection: Collection;
@@ -21,7 +21,7 @@ export default function EditableCollectionName({ collection }: EditableCollectio
     if (userInput && userInput !== collectionName) {
       api.renameCollection(collection.id, userInput);
       setCollectionName(userInput);
-      toast({ title: "Collection successfully updated" });
+      toast({ title: 'Collection successfully updated' });
     }
     setEditing(false);
     setUserInput(undefined);
@@ -31,20 +31,20 @@ export default function EditableCollectionName({ collection }: EditableCollectio
     if (editing) {
       return (
         <Input
-          className="py-1 mb-2 text-4xl"
+          className='py-1 mb-2 text-4xl'
           value={value}
           onChange={(e) => setUserInput(e.target.value)}
           autoFocus
           onBlur={renameCollection}
           onKeyDown={(e) => {
-            if (e.key === "Enter") renameCollection();
+            if (e.key === 'Enter') renameCollection();
           }}
         />
       );
     } else if (!editing) {
       return (
         <h1
-          className="px-2 py-1 mb-2 text-4xl rounded cursor-pointer hover:bg-slate-600"
+          className='px-2 py-1 mb-2 text-4xl rounded cursor-pointer hover:bg-slate-600'
           onClick={() => setEditing(true)}
         >
           {collectionName}
@@ -52,6 +52,6 @@ export default function EditableCollectionName({ collection }: EditableCollectio
       );
     }
   } else {
-    return <h1 className="mb-2 text-4xl">{collection.name}</h1>;
+    return <h1 className='mb-2 text-4xl'>{collection.name}</h1>;
   }
 }

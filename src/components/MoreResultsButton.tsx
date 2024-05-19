@@ -1,6 +1,6 @@
-"use client";
-import { useSearchParams } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+'use client';
+import { useSearchParams } from 'next/navigation';
+import { ReactNode, useEffect, useState } from 'react';
 
 export interface MoreResultsButtonProps {
   children: ReactNode;
@@ -15,8 +15,8 @@ export default function MoreResultsButton({ children }: MoreResultsButtonProps) 
     <button
       className={
         loading
-          ? "flex gap-4 justify-center items-center w-full p-3 text-center transition rounded bg-slate-800 opacity-60"
-          : "w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600"
+          ? 'flex gap-4 justify-center items-center w-full p-3 text-center transition rounded bg-slate-800 opacity-60'
+          : 'w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'
       }
       onClick={() => setLoading(true)}
       disabled={loading}

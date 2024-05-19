@@ -1,5 +1,5 @@
-import { decodeULEB128 } from "./uleb128";
-import { decodeUtf8 } from "./utf8-decoder";
+import { decodeULEB128 } from './uleb128';
+import { decodeUtf8 } from './utf8-decoder';
 
 // Returns array of:
 /*
@@ -63,7 +63,7 @@ function readUnalignedInt32(source, position) {
 function parsePeppyString(buffer, startOffset): [string, number] {
   let offset = startOffset;
   if (new Uint8Array(buffer, offset)[0] === 0x00) {
-    return ["", 1];
+    return ['', 1];
   } else if (new Uint8Array(buffer, offset)[0] === 0x0b) {
     offset += 1;
     const uleb128 = decodeULEB128(new Uint8Array(buffer, offset), 0);
@@ -76,7 +76,7 @@ function parsePeppyString(buffer, startOffset): [string, number] {
     let bytesParsed = offset - startOffset;
     return [result, bytesParsed];
   }
-  throw new Error("Tried to read an invalid peppy string");
+  throw new Error('Tried to read an invalid peppy string');
 }
 
 export { parseCollectionDb };

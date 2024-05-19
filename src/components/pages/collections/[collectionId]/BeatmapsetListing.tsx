@@ -1,6 +1,6 @@
-"use client";
-import BeatmapsetCard from "@/components/pages/collections/[collectionId]/BeatmapsetCard";
-import { Provider } from "jotai";
+'use client';
+import BeatmapsetCard from '@/components/pages/collections/[collectionId]/BeatmapsetCard';
+import { Provider } from 'jotai';
 
 export interface BeatmapsetListingProps {
   listing: any;

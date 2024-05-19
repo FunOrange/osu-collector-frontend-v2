@@ -1,5 +1,5 @@
-import { Uploader } from "@/entities/Uploader";
-import { FirestoreTimestamp } from "@/types";
+import { Uploader } from '@/entities/Uploader';
+import { FirestoreTimestamp } from '@/types';
 
 export interface Tournament {
   unknownIds: any[];

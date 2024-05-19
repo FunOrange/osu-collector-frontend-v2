@@ -6,18 +6,16 @@ export function secondsToHHMMSS(sec_num) {
 
   if (hours < 10) {
     // @ts-ignore
-    hours = "0" + hours;
+    hours = '0' + hours;
   }
   if (minutes < 10 && hours > 0) {
     // @ts-ignore
-    minutes = "0" + minutes;
+    minutes = '0' + minutes;
   }
   if (seconds < 10) {
     // @ts-ignore
-    seconds = "0" + seconds;
+    seconds = '0' + seconds;
   }
 
-  return hours > 0
-    ? hours + ":" + minutes + ":" + seconds
-    : minutes + ":" + seconds;
+  return hours > 0 ? hours + ':' + minutes + ':' + seconds : minutes + ':' + seconds;
 }
