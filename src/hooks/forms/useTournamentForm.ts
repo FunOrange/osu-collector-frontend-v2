@@ -1,3 +1,4 @@
+import { Tournament } from "@/entities/Tournament";
 import { dropdownPropsGeneric, formItemPropsGeneric, inputPropsGeneric } from "@/utils/form-props";
 import rules, { ValidationRule, checkRuleAndSetError } from "@/utils/form-validation-rules";
 import { useState } from "react";
@@ -8,19 +9,26 @@ interface TournamentFormFields {
   banner: string;
   downloadUrl: string;
   description: string;
-  organizers: { id: number; username: string }[];
-  mappoolText: string;
 }
-export default function useTournamentForm(email?: string) {
-  const [fields, setFields] = useState<TournamentFormFields>({
-    name: "",
-    link: "",
-    banner: "",
-    downloadUrl: "",
-    description: "",
-    organizers: [],
-    mappoolText: "",
-  });
+export default function useTournamentForm(
+  tournament?: Tournament,
+  tournamentDraft?: TournamentFormFields,
+  afterChange?: () => void
+) {
+  const [touchedFields, _setTouchedFields] = useState<Partial<TournamentFormFields>>({});
+  const fields: TournamentFormFields = {
+    name: tournament?.name ?? tournamentDraft?.name ?? "",
+    link: tournament?.link ?? tournamentDraft?.link ?? "",
+    banner: tournament?.banner ?? tournamentDraft?.banner ?? "",
+    downloadUrl: tournament?.downloadUrl ?? tournamentDraft?.downloadUrl ?? "",
+    description: tournament?.description ?? tournamentDraft?.description ?? "",
+    ...touchedFields,
+  };
+  const setTouchedFields = (...args) => {
+    afterChange();
+    _setTouchedFields.apply(null, args);
+  };
+
   const [errors, setErrors] = useState<{ [P in keyof TournamentFormFields]?: string }>({});
 
   const validateWithRules =
@@ -33,6 +41,26 @@ export default function useTournamentForm(email?: string) {
       rules.minLength(2),
       rules.maxLength(256),
     ]),
+    link: validateWithRules("link", [
+      rules.required(),
+      rules.notBlank(),
+      rules.maxLength(2048),
+      rules.url(),
+      rules.matchesRegex(
+        /^https:\/\/((\w+\.)?ppy\.sh|docs\.google\.com)\//,
+        "Only osu.ppy.sh forum or google doc links or are accepted"
+      ),
+    ]),
+    banner: validateWithRules("banner", [
+      rules.notBlank(),
+      rules.url(),
+      rules.matchesRegex(
+        /^https:\/\/i\.ppy\.sh/,
+        'For security reasons, only URLs originating from https://i.ppy.sh are accepted. Please use the "Copy image address" method described below.'
+      ),
+    ]),
+    downloadUrl: validateWithRules("downloadUrl", [rules.url()]),
+    description: validateWithRules("description", [rules.maxLength(5000)]),
     all: () => {
       const validators = Object.entries(validate)
         .filter(([key]) => key !== "all")
@@ -43,7 +71,7 @@ export default function useTournamentForm(email?: string) {
 
   const inputProps = inputPropsGeneric<TournamentFormFields>({
     fields,
-    setTouchedFields: setFields,
+    setTouchedFields,
     errors,
     setErrors,
     validate,
@@ -51,8 +79,8 @@ export default function useTournamentForm(email?: string) {
   const formItemProps = formItemPropsGeneric<TournamentFormFields>({ errors });
   const dropdownProps = dropdownPropsGeneric<TournamentFormFields>({
     fields,
-    setTouchedFields: setFields,
+    setTouchedFields,
     setErrors,
   });
-  return { fields, setFields, validate, formItemProps, inputProps, dropdownProps };
+  return { fields, setTouchedFields, validate, formItemProps, inputProps, dropdownProps };
 }

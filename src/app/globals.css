@@ -83,3 +83,16 @@ a {
     color-scheme: dark;
   }
 }
+
+*::-webkit-scrollbar {
+  width: 10px; /* width of the entire scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.226); /* color of the tracking area */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ffffff5d; /* color of the scroll thumb */
+  border-radius: 20px; /* radius of the scroll thumb */
+}
