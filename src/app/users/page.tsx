@@ -8,10 +8,10 @@ import SearchInput from '@/components/pages/all/SearchInput';
 import TournamentCard from '@/components/TournamentCard';
 import { Button } from '@/components/shadcn/button';
 
-interface TournamentsPageProps {
+interface UsersPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
-export default async function TournamentsPage({ searchParams }: TournamentsPageProps) {
+export default async function UsersPage({ searchParams }: UsersPageProps) {
   const { tournaments, hasMore, nextPageCursor } = await (async () => {
     if (searchParams.search) {
       const { tournaments, hasMore, nextPageCursor } = await api.searchTournaments({
@@ -37,7 +37,7 @@ export default async function TournamentsPage({ searchParams }: TournamentsPageP
         <div className='flex flex-col items-center gap-3'>
           <SearchInput searchParams={searchParams} withIcon />
         </div>
-        <div className='w-full p-4 mb-4 rounded max-w-screen-2xl bg-[#162032] md:p-7'>
+        <div className='w-full p-4 mb-4 rounded max-w-screen-2xl border-slate-900 shadow-inner bg-[#162032] md:p-7'>
           <div className='flex justify-between'>
             <h1 className='mb-6 text-3xl'>
               <TrophyFill className='inline mb-1 mr-3 text-yellow-400' size={24} />

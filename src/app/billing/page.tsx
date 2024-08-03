@@ -117,7 +117,7 @@ export default function BillingPage({}: BillingPageProps) {
             </div>
           </div>
 
-          <div className='flex gap-16 px-5 py-6 rounded bg-slate-700'>
+          <div className='flex gap-16 px-5 py-6 rounded border-slate-900 shadow-inner bg-[#162032]'>
             <Skeleton loading={twitchLoading}>
               <div>
                 <div className='mb-1 text-xs text-slate-400'>TWITCH ACCOUNT</div>
@@ -181,7 +181,7 @@ export default function BillingPage({}: BillingPageProps) {
             <h1 className='text-2xl'>PayPal</h1>
           </div>
 
-          <div className='rounded bg-slate-700'>
+          <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
             <div className='border-b border-slate-600'>
               <div className='flex items-center justify-between px-5 py-3'>
                 <div className='text-lg'>Current Plan</div>
@@ -307,7 +307,7 @@ export default function BillingPage({}: BillingPageProps) {
             <h1 className='text-2xl'>Credit Card</h1>
           </div>
 
-          <div className='rounded bg-slate-700'>
+          <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
             <div className='border-b border-slate-600'>
               <div className='flex items-center justify-between px-5 py-3'>
                 <div className='text-lg'>Current Plan</div>
@@ -415,7 +415,7 @@ export default function BillingPage({}: BillingPageProps) {
             </div>
           </div>
           {showStripePaymentMethod && (
-            <div className='rounded bg-slate-700'>
+            <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
               <div className='border-b border-slate-600'>
                 <div className='px-5 py-3 text-lg'>Payment Method</div>
               </div>
@@ -496,7 +496,7 @@ export default function BillingPage({}: BillingPageProps) {
               {new Array(10).fill(0).map((_, i) => (
                 <div
                   key={i}
-                  className="grid grid-cols-3 px-5 py-3 transition-colors rounded bg-slate-700 hover:bg-slate-600"
+                  className="grid grid-cols-3 px-5 py-3 transition-colors rounded border-slate-900 shadow-inner bg-[#162032] hover:bg-slate-700"
                 >
                   <div>3/9/2024</div>
                   <div>PayPal - funorange42@yahoo.ca</div>

@@ -31,7 +31,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
             {results} results
           </div>
         </div>
-        <div className='p-4 mb-4 rounded bg-slate-700 md:p-7'>
+        <div className='p-4 mb-4 rounded border-slate-900 shadow-inner bg-[#162032] md:p-7'>
           <div className='flex flex-wrap items-center gap-2 mb-6'>
             {[
               searchParams.search ? { label: 'Relevance', sortBy: '_text_match', orderBy: 'desc' } : undefined,

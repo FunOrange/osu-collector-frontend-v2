@@ -33,7 +33,7 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
       </div>
       <div className='flex gap-2'>
         <Button
-          className='bg-slate-700'
+          className='bg-[#162032]'
           variant='important'
           disabled={!user?.paidFeaturesAccess}
           onClick={downloadWindowsInstaller}
@@ -43,7 +43,7 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
           Windows 64-bit
         </Button>
         <Button
-          className='bg-slate-700'
+          className='bg-[#162032]'
           variant='important'
           disabled={!user?.paidFeaturesAccess}
           onClick={downloadLinuxInstaller}

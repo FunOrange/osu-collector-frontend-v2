@@ -69,7 +69,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
   return (
     <div className='flex justify-center w-full'>
       <div className='flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl'>
-        <div className='rounded bg-slate-700'>
+        <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
           <div className='grid mb-4 rounded-t lg:grid-cols-2 xs:grid-cols-1'>
             <BarGraphStars
               collection={collection}
@@ -115,7 +115,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                   <EditableCollectionDescription collection={collection} />
                 </div>
               </div>
-              <div className='flex flex-col justify-end gap-2 pl-4 border-l border-slate-700'>
+              <div className='flex flex-col justify-end gap-2'>
                 <CollectionDeleteButton collection={collection} />
                 <DownloadMapsButton collection={collection} />
                 <AddToOsuButton collection={collection} />
@@ -128,7 +128,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
         <CollectionCommentsSection collection={collection} />
 
-        <div className='flex flex-col gap-6 p-4 rounded bg-slate-700'>
+        <div className='flex flex-col gap-6 p-4 rounded border-slate-900 shadow-inner bg-[#162032]'>
           <div className='flex items-center gap-6'>
             <div>Sort by:</div>
             <div className='flex gap-2'>
