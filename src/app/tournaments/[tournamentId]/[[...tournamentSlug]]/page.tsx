@@ -50,7 +50,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
   return (
     <div className='flex justify-center w-full'>
       <div className='flex flex-col w-full max-w-screen-xl gap-2 px-2 py-5 md:px-10'>
-        <div className='rounded bg-slate-700'>
+        <div className='rounded border-slate-900 bg-[#162032] shadow-inner'>
           <div className='relative' style={{ height: `${bannerHeight}px` }}>
             <div className='absolute w-full overflow-hidden rounded-t-lg' style={{ height: `${bannerHeight}px` }}>
               <ImageWithFallback

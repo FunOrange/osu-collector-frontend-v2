@@ -47,7 +47,7 @@ export default function EditableCollectionDescription({ collection }: EditableCo
     ))
     .with({ isUploader: true, editing: false, hasDescription: true }, () => (
       <div
-        className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800', 'cursor-pointer hover:bg-slate-600')}
+        className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800', 'cursor-pointer hover:bg-slate-700')}
         style={{ minHeight: '208px' }}
         onClick={() => setEditing(true)}
       >
@@ -56,7 +56,7 @@ export default function EditableCollectionDescription({ collection }: EditableCo
     ))
     .with({ isUploader: true, editing: false, hasDescription: false }, () => (
       <div
-        className={cn('p-4 rounded bg-slate-800', 'cursor-pointer hover:bg-slate-600')}
+        className={cn('p-4 rounded bg-slate-800', 'cursor-pointer hover:bg-slate-700')}
         style={{ minHeight: '208px' }}
         onClick={() => setEditing(true)}
       >
@@ -65,7 +65,7 @@ export default function EditableCollectionDescription({ collection }: EditableCo
     ))
     .with({ isUploader: true, editing: true }, () => (
       <Textarea
-        placeholder='Type your message here.'
+        placeholder='Enter description here.'
         className='text-md'
         value={value}
         onChange={(e) => setUserInput(e.target.value)}

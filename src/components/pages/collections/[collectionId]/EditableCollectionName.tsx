@@ -44,7 +44,7 @@ export default function EditableCollectionName({ collection }: EditableCollectio
     } else if (!editing) {
       return (
         <h1
-          className='px-2 py-1 mb-2 text-4xl rounded cursor-pointer hover:bg-slate-600'
+          className='px-2 py-1 mb-2 text-4xl rounded cursor-pointer hover:bg-slate-700'
           onClick={() => setEditing(true)}
         >
           {collectionName}

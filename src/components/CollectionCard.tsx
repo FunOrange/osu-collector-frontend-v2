@@ -13,7 +13,7 @@ function CollectionCard({ collection }) {
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
   return (
-    <div className='flex flex-col h-full overflow-hidden transition rounded-lg shadow-lg bg-slate-800 hover:shadow-xl'>
+    <div className='flex flex-col h-full overflow-hidden transition rounded-lg shadow-lg bg-slate-800 hover:shadow-xl hover:brightness-125'>
       <Link href={href} className='overflow-hidden'>
         {/* Difficulty Spread Graph */}
         <BarGraph
