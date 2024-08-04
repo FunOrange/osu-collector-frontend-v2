@@ -23,7 +23,7 @@ function UserCard({ user }: UserCardProps) {
         src={banner}
         fallbackSrc='/images/slimcoverfallback.jpg'
         fill
-        sizes='100vw'
+        sizes='(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (min-width: 1024px) 472px'
         alt='User profile banner'
         className='w-full h-full object-cover absolute brightness-30'
       />

@@ -189,7 +189,7 @@ export async function downloadCollectionDb(collectionId) {
 }
 
 // Returns PaginatedUserData object
-export async function getUsers(page, perPage = undefined, cancelCallback = undefined) {
+export async function getUsers({ page, perPage }, cancelCallback = undefined) {
   const params = {
     page,
     perPage,
