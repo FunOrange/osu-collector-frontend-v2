@@ -2,6 +2,25 @@ import TournamentCard from '@/components/TournamentCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar';
 import * as api from '@/services/osu-collector-api';
 import { s } from '@/utils/string-utils';
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const pageUser = await api.getUser(params.userId);
+  if (!pageUser) return {};
+
+  const title = `${pageUser.osuweb.username}'s Tournaments | osu!Collector`;
+  const description = `Tournaments uploaded by ${pageUser.osuweb.username}`;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://osucollector.com/users/${params.userId}/uploads/tournamants`,
+      images: [pageUser.osuweb.avatar_url].filter(Boolean),
+    },
+  };
+}
 
 interface PageProps {
   params: { userId: string };

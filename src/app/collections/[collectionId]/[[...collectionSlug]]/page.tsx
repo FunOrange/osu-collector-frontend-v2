@@ -1,8 +1,9 @@
+import { ResolvingMetadata, Metadata, ResolvedMetadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
 import moment from 'moment';
 import ModeCounters from '@/components/ModeCounters';
 import * as api from '@/services/osu-collector-api';
-import Link from 'next/link';
-import Image from 'next/image';
 import { formatQueryParams, getUrlSlug } from '@/utils/string-utils';
 import { identity, mergeRight } from 'ramda';
 import { Pattern, match } from 'ts-pattern';
@@ -19,6 +20,24 @@ import EditableCollectionName from '@/components/pages/collections/[collectionId
 import CollectionDeleteButton from '@/components/pages/collections/[collectionId]/CollectionDeleteButton';
 import EditableCollectionDescription from '@/components/pages/collections/[collectionId]/EditableCollectionDescription';
 import CollectionUpdateButton from '@/components/pages/collections/[collectionId]/CollectionUpdateButton';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const collection = await api.getCollection(params.collectionId);
+  if (!collection) return {};
+
+  const title = `${collection.name} | osu!Collector`;
+  const description = collection.description || `Collection uploaded by ${collection?.uploader.username}`;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://osucollector.com/collections/${collection.id}/${getUrlSlug(collection.name)}`,
+      images: [`https://a.ppy.sh/${collection.uploader.id}`],
+    },
+  };
+}
 
 interface CollectionPageProps {
   params: { collectionId: string };

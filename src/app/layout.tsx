@@ -25,7 +25,7 @@ const navbarHeight = 'h-14';
 const navbarSpacer = 'pt-14';
 
 export const metadata: Metadata = {
-  title: 'osu!Collector',
+  title: 'osu!Collector | Find osu! beatmap collections',
   description: 'Find osu! beatmap collections and tournaments',
 };
 

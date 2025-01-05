@@ -5,6 +5,12 @@ import { PersonFill } from 'react-bootstrap-icons';
 import { formatQueryParams } from '@/utils/string-utils';
 import { mergeRight } from 'ramda';
 import UserCard from '@/components/UserCard';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'osu!Collector | Find osu! beatmap collections',
+  description: 'Find osu! beatmap collections and tournaments',
+};
 
 interface UsersPageProps {
   searchParams: { [key: string]: string | string[] | undefined };

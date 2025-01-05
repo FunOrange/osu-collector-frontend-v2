@@ -46,7 +46,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
           </DialogHeader>
           <DialogDescription>
             Don&apos;t have the desktop client installed?{' '}
-            <Link href='/client' className='font-semibold hover:underline text-gray-50'>
+            <Link href='/client#download-links' className='font-semibold hover:underline text-gray-50'>
               Click here
             </Link>{' '}
             to download it.

@@ -38,8 +38,8 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
           </DialogHeader>
           <DialogDescription>
             Don&apos;t have the desktop client installed?{' '}
-            <Link href='/client' className='font-semibold hover:underline text-gray-50'>
-              Click here{/* TODO: link directly to download */}
+            <Link href='/client#download-links' className='font-semibold hover:underline text-gray-50'>
+              Click here
             </Link>{' '}
             to download it.
           </DialogDescription>

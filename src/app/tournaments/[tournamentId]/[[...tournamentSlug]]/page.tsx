@@ -11,6 +11,25 @@ import moment from 'moment';
 import Image from 'next/image';
 import { identity, mergeRight } from 'ramda';
 import { Pattern, match } from 'ts-pattern';
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const tournament = await api.getTournament(params.tournamentId);
+  if (!tournament) return {};
+
+  const title = `${tournament.name} | osu!Collector`;
+  const description = tournament.description || `Tournament uploaded by ${tournament?.uploader.username}`;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://osucollector.com/collections/${tournament.id}/${getUrlSlug(tournament.name)}`,
+      images: [tournament.banner].filter(Boolean),
+    },
+  };
+}
 
 interface TournamentPageProps {
   params: { tournamentId: string };

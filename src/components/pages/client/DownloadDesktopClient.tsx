@@ -21,7 +21,7 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
   return (
     <div className='w-full max-w-6xl p-6 rounded bg-slate-600'>
       <div className='mb-2'>
-        <h2 className='text-2xl font-semibold text-slate-50 whitespace-nowrap' id='download'>
+        <h2 className='text-2xl font-semibold text-slate-50 whitespace-nowrap' id='download-links'>
           Download osu!Collector Desktop
         </h2>
         {user?.paidFeaturesAccess && <div className='text-pink-400'>Thank you for supporting us! You are awesome.</div>}

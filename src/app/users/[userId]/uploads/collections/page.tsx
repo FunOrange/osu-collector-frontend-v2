@@ -2,6 +2,25 @@ import CollectionCard from '@/components/CollectionCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar';
 import * as api from '@/services/osu-collector-api';
 import { s } from '@/utils/string-utils';
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const pageUser = await api.getUser(params.userId);
+  if (!pageUser) return {};
+
+  const title = `${pageUser.osuweb.username}'s Collections | osu!Collector`;
+  const description = `Collections uploaded by ${pageUser.osuweb.username}`;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://osucollector.com/users/${params.userId}/uploads/collections`,
+      images: [pageUser.osuweb.avatar_url].filter(Boolean),
+    },
+  };
+}
 
 interface PageProps {
   params: { userId: string };

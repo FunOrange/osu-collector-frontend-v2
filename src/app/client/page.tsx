@@ -2,8 +2,12 @@ import PaymentOptions from '@/components/pages/client/PaymentOptions';
 import Image from 'next/image';
 import { HeartFill } from 'react-bootstrap-icons';
 import DownloadDesktopClient from '@/components/pages/client/DownloadDesktopClient';
-import { Button } from '@/components/shadcn/button';
-import { useToast } from '@/components/shadcn/use-toast';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'osu!Collector Desktop App',
+  description: 'Download entire collections with seamless integration with osu!',
+};
 
 export default function DesktopClientPage() {
   return (
