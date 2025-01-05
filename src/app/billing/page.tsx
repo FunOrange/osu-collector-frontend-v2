@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: 'Find osu! beatmap collections and tournaments',
 };
 
-export default function BillingPage({}: BillingPageProps) {
+export default function BillingPage() {
   return <Billing />;
 }
