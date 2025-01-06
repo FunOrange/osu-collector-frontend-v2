@@ -76,7 +76,7 @@ export function UserNav() {
             <AvatarImage src={user.osuweb.avatar_url} alt='@shadcn' />
             <AvatarFallback>{user.osuweb.username[0].toLocaleUpperCase()}</AvatarFallback>
           </Avatar>
-          {user.osuweb.username}
+          <div className='line-clamp-1'>{user.osuweb.username}</div>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount sideOffset={10}>
