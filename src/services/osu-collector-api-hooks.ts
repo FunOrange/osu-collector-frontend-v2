@@ -92,7 +92,7 @@ export const usePaypalSubscription = () => {
   const isPaypalSubscriptionInEffect =
     new Date(user?.private?.subscriptionExpiryDate?._seconds * 1000) > new Date() ||
     paypalSubscription?.status.toLowerCase() === 'active';
-  const canCancelPaypalSubscription = paypalSubscription?.status?.toLowerCase() === 'active';
+  const canCancelPaypalSubscription = paypalSubscription && paypalSubscription?.status?.toLowerCase() === 'active';
   const paypalEndDate = new Date(
     paypalSubscription?.billing_info.next_billing_time || user?.private?.subscriptionExpiryDate?._seconds * 1000,
   );
@@ -128,7 +128,9 @@ export const useStripeSubscription = () => {
           ? 'Renews'
           : 'Ends';
   const canCancelStripeSubscription =
-    stripeSubscription?.status?.toLowerCase() !== 'canceled' && !stripeSubscription?.cancel_at_period_end;
+    stripeSubscription &&
+    stripeSubscription?.status?.toLowerCase() !== 'canceled' &&
+    !stripeSubscription?.cancel_at_period_end;
   return {
     stripeSubscription,
     stripeEndDate,
