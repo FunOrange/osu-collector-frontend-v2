@@ -2,7 +2,7 @@ import { formatQueryParams } from '@/utils/string-utils';
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST + '/api',
+  baseURL: typeof window !== 'undefined' ? '/api' : process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST + '/api',
   withCredentials: true,
 });
 api.interceptors.request.use(function (config) {
@@ -360,7 +360,7 @@ export async function getSubscription(cancelCallback = undefined) {
     if (err.response?.status === 404) {
       return null;
     } else {
-      console.error(`/payments/createSubscription responded with ${err.response?.status}: ${err.response?.data}`);
+      console.error(`/payments/stripeSubscription responded with ${err.response?.status}: ${err.response?.data}`);
       return null;
     }
   }
