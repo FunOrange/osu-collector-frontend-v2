@@ -7,6 +7,7 @@ export async function proxy(method: string, req: Request) {
     const upstreamResponse = await fetch(upstreamUrl.toString(), {
       method,
       headers: removeHeader(req.headers, 'accept-encoding'),
+      body: req.body,
     });
     return new Response(upstreamResponse.body, {
       status: upstreamResponse.status,
