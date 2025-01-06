@@ -6,7 +6,7 @@ import useSWRImmutable from 'swr/immutable';
 import { match } from 'ts-pattern';
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_BASE_URL,
+  baseURL: '/api',
   withCredentials: true,
 });
 

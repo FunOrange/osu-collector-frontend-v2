@@ -2,7 +2,7 @@ import { formatQueryParams } from '@/utils/string-utils';
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST + '/api',
   withCredentials: true,
 });
 api.interceptors.request.use(function (config) {
