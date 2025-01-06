@@ -23,7 +23,7 @@ import { formatQueryParams } from '@/utils/string-utils';
 import { CreditCard, Heart, Upload } from 'lucide-react';
 
 export function UserNav() {
-  const { user, isLoading, logout } = useUser();
+  const { user, morphed, morph, unmorph, isLoading, logout } = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -129,6 +129,19 @@ export function UserNav() {
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        {user.id === 2051389 && !morphed && (
+          <DropdownMenuItem
+            onClick={async () => {
+              const userId = Number(prompt('Enter userId'));
+              if (userId) {
+                await morph(userId);
+              }
+            }}
+          >
+            Morph
+          </DropdownMenuItem>
+        )}
+        {user.id === 2051389 && morphed && <DropdownMenuItem onClick={unmorph}>Unmorph</DropdownMenuItem>}
         <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

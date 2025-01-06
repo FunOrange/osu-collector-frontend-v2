@@ -11,7 +11,7 @@ export const api = axios.create({
 });
 
 export function useUser() {
-  type Response = { loggedIn: true; user: OsuCollectorUser } | { loggedIn: false; user: null };
+  type Response = { loggedIn: true; user: OsuCollectorUser; morphed: boolean } | { loggedIn: false; user: null };
   const { data, mutate, ...rest } = useSWRImmutable<Response>('/users/me', (url) =>
     api.get(url).then((res) => res.data),
   );
@@ -19,13 +19,26 @@ export function useUser() {
     .with({ loggedIn: true }, ({ user }) => user)
     .with({ loggedIn: false }, undefined, () => null)
     .exhaustive();
+  const morphed = match(data)
+    .with({ loggedIn: true, morphed: true }, () => true)
+    .otherwise(() => false);
 
   const [logout] = useSubmit(async () => {
     await api.post('/logout');
-    mutate();
+    await mutate();
   });
 
-  return { user, mutate, logout, ...rest };
+  const [morph] = useSubmit(async (userId: number) => {
+    await api.post('/users/morph', { userId });
+    await mutate();
+  });
+
+  const [unmorph] = useSubmit(async () => {
+    await api.post('/users/unmorph');
+    await mutate();
+  });
+
+  return { user, morphed, mutate, logout, morph, unmorph, ...rest };
 }
 
 export function useCancellableSWRImmutable(key, query = undefined) {
