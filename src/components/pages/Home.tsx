@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import CollectionCard from '@/components/CollectionCard';
 import { Collection } from '@/entities/Collection';
 import Link from 'next/link';
@@ -26,9 +27,9 @@ export default function Home({ metadata, popularCollections, recentCollections }
 
         <div className='items-center justify-between gap-6 mb-4 md:flex'>
           <div className='my-2'>
-            <div className='flex items-center gap-2'>
-              {/* TODO: add santa hat */}
-              <h1 className='mb-1 text-3xl'>Welcome to osu!Collector!</h1>
+            <div className='flex items-end gap-3 mb-1'>
+              <Image width={44} height={44} src='/icons/santa-hat.svg' unoptimized alt='santa hat' />
+              <h1 className='text-3xl'>Welcome to osu!Collector!</h1>
             </div>
             <p>
               This is a place where you can view beatmap collections uploaded by other players. It is mainly developed
