@@ -100,7 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <UserNav />
           </div>
         </div>
-        <div className={navbarSpacer}>{children}</div>
+        <div className={cn(navbarSpacer, 'min-h-screen flex flex-col')}>{children}</div>
         <Toaster />
       </body>
     </html>

@@ -54,7 +54,7 @@ const rules = {
   matches: (target, errorMessage) => rule((input) => input !== target, errorMessage),
   noSpecialChars: () => rule((input) => /[!?@#$%^&\*\-_]/.test(input), 'Must not contain any special characters'),
   noNumbers: () => rule((input) => /\d/.test(input), 'Must not contain numbers'),
-  url: () => rule((input) => !/^(http|https):\/\/[^ "]+$/.test(input), 'Not a valid URL'),
+  url: () => rule((input) => input && !/^(http|https):\/\/[^ "]+$/.test(input), 'Not a valid URL'),
   matchesRegex: (regex, errorMessage) => rule((input) => input && !regex.test(input), errorMessage),
 };
 export default rules;

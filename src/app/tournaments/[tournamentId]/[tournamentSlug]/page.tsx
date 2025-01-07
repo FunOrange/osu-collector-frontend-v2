@@ -2,6 +2,7 @@ import FavouriteButton from '@/components/FavouriteButton';
 import DownloadMapsButton from '@/components/pages/tournaments/[tournamentId]/DownloadMapsButton';
 import AddTournamentToOsuButton from '@/components/pages/tournaments/[tournamentId]/AddTournamentToOsuButton';
 import TournamentDeleteButton from '@/components/pages/tournaments/[tournamentId]/TournamentDeleteButton';
+import TournamentEditButton from '@/components/pages/tournaments/[tournamentId]/TournamentEditButton';
 import TournamentUpdateButton from '@/components/pages/tournaments/[tournamentId]/TournamentUpdateButton';
 import TournamentMappool from '@/components/pages/tournaments/[tournamentId]/TournamentMappool';
 import ImageWithFallback from '@/components/universal/ImageWithFallback';
@@ -134,6 +135,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
               </div>
               <div className='flex flex-col justify-end gap-2 pl-4 border-l border-slate-700'>
                 <TournamentDeleteButton tournament={tournament} />
+                <TournamentEditButton tournament={tournament} />
                 <DownloadMapsButton tournament={tournament} />
                 <AddTournamentToOsuButton tournament={tournament} />
                 <FavouriteButton tournament={tournament} variant='fullWidth' />

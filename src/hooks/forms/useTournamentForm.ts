@@ -25,7 +25,7 @@ export default function useTournamentForm(
     ...touchedFields,
   };
   const setTouchedFields = (...args) => {
-    afterChange();
+    afterChange?.();
     _setTouchedFields.apply(null, args);
   };
 
@@ -76,5 +76,5 @@ export default function useTournamentForm(
     setTouchedFields,
     setErrors,
   });
-  return { fields, setTouchedFields, validate, formItemProps, inputProps, dropdownProps };
+  return { fields, touchedFields, setTouchedFields, validate, formItemProps, inputProps, dropdownProps };
 }

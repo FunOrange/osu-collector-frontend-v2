@@ -469,9 +469,18 @@ export async function createTournament(createTournamentDto) {
   return res.data;
 }
 
-export async function editTournament(id, createTournamentDto) {
+export interface UpdateTournamentDto {
+  name?: string;
+  description?: string;
+  link?: string;
+  banner?: string;
+  downloadUrl?: string;
+  organizers?: any[];
+  rounds?: any[];
+}
+export async function editTournament(id, dto: UpdateTournamentDto) {
   const route = `/tournaments/${id}`;
-  const res = await api.patch(route, createTournamentDto);
+  const res = await api.patch(route, dto);
   if (res.status !== 200) {
     throw new Error(`${route} responded with ${res.status}: ${res.data}`);
   }
