@@ -55,19 +55,37 @@ export default function DesktopClientPage() {
         </div>
       </div>
 
-      <div className='flex flex-col items-center w-full gap-8 px-2 py-16 bg-slate-700'>
-        <DownloadDesktopClient />
-
-        <div className='w-full max-w-6xl py-6 rounded'>
-          <h2 className='text-2xl text-center'>Two ways to support us!</h2>
-          <div className='mb-2 text-center'>
-            Please note that supporting us with both methods at the same time{' '}
-            <b>will not extend your supporter status!</b> Please use only one method.
+      <div className='flex flex-col w-full'>
+        <div className='flex flex-col items-center w-full text-black font-semibold'>
+          {yellowStripes}
+          <div className='flex flex-col items-center w-full gap-8 px-2 py-4 bg-yellow-500 text-sm text-yellow-900'>
+            Note: osu! Lazer is not currently supported. Sorry!
           </div>
+          {yellowStripes}
+        </div>
+        <div className='flex flex-col items-center w-full gap-8 px-2 py-16 bg-slate-700'>
+          <DownloadDesktopClient />
 
-          <PaymentOptions />
+          <div className='w-full max-w-6xl py-6 rounded'>
+            <h2 className='text-2xl text-center'>Two ways to support us!</h2>
+            <div className='mb-2 text-center'>
+              Please note that supporting us with both methods at the same time{' '}
+              <b>will not extend your supporter status!</b> Please use only one method.
+            </div>
+
+            <PaymentOptions />
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+const yellowStripes = (
+  <div
+    className='flex flex-col items-center w-full bg-yellow-500 h-2'
+    style={{
+      background: `repeating-linear-gradient(45deg, #fde047, #fde047 14px, #eab308 14px, #eab308 28px)`,
+    }}
+  />
+);
