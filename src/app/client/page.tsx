@@ -3,6 +3,14 @@ import Image from 'next/image';
 import { HeartFill } from 'react-bootstrap-icons';
 import DownloadDesktopClient from '@/components/pages/client/DownloadDesktopClient';
 import { Metadata } from 'next';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/shadcn/dialog';
 
 export const metadata: Metadata = {
   title: 'osu!Collector Desktop App',
@@ -58,8 +66,35 @@ export default function DesktopClientPage() {
       <div className='flex flex-col w-full'>
         <div className='flex flex-col items-center w-full text-black font-semibold'>
           {yellowStripes}
-          <div className='flex flex-col items-center w-full gap-8 px-2 py-4 bg-yellow-500 text-sm text-yellow-900'>
-            Note: osu! Lazer is not currently supported. Sorry!
+          <div className='text-center w-full gap-8 px-2 py-4 bg-yellow-500 text-sm text-yellow-900'>
+            Collection integration with osu! Lazer is not currently supported. For workarounds{' '}
+            <Dialog>
+              <DialogTrigger className='inline underline'>click here</DialogTrigger>.
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>About osu! Lazer</DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                  <h2 className='text-lg font-semibold mb-1 text-slate-100'>Why is osu! Lazer not supported?</h2>
+                  <div className='mb-3'>
+                    <a href='https://github.com/ppy/osu/wiki/User-file-storage' className='underline text-blue-500'>
+                      The way osu! lazer stores its files
+                    </a>{' '}
+                    makes it difficult for third-party programs to read/write to the game files.
+                  </div>
+
+                  <h2 className='text-lg font-semibold mb-1 text-slate-100'>
+                    How can I add my missing maps and collections to osu! Lazer?
+                  </h2>
+                  <div className='mb-3'>
+                    So far, the fastest way to get both your collections and maps from osu!Collector to osu!lazer is by
+                    importing the collections/maps from osu! stable to osu!lazer by using the{' '}
+                    <b className='text-slate-300'>Import function</b> in{' '}
+                    <b className='text-slate-300'>Run setup wizard</b> on the settings.
+                  </div>
+                </DialogDescription>
+              </DialogContent>
+            </Dialog>
           </div>
           {yellowStripes}
         </div>
