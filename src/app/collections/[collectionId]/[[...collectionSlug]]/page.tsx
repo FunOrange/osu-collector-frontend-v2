@@ -20,6 +20,7 @@ import EditableCollectionName from '@/components/pages/collections/[collectionId
 import CollectionDeleteButton from '@/components/pages/collections/[collectionId]/CollectionDeleteButton';
 import EditableCollectionDescription from '@/components/pages/collections/[collectionId]/EditableCollectionDescription';
 import CollectionUpdateButton from '@/components/pages/collections/[collectionId]/CollectionUpdateButton';
+import UserChip from '@/components/UserChip';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const collection = await api.getCollection(params.collectionId);
@@ -89,7 +90,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     <div className='flex justify-center w-full'>
       <div className='flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl'>
         <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
-          <div className='grid mb-4 rounded-t lg:grid-cols-2 xs:grid-cols-1'>
+          <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1'>
             <BarGraphStars
               collection={collection}
               height={graphHeight}
@@ -105,32 +106,20 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               />
             </div>
           </div>
-          <div className='p-4'>
-            <EditableCollectionName collection={collection} />
+          <div className='flex flex-col gap-4 p-4'>
+            <div className='flex flex-col xl:flex-row justify-between items-center gap-2'>
+              <EditableCollectionName collection={collection} />
+              <ModeCounters variant='full' collection={collection} />
+            </div>
             <div className='grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
               <div>
-                <div className='mb-2'>
-                  <ModeCounters collection={collection} showUnavailable />
+                <div className='flex items-center gap-2'>
+                  <UserChip user={collection.uploader} />
+                  <small className='text-slate-400'>
+                    Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
+                  </small>
                 </div>
-                <small className='text-slate-400'>
-                  Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
-                </small>
-                <div className='grid items-start w-full gap-4 pt-4 pr-4' style={{ gridTemplateColumns: 'auto 1fr' }}>
-                  <div className='flex items-center justify-start px-2 py-1 mt-1 transition rounded-lg cursor-pointer first-letter:items-center hover:bg-slate-900'>
-                    <Image
-                      className='mr-2 rounded-full'
-                      src={`https://a.ppy.sh/${collection.uploader.id}`}
-                      width={32}
-                      height={32}
-                      alt={'Collection uploader avatar'}
-                    />
-                    <div className='flex flex-col'>
-                      <div className='text-sm whitespace-nowrap'>{collection.uploader.username}</div>
-                      {collection.uploader.rank > 0 && (
-                        <small className='text-xs text-slate-500'>#{collection.uploader.rank}</small>
-                      )}
-                    </div>
-                  </div>
+                <div className='w-full pt-4 pr-4'>
                   <EditableCollectionDescription collection={collection} />
                 </div>
               </div>

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { getUrlSlug } from '@/utils/string-utils';
 import { starToColor } from '@/utils/theme-utils';
 import FavouriteButton from '@/components/FavouriteButton';
+import UserChip from '@/components/UserChip';
 
 function CollectionCard({ collection }) {
   if (!collection) return <div></div>;
@@ -28,7 +29,7 @@ function CollectionCard({ collection }) {
       </Link>
       <div className='px-4 pt-4'>
         <div className='flex items-center justify-between'>
-          <ModeCounters collection={collection} />
+          <ModeCounters variant='small' collection={collection} />
           <FavouriteButton collection={collection} variant='iconOnly' />
         </div>
       </div>
@@ -43,27 +44,7 @@ function CollectionCard({ collection }) {
         )}
       </Link>
       <div className='flex items-end justify-between px-4 pb-2 '>
-        <div
-          className='flex items-center justify-start px-2 py-1 transition rounded-lg cursor-pointer hover:bg-slate-700'
-          style={{ marginLeft: '-8px' }}
-        >
-          <Image
-            className='mr-2 rounded-full'
-            src={`https://a.ppy.sh/${collection.uploader.id}`}
-            width={32}
-            height={32}
-            alt={'Collection uploader avatar'}
-          />
-          <div className='flex flex-col'>
-            <div className='text-sm whitespace-nowrap'>{collection.uploader.username}</div>
-            {collection.uploader.rank > 0 && (
-              <small className='text-xs text-slate-500'>#{collection.uploader.rank}</small>
-            )}
-          </div>
-          {/* <Link href={`/users/${collection.uploader.id}/uploads`}>
-              {collection.uploader.username}
-            </Link> */}
-        </div>
+        <UserChip user={collection.uploader} className='hover:bg-slate-700 ml-[-8px]' />
         <small className='pb-2 truncate text-slate-400'>
           {moment.unix(collection.dateUploaded._seconds).fromNow()}
         </small>

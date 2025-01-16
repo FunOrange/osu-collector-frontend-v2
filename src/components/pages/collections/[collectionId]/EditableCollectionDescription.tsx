@@ -36,12 +36,12 @@ export default function EditableCollectionDescription({ collection }: EditableCo
   };
   return match(conditions)
     .with({ isUploader: false, editing: false, hasDescription: true }, () => (
-      <div className='px-3 py-2 whitespace-pre-wrap rounded bg-slate-800' style={{ minHeight: '88px' }}>
+      <div className='px-3 py-2 whitespace-pre-wrap rounded bg-slate-800' style={{ minHeight: '106px' }}>
         <div>{collection.description}</div>
       </div>
     ))
     .with({ isUploader: false, editing: false, hasDescription: false }, () => (
-      <div className='p-4 rounded bg-slate-800' style={{ minHeight: '88px' }}>
+      <div className='p-4 rounded bg-slate-800' style={{ minHeight: '106px' }}>
         <div className='text-sm text-slate-500'>No description</div>
       </div>
     ))

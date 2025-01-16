@@ -52,6 +52,6 @@ export default function EditableCollectionName({ collection }: EditableCollectio
       );
     }
   } else {
-    return <h1 className='mb-2 text-4xl'>{collection.name}</h1>;
+    return <h1 className='mb-2 text-4xl text-gray-100'>{collection.name}</h1>;
   }
 }
