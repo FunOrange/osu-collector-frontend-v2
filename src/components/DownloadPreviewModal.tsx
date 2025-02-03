@@ -92,7 +92,7 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
       <DialogHeader>
         <DialogTitle>Downloads (preview)</DialogTitle>
       </DialogHeader>
-      <DesktopFeaturePreviewOverlay visible={overlayVisible} />
+      <DesktopFeaturePreviewOverlay visible={overlayVisible} onCancel={close} />
       <DialogDescription style={{ height: '80vh', overflow: 'hidden' }}>
         <div>osu! should automatically open all .osz files once they are finished downloading.</div>
         <div className='mb-3'>If it doesn&apos;t, you may need to press F5 at the song select screen.</div>

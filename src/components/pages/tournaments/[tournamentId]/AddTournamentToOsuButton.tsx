@@ -81,7 +81,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
           Add mappool to osu
         </DialogTrigger>
         <DialogContent className='max-w-5xl' onPointerDownOutside={() => setPreviewOpened(false)}>
-          <DesktopFeaturePreviewOverlay visible={overlayVisible} />
+          <DesktopFeaturePreviewOverlay visible={overlayVisible} onCancel={() => setPreviewOpened(false)} />
           <DialogHeader>
             <DialogTitle className='text-slate-500'>Import mappool collections (preview)</DialogTitle>
           </DialogHeader>

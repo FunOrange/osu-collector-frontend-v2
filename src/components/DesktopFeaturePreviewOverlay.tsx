@@ -5,15 +5,16 @@ import styled from 'styled-components';
 
 export interface DesktopFeaturePreviewOverlayProps {
   visible: boolean;
+  onCancel: () => void;
 }
-export default function DesktopFeaturePreviewOverlay({ visible }) {
+export default function DesktopFeaturePreviewOverlay({ visible, onCancel }) {
   return (
     <PreviewOverlay className={visible ? undefined : 'opacity-0'}>
       <div className='horizontalStrip'>
         <h3>You are previewing an osu!Collector Desktop feature!</h3>
         <div className='flex gap-3' style={{ pointerEvents: 'all' }}>
           <DialogClose>
-            <Button variant='secondary' onClick={close}>
+            <Button variant='secondary' onClick={onCancel}>
               Cancel
             </Button>
           </DialogClose>
