@@ -38,7 +38,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
             window.open(`osucollector://collections/${collection.id}`, '_blank', 'noreferrer');
           }}
         >
-          Add to osu
+          Add to osu!
         </DialogTrigger>
         <DialogContent onPointerDownOutside={() => setOpen(false)}>
           <DialogHeader>
@@ -92,7 +92,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
       href='/client'
       className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
     >
-      Add to osu
+      Add to osu!
     </Link>
   );
 }

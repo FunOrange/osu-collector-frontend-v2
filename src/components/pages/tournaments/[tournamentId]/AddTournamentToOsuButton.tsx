@@ -52,7 +52,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
             window.open(`osucollector://tournaments/${tournament.id}`, '_blank', 'noreferrer');
           }}
         >
-          Add mappool to osu
+          Add mappool to osu!
         </DialogTrigger>
         <DialogContent onPointerDownOutside={() => setDesktopClientOpened(false)}>
           <DialogHeader>
@@ -78,7 +78,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
         }}
       >
         <DialogTrigger className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
-          Add mappool to osu
+          Add mappool to osu!
         </DialogTrigger>
         <DialogContent className='max-w-5xl' onPointerDownOutside={() => setPreviewOpened(false)}>
           <DesktopFeaturePreviewOverlay visible={overlayVisible} onCancel={() => setPreviewOpened(false)} />
