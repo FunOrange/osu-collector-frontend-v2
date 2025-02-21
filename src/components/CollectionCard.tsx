@@ -2,13 +2,16 @@ import moment from 'moment';
 import BarGraph from '@/components/BarGraph';
 import ModeCounters from '@/components/ModeCounters';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getUrlSlug } from '@/utils/string-utils';
 import { starToColor } from '@/utils/theme-utils';
 import FavouriteButton from '@/components/FavouriteButton';
 import UserChip from '@/components/UserChip';
+import { Collection } from '@/shared/entities/v1/Collection';
 
-function CollectionCard({ collection }) {
+export interface CollectionCardProps {
+  collection: Collection;
+}
+export default function CollectionCard({ collection }: CollectionCardProps) {
   if (!collection) return <div></div>;
 
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
@@ -52,5 +55,3 @@ function CollectionCard({ collection }) {
     </div>
   );
 }
-
-export default CollectionCard;

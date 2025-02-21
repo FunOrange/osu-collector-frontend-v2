@@ -9,7 +9,7 @@ import md5 from 'md5';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { formatQueryParams } from '@/utils/string-utils';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import { Tournament } from '@/entities/Tournament';
 
 export type FavouriteButtonProps = {

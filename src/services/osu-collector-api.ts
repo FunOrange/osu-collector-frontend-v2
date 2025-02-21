@@ -1,3 +1,5 @@
+import { Beatmap } from '@/shared/entities/v1/Beatmap';
+import { Collection } from '@/shared/entities/v1/Collection';
 import { formatQueryParams } from '@/utils/string-utils';
 import axios from 'axios';
 
@@ -46,7 +48,11 @@ export async function getPopularCollections({
     perPage,
   };
   return api
-    .get('/collections/popularv2', {
+    .get<{
+      nextPageCursor: number | null;
+      hasMore: boolean;
+      collections: Collection[];
+    }>('/collections/popularv2', {
       params,
       cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
@@ -100,7 +106,11 @@ export async function getCollectionBeatmaps({
     filterMax: filterMax && ['difficulty_rating', 'bpm'].includes(sortBy) ? filterMax : undefined,
   };
   return api
-    .get(`/collections/${collectionId}/beatmapsv2`, {
+    .get<{
+      nextPageCursor: number | null;
+      hasMore: boolean;
+      beatmaps: Beatmap[];
+    }>(`/collections/${collectionId}/beatmapsv2`, {
       params,
       cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })

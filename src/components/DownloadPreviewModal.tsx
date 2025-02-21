@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { getRandomFromArray } from '@/utils/array-utils';
 import { Progress } from '@/components/shadcn/progress';
 import { DialogClose } from '@radix-ui/react-dialog';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import DesktopFeaturePreviewOverlay from '@/components/DesktopFeaturePreviewOverlay';
 
 enum DownloadStates {

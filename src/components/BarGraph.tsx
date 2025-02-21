@@ -11,8 +11,9 @@ export interface BarGraphProps {
   height?: string | number;
   barHref?: (x: any) => string;
   className?: string;
+  barClassName?: string;
 }
-export default function BarGraph({ title, data, barHref, height = '80px', className }: BarGraphProps) {
+export default function BarGraph({ title, data, barHref, height = '80px', className, barClassName }: BarGraphProps) {
   const length = data.x.length;
   const maxValue = Math.max(...data.y);
   const barStyle = (y, i) => ({
@@ -34,12 +35,12 @@ export default function BarGraph({ title, data, barHref, height = '80px', classN
           <Link
             key={i}
             href={barHref(data.x[i])}
-            className='self-end cursor-pointer hover:border hover:border-gray-50'
+            className={cn('self-end cursor-pointer hover:border hover:border-gray-50', barClassName)}
             style={barStyle(y, i)}
             replace
           />
         ) : (
-          <div key={i} className='self-end' style={barStyle(y, i)} />
+          <div key={i} className={cn('self-end', barClassName)} style={barStyle(y, i)} />
         ),
       )}
       {data.x.map((value, i) => (

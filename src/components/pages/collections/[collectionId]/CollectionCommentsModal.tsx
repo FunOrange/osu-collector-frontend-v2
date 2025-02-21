@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from '@/components/shadcn/dialog';
 import { Textarea } from '@/components/shadcn/textarea';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import useSubmit from '@/hooks/useSubmit';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { ReactNode, useState } from 'react';

@@ -1,4 +1,4 @@
-import { OsuCollectorUser } from '@/entities/OsuCollectorUser';
+import { User } from '@/shared/entities/v1/User';
 import { StripeSubscription } from '@/entities/stripe/StripeSubscription';
 import useSubmit from '@/hooks/useSubmit';
 import axios from 'axios';
@@ -11,7 +11,7 @@ export const api = axios.create({
 });
 
 export function useUser() {
-  type Response = { loggedIn: true; user: OsuCollectorUser; morphed: boolean } | { loggedIn: false; user: null };
+  type Response = { loggedIn: true; user: User; morphed: boolean } | { loggedIn: false; user: null };
   const { data, mutate, ...rest } = useSWRImmutable<Response>('/users/me', (url) =>
     api.get(url).then((res) => res.data),
   );

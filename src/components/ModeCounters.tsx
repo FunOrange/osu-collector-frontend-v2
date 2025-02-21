@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/shadcn/tooltip';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import { cn } from '@/utils/shadcn-utils';
 import Image from 'next/image';
 import { ExclamationTriangleFill } from 'react-bootstrap-icons';

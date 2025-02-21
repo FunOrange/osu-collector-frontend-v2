@@ -1,4 +1,5 @@
-import { Uploader } from '@/entities/Uploader';
+import { Beatmap } from '@/shared/entities/v1/Beatmap';
+import { Uploader } from '@/shared/entities/v1/Uploader';
 import { FirestoreTimestamp } from '@/types';
 
 export interface Tournament {
@@ -29,23 +30,7 @@ export interface Round {
 
 export interface Mod {
   mod: string;
-  maps: Map[];
-}
-
-export interface Map {
-  difficulty_rating: number;
-  accuracy: number;
-  version: string;
-  url: string;
-  cs: number;
-  mode: string;
-  ar: number;
-  beatmapset: Beatmapset;
-  checksum: string;
-  id: number;
-  hit_length: number;
-  bpm: number;
-  status: string;
+  maps: Beatmap[];
 }
 
 export interface Beatmapset {

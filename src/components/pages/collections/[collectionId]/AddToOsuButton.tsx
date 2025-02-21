@@ -1,5 +1,5 @@
 'use client';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import Link from 'next/link';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import {

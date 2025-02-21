@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { match } from 'ts-pattern';
 import { secondsToHHMMSS } from '@/utils/date-time-utils';
 import { bpmToColor, getContrastColor, starToColor } from '@/utils/theme-utils';
-import { Beatmap } from '@/entities/Beatmap';
-import { Beatmapset } from '@/entities/Beatmapset';
+import { Beatmap } from '@/shared/entities/v1/Beatmap';
+import { Beatmapset } from '@/shared/entities/v1/Beatmapset';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 import BeatmapsetCardPlayButton from '@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton';
 import { cn } from '@/utils/shadcn-utils';
@@ -30,7 +30,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
           <div className='absolute overflow-hidden rounded'>
             <div className={cn(imageHovered ? undefined : 'blur-sm')}>
               <Image
-                src={imageError ? slimcoverfallback : beatmapset.covers.card}
+                src={imageError ? slimcoverfallback : beatmapset.covers.cover}
                 alt={beatmapset.title}
                 width={340}
                 height={84}

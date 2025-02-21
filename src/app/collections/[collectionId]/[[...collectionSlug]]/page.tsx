@@ -7,7 +7,7 @@ import * as api from '@/services/osu-collector-api';
 import { formatQueryParams, getUrlSlug } from '@/utils/string-utils';
 import { identity, mergeRight } from 'ramda';
 import { Pattern, match } from 'ts-pattern';
-import { groupBeatmapsets } from '@/entities/Beatmap';
+import { groupBeatmapsets } from '@/shared/entities/v1/Beatmap';
 import { cn } from '@/utils/shadcn-utils';
 import FavouriteButton from '@/components/FavouriteButton';
 import BarGraphStars from '@/components/pages/collections/[collectionId]/BarGraphStars';
@@ -21,6 +21,7 @@ import CollectionDeleteButton from '@/components/pages/collections/[collectionId
 import EditableCollectionDescription from '@/components/pages/collections/[collectionId]/EditableCollectionDescription';
 import CollectionUpdateButton from '@/components/pages/collections/[collectionId]/CollectionUpdateButton';
 import UserChip from '@/components/UserChip';
+import { Button } from '@/components/shadcn/button';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const collection = await api.getCollection(params.collectionId);
@@ -90,22 +91,6 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     <div className='flex justify-center w-full'>
       <div className='flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl'>
         <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
-          <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1'>
-            <BarGraphStars
-              collection={collection}
-              height={graphHeight}
-              replaceQueryParams={replaceQueryParams}
-              className='rounded-tl'
-            />
-            <div className='hidden sm:block'>
-              <BarGraphBpm
-                collection={collection}
-                height={graphHeight}
-                replaceQueryParams={replaceQueryParams}
-                className='rounded-tr'
-              />
-            </div>
-          </div>
           <div className='flex flex-col gap-4 p-4'>
             <div className='flex flex-col xl:flex-row justify-between items-center gap-2'>
               <EditableCollectionName collection={collection} />
@@ -131,6 +116,48 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                 <CollectionUpdateButton collection={collection} />
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1 gap-4'>
+          <div className='flex flex-col gap-2 p-4 bg-slate-950'>
+            <div className='flex flex-col md:flex-row md:justify-between items-start'>
+              <div>
+                <div className='font-semibold text-white text-[20px]'>Filter by Star Rating</div>
+                <div className='text-slate-500 text-base'>
+                  Average: <span className='text-cyan-400'>6.25</span>
+                </div>
+              </div>
+              <Button variant='important'>Reset</Button>
+            </div>
+            <BarGraphStars
+              title=''
+              collection={collection}
+              height={graphHeight}
+              replaceQueryParams={replaceQueryParams}
+              className='rounded-tl'
+              barClassName='rounded-t-lg'
+            />
+          </div>
+          <div className='flex flex-col gap-2 p-4 bg-slate-950'>
+            <div className='flex flex-col md:flex-row md:justify-between items-start'>
+              <div>
+                <div className='font-semibold text-white text-[20px]'>Filter by BPM</div>
+                <div className='text-slate-500 text-base'>
+                  Average: <span className='text-cyan-400'>240</span>
+                </div>
+              </div>
+              <Button variant='important'>Reset</Button>
+            </div>
+
+            <BarGraphBpm
+              title=''
+              collection={collection}
+              height={graphHeight}
+              replaceQueryParams={replaceQueryParams}
+              className='rounded-tr'
+              barClassName='rounded-t-md'
+            />
           </div>
         </div>
 

@@ -1,8 +1,9 @@
+import { Collection } from '@/shared/entities/v1/Collection';
 import { cn } from '@/utils/shadcn-utils';
 import Image from 'next/image';
 
 export interface UserChipProps {
-  user: { id: number; username: string; rank: number };
+  user: Collection['uploader'];
   className?: string;
 }
 export default function UserChip({ user, className }: UserChipProps) {

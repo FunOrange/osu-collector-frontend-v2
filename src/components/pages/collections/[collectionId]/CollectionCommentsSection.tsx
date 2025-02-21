@@ -1,5 +1,5 @@
 'use client';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import { ChatFill } from 'react-bootstrap-icons';
 import * as api from '@/services/osu-collector-api';
 import { useUser } from '@/services/osu-collector-api-hooks';

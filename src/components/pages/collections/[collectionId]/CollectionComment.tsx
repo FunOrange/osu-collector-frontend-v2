@@ -1,6 +1,6 @@
 'use client';
 import CollectionCommentLikeButton from '@/components/pages/collections/[collectionId]/CollectionCommentLikeButton';
-import { Comment } from '@/entities/Collection';
+import { Comment } from '@/shared/entities/v1/Collection';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import moment from 'moment';
 import Image from 'next/image';

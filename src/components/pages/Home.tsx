@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import CollectionCard from '@/components/CollectionCard';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import Link from 'next/link';
 import { Discord, Fire, Stars } from 'react-bootstrap-icons';
 import Snowfall from 'react-snowfall';
