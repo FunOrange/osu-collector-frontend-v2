@@ -22,9 +22,10 @@ import EditableCollectionDescription from '@/components/pages/collections/[colle
 import CollectionUpdateButton from '@/components/pages/collections/[collectionId]/CollectionUpdateButton';
 import UserChip from '@/components/UserChip';
 import { Button } from '@/components/shadcn/button';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const collection = await api.getCollection(params.collectionId);
+  const collection = await api.getCollection(params.collectionId).catch(() => null);
   if (!collection) return {};
 
   const title = `${collection.name} | osu!Collector`;
@@ -46,7 +47,13 @@ interface CollectionPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
-  const collection = await api.getCollection(params.collectionId);
+  const collection = await api.getCollection(params.collectionId).catch((e) => {
+    if (e.response?.status === 404) return null;
+    throw e;
+  });
+  if (collection === null) {
+    notFound();
+  }
 
   const graphHeight = 160;
 
@@ -78,7 +85,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     sortBy,
     filterMin: searchParams.filterMin,
     filterMax: searchParams.filterMax,
-    perPage: 24,
+    perPage: 100,
   });
   const listing = groupBeatmapsets(beatmaps);
 

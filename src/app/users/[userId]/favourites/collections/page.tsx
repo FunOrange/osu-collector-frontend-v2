@@ -3,9 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar'
 import * as api from '@/services/osu-collector-api';
 import { s } from '@/utils/string-utils';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const pageUser = await api.getUser(params.userId);
+  const pageUser = await api.getUser(params.userId).catch(() => null);
   if (!pageUser) return {};
 
   const title = `${pageUser.osuweb.username}'s Collections | osu!Collector`;
@@ -31,7 +32,7 @@ export default async function UserFavouriteCollectionsPage({ params }: PageProps
     api.getUserFavouriteCollections(params.userId),
   ]).catch(() => [null, null]);
   if (!pageUser) {
-    return <div className='mt-16 text-3xl text-center text-red-500'>No such user exists.</div>;
+    notFound();
   }
 
   return (
@@ -53,8 +54,10 @@ export default async function UserFavouriteCollectionsPage({ params }: PageProps
               </a>
             </div>
           </h2>
-          <h1 className='mb-2 text-2xl'>
-            {collections.length} favourited collection{s(collections.length)}
+          <h1 className='mb-2 text-xl'>
+            {collections.length === 1
+              ? `${pageUser.osuweb.username} favourited this collection:`
+              : `${pageUser.osuweb.username} favourited these ${collections.length} collections`}
           </h1>
           <div className='grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {!collections ? (

@@ -2,7 +2,7 @@
 import BeatmapsetCardPlayButton from '@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton';
 import { Button } from '@/components/shadcn/button';
 import ImageWithFallback from '@/components/universal/ImageWithFallback';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import { calculateARWithHR, calculateODWithHR, calculateARWithDT, calculateODWithDT } from '@/utils/diff-calc';
 import { cn } from '@/utils/shadcn-utils';
 import React, { useState } from 'react';

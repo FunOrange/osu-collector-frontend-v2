@@ -22,6 +22,8 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
   const slimcoverfallback = '/images/slimcoverfallback.jpg';
   const [imageHovered, setImageHovered] = useState(false);
 
+  const textShadow = '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000';
+
   return (
     <div>
       <div className='grid gap-2' style={{ gridTemplateColumns: '340px 1fr' }}>
@@ -53,38 +55,22 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
             <div className='grid gap-2' style={{ gridTemplateColumns: '1fr 50px' }}>
               <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target='_blank'>
                 <div style={{ maxWidth: '264px' }}>
-                  <div
-                    className='text-lg font-medium text-white truncate'
-                    style={{
-                      textShadow: '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000',
-                    }}
-                  >
+                  <div className='text-lg font-medium text-white truncate' style={{ textShadow }}>
                     {beatmapset.title}
                   </div>
-                  <div
-                    className='text-sm font-medium text-gray-100 truncate'
-                    style={{
-                      textShadow: '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000',
-                    }}
-                  >
+                  <div className='text-sm font-medium text-gray-100 truncate' style={{ textShadow }}>
                     {beatmapset.artist}
                   </div>
                   <div className='text-sm font-medium text-gray-100 truncate'>
                     <span
-                      className='text-slate-200 opacity-70'
+                      className='text-slate-200'
                       style={{
                         textShadow: '2px 2px 2px #00000071, 2px 2px 2px #00000071, 2px 2px 2px #00000071',
                       }}
                     >
                       Mapped by
                     </span>{' '}
-                    <span
-                      style={{
-                        textShadow: '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000',
-                      }}
-                    >
-                      {beatmapset.creator}
-                    </span>
+                    <span style={{ textShadow }}>{beatmapset.creator}</span>
                   </div>
                 </div>
               </a>

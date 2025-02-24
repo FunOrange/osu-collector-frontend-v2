@@ -7,6 +7,7 @@ import Image from 'next/image';
 import * as api from '@/services/osu-collector-api';
 import useSubmit from '@/hooks/useSubmit';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export interface CollectionCommentProps {
   collectionId: number;
@@ -15,9 +16,16 @@ export interface CollectionCommentProps {
 export default function CollectionComment({ comment, collectionId }: CollectionCommentProps) {
   const { user } = useUser();
   const router = useRouter();
-  const [deleteComment, deleting] = useSubmit(async () => {
-    await api.deleteComment(collectionId, comment.id);
-    router.refresh();
+  const [deleting, setDeleting] = useState(false);
+  const [deleteComment] = useSubmit(async () => {
+    setDeleting(true);
+    try {
+      await api.deleteComment(collectionId, comment.id);
+      router.refresh();
+    } catch (e) {
+      setDeleting(false);
+      throw e;
+    }
   });
   return (
     <div className='flex'>

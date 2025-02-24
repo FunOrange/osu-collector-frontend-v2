@@ -5,7 +5,7 @@ import { Input } from '@/components/shadcn/input';
 import { Label } from '@/components/shadcn/label';
 import { Textarea } from '@/components/shadcn/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/shadcn/tooltip';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import useTournamentForm from '@/hooks/forms/useTournamentForm';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';

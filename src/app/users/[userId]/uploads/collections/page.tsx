@@ -5,7 +5,7 @@ import { s } from '@/utils/string-utils';
 import { Metadata } from 'next';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const pageUser = await api.getUser(params.userId);
+  const pageUser = await api.getUser(params.userId).catch(() => null);
   if (!pageUser) return {};
 
   const title = `${pageUser.osuweb.username}'s Collections | osu!Collector`;

@@ -1,4 +1,4 @@
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 
 export const mappoolTemplate = `# Lines beginning with '#' are ignored
 

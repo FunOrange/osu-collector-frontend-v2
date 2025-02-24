@@ -28,9 +28,11 @@ export default function UploadButton({}: UploadButtonProps) {
       <>
         <Dialog open={makingSelection} onOpenChange={setMakingSelection}>
           <DialogTrigger>
-            <Button variant='important' className='gap-2'>
-              <CloudUploadFill size={20} className='mt-1' />
-              Upload
+            <Button variant='important' className='gap-2' asChild>
+              <div>
+                <CloudUploadFill size={20} className='mt-1' />
+                Upload
+              </div>
             </Button>
           </DialogTrigger>
           <DialogContent className='max-w-2xl'>

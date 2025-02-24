@@ -9,8 +9,8 @@ export interface BeatmapsetListingProps {
 export default function BeatmapsetListing({ listing }: BeatmapsetListingProps) {
   return (
     <Provider>
-      {listing.map(({ beatmapset, beatmaps }) => (
-        <BeatmapsetCard key={beatmapset.id} beatmapset={beatmapset} beatmaps={beatmaps} />
+      {listing.map(({ beatmapset, beatmaps }, i) => (
+        <BeatmapsetCard key={i} beatmapset={beatmapset} beatmaps={beatmaps} />
       ))}
     </Provider>
   );

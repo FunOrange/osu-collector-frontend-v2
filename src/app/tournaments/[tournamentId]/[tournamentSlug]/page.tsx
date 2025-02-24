@@ -15,7 +15,7 @@ import { Pattern, match } from 'ts-pattern';
 import { Metadata } from 'next';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const tournament = await api.getTournament(params.tournamentId);
+  const tournament = await api.getTournament(params.tournamentId).catch(() => null);
   if (!tournament) return {};
 
   const title = `${tournament.name} | osu!Collector`;

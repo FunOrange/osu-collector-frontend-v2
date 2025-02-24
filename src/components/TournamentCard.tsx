@@ -1,6 +1,6 @@
 'use client';
 import { getUrlSlug } from '@/utils/string-utils';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import ImageWithFallback from '@/components/universal/ImageWithFallback';
 import Link from 'next/link';
 import moment from 'moment';

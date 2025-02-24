@@ -10,7 +10,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { formatQueryParams } from '@/utils/string-utils';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import { Collection } from '@/shared/entities/v1/Collection';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 
 export type FavouriteButtonProps = {
   collection?: Collection;

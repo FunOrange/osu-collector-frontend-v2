@@ -54,7 +54,13 @@ export default function CollectionDeleteButton({ collection }: CollectionDeleteB
           </DialogContent>
         </Dialog>
 
-        <Dialog open={collectionDeleted} onOpenChange={(open) => setCollectionDeleted(open)}>
+        <Dialog
+          open={collectionDeleted}
+          onOpenChange={(open) => {
+            setCollectionDeleted(open);
+            if (!open) router.push('/');
+          }}
+        >
           <DialogContent onPointerDownOutside={() => router.push('/')}>
             <DialogHeader>
               <DialogTitle>Collection successfully deleted.</DialogTitle>

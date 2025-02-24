@@ -1,23 +1,14 @@
 'use client';
 import { Button } from '@/components/shadcn/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/shadcn/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/shadcn/dialog';
 import { Collection } from '@/shared/entities/v1/Collection';
 import useSubmit from '@/hooks/useSubmit';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { DialogClose } from '@radix-ui/react-dialog';
 import * as api from '@/services/osu-collector-api';
 import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
-import { equals } from 'ramda';
 import { useDropzone } from 'react-dropzone';
 import { parseCollectionDb } from '@/services/osu-collection-db';
 import { match } from 'ts-pattern';
@@ -34,7 +25,6 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
   const { toast } = useToast();
 
   const [showModal, setShowModal] = useState(false);
-  const [collectionDeleted, setCollectionDeleted] = useState(false);
 
   const remoteChecksums = remoteCollection?.beatmapsets
     ?.flatMap((beatmapset) => beatmapset.beatmaps)
@@ -155,22 +145,6 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
               <Button variant='important' onClick={upload} loading={uploading} disabled={uploadDisabled}>
                 Submit
               </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        <Dialog open={collectionDeleted} onOpenChange={(open) => setCollectionDeleted(open)}>
-          <DialogContent onPointerDownOutside={() => router.push('/')}>
-            <DialogHeader>
-              <DialogTitle>Collection successfully deleted.</DialogTitle>
-            </DialogHeader>
-            <div className='flex items-center gap-2'>
-              <Link
-                href='/'
-                className='inline-flex px-4 py-3 transition-colors rounded bg-slate-600 hover:bg-slate-600'
-              >
-                Back to home
-              </Link>
             </div>
           </DialogContent>
         </Dialog>
