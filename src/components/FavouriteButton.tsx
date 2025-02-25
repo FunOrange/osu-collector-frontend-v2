@@ -5,9 +5,6 @@ import * as api from '@/services/osu-collector-api';
 import { assocPath, concat, without } from 'ramda';
 import { useState } from 'react';
 import { match } from 'ts-pattern';
-import md5 from 'md5';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { formatQueryParams } from '@/utils/string-utils';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import { Collection } from '@/shared/entities/v1/Collection';
 import { Tournament } from '@/shared/entities/v1/Tournament';
@@ -19,11 +16,11 @@ export type FavouriteButtonProps = {
 };
 export default function FavouriteButton({ collection, tournament, variant }: FavouriteButtonProps) {
   const { user, mutate } = useUser();
-  const favourited =
-    user?.favourites?.includes(collection?.id) ?? user?.favouriteTournaments?.includes(tournament?.id) ?? false;
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const favourited = collection
+    ? (user?.favourites?.includes(collection?.id) ?? false)
+    : tournament
+      ? (user?.favouriteTournaments?.includes(tournament?.id) ?? false)
+      : false;
 
   const [hovered, setHovered] = useState(false);
 
@@ -47,7 +44,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
         populateCache: false,
       });
     } else if (tournament && favourited) {
-      await mutate(api.favouriteTournament(tournament.id, true) as any, {
+      await mutate(api.favouriteTournament(tournament.id, false) as any, {
         optimisticData: (data) =>
           assocPath(
             ['user', 'favouriteTournaments'],
@@ -57,7 +54,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
         populateCache: false,
       });
     } else if (tournament && !favourited) {
-      await mutate(api.favouriteTournament(tournament.id, false) as any, {
+      await mutate(api.favouriteTournament(tournament.id, true) as any, {
         optimisticData: (data) =>
           assocPath(
             ['user', 'favouriteTournaments'],
