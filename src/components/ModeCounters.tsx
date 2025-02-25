@@ -1,5 +1,5 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/shadcn/tooltip';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import { cn } from '@/utils/shadcn-utils';
 import Image from 'next/image';
 import { ExclamationTriangleFill } from 'react-bootstrap-icons';
@@ -39,14 +39,17 @@ const modeCountersSmall = ({ collection }: Omit<ModeCountersProps, 'variant'>) =
 const modeCountersFull = ({ collection }: Omit<ModeCountersProps, 'variant'>) => (
   <div className='flex divide-x divide-gray-600 items-center'>
     {(['osu', 'taiko', 'mania', 'fruits'] as const).map((mode, i) => (
-      <div key={mode} className={cn('flex items-center px-4 gap-2', i === 0 && 'pl-2')}>
+      <div
+        key={mode}
+        className={cn('flex items-center px-4 gap-2', i === 0 && 'pl-2')}
+        style={{ opacity: collection.modes?.[mode] > 0 ? 0.9 : 0.2 }}
+      >
         <Image
           src={modeIcon(mode)}
           width={32}
           height={32}
           alt={mode}
           className={cn('mr-1 invert', !collection.modes?.[mode] && 'opacity-20')}
-          // style={{ opacity: collection.modes?.[mode] > 0 ? 0.9 : 0.2 }}
         />
         <div>
           <div className={cn('leading-4', collection.modes?.[mode] ? 'text-gray-300' : 'text-gray-600')}>

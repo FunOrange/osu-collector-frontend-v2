@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/shadcn/dialog';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import useSubmit from '@/hooks/useSubmit';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { DialogClose } from '@radix-ui/react-dialog';
@@ -54,7 +54,13 @@ export default function CollectionDeleteButton({ collection }: CollectionDeleteB
           </DialogContent>
         </Dialog>
 
-        <Dialog open={collectionDeleted} onOpenChange={(open) => setCollectionDeleted(open)}>
+        <Dialog
+          open={collectionDeleted}
+          onOpenChange={(open) => {
+            setCollectionDeleted(open);
+            if (!open) router.push('/');
+          }}
+        >
           <DialogContent onPointerDownOutside={() => router.push('/')}>
             <DialogHeader>
               <DialogTitle>Collection successfully deleted.</DialogTitle>

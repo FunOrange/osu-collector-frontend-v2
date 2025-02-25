@@ -1,5 +1,5 @@
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
-import { Comment } from '@/entities/Collection';
+import { Comment } from '@/shared/entities/v1/Collection';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { useState } from 'react';
 import { HandThumbsUpFill } from 'react-bootstrap-icons';

@@ -1,5 +1,5 @@
 import BarGraph, { BarGraphProps } from '@/components/BarGraph';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import { bpmToColor } from '@/utils/theme-utils';
 import { match } from 'ts-pattern';
 

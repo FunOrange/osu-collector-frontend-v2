@@ -1,4 +1,4 @@
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import { dropdownPropsGeneric, formItemPropsGeneric, inputPropsGeneric } from '@/utils/form-props';
 import rules, { ValidationRule, checkRuleAndSetError } from '@/utils/form-validation-rules';
 import { useState } from 'react';

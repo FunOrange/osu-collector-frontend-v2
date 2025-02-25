@@ -1,6 +1,6 @@
 'use client';
 import { Input } from '@/components/shadcn/input';
-import { Collection } from '@/entities/Collection';
+import { Collection } from '@/shared/entities/v1/Collection';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { useState } from 'react';
 import * as api from '@/services/osu-collector-api';

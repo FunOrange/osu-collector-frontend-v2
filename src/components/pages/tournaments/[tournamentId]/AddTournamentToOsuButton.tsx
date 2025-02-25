@@ -11,7 +11,7 @@ import {
 } from '@/components/shadcn/dialog';
 import { Label } from '@/components/shadcn/label';
 import { RadioGroup, RadioGroupItem } from '@/components/shadcn/radio-group';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { s } from '@/utils/string-utils';
 import Link from 'next/link';

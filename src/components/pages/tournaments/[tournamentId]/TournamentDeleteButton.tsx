@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/shadcn/dialog';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import useSubmit from '@/hooks/useSubmit';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { DialogClose } from '@radix-ui/react-dialog';
@@ -54,7 +54,13 @@ export default function TournamentDeleteButton({ tournament }: TournamentDeleteB
           </DialogContent>
         </Dialog>
 
-        <Dialog open={tournamentDeleted} onOpenChange={(open) => setTournamentDeleted(open)}>
+        <Dialog
+          open={tournamentDeleted}
+          onOpenChange={(open) => {
+            setTournamentDeleted(open);
+            if (!open) router.push('/');
+          }}
+        >
           <DialogContent onPointerDownOutside={() => router.push('/tournaments')}>
             <DialogHeader>
               <DialogTitle>Tournament successfully deleted.</DialogTitle>

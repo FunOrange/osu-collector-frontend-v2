@@ -2,7 +2,7 @@
 import BeatmapsetCardPlayButton from '@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton';
 import { Button } from '@/components/shadcn/button';
 import ImageWithFallback from '@/components/universal/ImageWithFallback';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import { calculateARWithHR, calculateODWithHR, calculateARWithDT, calculateODWithDT } from '@/utils/diff-calc';
 import { cn } from '@/utils/shadcn-utils';
 import React, { useState } from 'react';
@@ -13,6 +13,7 @@ import { match } from 'ts-pattern';
 import { secondsToHHMMSS } from '@/utils/date-time-utils';
 import { getContrastColor, modToColor, starToColor } from '@/utils/theme-utils';
 import TabSwitcher from '@/components/universal/TabSwitcher';
+import { Beatmap } from '@/shared/entities/v1/Beatmap';
 
 export interface TournamentMappoolProps {
   tournament: Tournament;
@@ -35,7 +36,7 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
         {round.mods.map((mod, j) => (
           <React.Fragment key={j}>
             {mod.maps.map((beatmap, k) => {
-              let moddedBeatmap;
+              let moddedBeatmap: Beatmap;
               if (typeof beatmap === 'object') {
                 moddedBeatmap = { ...beatmap };
                 if (mod.mod.toLowerCase() === 'hr') {
@@ -58,7 +59,12 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
   );
 }
 
-function MappoolBeatmap({ key, mod, modIndex, beatmap }) {
+interface MappoolBeatmapProps {
+  mod: string;
+  modIndex: number;
+  beatmap: Beatmap;
+}
+function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
   const [imageHovered, setImageHovered] = useState(false);
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState<number[]>([]);
 
@@ -79,7 +85,6 @@ function MappoolBeatmap({ key, mod, modIndex, beatmap }) {
       style={{
         gridTemplateColumns: '340px auto auto 1fr auto auto',
       }}
-      key={key}
     >
       <div>
         {/* song background */}

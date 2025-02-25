@@ -1,4 +1,4 @@
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 
 export const mappoolTemplate = `# Lines beginning with '#' are ignored
 
@@ -263,7 +263,7 @@ export function getMappoolTextFromTournament(tournament: Tournament) {
       const section = `[${round.round}.${mod.mod}]`;
       lines.push(section);
       for (const map of mod.maps) {
-        lines.push(map.url);
+        lines.push(`https://osu.ppy.sh/beatmaps/${map.id}`);
       }
       lines.push('');
     }

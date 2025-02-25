@@ -1,5 +1,5 @@
 'use client';
-import { Tournament } from '@/entities/Tournament';
+import { Tournament } from '@/shared/entities/v1/Tournament';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import Link from 'next/link';
 import { prop } from 'ramda';
