@@ -4,6 +4,7 @@ export async function proxy(method: string, req: Request) {
   upstreamUrl.protocol = protocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   upstreamUrl.port = port(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   try {
+    console.log(`${req.method?.toUpperCase()} ${req.url} (nextjs proxy)`);
     const upstreamResponse = await fetch(upstreamUrl.toString(), {
       method,
       headers: removeHeader(req.headers, 'accept-encoding'),
