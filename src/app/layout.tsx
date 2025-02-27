@@ -48,6 +48,7 @@ const glass = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
+      <GoogleTagManager gtmId='G-WH5S52ZCWB' />
       <body className={inter.className}>
         <div
           className={cn(

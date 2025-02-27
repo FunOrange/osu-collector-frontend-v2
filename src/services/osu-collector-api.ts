@@ -13,11 +13,11 @@ api.interceptors.request.use(function (config) {
   return config;
 });
 api.interceptors.response.use(function (response) {
-  console.log(
-    `${response.config.method.toUpperCase()} ${response.config.url}${
-      formatQueryParams(response.config.params) ? '?' + formatQueryParams(response.config.params) : ''
-    } (${Date.now() - (response.config as any).metadata.startMs} ms)`,
-  );
+  const method = response.config.method.toUpperCase();
+  const queryParams = formatQueryParams(response.config.params) ? '?' + formatQueryParams(response.config.params) : '';
+  const duration = Date.now() - (response.config as any).metadata.startMs;
+  const environment = typeof window !== 'undefined' ? 'browser' : 'server';
+  console.log(`[${environment}] ${method} ${response.config.url}${queryParams} (${duration} ms)`);
   return response;
 });
 
