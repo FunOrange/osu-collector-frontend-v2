@@ -18,6 +18,8 @@ import { cn } from '@/utils/shadcn-utils';
 import NavbarSearch from '@/components/NavbarSearch';
 import { Toaster } from '@/components/shadcn/toaster';
 import UploadButton from '@/components/UploadButton';
+import { GoogleTagManager } from '@next/third-parties/google';
+import TwitchSubEndOfSupportModal from '@/components/TwitchSubEndOfSupportModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -102,6 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div className={cn(navbarSpacer, 'min-h-screen flex flex-col')}>{children}</div>
         <Toaster />
+        <TwitchSubEndOfSupportModal />
       </body>
     </html>
   );
