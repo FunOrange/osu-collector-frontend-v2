@@ -109,74 +109,6 @@ export default function Billing() {
 
         <div className='flex flex-col gap-6'>
           <div className='w-full max-w-screen-lg'>
-            <h1 className='text-2xl'>Twitch Sub</h1>
-            <div className='text-sm text-slate-400'>
-              An osu!Collector subscription can be obtained by subbing to FunOrange on Twitch. Existing Twitch Prime
-              users can use a <span className='text-white'>prime sub</span> for no additional cost.
-            </div>
-          </div>
-
-          <div className='flex gap-16 px-5 py-6 rounded border-slate-900 shadow-inner bg-[#162032]'>
-            <Skeleton loading={twitchLoading}>
-              <div>
-                <div className='mb-1 text-xs text-slate-400'>TWITCH ACCOUNT</div>
-                {!user && (
-                  <YouMustBeLoggedIn>
-                    <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
-                      Link Twitch account
-                    </Button>
-                  </YouMustBeLoggedIn>
-                )}
-                {user && !user?.private?.linkedTwitchAccount && (
-                  <Button
-                    size='sm'
-                    variant='important'
-                    className={cn('h-7', !user?.paidFeaturesAccess ? 'bg-cyan-600 font-bold text-white' : '')}
-                    asChild
-                  >
-                    <a href='https://id.twitch.tv/oauth2/authorize?client_id=q0uygwcj9cplrb0sb20x7fthkc4wcd&redirect_uri=https%3A%2F%2Fosucollector.com%2Fauthentication%2Ftwitch&response_type=code&scope=user:read:subscriptions'>
-                      Link Twitch Account
-                    </a>
-                  </Button>
-                )}
-                {user?.private?.linkedTwitchAccount && (
-                  <div className='flex'>
-                    <Button size='sm' className='w-full h-8 rounded-r-none bg-background' variant='outline' disabled>
-                      {user.private.linkedTwitchAccount.displayName}
-                    </Button>
-                    <Button
-                      size='sm'
-                      className='h-8 rounded-l-none bg-background'
-                      variant='outline'
-                      onClick={unlinkTwitchAccount}
-                      loading={unlinkingTwitchAccount}
-                    >
-                      Unlink
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </Skeleton>
-            <Skeleton loading={twitchLoading}>
-              <div>
-                <div className='mb-1 text-xs text-slate-400'>STATUS</div>
-                {user?.private?.twitchError && Boolean(user?.private?.linkedTwitchAccount) ? (
-                  <div className='text-red-400'>Please unlink your Twitch account and try again.</div>
-                ) : !user?.private?.linkedTwitchAccount ? (
-                  <div className='text-slate-500'>Twitch account not linked</div>
-                ) : !isSubbedToFunOrange ? (
-                  <div className='text-slate-500'>Not subbed to FunOrange</div>
-                ) : isSubbedToFunOrange ? (
-                  <div className='px-3 py-1 text-sm font-semibold bg-green-600 rounded text-slate-50'>Subbed</div>
-                ) : undefined}
-              </div>
-            </Skeleton>
-            <div />
-          </div>
-        </div>
-
-        <div className='flex flex-col gap-6'>
-          <div className='w-full max-w-screen-lg'>
             <h1 className='text-2xl'>PayPal</h1>
           </div>
 
@@ -471,6 +403,77 @@ export default function Billing() {
               </div>
             </div>
           )}
+        </div>
+
+        <div className='flex flex-col gap-4'>
+          <div className='w-full max-w-screen-lg'>
+            <h1 className='text-2xl text-slate-400'>
+              Twitch Sub <span className='text-red-300'> - DEPRECATED</span>
+            </h1>
+            <div className='text-sm text-slate-400 mb-1'>
+              An osu!Collector subscription can be obtained by subbing to FunOrange on Twitch. Existing Twitch Prime
+              users can use a <span className='text-white'>prime sub</span> for no additional cost.
+            </div>
+            <div className='text-sm text-white'>NOTE: This subscription method will stop working in April.</div>
+          </div>
+
+          <div className='flex gap-16 px-5 py-6 rounded border-slate-900 shadow-inner bg-[#162032]'>
+            <Skeleton loading={twitchLoading}>
+              <div>
+                <div className='mb-1 text-xs text-slate-400'>TWITCH ACCOUNT</div>
+                {!user && (
+                  <YouMustBeLoggedIn>
+                    <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
+                      Link Twitch account
+                    </Button>
+                  </YouMustBeLoggedIn>
+                )}
+                {user && !user?.private?.linkedTwitchAccount && (
+                  <Button
+                    size='sm'
+                    variant='important'
+                    className={cn('h-7', !user?.paidFeaturesAccess ? 'bg-cyan-600 font-bold text-white' : '')}
+                    asChild
+                  >
+                    <a href='https://id.twitch.tv/oauth2/authorize?client_id=q0uygwcj9cplrb0sb20x7fthkc4wcd&redirect_uri=https%3A%2F%2Fosucollector.com%2Fauthentication%2Ftwitch&response_type=code&scope=user:read:subscriptions'>
+                      Link Twitch Account
+                    </a>
+                  </Button>
+                )}
+                {user?.private?.linkedTwitchAccount && (
+                  <div className='flex'>
+                    <Button size='sm' className='w-full h-8 rounded-r-none bg-background' variant='outline' disabled>
+                      {user.private.linkedTwitchAccount.displayName}
+                    </Button>
+                    <Button
+                      size='sm'
+                      className='h-8 rounded-l-none bg-background'
+                      variant='outline'
+                      onClick={unlinkTwitchAccount}
+                      loading={unlinkingTwitchAccount}
+                    >
+                      Unlink
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </Skeleton>
+            <Skeleton loading={twitchLoading}>
+              <div>
+                <div className='mb-1 text-xs text-slate-400'>STATUS</div>
+                {user?.private?.twitchError && Boolean(user?.private?.linkedTwitchAccount) ? (
+                  <div className='text-red-400'>Please unlink your Twitch account and try again.</div>
+                ) : !user?.private?.linkedTwitchAccount ? (
+                  <div className='text-slate-500'>Twitch account not linked</div>
+                ) : !isSubbedToFunOrange ? (
+                  <div className='text-slate-500'>Not subbed to FunOrange</div>
+                ) : isSubbedToFunOrange ? (
+                  <div className='px-3 py-1 text-sm font-semibold bg-green-600 rounded text-slate-50'>Subbed</div>
+                ) : undefined}
+              </div>
+            </Skeleton>
+            <div />
+          </div>
         </div>
 
         {/* TODO: need to keep record of old paypalSubscriptionIds and stripeSubscriptionIds */}
