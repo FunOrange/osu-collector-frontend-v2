@@ -29,7 +29,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   if (!collection) return {};
 
   const title = `${collection.name} | osu!Collector`;
-  const description = collection.description || `Collection uploaded by ${collection?.uploader.username}`;
+  const description = collection.description || `Collection uploaded by ${collection.uploader.username}`;
   return {
     title,
     description,
