@@ -1,6 +1,5 @@
 'use client';
 import BeatmapsetCardPlayButton from '@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton';
-import { Button } from '@/components/shadcn/button';
 import ImageWithFallback from '@/components/universal/ImageWithFallback';
 import { Tournament, TournamentBeatmap } from '@/shared/entities/v1/Tournament';
 import { calculateARWithHR, calculateODWithHR, calculateARWithDT, calculateODWithDT } from '@/utils/diff-calc';
@@ -9,11 +8,9 @@ import React, { useState } from 'react';
 import { Provider } from 'jotai';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 import { Clipboard } from 'react-bootstrap-icons';
-import { match } from 'ts-pattern';
 import { secondsToHHMMSS } from '@/utils/date-time-utils';
 import { getContrastColor, modToColor, starToColor } from '@/utils/theme-utils';
 import TabSwitcher from '@/components/universal/TabSwitcher';
-import { Beatmap } from '@/shared/entities/v1/Beatmap';
 
 export interface TournamentMappoolProps {
   tournament: Tournament;

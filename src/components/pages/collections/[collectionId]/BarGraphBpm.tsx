@@ -18,8 +18,8 @@ export default function BarGraphBpm({ collection, replaceQueryParams, ...props }
         y: bpms.map((bpm) => collection.bpmSpread?.[bpm] ?? 0),
         barColors: bpms.map((bpm) => bpmToColor(bpm, true)),
       }}
-      barHref={(bpm: (typeof bpms)[number]) =>
-        replaceQueryParams({
+      barHref={(bpm: (typeof bpms)[number]) => {
+        return replaceQueryParams({
           sortBy: 'bpm',
           orderBy: 'asc',
           cursor: undefined,
@@ -27,8 +27,8 @@ export default function BarGraphBpm({ collection, replaceQueryParams, ...props }
             .with(150, () => ({ filterMin: 0, filterMax: 160 }))
             .with(300, () => ({ filterMin: 300, filterMax: null }))
             .otherwise((bpm) => ({ filterMin: bpm, filterMax: bpm + 10 })),
-        })
-      }
+        });
+      }}
       {...props}
     />
   );

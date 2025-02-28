@@ -16,8 +16,8 @@ export default function BarGraphStars({ collection, replaceQueryParams, ...props
         y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => collection.difficultySpread?.[star] ?? 0),
         barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => starToColor(star, true)),
       }}
-      barHref={(stars: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10) =>
-        replaceQueryParams({
+      barHref={(stars: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10) => {
+        return replaceQueryParams({
           sortBy: 'difficulty_rating',
           orderBy: 'asc',
           cursor: undefined,
@@ -26,8 +26,8 @@ export default function BarGraphStars({ collection, replaceQueryParams, ...props
             .with(2, 3, 4, 5, 6, 7, 8, 9, (stars) => ({ filterMin: stars, filterMax: stars + 1 }))
             .with(10, () => ({ filterMin: 10 }))
             .exhaustive(),
-        })
-      }
+        });
+      }}
       {...props}
     />
   );

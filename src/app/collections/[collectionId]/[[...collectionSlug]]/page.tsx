@@ -127,7 +127,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
         </div>
 
         <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1 gap-4'>
-          <div className='flex flex-col gap-2 p-4 bg-slate-950'>
+          <div className='flex flex-col gap-2 p-4 bg-slate-950 rounded-lg'>
             <div className='flex flex-col md:flex-row md:justify-between items-start'>
               <div>
                 <div className='font-semibold text-white text-[20px]'>Star Rating</div>
@@ -137,18 +137,18 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                   </div>
                 )}
               </div>
-              <Button variant='important'>Reset</Button>
+              {false && <Button variant='important'>Reset</Button>}
             </div>
             <BarGraphStars
               title=''
               collection={collection}
               height={graphHeight}
               replaceQueryParams={replaceQueryParams}
-              className='rounded-tl'
+              className='px-2 pt-0'
               barClassName='rounded-t-lg'
             />
           </div>
-          <div className='flex flex-col gap-2 p-4 bg-slate-950'>
+          <div className='flex flex-col gap-2 p-4 bg-slate-950 rounded-lg'>
             <div className='flex flex-col md:flex-row md:justify-between items-start'>
               <div>
                 <div className='font-semibold text-white text-[20px]'>BPM</div>
@@ -158,7 +158,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                   </div>
                 )}
               </div>
-              <Button variant='important'>Reset</Button>
+              {false && <Button variant='important'>Reset</Button>}
             </div>
 
             <BarGraphBpm
@@ -166,7 +166,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               collection={collection}
               height={graphHeight}
               replaceQueryParams={replaceQueryParams}
-              className='rounded-tr'
+              className='px-2 pt-0'
               barClassName='rounded-t-md'
             />
           </div>
