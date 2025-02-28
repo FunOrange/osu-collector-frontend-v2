@@ -130,10 +130,12 @@ export default async function CollectionPage({ params, searchParams }: Collectio
           <div className='flex flex-col gap-2 p-4 bg-slate-950'>
             <div className='flex flex-col md:flex-row md:justify-between items-start'>
               <div>
-                <div className='font-semibold text-white text-[20px]'>Filter by Star Rating</div>
-                <div className='text-slate-500 text-base'>
-                  Average: <span className='text-cyan-400'>6.25</span>
-                </div>
+                <div className='font-semibold text-white text-[20px]'>Star Rating</div>
+                {false && (
+                  <div className='text-slate-500 text-base'>
+                    Average: <span className='text-cyan-400'>6.25</span>
+                  </div>
+                )}
               </div>
               <Button variant='important'>Reset</Button>
             </div>
@@ -149,10 +151,12 @@ export default async function CollectionPage({ params, searchParams }: Collectio
           <div className='flex flex-col gap-2 p-4 bg-slate-950'>
             <div className='flex flex-col md:flex-row md:justify-between items-start'>
               <div>
-                <div className='font-semibold text-white text-[20px]'>Filter by BPM</div>
-                <div className='text-slate-500 text-base'>
-                  Average: <span className='text-cyan-400'>240</span>
-                </div>
+                <div className='font-semibold text-white text-[20px]'>BPM</div>
+                {false && (
+                  <div className='text-slate-500 text-base'>
+                    Average: <span className='text-cyan-400'>240</span>
+                  </div>
+                )}
               </div>
               <Button variant='important'>Reset</Button>
             </div>
@@ -171,108 +175,110 @@ export default async function CollectionPage({ params, searchParams }: Collectio
         <CollectionCommentsSection collection={collection} />
 
         <div className='flex flex-col gap-6 p-4 rounded border-slate-900 shadow-inner bg-[#162032]'>
-          <div className='flex items-center gap-6'>
-            <div>Sort by:</div>
-            <div className='flex gap-2'>
-              {[
-                {
-                  labelDefault: 'Artist',
-                  labelAsc: 'Artist: A-Z',
-                  labelDesc: 'Artist: Z-A',
-                  sortKey: 'beatmapset.artist',
-                  defaultOrderBy: 'asc',
-                },
-                {
-                  labelDefault: 'Title',
-                  labelAsc: 'Title: A-Z',
-                  labelDesc: 'Title: Z-A',
-                  sortKey: 'beatmapset.title',
-                  defaultOrderBy: 'asc',
-                },
-                {
-                  labelDefault: 'Mapper',
-                  labelAsc: 'Mapper: A-Z',
-                  labelDesc: 'Mapper: Z-A',
-                  sortKey: 'beatmapset.creator',
-                  defaultOrderBy: 'asc',
-                },
-                {
-                  labelDefault: 'Stars',
-                  labelAsc: 'Stars: lowest',
-                  labelDesc: 'Stars: highest',
-                  sortKey: 'difficulty_rating',
-                  defaultOrderBy: 'desc',
-                },
-                {
-                  labelDefault: 'BPM',
-                  labelAsc: 'BPM: lowest',
-                  labelDesc: 'BPM: highest',
-                  sortKey: 'bpm',
-                  defaultOrderBy: 'desc',
-                },
-                {
-                  labelDefault: 'Length',
-                  labelAsc: 'Length: shortest',
-                  labelDesc: 'Length: longest',
-                  sortKey: 'hit_length',
-                  defaultOrderBy: 'desc',
-                },
-              ]
-                .filter(Boolean)
-                .map(({ labelDefault, labelAsc, labelDesc, sortKey, defaultOrderBy }, i) =>
-                  match({ sortBy, orderBy })
-                    .with({ sortBy: sortKey, orderBy: 'asc' }, () => (
-                      <Link
-                        key={i}
-                        replace
-                        href={replaceQueryParams({
-                          sortBy: sortKey,
-                          orderBy: 'desc',
-                          cursor: undefined,
-                        })}
-                        className={cn(
-                          'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
-                          'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
-                        )}
-                      >
-                        {labelAsc ?? labelDefault}
-                      </Link>
-                    ))
-                    .with({ sortBy: sortKey, orderBy: 'desc' }, () => (
-                      <Link
-                        key={i}
-                        replace
-                        href={replaceQueryParams({
-                          sortBy: sortKey,
-                          orderBy: 'asc',
-                          cursor: undefined,
-                        })}
-                        className={cn(
-                          'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
-                          'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
-                        )}
-                      >
-                        {labelDesc ?? labelDefault}
-                      </Link>
-                    ))
-                    .otherwise(() => (
-                      <Link
-                        replace
-                        href={replaceQueryParams({
-                          sortBy: sortKey,
-                          orderBy: defaultOrderBy,
-                          cursor: undefined,
-                        })}
-                        className={
-                          'px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600'
-                        }
-                      >
-                        {labelDefault}
-                      </Link>
-                    )),
-                )}
+          {false && (
+            <div className='flex items-center gap-6'>
+              <div>Sort by:</div>
+              <div className='flex gap-2'>
+                {[
+                  {
+                    labelDefault: 'Artist',
+                    labelAsc: 'Artist: A-Z',
+                    labelDesc: 'Artist: Z-A',
+                    sortKey: 'beatmapset.artist',
+                    defaultOrderBy: 'asc',
+                  },
+                  {
+                    labelDefault: 'Title',
+                    labelAsc: 'Title: A-Z',
+                    labelDesc: 'Title: Z-A',
+                    sortKey: 'beatmapset.title',
+                    defaultOrderBy: 'asc',
+                  },
+                  {
+                    labelDefault: 'Mapper',
+                    labelAsc: 'Mapper: A-Z',
+                    labelDesc: 'Mapper: Z-A',
+                    sortKey: 'beatmapset.creator',
+                    defaultOrderBy: 'asc',
+                  },
+                  {
+                    labelDefault: 'Stars',
+                    labelAsc: 'Stars: lowest',
+                    labelDesc: 'Stars: highest',
+                    sortKey: 'difficulty_rating',
+                    defaultOrderBy: 'desc',
+                  },
+                  {
+                    labelDefault: 'BPM',
+                    labelAsc: 'BPM: lowest',
+                    labelDesc: 'BPM: highest',
+                    sortKey: 'bpm',
+                    defaultOrderBy: 'desc',
+                  },
+                  {
+                    labelDefault: 'Length',
+                    labelAsc: 'Length: shortest',
+                    labelDesc: 'Length: longest',
+                    sortKey: 'hit_length',
+                    defaultOrderBy: 'desc',
+                  },
+                ]
+                  .filter(Boolean)
+                  .map(({ labelDefault, labelAsc, labelDesc, sortKey, defaultOrderBy }, i) =>
+                    match({ sortBy, orderBy })
+                      .with({ sortBy: sortKey, orderBy: 'asc' }, () => (
+                        <Link
+                          key={i}
+                          replace
+                          href={replaceQueryParams({
+                            sortBy: sortKey,
+                            orderBy: 'desc',
+                            cursor: undefined,
+                          })}
+                          className={cn(
+                            'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
+                            'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
+                          )}
+                        >
+                          {labelAsc ?? labelDefault}
+                        </Link>
+                      ))
+                      .with({ sortBy: sortKey, orderBy: 'desc' }, () => (
+                        <Link
+                          key={i}
+                          replace
+                          href={replaceQueryParams({
+                            sortBy: sortKey,
+                            orderBy: 'asc',
+                            cursor: undefined,
+                          })}
+                          className={cn(
+                            'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
+                            'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
+                          )}
+                        >
+                          {labelDesc ?? labelDefault}
+                        </Link>
+                      ))
+                      .otherwise(() => (
+                        <Link
+                          replace
+                          href={replaceQueryParams({
+                            sortBy: sortKey,
+                            orderBy: defaultOrderBy,
+                            cursor: undefined,
+                          })}
+                          className={
+                            'px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600'
+                          }
+                        >
+                          {labelDefault}
+                        </Link>
+                      )),
+                  )}
+              </div>
             </div>
-          </div>
+          )}
           <div className='flex flex-col gap-4'>
             <BeatmapsetListing listing={listing} />
             {hasMore ? (
