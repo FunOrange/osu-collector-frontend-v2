@@ -48,10 +48,6 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
   const [selectedCollection, setSelectedCollection] = useState(undefined);
 
   const [uploadCollection, uploading] = useSubmit(async () => {
-    if (selectedCollection.beatmapChecksums.length > 2000) {
-      alert('This collection is too big (max collection size: 2000)');
-      return;
-    }
     const collections = await api.uploadCollections([selectedCollection]);
     router.push(`/collections/${collections[0].id}/${getUrlSlug(collections[0].name)}`);
     toast({ title: 'Collection uploaded!', description: 'Redirecting to collection page...' });
