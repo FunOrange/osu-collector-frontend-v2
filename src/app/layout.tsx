@@ -18,7 +18,6 @@ import { cn } from '@/utils/shadcn-utils';
 import NavbarSearch from '@/components/NavbarSearch';
 import { Toaster } from '@/components/shadcn/toaster';
 import UploadButton from '@/components/UploadButton';
-import { GoogleTagManager } from '@next/third-parties/google';
 import { PostHogProvider } from '@/providers/posthog';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -48,7 +47,6 @@ const glass = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
-      <GoogleTagManager gtmId='G-WH5S52ZCWB' />
       <body className={inter.className}>
         <PostHogProvider>
           <div
