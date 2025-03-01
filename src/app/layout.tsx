@@ -19,6 +19,7 @@ import NavbarSearch from '@/components/NavbarSearch';
 import { Toaster } from '@/components/shadcn/toaster';
 import UploadButton from '@/components/UploadButton';
 import { GoogleTagManager } from '@next/third-parties/google';
+import { PostHogProvider } from '@/providers/posthog';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -49,59 +50,61 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='en'>
       <GoogleTagManager gtmId='G-WH5S52ZCWB' />
       <body className={inter.className}>
-        <div
-          className={cn(
-            'fixed top-0 z-40 flex flex-colshadow-xl justify-between w-full px-1 md:px-4 md:pr-2',
-            navbarHeight,
-          )}
-          style={glass}
-        >
-          <div className='flex items-center'>
-            <div className='block md:hidden'>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <button className='px-2 py-1 text-sm transition rounded hover:bg-slate-600'>
-                    <List size={30} />
-                  </button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>osu!Collector</AlertDialogTitle>
-                  </AlertDialogHeader>
-                  <div className='flex flex-col gap-1'>
-                    {[{ href: '/', label: 'Home' }, ...navItems].map(({ label, href }, i) => (
-                      <Link href={href} key={i}>
-                        <AlertDialogAction className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>
-                          {label}
-                        </AlertDialogAction>
-                      </Link>
-                    ))}
-                  </div>
-                  <AlertDialogCancel>Close</AlertDialogCancel>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-            <Link href='/'>
-              <div className='flex items-center px-2 py-3 cursor-pointer'>
-                osu!
-                <span className='font-semibold text-gray-50'>Collector</span>
+        <PostHogProvider>
+          <div
+            className={cn(
+              'fixed top-0 z-40 flex flex-colshadow-xl justify-between w-full px-1 md:px-4 md:pr-2',
+              navbarHeight,
+            )}
+            style={glass}
+          >
+            <div className='flex items-center'>
+              <div className='block md:hidden'>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button className='px-2 py-1 text-sm transition rounded hover:bg-slate-600'>
+                      <List size={30} />
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>osu!Collector</AlertDialogTitle>
+                    </AlertDialogHeader>
+                    <div className='flex flex-col gap-1'>
+                      {[{ href: '/', label: 'Home' }, ...navItems].map(({ label, href }, i) => (
+                        <Link href={href} key={i}>
+                          <AlertDialogAction className={cn(buttonVariants({ variant: 'secondary' }), 'w-full')}>
+                            {label}
+                          </AlertDialogAction>
+                        </Link>
+                      ))}
+                    </div>
+                    <AlertDialogCancel>Close</AlertDialogCancel>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
-            </Link>
-            <nav className='items-center hidden mx-6 space-x-4 lg:space-x-6 md:flex'>
-              {navItems.map(({ label, href }, i) => (
-                <Link href={href} className='text-sm font-medium transition-colors hover:text-primary' key={i}>
-                  {label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+              <Link href='/'>
+                <div className='flex items-center px-2 py-3 cursor-pointer'>
+                  osu!
+                  <span className='font-semibold text-gray-50'>Collector</span>
+                </div>
+              </Link>
+              <nav className='items-center hidden mx-6 space-x-4 lg:space-x-6 md:flex'>
+                {navItems.map(({ label, href }, i) => (
+                  <Link href={href} className='text-sm font-medium transition-colors hover:text-primary' key={i}>
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
 
-          <div className='flex items-center gap-2'>
-            <NavbarSearch />
-            <UploadButton />
-            <UserNav />
+            <div className='flex items-center gap-2'>
+              <NavbarSearch />
+              <UploadButton />
+              <UserNav />
+            </div>
           </div>
-        </div>
+        </PostHogProvider>
         <div className={cn(navbarSpacer, 'min-h-screen flex flex-col')}>{children}</div>
         <Toaster />
       </body>
