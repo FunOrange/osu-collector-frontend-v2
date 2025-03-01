@@ -1,20 +1,17 @@
-import { ResolvingMetadata, Metadata, ResolvedMetadata } from 'next';
+import { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import moment from 'moment';
 import ModeCounters from '@/components/ModeCounters';
 import * as api from '@/services/osu-collector-api';
 import { formatQueryParams, getUrlSlug } from '@/utils/string-utils';
 import { identity, mergeRight } from 'ramda';
 import { Pattern, match } from 'ts-pattern';
-import { groupBeatmapsets } from '@/shared/entities/v1/Beatmap';
 import { cn } from '@/utils/shadcn-utils';
 import FavouriteButton from '@/components/FavouriteButton';
 import BarGraphStars from '@/components/pages/collections/[collectionId]/BarGraphStars';
 import BarGraphBpm from '@/components/pages/collections/[collectionId]/BarGraphBpm';
 import DownloadMapsButton from '@/components/pages/collections/[collectionId]/DownloadMapsButton';
 import AddToOsuButton from '@/components/pages/collections/[collectionId]/AddToOsuButton';
-import BeatmapsetListing from '@/components/pages/collections/[collectionId]/BeatmapsetListing';
 import CollectionCommentsSection from '@/components/pages/collections/[collectionId]/CollectionCommentsSection';
 import EditableCollectionName from '@/components/pages/collections/[collectionId]/EditableCollectionName';
 import CollectionDeleteButton from '@/components/pages/collections/[collectionId]/CollectionDeleteButton';
@@ -23,6 +20,8 @@ import CollectionUpdateButton from '@/components/pages/collections/[collectionId
 import UserChip from '@/components/UserChip';
 import { Button } from '@/components/shadcn/button';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import BeatmapsetListingSC from '@/components/pages/collections/[collectionId]/BeatmapsetListingSC';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const collection = await api.getCollection(params.collectionId).catch(() => null);
@@ -78,16 +77,6 @@ export default async function CollectionPage({ params, searchParams }: Collectio
       sortBy: 'beatmapset.artist',
       orderBy: 'asc',
     }));
-  const { beatmaps, hasMore, nextPageCursor } = await api.getCollectionBeatmaps({
-    collectionId: collection.id,
-    cursor: searchParams.cursor,
-    orderBy,
-    sortBy,
-    filterMin: searchParams.filterMin,
-    filterMax: searchParams.filterMax,
-    perPage: 100,
-  });
-  const listing = groupBeatmapsets(beatmaps);
 
   const pathname = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
@@ -280,16 +269,17 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             </div>
           )}
           <div className='flex flex-col gap-4'>
-            <BeatmapsetListing listing={listing} />
-            {hasMore ? (
-              <Link href={replaceQueryParams({ cursor: nextPageCursor })}>
-                <div className='w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'>
-                  Load more
-                </div>
-              </Link>
-            ) : (
-              <div className='text-center text-slate-400'>Reached end of results</div>
-            )}
+            <Suspense>
+              <BeatmapsetListingSC
+                searchParams={searchParams}
+                collection={collection}
+                cursor={searchParams.cursor}
+                orderBy={orderBy}
+                sortBy={sortBy}
+                filterMin={searchParams.filterMin}
+                filterMax={searchParams.filterMax}
+              />
+            </Suspense>
           </div>
         </div>
       </div>

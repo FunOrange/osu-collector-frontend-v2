@@ -80,7 +80,7 @@ export async function searchCollections({
 // Returns CollectionData object: https://osucollector.com/docs.html#responses-getCollectionById-200-schema
 export async function getCollection(id, cancelCallback = undefined) {
   return api
-    .get(`/collections/${id}?withBeatmapsets=false`, {
+    .get<Collection>(`/collections/${id}?withBeatmapsets=false`, {
       cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
