@@ -1,3 +1,4 @@
+'use server';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import moment from 'moment';
@@ -85,7 +86,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
   return (
     <div className='flex justify-center w-full'>
-      <div className='flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl'>
+      <div className='flex flex-col px-2 py-5 md:px-10 gap-7 w-full max-w-screen-xl'>
         <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
           <div className='flex flex-col gap-4 p-4'>
             <div className='flex flex-col xl:flex-row justify-between items-center gap-2'>
@@ -268,7 +269,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               </div>
             </div>
           )}
-          <div className='flex flex-col gap-4'>
+          <div className='flex flex-col gap-4 min-h-screen'>
             <Suspense>
               <BeatmapsetListingSC
                 searchParams={searchParams}
