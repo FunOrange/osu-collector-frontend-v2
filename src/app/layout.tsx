@@ -19,6 +19,7 @@ import NavbarSearch from '@/components/NavbarSearch';
 import { Toaster } from '@/components/shadcn/toaster';
 import UploadButton from '@/components/UploadButton';
 import { PostHogProvider } from '@/providers/posthog';
+import TwitchSubEndOfSupportModal from '@/components/TwitchSubEndOfSupportModal';
 
 const inter = Inter({ subsets: ['latin'] });
 
