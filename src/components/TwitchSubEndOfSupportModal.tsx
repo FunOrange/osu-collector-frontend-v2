@@ -10,10 +10,10 @@ export default function TwitchSubEndOfSupportModal() {
 
   useEffect(() => {
     const alreadyShown = localStorage.getItem('twitch-sub-end-of-support-modal-shown');
-    if (user?.hasActiveTwitchSub && alreadyShown !== 'true') {
+    if (user?.private?.linkedTwitchAccount?.id && alreadyShown !== 'true') {
       setOpen(true);
     }
-  }, [user?.hasActiveTwitchSub]);
+  }, [user?.private?.linkedTwitchAccount?.id]);
 
   const onConfirm = () => {
     localStorage.setItem('twitch-sub-end-of-support-modal-shown', 'true');
