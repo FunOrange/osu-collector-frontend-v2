@@ -1,10 +1,16 @@
+import posthog from 'posthog-js';
+
 export async function proxy(method: string, req: Request) {
   const upstreamUrl = new URL(req.url);
   upstreamUrl.hostname = withoutProtocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   upstreamUrl.protocol = protocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   upstreamUrl.port = port(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   try {
-    console.log(`${req.method?.toUpperCase()} ${req.url} (nextjs proxy)`);
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0];
+    const method = req.method;
+    const pathname = upstreamUrl.pathname;
+    posthog.capture('api_call', { ip, method, pathname });
+    console.log(`api_call ${method} ${pathname} ${ip}`);
     const upstreamResponse = await fetch(upstreamUrl.toString(), {
       method,
       headers: removeHeader(req.headers, 'accept-encoding'),

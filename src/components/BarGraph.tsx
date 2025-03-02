@@ -31,7 +31,7 @@ export default function BarGraph({ title, data, barHref, height = '80px', classN
       }}
     >
       {data.y.map((y, i) =>
-        barHref ? (
+        false && barHref ? (
           <Link
             key={i}
             href={barHref(data.x[i])}

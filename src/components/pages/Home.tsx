@@ -15,7 +15,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
   return (
     <div className='flex justify-center w-full'>
       <Snowfall style={{ position: 'fixed' }} snowflakeCount={50} />
-      <div className='px-2 py-5 md:px-10 max-w-screen-2xl'>
+      <div className='px-2 py-5 md:px-10 w-full max-w-screen-2xl'>
         <div className='p-4 mb-4 text-center rounded bg-sky-900 text-sky-200'>
           <Discord className='inline mb-1 mr-2' size={20} />
           Join the{' '}

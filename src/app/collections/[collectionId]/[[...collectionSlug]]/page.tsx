@@ -1,20 +1,18 @@
-import { ResolvingMetadata, Metadata, ResolvedMetadata } from 'next';
+'use server';
+import { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import moment from 'moment';
 import ModeCounters from '@/components/ModeCounters';
 import * as api from '@/services/osu-collector-api';
 import { formatQueryParams, getUrlSlug } from '@/utils/string-utils';
 import { identity, mergeRight } from 'ramda';
 import { Pattern, match } from 'ts-pattern';
-import { groupBeatmapsets } from '@/shared/entities/v1/Beatmap';
 import { cn } from '@/utils/shadcn-utils';
 import FavouriteButton from '@/components/FavouriteButton';
 import BarGraphStars from '@/components/pages/collections/[collectionId]/BarGraphStars';
 import BarGraphBpm from '@/components/pages/collections/[collectionId]/BarGraphBpm';
 import DownloadMapsButton from '@/components/pages/collections/[collectionId]/DownloadMapsButton';
 import AddToOsuButton from '@/components/pages/collections/[collectionId]/AddToOsuButton';
-import BeatmapsetListing from '@/components/pages/collections/[collectionId]/BeatmapsetListing';
 import CollectionCommentsSection from '@/components/pages/collections/[collectionId]/CollectionCommentsSection';
 import EditableCollectionName from '@/components/pages/collections/[collectionId]/EditableCollectionName';
 import CollectionDeleteButton from '@/components/pages/collections/[collectionId]/CollectionDeleteButton';
@@ -23,13 +21,15 @@ import CollectionUpdateButton from '@/components/pages/collections/[collectionId
 import UserChip from '@/components/UserChip';
 import { Button } from '@/components/shadcn/button';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import BeatmapsetListingSC from '@/components/pages/collections/[collectionId]/BeatmapsetListingSC';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const collection = await api.getCollection(params.collectionId).catch(() => null);
   if (!collection) return {};
 
   const title = `${collection.name} | osu!Collector`;
-  const description = collection.description || `Collection uploaded by ${collection?.uploader.username}`;
+  const description = collection.description || `Collection uploaded by ${collection.uploader.username}`;
   return {
     title,
     description,
@@ -78,16 +78,6 @@ export default async function CollectionPage({ params, searchParams }: Collectio
       sortBy: 'beatmapset.artist',
       orderBy: 'asc',
     }));
-  const { beatmaps, hasMore, nextPageCursor } = await api.getCollectionBeatmaps({
-    collectionId: collection.id,
-    cursor: searchParams.cursor,
-    orderBy,
-    sortBy,
-    filterMin: searchParams.filterMin,
-    filterMax: searchParams.filterMax,
-    perPage: 100,
-  });
-  const listing = groupBeatmapsets(beatmaps);
 
   const pathname = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
@@ -96,7 +86,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
   return (
     <div className='flex justify-center w-full'>
-      <div className='flex flex-col px-2 py-5 md:px-10 gap-7 max-w-screen-2xl'>
+      <div className='flex flex-col px-2 py-5 md:px-10 gap-7 w-full max-w-screen-xl'>
         <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
           <div className='flex flex-col gap-4 p-4'>
             <div className='flex flex-col xl:flex-row justify-between items-center gap-2'>
@@ -127,34 +117,38 @@ export default async function CollectionPage({ params, searchParams }: Collectio
         </div>
 
         <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1 gap-4'>
-          <div className='flex flex-col gap-2 p-4 bg-slate-950'>
+          <div className='flex flex-col gap-2 p-4 bg-slate-950 rounded-lg'>
             <div className='flex flex-col md:flex-row md:justify-between items-start'>
               <div>
-                <div className='font-semibold text-white text-[20px]'>Filter by Star Rating</div>
-                <div className='text-slate-500 text-base'>
-                  Average: <span className='text-cyan-400'>6.25</span>
-                </div>
+                <div className='font-semibold text-white text-[20px]'>Star Rating</div>
+                {false && (
+                  <div className='text-slate-500 text-base'>
+                    Average: <span className='text-cyan-400'>6.25</span>
+                  </div>
+                )}
               </div>
-              <Button variant='important'>Reset</Button>
+              {false && <Button variant='important'>Reset</Button>}
             </div>
             <BarGraphStars
               title=''
               collection={collection}
               height={graphHeight}
               replaceQueryParams={replaceQueryParams}
-              className='rounded-tl'
+              className='px-2 pt-0'
               barClassName='rounded-t-lg'
             />
           </div>
-          <div className='flex flex-col gap-2 p-4 bg-slate-950'>
+          <div className='flex flex-col gap-2 p-4 bg-slate-950 rounded-lg'>
             <div className='flex flex-col md:flex-row md:justify-between items-start'>
               <div>
-                <div className='font-semibold text-white text-[20px]'>Filter by BPM</div>
-                <div className='text-slate-500 text-base'>
-                  Average: <span className='text-cyan-400'>240</span>
-                </div>
+                <div className='font-semibold text-white text-[20px]'>BPM</div>
+                {false && (
+                  <div className='text-slate-500 text-base'>
+                    Average: <span className='text-cyan-400'>240</span>
+                  </div>
+                )}
               </div>
-              <Button variant='important'>Reset</Button>
+              {false && <Button variant='important'>Reset</Button>}
             </div>
 
             <BarGraphBpm
@@ -162,7 +156,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
               collection={collection}
               height={graphHeight}
               replaceQueryParams={replaceQueryParams}
-              className='rounded-tr'
+              className='px-2 pt-0'
               barClassName='rounded-t-md'
             />
           </div>
@@ -171,119 +165,122 @@ export default async function CollectionPage({ params, searchParams }: Collectio
         <CollectionCommentsSection collection={collection} />
 
         <div className='flex flex-col gap-6 p-4 rounded border-slate-900 shadow-inner bg-[#162032]'>
-          <div className='flex items-center gap-6'>
-            <div>Sort by:</div>
-            <div className='flex gap-2'>
-              {[
-                {
-                  labelDefault: 'Artist',
-                  labelAsc: 'Artist: A-Z',
-                  labelDesc: 'Artist: Z-A',
-                  sortKey: 'beatmapset.artist',
-                  defaultOrderBy: 'asc',
-                },
-                {
-                  labelDefault: 'Title',
-                  labelAsc: 'Title: A-Z',
-                  labelDesc: 'Title: Z-A',
-                  sortKey: 'beatmapset.title',
-                  defaultOrderBy: 'asc',
-                },
-                {
-                  labelDefault: 'Mapper',
-                  labelAsc: 'Mapper: A-Z',
-                  labelDesc: 'Mapper: Z-A',
-                  sortKey: 'beatmapset.creator',
-                  defaultOrderBy: 'asc',
-                },
-                {
-                  labelDefault: 'Stars',
-                  labelAsc: 'Stars: lowest',
-                  labelDesc: 'Stars: highest',
-                  sortKey: 'difficulty_rating',
-                  defaultOrderBy: 'desc',
-                },
-                {
-                  labelDefault: 'BPM',
-                  labelAsc: 'BPM: lowest',
-                  labelDesc: 'BPM: highest',
-                  sortKey: 'bpm',
-                  defaultOrderBy: 'desc',
-                },
-                {
-                  labelDefault: 'Length',
-                  labelAsc: 'Length: shortest',
-                  labelDesc: 'Length: longest',
-                  sortKey: 'hit_length',
-                  defaultOrderBy: 'desc',
-                },
-              ]
-                .filter(Boolean)
-                .map(({ labelDefault, labelAsc, labelDesc, sortKey, defaultOrderBy }, i) =>
-                  match({ sortBy, orderBy })
-                    .with({ sortBy: sortKey, orderBy: 'asc' }, () => (
-                      <Link
-                        key={i}
-                        replace
-                        href={replaceQueryParams({
-                          sortBy: sortKey,
-                          orderBy: 'desc',
-                          cursor: undefined,
-                        })}
-                        className={cn(
-                          'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
-                          'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
-                        )}
-                      >
-                        {labelAsc ?? labelDefault}
-                      </Link>
-                    ))
-                    .with({ sortBy: sortKey, orderBy: 'desc' }, () => (
-                      <Link
-                        key={i}
-                        replace
-                        href={replaceQueryParams({
-                          sortBy: sortKey,
-                          orderBy: 'asc',
-                          cursor: undefined,
-                        })}
-                        className={cn(
-                          'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
-                          'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
-                        )}
-                      >
-                        {labelDesc ?? labelDefault}
-                      </Link>
-                    ))
-                    .otherwise(() => (
-                      <Link
-                        replace
-                        href={replaceQueryParams({
-                          sortBy: sortKey,
-                          orderBy: defaultOrderBy,
-                          cursor: undefined,
-                        })}
-                        className={
-                          'px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600'
-                        }
-                      >
-                        {labelDefault}
-                      </Link>
-                    )),
-                )}
+          {false && (
+            <div className='flex items-center gap-6'>
+              <div>Sort by:</div>
+              <div className='flex gap-2'>
+                {[
+                  {
+                    labelDefault: 'Artist',
+                    labelAsc: 'Artist: A-Z',
+                    labelDesc: 'Artist: Z-A',
+                    sortKey: 'beatmapset.artist',
+                    defaultOrderBy: 'asc',
+                  },
+                  {
+                    labelDefault: 'Title',
+                    labelAsc: 'Title: A-Z',
+                    labelDesc: 'Title: Z-A',
+                    sortKey: 'beatmapset.title',
+                    defaultOrderBy: 'asc',
+                  },
+                  {
+                    labelDefault: 'Mapper',
+                    labelAsc: 'Mapper: A-Z',
+                    labelDesc: 'Mapper: Z-A',
+                    sortKey: 'beatmapset.creator',
+                    defaultOrderBy: 'asc',
+                  },
+                  {
+                    labelDefault: 'Stars',
+                    labelAsc: 'Stars: lowest',
+                    labelDesc: 'Stars: highest',
+                    sortKey: 'difficulty_rating',
+                    defaultOrderBy: 'desc',
+                  },
+                  {
+                    labelDefault: 'BPM',
+                    labelAsc: 'BPM: lowest',
+                    labelDesc: 'BPM: highest',
+                    sortKey: 'bpm',
+                    defaultOrderBy: 'desc',
+                  },
+                  {
+                    labelDefault: 'Length',
+                    labelAsc: 'Length: shortest',
+                    labelDesc: 'Length: longest',
+                    sortKey: 'hit_length',
+                    defaultOrderBy: 'desc',
+                  },
+                ]
+                  .filter(Boolean)
+                  .map(({ labelDefault, labelAsc, labelDesc, sortKey, defaultOrderBy }, i) =>
+                    match({ sortBy, orderBy })
+                      .with({ sortBy: sortKey, orderBy: 'asc' }, () => (
+                        <Link
+                          key={i}
+                          replace
+                          href={replaceQueryParams({
+                            sortBy: sortKey,
+                            orderBy: 'desc',
+                            cursor: undefined,
+                          })}
+                          className={cn(
+                            'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
+                            'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
+                          )}
+                        >
+                          {labelAsc ?? labelDefault}
+                        </Link>
+                      ))
+                      .with({ sortBy: sortKey, orderBy: 'desc' }, () => (
+                        <Link
+                          key={i}
+                          replace
+                          href={replaceQueryParams({
+                            sortBy: sortKey,
+                            orderBy: 'asc',
+                            cursor: undefined,
+                          })}
+                          className={cn(
+                            'px-3 py-1 flex items-center gap-2 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
+                            'text-indigo-200 bg-indigo-800 hover:bg-indigo-700 opacity-90  border-indigo-800 hover:border-indigo-700',
+                          )}
+                        >
+                          {labelDesc ?? labelDefault}
+                        </Link>
+                      ))
+                      .otherwise(() => (
+                        <Link
+                          replace
+                          href={replaceQueryParams({
+                            sortBy: sortKey,
+                            orderBy: defaultOrderBy,
+                            cursor: undefined,
+                          })}
+                          className={
+                            'px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600'
+                          }
+                        >
+                          {labelDefault}
+                        </Link>
+                      )),
+                  )}
+              </div>
             </div>
-          </div>
-          <div className='flex flex-col gap-4'>
-            <BeatmapsetListing listing={listing} />
-            {hasMore ? (
-              <Link href={replaceQueryParams({ cursor: nextPageCursor })}>
-                <div className='w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'>
-                  Load more
-                </div>
-              </Link>
-            ) : (
-              <div className='text-center text-slate-400'>Reached end of results</div>
-            )}
+          )}
+          <div className='flex flex-col gap-4 min-h-screen'>
+            <Suspense>
+              <BeatmapsetListingSC
+                searchParams={searchParams}
+                collection={collection}
+                cursor={searchParams.cursor}
+                orderBy={orderBy}
+                sortBy={sortBy}
+                filterMin={searchParams.filterMin}
+                filterMax={searchParams.filterMax}
+              />
+            </Suspense>
           </div>
         </div>
       </div>

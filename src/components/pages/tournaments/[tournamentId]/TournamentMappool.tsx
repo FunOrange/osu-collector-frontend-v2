@@ -1,19 +1,16 @@
 'use client';
 import BeatmapsetCardPlayButton from '@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton';
-import { Button } from '@/components/shadcn/button';
 import ImageWithFallback from '@/components/universal/ImageWithFallback';
-import { Tournament } from '@/shared/entities/v1/Tournament';
+import { Tournament, TournamentBeatmap } from '@/shared/entities/v1/Tournament';
 import { calculateARWithHR, calculateODWithHR, calculateARWithDT, calculateODWithDT } from '@/utils/diff-calc';
 import { cn } from '@/utils/shadcn-utils';
 import React, { useState } from 'react';
 import { Provider } from 'jotai';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 import { Clipboard } from 'react-bootstrap-icons';
-import { match } from 'ts-pattern';
 import { secondsToHHMMSS } from '@/utils/date-time-utils';
 import { getContrastColor, modToColor, starToColor } from '@/utils/theme-utils';
 import TabSwitcher from '@/components/universal/TabSwitcher';
-import { Beatmap } from '@/shared/entities/v1/Beatmap';
 
 export interface TournamentMappoolProps {
   tournament: Tournament;
@@ -36,7 +33,7 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
         {round.mods.map((mod, j) => (
           <React.Fragment key={j}>
             {mod.maps.map((beatmap, k) => {
-              let moddedBeatmap: Beatmap;
+              let moddedBeatmap: TournamentBeatmap;
               if (typeof beatmap === 'object') {
                 moddedBeatmap = { ...beatmap };
                 if (mod.mod.toLowerCase() === 'hr') {
@@ -62,7 +59,7 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
 interface MappoolBeatmapProps {
   mod: string;
   modIndex: number;
-  beatmap: Beatmap;
+  beatmap: TournamentBeatmap;
 }
 function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
   const [imageHovered, setImageHovered] = useState(false);

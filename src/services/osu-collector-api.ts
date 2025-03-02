@@ -21,7 +21,7 @@ api.interceptors.response.use(function (response) {
   return response;
 });
 
-export async function getRecentCollections({ cursor = undefined, perPage = undefined, cancelCallback = undefined }) {
+export async function getRecentCollections({ cursor = undefined, perPage = undefined }) {
   const params = {
     cursor,
     perPage,
@@ -29,19 +29,13 @@ export async function getRecentCollections({ cursor = undefined, perPage = undef
   return api
     .get('/collections/recent', {
       params,
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
 
 // range: 'today' or 'week' or 'month' or 'year' or 'alltime'
 // Returns PaginatedCollectionData object: https://osucollector.com/docs.html#responses-getCollections-200-schema
-export async function getPopularCollections({
-  range = 'today',
-  cursor = undefined,
-  perPage = undefined,
-  cancelCallback = undefined,
-}) {
+export async function getPopularCollections({ range = 'today', cursor = undefined, perPage = undefined }) {
   const params = {
     range,
     cursor,
@@ -54,7 +48,6 @@ export async function getPopularCollections({
       collections: Collection[];
     }>('/collections/popularv2', {
       params,
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -66,24 +59,18 @@ export async function searchCollections({
   perPage = undefined,
   sortBy = undefined,
   orderBy = undefined,
-  cancelCallback = undefined,
 }) {
   const params = { search, cursor, perPage, sortBy, orderBy };
   return api
     .get('/collections/search', {
       params,
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
 
 // Returns CollectionData object: https://osucollector.com/docs.html#responses-getCollectionById-200-schema
-export async function getCollection(id, cancelCallback = undefined) {
-  return api
-    .get(`/collections/${id}`, {
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
-    })
-    .then((res) => res.data);
+export async function getCollection(id) {
+  return api.get<Collection>(`/collections/${id}?withBeatmapsets=false`, {}).then((res) => res.data);
 }
 
 // Returns PaginatedCollectionData object: https://osucollector.com/docs.html#responses-getCollectionBeatmaps-200-schema
@@ -95,7 +82,6 @@ export async function getCollectionBeatmaps({
   orderBy = undefined,
   filterMin = undefined,
   filterMax = undefined,
-  cancelCallback = undefined,
 }) {
   const params = {
     cursor,
@@ -112,7 +98,6 @@ export async function getCollectionBeatmaps({
       beatmaps: Beatmap[];
     }>(`/collections/${collectionId}/beatmapsv2`, {
       params,
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -154,11 +139,10 @@ export async function downloadCollectionDb(collectionId) {
 }
 
 // Returns PaginatedUserData object
-export async function getUsers({ page, perPage }, cancelCallback = undefined) {
+export async function getUsers({ page, perPage }) {
   return await api
     .get('/users', {
       params: { page, perPage },
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
@@ -172,35 +156,19 @@ export async function getOwnUser() {
   const { loggedIn, user } = response.data;
   return loggedIn ? user : null;
 }
-export async function getUserFavouriteCollections(userId, cancelCallback = undefined) {
-  return api
-    .get(`/users/${userId}/favourites/collections`, {
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
-    })
-    .then((res) => res.data);
+export async function getUserFavouriteCollections(userId) {
+  return api.get(`/users/${userId}/favourites/collections`, {}).then((res) => res.data);
 }
 
-export async function getUserFavouriteTournaments(userId, cancelCallback = undefined) {
-  return api
-    .get(`/users/${userId}/favourites/tournaments`, {
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
-    })
-    .then((res) => res.data);
+export async function getUserFavouriteTournaments(userId) {
+  return api.get(`/users/${userId}/favourites/tournaments`, {}).then((res) => res.data);
 }
 
-export async function getUserUploads(userId, cancelCallback = undefined) {
-  return api
-    .get(`/users/${userId}/uploads`, {
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
-    })
-    .then((res) => res.data);
+export async function getUserUploads(userId) {
+  return api.get(`/users/${userId}/uploads`, {}).then((res) => res.data);
 }
-export async function getMetadata(cancelCallback = undefined) {
-  return api
-    .get(`/metadata`, {
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
-    })
-    .then((res) => res.data);
+export async function getMetadata() {
+  return api.get(`/metadata`, {}).then((res) => res.data);
 }
 
 export async function submitOtp(otp, y) {
@@ -220,12 +188,8 @@ export async function linkPaypalSubscription(subscriptionId) {
     .then((res) => res.data);
 }
 
-export async function getPaypalSubscription(cancelCallback = undefined) {
-  return await api
-    .get('/payments/paypalSubscription', {
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
-    })
-    .then((res) => res.data);
+export async function getPaypalSubscription() {
+  return await api.get('/payments/paypalSubscription', {}).then((res) => res.data);
 }
 
 export async function cancelPaypalSubscription() {
@@ -303,29 +267,24 @@ export async function editTournament(id, dto: UpdateTournamentDto) {
   return res.data;
 }
 
-export async function getRecentTournaments({ cursor = undefined, perPage = undefined, cancelCallback = undefined }) {
+export async function getRecentTournaments({ cursor = undefined, perPage = undefined }) {
   const params = { cursor, perPage };
   return api
     .get('/tournaments/recent', {
       params,
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }
-export async function searchTournaments(
-  params: {
-    search: string;
-    cursor: string | number;
-    perPage: string | number;
-    sortBy: string;
-    orderBy: string;
-  },
-  cancelCallback = undefined,
-) {
+export async function searchTournaments(params: {
+  search: string;
+  cursor: string | number;
+  perPage: string | number;
+  sortBy: string;
+  orderBy: string;
+}) {
   return api
     .get('/tournaments/search', {
       params,
-      cancelToken: cancelCallback ? new axios.CancelToken(cancelCallback) : undefined,
     })
     .then((res) => res.data);
 }

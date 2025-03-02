@@ -28,6 +28,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
             barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => starToColor(star, true)),
           }}
           height={100}
+          barClassName='rounded-t'
         />
       </Link>
       <div className='px-4 pt-4'>
