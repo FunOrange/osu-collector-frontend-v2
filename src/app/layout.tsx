@@ -105,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </PostHogProvider>
         <div className={cn(navbarSpacer, 'min-h-screen flex flex-col')}>{children}</div>
         <Toaster />
+        <TwitchSubEndOfSupportModal />
       </body>
     </html>
   );

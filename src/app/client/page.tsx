@@ -98,17 +98,14 @@ export default function DesktopClientPage() {
           </div>
           {yellowStripes}
         </div>
-        <div className='flex flex-col items-center w-full gap-8 px-2 py-16 bg-slate-700'>
-          <DownloadDesktopClient />
+        <div className='flex justify-center w-full px-2 py-16 bg-slate-700'>
+          <div className='w-full flex flex-col items-center gap-8 max-w-[520px]'>
+            <DownloadDesktopClient />
 
-          <div className='w-full max-w-6xl py-6 rounded'>
-            <h2 className='text-2xl text-center'>Two ways to support us!</h2>
-            <div className='mb-2 text-center'>
-              Please note that supporting us with both methods at the same time{' '}
-              <b>will not extend your supporter status!</b> Please use only one method.
+            <div className='flex flex-col items-center w-full max-w-6xl py-6 rounded gap-4'>
+              <h2 className='text-2xl text-center text-white'>Buy osu!Collector Desktop now!</h2>
+              <PaymentOptions />
             </div>
-
-            <PaymentOptions />
           </div>
         </div>
       </div>
