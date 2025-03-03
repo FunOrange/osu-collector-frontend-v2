@@ -21,7 +21,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type,
         {...props}
       />
       <div className={cn('relative transition-all ', error ? 'h-6' : 'h-0')}>
-        <p className={cn('mt-1 absolute text-sm text-red-700 whitespace-nowrap')}>{error}</p>
+        <p className={cn('mt-1 absolute text-sm text-red-500 whitespace-nowrap')}>{error}</p>
       </div>
     </div>
   );

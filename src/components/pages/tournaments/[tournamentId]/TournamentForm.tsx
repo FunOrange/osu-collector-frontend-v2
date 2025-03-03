@@ -67,9 +67,9 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
   const organizers = touchedOrganizers ?? tournament?.organizers?.map(prop('id')) ?? [];
   const [organizerError, setOrganizerError] = useState('');
   const addOrganizer = () => {
-    const organizerId = Number(organizerField);
+    const organizerId = Number(organizerField.match(/https:\/\/osu\.ppy\.sh\/users\/(\d+)/)?.[1]);
     if (isNaN(organizerId) || !organizerId) {
-      setOrganizerError('Not a valid user ID');
+      setOrganizerError('Not a valid user URL. Example: https://osu.ppy.sh/users/123456');
     } else if (organizers.includes(organizerId)) {
       setOrganizerError('This user is already an added');
     } else {
@@ -207,13 +207,8 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
                 <div className='flex items-start'>
                   <div className='flex items-start mr-4'>
                     <Input
-                      disabled
-                      value='https://osu.ppy.sh/users/'
-                      className='w-[185px] pr-0 rounded-none rounded-s rounded-e-0'
-                    />
-                    <Input
-                      placeholder='123456'
-                      className='relative z-10 w-20 rounded-none'
+                      placeholder='https://osu.ppy.sh/users/.......'
+                      className='relative z-10 w-[265px] rounded-none'
                       value={organizerField}
                       onKeyDown={(e) => e.key === 'Enter' && addOrganizer()}
                       onChange={(e) => {
