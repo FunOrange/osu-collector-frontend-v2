@@ -11,6 +11,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   const title = `${pageUser.osuweb.username}'s Tournaments | osu!Collector`;
   const description = `Tournaments uploaded by ${pageUser.osuweb.username}`;
   return {
+    metadataBase: new URL('https://osucollector.com'),
     title,
     description,
     openGraph: {

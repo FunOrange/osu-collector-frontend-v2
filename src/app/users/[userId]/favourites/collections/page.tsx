@@ -12,6 +12,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   const title = `${pageUser.osuweb.username}'s Collections | osu!Collector`;
   const description = `Collections favourited by ${pageUser.osuweb.username}`;
   return {
+    metadataBase: new URL('https://osucollector.com'),
     title,
     description,
     openGraph: {
