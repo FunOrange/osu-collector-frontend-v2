@@ -170,7 +170,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
     <>
       <div className='flex justify-center w-full'>
         <div className='items-end w-full max-w-screen-lg m-5 gap-x-4'>
-          <div className='p-4 rounded bg-slate-700 md:p-7'>
+          <div className='p-4 rounded border border-slate-900 bg-[#162032] md:p-7'>
             <h1 className='mb-6 text-3xl'>{creating ? 'Create tournament' : 'Edit tournament'}</h1>
             <div className='flex flex-col mb-6 gap-y-4'>
               <div>
