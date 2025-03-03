@@ -76,6 +76,16 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
   const beatmapBeingProcessed = typeof beatmap === 'number';
   const beatmapId = beatmapBeingProcessed ? beatmap : beatmap.id;
   const stars = Math.round(beatmap.difficulty_rating * 10) / 10;
+
+  if (!beatmap.beatmapset?.id) {
+    const url = `https://osu.ppy.sh/beatmaps/${beatmap.id}`;
+    return (
+      <div className='rounded bg-slate-400 p-4'>
+        We are currently looking up this beatmap... (<a href={url}>{url}</a>)
+      </div>
+    );
+  }
+
   return (
     <div
       className='grid items-center gap-2'
