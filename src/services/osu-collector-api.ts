@@ -5,10 +5,16 @@ import axios from 'axios';
 
 const get = async <T>(url: string) => {
   const startMs = Date.now();
-  const res = await fetch(baseURL + url, {
+  const response = await fetch(baseURL + url, {
     next: { revalidate: 1 },
   });
-  const data = (await res.json()) as T;
+  if (!response.ok) {
+    const error = new Error(await response.text());
+    // @ts-ignore:next-line
+    error.response = response;
+    throw error;
+  }
+  const data = (await response.json()) as T;
   const duration = Date.now() - startMs;
   const environment = typeof window !== 'undefined' ? 'browser' : 'server';
   console.log(`[${environment}] GET ${url} (${duration} ms)`);
