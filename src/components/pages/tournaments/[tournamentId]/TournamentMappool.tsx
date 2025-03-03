@@ -17,7 +17,7 @@ export interface TournamentMappoolProps {
 }
 export default function TournamentMappool({ tournament }: TournamentMappoolProps) {
   const [_currentRound, setCurrentRound] = useState(undefined);
-  const currentRound = _currentRound ?? tournament.rounds[0].round;
+  const currentRound = _currentRound ?? tournament.rounds[0]?.round;
   const round = tournament.rounds.find((round) => round.round === currentRound);
 
   return (
@@ -30,7 +30,7 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
         />
       </div>
       <div className='flex flex-col gap-2 p-4'>
-        {round.mods.map((mod, j) => (
+        {round?.mods.map((mod, j) => (
           <React.Fragment key={j}>
             {mod.maps.map((beatmap, k) => {
               let moddedBeatmap: TournamentBeatmap;
