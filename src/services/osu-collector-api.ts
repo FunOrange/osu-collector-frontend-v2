@@ -6,7 +6,7 @@ import axios from 'axios';
 const get = async <T>(url: string) => {
   const startMs = Date.now();
   const response = await fetch(baseURL + url, {
-    next: { revalidate: 1 },
+    next: { revalidate: 10 },
   });
   if (!response.ok) {
     const error = new Error(await response.text());
