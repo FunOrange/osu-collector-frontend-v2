@@ -80,8 +80,23 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
   if (!beatmap.beatmapset?.id) {
     const url = `https://osu.ppy.sh/beatmaps/${beatmap.id}`;
     return (
-      <div className='rounded bg-slate-400 p-4'>
-        We are currently looking up this beatmap... (<a href={url}>{url}</a>)
+      <div className='flex items-center gap-3 rounded bg-slate-800 p-4'>
+        <div
+          className='p-3 text-lg font-semibold rounded'
+          style={{
+            background: modToColor(mod),
+            color: getContrastColor(modToColor(mod)),
+          }}
+        >
+          {mod}
+          {modIndex}
+        </div>
+        <div className='flex flex-col text-slate-400'>
+          We are currently looking up this beatmap...{' '}
+          <a href={url} className='text-slate-300 underline text-sm'>
+            {url}
+          </a>
+        </div>
       </div>
     );
   }
