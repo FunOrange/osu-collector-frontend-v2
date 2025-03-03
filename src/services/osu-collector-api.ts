@@ -3,8 +3,21 @@ import { Collection } from '@/shared/entities/v1/Collection';
 import { formatQueryParams } from '@/utils/string-utils';
 import axios from 'axios';
 
+const get = async <T>(url: string) => {
+  const startMs = Date.now();
+  const res = await fetch(baseURL + url, {
+    next: { revalidate: 1 },
+  });
+  const data = (await res.json()) as T;
+  const duration = Date.now() - startMs;
+  const environment = typeof window !== 'undefined' ? 'browser' : 'server';
+  console.log(`[${environment}] GET ${url} (${duration} ms)`);
+  return data;
+};
+
+const baseURL = typeof window !== 'undefined' ? '/api' : process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST + '/api';
 export const api = axios.create({
-  baseURL: typeof window !== 'undefined' ? '/api' : process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST + '/api',
+  baseURL,
   withCredentials: true,
 });
 api.interceptors.request.use(function (config) {
@@ -70,7 +83,7 @@ export async function searchCollections({
 
 // Returns CollectionData object: https://osucollector.com/docs.html#responses-getCollectionById-200-schema
 export async function getCollection(id) {
-  return api.get<Collection>(`/collections/${id}?withBeatmapsets=false`, {}).then((res) => res.data);
+  return await get<Collection>(`/collections/${id}?withBeatmapsets=false`);
 }
 
 // Returns PaginatedCollectionData object: https://osucollector.com/docs.html#responses-getCollectionBeatmaps-200-schema
