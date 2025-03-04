@@ -46,7 +46,7 @@ export default function BarGraph({ title, data, barHref, className, barClassName
           key={i}
           className={cn(
             'text-xs justify-self-center text-slate-400',
-            data.x.length >= 16 && i % 3 !== 0 && 'invisible sm:visible',
+            data.x.length >= 16 && i % 3 !== 0 && 'invisible lg:visible',
           )}
         >
           {value}
