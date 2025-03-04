@@ -30,10 +30,10 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
   const [open, setOpen] = useState(false);
 
   return user ? (
-    <div className='flex w-full'>
+    <div className='flex w-full items-stretch'>
       <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
         <DialogTrigger
-          className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+          className='w-full p-3 text-center transition rounded sm:rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => {
             window.open(`osucollector://collections/${collection.id}`, '_blank', 'noreferrer');
           }}
@@ -57,7 +57,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
       <DropdownMenu>
         <DropdownMenuTrigger
           asChild
-          className='h-full transition rounded rounded-l-none cursor-pointer bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+          className='h-full hidden sm:flex transition rounded rounded-l-none cursor-pointer bg-slate-600 hover:shadow-xl hover:bg-slate-500'
         >
           <div className='flex items-center'>
             <ThreeDotsVertical className='mx-2' />

@@ -1,7 +1,7 @@
 'use client';
 import { Collection } from '@/shared/entities/v1/Collection';
 import { useUser } from '@/services/osu-collector-api-hooks';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as api from '@/services/osu-collector-api';
 import { Textarea } from '@/components/shadcn/textarea';
 import { match } from 'ts-pattern';
@@ -29,18 +29,44 @@ export default function EditableCollectionDescription({ collection }: EditableCo
     setUserInput(undefined);
   };
 
+  const commentRef = useRef<HTMLParagraphElement>(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  useEffect(() => {
+    if (commentRef.current) {
+      setIsOverflowing(commentRef.current.scrollHeight > commentRef.current.clientHeight);
+    }
+  }, [collection.description]);
+
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+
   const conditions = {
     isUploader: collection.uploader.id === user?.id,
     editing,
     hasDescription: Boolean(collectionDescription?.trim()),
   };
   return match(conditions)
-    .with({ isUploader: false, editing: false, hasDescription: true }, () => (
-      <div className='px-3 py-2 whitespace-pre-wrap rounded bg-slate-800' style={{ minHeight: '106px' }}>
-        <div>{collection.description}</div>
+    .with({ isUploader: false, hasDescription: true }, () => (
+      <div
+        className={cn('relative', isOverflowing && !descriptionExpanded && 'cursor-pointer hover:brightness-125')}
+        onClick={() => setDescriptionExpanded(true)}
+      >
+        <div
+          ref={commentRef}
+          className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800', !descriptionExpanded && 'line-clamp-6')}
+          style={{ minHeight: '106px' }}
+        >
+          {collection.description}
+        </div>
+        {isOverflowing && !descriptionExpanded && (
+          <div className='absolute bottom-0 left-0 right-0 flex flex-col justify-end'>
+            <div className='absolute w-full flex justify-center text-white pb-3'>Read more...</div>
+            <div className='h-10 bg-gradient-to-t from-[#000000dd] to-transparent'></div>
+            <div className='bg-[#000000dd] rounded-b h-8'></div>
+          </div>
+        )}
       </div>
     ))
-    .with({ isUploader: false, editing: false, hasDescription: false }, () => (
+    .with({ isUploader: false, hasDescription: false }, () => (
       <div className='p-4 rounded bg-slate-800' style={{ minHeight: '106px' }}>
         <div className='text-sm text-slate-500'>No description</div>
       </div>

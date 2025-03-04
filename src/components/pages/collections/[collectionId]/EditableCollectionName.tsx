@@ -5,11 +5,13 @@ import { useUser } from '@/services/osu-collector-api-hooks';
 import { useState } from 'react';
 import * as api from '@/services/osu-collector-api';
 import { useToast } from '@/components/shadcn/use-toast';
+import { cn } from '@/utils/shadcn-utils';
 
 export interface EditableCollectionNameProps {
   collection: Collection;
+  className?: string;
 }
-export default function EditableCollectionName({ collection }: EditableCollectionNameProps) {
+export default function EditableCollectionName({ collection, className }: EditableCollectionNameProps) {
   const { toast } = useToast();
   const { user } = useUser();
   const [editing, setEditing] = useState(false);
@@ -27,31 +29,30 @@ export default function EditableCollectionName({ collection }: EditableCollectio
     setUserInput(undefined);
   };
 
-  if (collection.uploader.id === user?.id) {
-    if (editing) {
-      return (
-        <Input
-          className='py-1 mb-2 text-4xl'
-          value={value}
-          onChange={(e) => setUserInput(e.target.value)}
-          autoFocus
-          onBlur={renameCollection}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') renameCollection();
-          }}
-        />
-      );
-    } else if (!editing) {
-      return (
-        <h1
-          className='px-2 py-1 mb-2 text-4xl rounded cursor-pointer hover:bg-slate-700'
-          onClick={() => setEditing(true)}
-        >
-          {collectionName}
-        </h1>
-      );
-    }
-  } else {
-    return <h1 className='mb-2 text-4xl text-gray-100'>{collection.name}</h1>;
+  const isOwner = collection.uploader.id === user?.id;
+  if (isOwner && editing) {
+    return (
+      <Input
+        className='py-1 mb-2 text-4xl'
+        value={value}
+        onChange={(e) => setUserInput(e.target.value)}
+        autoFocus
+        onBlur={renameCollection}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') renameCollection();
+        }}
+      />
+    );
+  } else if (isOwner && !editing) {
+    return (
+      <h1
+        className='px-2 py-1 mb-2 text-2xl sm:text-4xl rounded cursor-pointer hover:bg-slate-700'
+        onClick={() => setEditing(true)}
+      >
+        {collectionName}
+      </h1>
+    );
+  } else if (!isOwner) {
+    return <h1 className={cn('mb-2 text-2xl sm:text-4xl text-gray-100', className)}>{collection.name}</h1>;
   }
 }

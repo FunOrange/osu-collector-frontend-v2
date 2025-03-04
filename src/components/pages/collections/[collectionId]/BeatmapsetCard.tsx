@@ -26,20 +26,19 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
 
   return (
     <div>
-      <div className='grid gap-2' style={{ gridTemplateColumns: '340px 1fr' }}>
+      <div className='sm:grid gap-2' style={{ gridTemplateColumns: '340px 1fr' }}>
         {/* beatmapset */}
         <div className='relative rounded'>
-          <div className='absolute overflow-hidden rounded'>
-            <div className={cn(imageHovered ? undefined : 'blur-sm')}>
+          <div className='absolute w-full overflow-hidden rounded-t sm:rounded-b'>
+            <div className={cn('relative h-[84px] w-full', imageHovered ? undefined : 'blur-sm')}>
               <Image
                 src={imageError ? slimcoverfallback : beatmapset.covers.cover}
                 alt={beatmapset.title}
-                width={340}
-                height={84}
-                className='rounded'
+                sizes='(max-width: 340px) 100vw, 340px'
+                fill
+                className='w-full rounded'
                 style={{
                   transition: 'filter 0.1s',
-                  height: '84px',
                   objectFit: 'cover',
                   filter: `brightness(${imageHovered ? 1 : 0.5})`,
                 }}
@@ -80,7 +79,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
         </div>
         {/* diffs */}
         <div>
-          <div className='rounded bg-slate-800'>
+          <div className='rounded-b sm:rounded-t bg-slate-800'>
             {beatmaps.map((beatmap) => (
               <div
                 key={beatmap.id}

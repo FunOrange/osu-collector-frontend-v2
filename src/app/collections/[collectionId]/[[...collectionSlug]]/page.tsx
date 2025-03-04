@@ -90,23 +90,23 @@ export default async function CollectionPage({ params, searchParams }: Collectio
       <div className='flex flex-col px-2 py-5 md:px-10 gap-7 w-full max-w-screen-xl'>
         <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
           <div className='flex flex-col gap-4 p-4'>
-            <div className='flex flex-col xl:flex-row justify-between items-center gap-2'>
-              <EditableCollectionName collection={collection} />
+            <div className='flex flex-col xl:flex-row justify-between gap-2'>
+              <EditableCollectionName collection={collection} className='pl-2' />
               <ModeCounters variant='full' collection={collection} />
             </div>
-            <div className='grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
-              <div>
+            <div className='flex flex-col gap-y-3 sm:grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
+              <div className='flex flex-col gap-y-2 sm:gap-y-0'>
                 <div className='flex items-center gap-2'>
                   <UserChip user={collection.uploader} />
                   <small className='text-slate-400'>
                     Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
                   </small>
                 </div>
-                <div className='w-full pt-4 pr-4'>
+                <div className='w-full sm:pt-4 sm:pr-4'>
                   <EditableCollectionDescription collection={collection} />
                 </div>
               </div>
-              <div className='flex flex-col gap-2'>
+              <div className='flex flex-col justify-end gap-2'>
                 <CollectionDeleteButton collection={collection} />
                 <DownloadMapsButton collection={collection} />
                 <AddToOsuButton collection={collection} />
