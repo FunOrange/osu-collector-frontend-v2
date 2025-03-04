@@ -1,3 +1,4 @@
+import { Tournament } from '@/shared/entities/v1';
 import { Beatmap } from '@/shared/entities/v1/Beatmap';
 import { Collection } from '@/shared/entities/v1/Collection';
 import { formatQueryParams } from '@/utils/string-utils';
@@ -308,7 +309,7 @@ export async function searchTournaments(params: {
     .then((res) => res.data);
 }
 export async function getTournament(id) {
-  return await api.get(`/tournaments/${id}`).then((res) => res.data);
+  return await api.get(`/tournaments/${id}`).then((res) => res.data as Tournament);
 }
 export async function deleteTournament(id) {
   return await api.delete(`/tournaments/${id}`);

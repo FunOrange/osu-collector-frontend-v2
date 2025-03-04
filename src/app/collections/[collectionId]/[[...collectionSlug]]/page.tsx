@@ -95,7 +95,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             <div className='flex flex-col gap-y-3 sm:grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
               <div className='flex flex-col gap-y-2 sm:gap-y-0'>
                 <div className='flex items-center gap-2'>
-                  <UserChip user={collection.uploader} />
+                  <UserChip user={collection.uploader} href={`/users/${collection.uploader.id}/uploads/collections`} />
                   <small className='text-slate-400'>
                     Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
                   </small>

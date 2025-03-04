@@ -48,7 +48,11 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
         )}
       </Link>
       <div className='flex items-end justify-between px-4 pb-2 '>
-        <UserChip user={collection.uploader} className='hover:bg-slate-700 ml-[-8px]' />
+        <UserChip
+          user={collection.uploader}
+          className='hover:bg-slate-700 ml-[-8px]'
+          href={`/users/${collection.uploader.id}/uploads/collections`}
+        />
         <small className='pb-2 truncate text-slate-400'>
           {moment.unix(collection.dateUploaded._seconds).fromNow()}
         </small>

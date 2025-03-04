@@ -49,7 +49,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
             </p>
           </div>
 
-          <div className='flex flex-col justify-center gap-4 mb-3 md:flex-row'>
+          <div className='grid grid-cols-2 md:flex flex-row justify-center gap-4 mb-3'>
             <div className='px-4 py-3 rounded md:px-6 border-slate-900 shadow-inner bg-[#162032]'>
               <div className='text-xl'>{metadata.userCount.toLocaleString()}</div>
               <div className='text-sm whitespace-nowrap'>Total users</div>

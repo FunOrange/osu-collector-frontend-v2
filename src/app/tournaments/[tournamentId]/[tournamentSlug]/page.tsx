@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { identity, mergeRight } from 'ramda';
 import { Pattern, match } from 'ts-pattern';
 import { Metadata } from 'next';
+import UserChip from '@/components/UserChip';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const tournament = await api.getTournament(params.tournamentId).catch(() => null);
@@ -99,17 +100,20 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   <div className='py-2 pr-6 border-r border-slate-700 text-slate-200'>Uploader</div>
                   <div className='flex items-center gap-1'>
                     <UserChip
-                      userId={tournament.uploader.id}
-                      username={tournament.uploader.username}
-                      rank={tournament.uploader.rank}
+                      user={tournament.uploader}
+                      href={`/users/${tournament.uploader.id}/uploads/tournaments`}
                     />
                   </div>
-                  <div className='py-2 pr-6 border-r border-slate-700 text-slate-200'>Organizers</div>
-                  <div className='flex items-center gap-1'>
-                    {tournament.organizers.map((organizer, i) => (
-                      <UserChip key={i} userId={organizer.id} username={organizer.username} rank={undefined} />
-                    ))}
-                  </div>
+                  {tournament.organizers.length > 0 && (
+                    <>
+                      <div className='py-2 pr-6 border-r border-slate-700 text-slate-200'>Organizers</div>
+                      <div className='flex items-center gap-1'>
+                        {tournament.organizers.map((organizer, i) => (
+                          <UserChip key={i} user={organizer} href={`https://osu.ppy.sh/users/${organizer.id}`} />
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div className='grid mt-2 gap-x-3 gap-y-1' style={{ gridTemplateColumns: 'auto 1fr' }}>
                   <div>Forum post:</div>
@@ -154,19 +158,3 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
     </div>
   );
 }
-
-const UserChip = ({ userId, username, rank }) => (
-  <div className='flex items-center justify-start px-2 py-1 mt-1 transition rounded-lg cursor-pointer first-letter:items-center hover:bg-slate-900'>
-    <Image
-      className='mr-2 rounded-full'
-      src={`https://a.ppy.sh/${userId}`}
-      width={32}
-      height={32}
-      alt={'Tournament uploader avatar'}
-    />
-    <div className='flex flex-col'>
-      <div className='text-sm font-semibold whitespace-nowrap'>{username}</div>
-      {rank > 0 && <small className='text-xs text-slate-500'>#{rank}</small>}
-    </div>
-  </div>
-);
