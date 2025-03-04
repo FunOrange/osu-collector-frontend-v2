@@ -106,7 +106,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                   <EditableCollectionDescription collection={collection} />
                 </div>
               </div>
-              <div className='flex flex-col justify-end gap-2'>
+              <div className='flex flex-col gap-2'>
                 <CollectionDeleteButton collection={collection} />
                 <DownloadMapsButton collection={collection} />
                 <AddToOsuButton collection={collection} />
@@ -116,6 +116,8 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             </div>
           </div>
         </div>
+
+        <CollectionCommentsSection collection={collection} />
 
         <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1 gap-4'>
           <div className='flex flex-col gap-2 p-4 bg-slate-950 rounded-lg'>
@@ -162,8 +164,6 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             />
           </div>
         </div>
-
-        <CollectionCommentsSection collection={collection} />
 
         <div className='flex flex-col gap-6 p-4 rounded border-slate-900 shadow-inner bg-[#162032]'>
           {false && (
