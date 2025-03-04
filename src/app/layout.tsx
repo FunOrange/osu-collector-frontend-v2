@@ -99,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <div className='flex items-center gap-2'>
               <NavbarSearch />
-              <UploadButton />
+              <UploadButton className='hidden sm:flex' />
               <UserNav />
             </div>
           </div>

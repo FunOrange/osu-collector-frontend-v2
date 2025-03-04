@@ -7,9 +7,12 @@ import { useState } from 'react';
 import { CloudUploadFill, MusicNoteList, Trophy } from 'react-bootstrap-icons';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/shadcn/dialog';
 import Link from 'next/link';
+import { cn } from '@/utils/shadcn-utils';
 
-export interface UploadButtonProps {}
-export default function UploadButton({}: UploadButtonProps) {
+export interface UploadButtonProps {
+  className?: string;
+}
+export default function UploadButton({ className }: UploadButtonProps) {
   const { user } = useUser();
   const [makingSelection, setMakingSelection] = useState(false);
   const [uploadingCollection, setUploadingCollection] = useState(false);
@@ -17,7 +20,7 @@ export default function UploadButton({}: UploadButtonProps) {
   if (!user) {
     return (
       <YouMustBeLoggedIn>
-        <Button variant='important' className='gap-2'>
+        <Button variant='important' className={cn('gap-2', className)}>
           <CloudUploadFill size={20} className='mt-1' />
           Upload
         </Button>
@@ -27,7 +30,7 @@ export default function UploadButton({}: UploadButtonProps) {
     return (
       <>
         <Dialog open={makingSelection} onOpenChange={setMakingSelection}>
-          <DialogTrigger>
+          <DialogTrigger className={className}>
             <Button variant='important' className='gap-2' asChild>
               <div>
                 <CloudUploadFill size={20} className='mt-1' />

@@ -27,7 +27,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
             y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => collection.difficultySpread?.[star] ?? 0),
             barColors: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => starToColor(star, true)),
           }}
-          height={100}
+          className='h-[100px]'
           barClassName='rounded-t'
         />
       </Link>

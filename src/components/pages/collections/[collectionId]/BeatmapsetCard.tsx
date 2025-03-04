@@ -135,7 +135,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
 
                 <b className='mr-2 truncate'>{beatmap.version}</b>
 
-                <div className='flex items-center gap-1 ms-auto'>
+                <div className='hidden sm:flex items-center gap-1 ms-auto'>
                   <a
                     className='px-2 py-1 text-sm transition rounded ms-auto hover:bg-slate-600'
                     href={`osu://b/${beatmap.id}`}

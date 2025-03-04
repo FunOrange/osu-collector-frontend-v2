@@ -28,7 +28,7 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
             />
             <CollectionCommentsModal
               collection={collection}
-              className='flex items-center justify-center w-full gap-2 py-3 text-center rounded cursor-pointer border-slate-900 shadow-inner bg-[#162032] hover:bg-slate-700'
+              className='flex items-center justify-center w-full gap-2 py-3 text-center border-t rounded-b cursor-pointer border-slate-900 shadow-inner bg-[#162032] hover:bg-slate-700'
             >
               <div>
                 View {collection.comments.length === 1 ? '' : 'all'} {collection.comments.length} comment

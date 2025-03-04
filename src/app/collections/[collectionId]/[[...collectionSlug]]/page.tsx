@@ -56,8 +56,6 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     notFound();
   }
 
-  const graphHeight = 160;
-
   const searchParamsSortBy = match(searchParams.sortBy)
     .with('beatmapset.artist', identity)
     .with('beatmapset.title', identity)
@@ -86,10 +84,10 @@ export default async function CollectionPage({ params, searchParams }: Collectio
     `${pathname}?${formatQueryParams(mergeRight(searchParams, newParams))}`;
 
   return (
-    <div className='flex justify-center w-full'>
-      <div className='flex flex-col px-2 py-5 md:px-10 gap-7 w-full max-w-screen-xl'>
+    <div className='flex justify-center w-full bg-[#162032] sm:bg-transparent'>
+      <div className='flex flex-col px-2 py-5 md:px-10 gap-4 md:gap-7 w-full max-w-screen-xl'>
         <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
-          <div className='flex flex-col gap-4 p-4'>
+          <div className='flex flex-col gap-y-2 gap-x-4 sm:p-4'>
             <div className='flex flex-col xl:flex-row justify-between gap-2'>
               <EditableCollectionName collection={collection} className='pl-2' />
               <ModeCounters variant='full' collection={collection} />
@@ -119,7 +117,8 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
         <CollectionCommentsSection collection={collection} />
 
-        <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1 gap-4'>
+        {/* Graphs */}
+        <div className='grid rounded-t lg:grid-cols-2 xs:grid-cols-1 gap-y-2 gap-x-4'>
           <div className='flex flex-col gap-2 p-4 bg-slate-950 rounded-lg'>
             <div className='flex flex-col md:flex-row md:justify-between items-start'>
               <div>
@@ -135,9 +134,8 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             <BarGraphStars
               title=''
               collection={collection}
-              height={graphHeight}
               replaceQueryParams={replaceQueryParams}
-              className='px-2 pt-0'
+              className='px-2 pt-0 h-[100px] lg:h-[160px]'
               barClassName='rounded-t-lg'
             />
           </div>
@@ -157,15 +155,14 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             <BarGraphBpm
               title=''
               collection={collection}
-              height={graphHeight}
               replaceQueryParams={replaceQueryParams}
-              className='px-2 pt-0'
+              className='px-2 pt-0 h-[100px] lg:h-[160px]'
               barClassName='rounded-t-md'
             />
           </div>
         </div>
 
-        <div className='flex flex-col gap-6 p-4 rounded border-slate-900 shadow-inner bg-[#162032]'>
+        <div className='flex flex-col gap-6 sm:p-4 rounded border-slate-900 shadow-inner bg-[#162032]'>
           {false && (
             <div className='flex items-center gap-6'>
               <div>Sort by:</div>

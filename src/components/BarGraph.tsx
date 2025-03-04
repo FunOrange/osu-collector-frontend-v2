@@ -8,12 +8,11 @@ export interface BarGraphProps {
     y: readonly number[];
     barColors: readonly string[];
   };
-  height?: string | number;
   barHref?: (x: any) => string;
   className?: string;
   barClassName?: string;
 }
-export default function BarGraph({ title, data, barHref, height = '80px', className, barClassName }: BarGraphProps) {
+export default function BarGraph({ title, data, barHref, className, barClassName }: BarGraphProps) {
   const length = data.x.length;
   const maxValue = Math.max(...data.y);
   const barStyle = (y, i) => ({
@@ -25,7 +24,6 @@ export default function BarGraph({ title, data, barHref, height = '80px', classN
     <div
       className={cn('grid w-full px-8 pt-4 pb-1 gap-x-2 bg-slate-950', className)}
       style={{
-        height,
         gridTemplateColumns: `repeat(${length}, minmax(0, 1fr))`,
         gridTemplateRows: '1fr auto auto',
       }}
@@ -44,7 +42,13 @@ export default function BarGraph({ title, data, barHref, height = '80px', classN
         ),
       )}
       {data.x.map((value, i) => (
-        <div key={i} className='text-xs justify-self-center text-slate-400'>
+        <div
+          key={i}
+          className={cn(
+            'text-xs justify-self-center text-slate-400',
+            data.x.length >= 16 && i % 3 !== 0 && 'invisible sm:visible',
+          )}
+        >
           {value}
         </div>
       ))}
