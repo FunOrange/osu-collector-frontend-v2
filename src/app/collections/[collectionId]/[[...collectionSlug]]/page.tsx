@@ -82,7 +82,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
 
         <CollectionCommentsSection collection={collection} />
 
-        <CollectionBeatmapsSection searchParams={searchParams} collection={collection} />
+        <CollectionBeatmapsSection collection={collection} />
       </div>
     </div>
   );
