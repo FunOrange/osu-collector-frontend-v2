@@ -7,7 +7,7 @@ import { secondsToHHMMSS } from '@/utils/date-time-utils';
 
 export interface BeatmapsetCardPlayButtonProps {
   beatmapsetId: number;
-  duration: string;
+  duration?: string;
 }
 export default function BeatmapsetCardPlayButton({ beatmapsetId, duration }: BeatmapsetCardPlayButtonProps) {
   const [audio] = useAtom(audioAtom);
@@ -46,9 +46,11 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId, duration }: Bea
       ) : (
         <PlayFill className='text-white' style={style} size={40} />
       )}
-      <div className='text-sm font-medium text-gray-100' style={{ textShadow }}>
-        {duration}
-      </div>
+      {duration && (
+        <div className='text-sm font-medium text-gray-100' style={{ textShadow }}>
+          {duration}
+        </div>
+      )}
     </button>
   );
 }
