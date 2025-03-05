@@ -48,7 +48,7 @@ const glass = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body id='app-root' className={cn('h-screen overflow-y-auto', inter.className)}>
         <PostHogProvider>
           <div
             className={cn(
@@ -104,7 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </PostHogProvider>
-        <div className={cn(navbarSpacer, 'min-h-screen flex flex-col')}>{children}</div>
+        <div className={cn(navbarSpacer, 'flex flex-col')}>{children}</div>
         <Toaster />
         <TwitchSubEndOfSupportModal />
       </body>
