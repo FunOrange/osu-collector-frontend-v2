@@ -28,7 +28,7 @@ export default function useSticky() {
       }
       setIsSticky(element.getBoundingClientRect().top <= stickyElementTopRef.current);
     };
-    const throttledScroll = throttle(handleScroll, 200);
+    const throttledScroll = throttle(handleScroll, 100);
     body.addEventListener('scroll', throttledScroll);
     return () => body.removeEventListener('scroll', throttledScroll);
   }, []);

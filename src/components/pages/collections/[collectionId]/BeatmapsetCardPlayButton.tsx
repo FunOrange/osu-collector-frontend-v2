@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { audioAtom, nowPlayingBeatmapsetIdAtom } from '@/atoms/audio-player';
 import { PlayFill, StopFill } from 'react-bootstrap-icons';
+import { secondsToHHMMSS } from '@/utils/date-time-utils';
 
 export interface BeatmapsetCardPlayButtonProps {
   beatmapsetId: number;
+  duration: string;
 }
-export default function BeatmapsetCardPlayButton({ beatmapsetId }: BeatmapsetCardPlayButtonProps) {
+export default function BeatmapsetCardPlayButton({ beatmapsetId, duration }: BeatmapsetCardPlayButtonProps) {
   const [audio] = useAtom(audioAtom);
   const [nowPlayingBeatmapsetId, setNowPlayingBeatmapsetId] = useAtom(nowPlayingBeatmapsetIdAtom);
   const [globalPlaying, setGlobalPlaying] = useState(false);
@@ -38,12 +40,17 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId }: BeatmapsetCar
     filter: 'drop-shadow(0 1px 2px rgb(0 0 0)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06))',
   };
   return (
-    <button className='p-1 media-play-button' onClick={onPlayClick}>
+    <button className='flex flex-col items-center p-1 media-play-button' onClick={onPlayClick}>
       {playing ? (
         <StopFill className='text-white' style={style} size={40} />
       ) : (
         <PlayFill className='text-white' style={style} size={40} />
       )}
+      <div className='text-sm font-medium text-gray-100' style={{ textShadow }}>
+        {duration}
+      </div>
     </button>
   );
 }
+
+const textShadow = '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000';

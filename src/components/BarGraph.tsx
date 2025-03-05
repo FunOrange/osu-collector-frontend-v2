@@ -1,5 +1,7 @@
+'use client';
 import { cn } from '@/utils/shadcn-utils';
-import Link from 'next/link';
+
+const isInRange = ([min, max] = [-Infinity, Infinity], value: number) => value >= min && value < max;
 
 export interface BarGraphProps {
   title?: string;
@@ -8,39 +10,44 @@ export interface BarGraphProps {
     y: readonly number[];
     barColors: readonly string[];
   };
-  barHref?: (x: any) => string;
+  onBarClick?: (x: any) => any;
   className?: string;
   barClassName?: string;
+  filter?: [number, number];
 }
-export default function BarGraph({ title, data, barHref, className, barClassName }: BarGraphProps) {
+export default function BarGraph({ title, data, onBarClick, className, barClassName, filter }: BarGraphProps) {
   const length = data.x.length;
   const maxValue = Math.max(...data.y);
-  const barStyle = (y, i) => ({
+  const barStyle = (x: number, y: number, i: number) => ({
+    opacity: isInRange(filter, x) ? 1 : 0.3,
     backgroundColor: data.barColors[i],
     height: `${Math.round(100 * y) / maxValue}%`,
     borderBottom: y / maxValue < 0.02 ? '1px solid #2b2f46' : undefined,
   });
   return (
     <div
-      className={cn('grid w-full px-8 pt-4 pb-1 gap-x-2 bg-slate-950', className)}
+      className={cn('grid w-full px-8 pt-4 pb-1 bg-slate-950', className)}
       style={{
         gridTemplateColumns: `repeat(${length}, minmax(0, 1fr))`,
         gridTemplateRows: '1fr auto auto',
       }}
     >
-      {data.y.map((y, i) =>
-        false && barHref ? (
-          <Link
-            key={i}
-            href={barHref(data.x[i])}
-            className={cn('self-end cursor-pointer hover:border hover:border-gray-50', barClassName)}
-            style={barStyle(y, i)}
-            replace
+      {data.y.map((y, i) => (
+        <div
+          key={i}
+          className={cn('flex h-full group px-1', onBarClick && 'cursor-pointer')}
+          onClick={() => onBarClick?.(data.x[i])}
+        >
+          <div
+            className={cn(
+              'w-full transition-all self-end',
+              onBarClick && 'cursor-pointer group-hover:brightness-125 group-hover:scale-105',
+              barClassName,
+            )}
+            style={barStyle(data.x[i], y, i)}
           />
-        ) : (
-          <div key={i} className={cn('self-end', barClassName)} style={barStyle(y, i)} />
-        ),
-      )}
+        </div>
+      ))}
       {data.x.map((value, i) => (
         <div
           key={i}

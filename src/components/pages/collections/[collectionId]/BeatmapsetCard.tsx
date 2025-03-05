@@ -5,15 +5,15 @@ import Image from 'next/image';
 import { match } from 'ts-pattern';
 import { secondsToHHMMSS } from '@/utils/date-time-utils';
 import { bpmToColor, getContrastColor, starToColor } from '@/utils/theme-utils';
-import { Beatmap } from '@/shared/entities/v1/Beatmap';
-import { Beatmapset } from '@/shared/entities/v1/Beatmapset';
+import * as V1 from '@/shared/entities/v1';
+import * as V2 from '@/shared/entities/v2';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 import BeatmapsetCardPlayButton from '@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton';
 import { cn } from '@/utils/shadcn-utils';
 
 export interface BeatmapsetCardCardProps {
-  beatmapset: Beatmapset;
-  beatmaps: Beatmap[];
+  beatmapset: V1.Beatmapset | V2.Beatmapset;
+  beatmaps: V1.Beatmap[];
 }
 export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardCardProps) {
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState<number[]>([]);
@@ -30,9 +30,13 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
         {/* beatmapset */}
         <div className='relative rounded'>
           <div className='absolute w-full overflow-hidden rounded-t sm:rounded-b'>
-            <div className={cn('relative h-[84px] w-full', imageHovered ? undefined : 'blur-sm')}>
+            <div className={cn('relative h-[84px] w-full')}>
               <Image
-                src={imageError ? slimcoverfallback : beatmapset.covers.cover}
+                src={
+                  imageError
+                    ? slimcoverfallback
+                    : ((beatmapset as V1.Beatmapset).covers?.cover ?? (beatmapset as V2.Beatmapset).cover)
+                }
                 alt={beatmapset.title}
                 sizes='(max-width: 340px) 100vw, 340px'
                 fill
@@ -40,7 +44,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
                 style={{
                   transition: 'filter 0.1s',
                   objectFit: 'cover',
-                  filter: `brightness(${imageHovered ? 1 : 0.5})`,
+                  filter: `brightness(${imageHovered ? 1 : 0.4})`,
                 }}
                 onError={() => setImageError(true)}
               />
@@ -51,7 +55,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
             onMouseEnter={() => setImageHovered(true)}
             onMouseLeave={() => setImageHovered(false)}
           >
-            <div className='grid gap-2' style={{ gridTemplateColumns: '1fr 50px' }}>
+            <div className='grid' style={{ gridTemplateColumns: '1fr 50px' }}>
               <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target='_blank'>
                 <div style={{ maxWidth: '264px' }}>
                   <div className='text-lg font-medium text-white truncate' style={{ textShadow }}>
@@ -73,7 +77,10 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
                   </div>
                 </div>
               </a>
-              <BeatmapsetCardPlayButton beatmapsetId={beatmapset.id} />
+              <BeatmapsetCardPlayButton
+                beatmapsetId={beatmapset.id}
+                duration={secondsToHHMMSS(Math.max(...beatmaps.map((b) => b.hit_length)))}
+              />
             </div>
           </div>
         </div>
@@ -88,13 +95,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
               >
                 <div className='flex gap-1'>
                   <div
-                    className='py-1 text-xs font-semibold text-center bg-gray-600 rounded'
-                    style={{ minWidth: '50px' }}
-                  >
-                    {secondsToHHMMSS(beatmap.hit_length)}
-                  </div>
-                  <div
-                    className='py-1 text-xs font-semibold text-center rounded text-sky-900'
+                    className='hidden sm:block py-1 text-xs font-semibold text-center rounded text-sky-900'
                     style={{
                       backgroundColor: bpmToColor(beatmap.bpm),
                       color: getContrastColor(bpmToColor(beatmap.bpm)),
