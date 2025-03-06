@@ -34,15 +34,15 @@ export default async function TournamentsPage({ searchParams }: TournamentsPageP
   return (
     <div className='flex justify-center w-full'>
       <div className='flex flex-col items-center w-full gap-6 px-2 py-5 md:px-10'>
-        <div className='flex flex-col items-center gap-3'>
-          <SearchInput searchParams={searchParams} withIcon />
-        </div>
         <div className='w-full p-4 mb-4 rounded max-w-screen-2xl bg-[#162032] md:p-7'>
-          <div className='flex justify-between'>
-            <h1 className='mb-6 text-3xl'>
+          <div className='mb-6 flex items-center justify-between'>
+            <h1 className='text-3xl whitespace-nowrap'>
               <TrophyFill className='inline mb-1 mr-3 text-yellow-400' size={24} />
               Tournaments
             </h1>
+            <div className='flex flex-col w-full gap-3 ml-6'>
+              <SearchInput searchParams={searchParams} withIcon className='bg-slate-800' />
+            </div>
             <Link href='/tournaments/upload'>
               <Button className='gap-x-2'>
                 <CloudUploadFill className='mt-1' />

@@ -159,12 +159,8 @@ export async function downloadCollectionDb(collectionId) {
 }
 
 // Returns PaginatedUserData object
-export async function getUsers({ page, perPage }) {
-  return await api
-    .get('/users', {
-      params: { page, perPage },
-    })
-    .then((res) => res.data);
+export async function getUsers({ page, perPage, username }) {
+  return await api.get('/users', { params: { page, perPage, username } }).then((res) => res.data);
 }
 
 export async function getUser(userId) {

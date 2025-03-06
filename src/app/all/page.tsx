@@ -25,7 +25,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
     <div className='flex justify-center w-full'>
       <div className='flex flex-col items-center gap-6 px-2 py-5 md:px-10 max-w-screen-2xl'>
         <div className='flex flex-col items-center gap-3'>
-          <SearchInput searchParams={searchParams} />
+          <SearchInput searchParams={searchParams} className='text-center' />
           <div className='flex gap-2 text-2xl'>
             <Search className='mt-1' />
             {results} results
