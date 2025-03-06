@@ -126,7 +126,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
                   alt={beatmap.mode}
                   width={20}
                   height={20}
-                  style={{ filter: 'contrast(0) brightness(100)' }}
+                  className='invert'
                 />
               )}
 

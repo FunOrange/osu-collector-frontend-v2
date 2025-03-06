@@ -9,11 +9,11 @@ import ImageWithFallback from '@/components/universal/ImageWithFallback';
 import * as api from '@/services/osu-collector-api';
 import { formatQueryParams, getUrlSlug } from '@/utils/string-utils';
 import moment from 'moment';
-import Image from 'next/image';
 import { identity, mergeRight } from 'ramda';
 import { Pattern, match } from 'ts-pattern';
 import { Metadata } from 'next';
 import UserChip from '@/components/UserChip';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const tournament = await api.getTournament(params.tournamentId).catch(() => null);
@@ -90,9 +90,14 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
             <h1 className='text-4xl rounded'>{tournament.name}</h1>
             <div className='grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
               <div className='pr-4'>
-                <small className='text-slate-400'>
-                  Uploaded {moment.unix(tournament.dateUploaded._seconds).fromNow()}
-                </small>
+                <Popover>
+                  <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
+                    Uploaded {moment.unix(tournament.dateUploaded._seconds).fromNow()}
+                  </PopoverTrigger>
+                  <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+                    {moment.unix(tournament.dateUploaded._seconds).format('LLL')}
+                  </PopoverContent>
+                </Popover>
                 <div
                   className='grid items-center w-full pt-2 gap-x-4 gap-y-1'
                   style={{ gridTemplateColumns: 'auto 1fr' }}

@@ -41,15 +41,19 @@ const modeCountersFull = ({ collection }: Omit<ModeCountersProps, 'variant'>) =>
     {(['osu', 'taiko', 'mania', 'fruits'] as const).map((mode, i) => (
       <div
         key={mode}
-        className={cn('flex items-center px-4 gap-2', i === 0 && 'pl-2')}
-        style={{ opacity: collection.modes?.[mode] > 0 ? 0.9 : 0.2 }}
+        className={cn(
+          'flex items-center px-4 gap-2',
+          i === 0 && 'pl-2',
+          !collection.modes?.[mode] && 'pointer-events-none',
+        )}
+        style={{ opacity: collection.modes?.[mode] > 0 ? 0.9 : 0.6 }}
       >
         <Image
           src={modeIcon(mode)}
           width={32}
           height={32}
           alt={mode}
-          className={cn('mr-1 invert', !collection.modes?.[mode] && 'opacity-20')}
+          className={cn('mr-1 invert hidden sm:block', !collection.modes?.[mode] && 'opacity-20')}
         />
         <div>
           <div className={cn('leading-4', collection.modes?.[mode] ? 'text-gray-300' : 'text-gray-600')}>
