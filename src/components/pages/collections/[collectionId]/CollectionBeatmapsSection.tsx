@@ -98,7 +98,7 @@ function filterSortPaginate(
   if (filters.bpm[1] === 310) _filters.bpm[1] = Infinity;
   _filters.search = filters.search.trim();
 
-  const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value <= max;
+  const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value < max;
   const withinStarRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.stars, beatmap.difficulty_rating);
   const withinBpmRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.bpm, beatmap.bpm);
   const matchesSearch = (beatmap: BeatmapWithBeatmapset) => {
