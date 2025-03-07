@@ -15,6 +15,7 @@ import { match } from 'ts-pattern';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import Link from 'next/link';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { Checkout, CheckoutButton, CheckoutStatus } from '@coinbase/onchainkit/checkout';
 
 const isPaypalOrStripeSubscriptionActive = (user, paypalSubscription, stripeSubscription) => {
   if (user?.private?.subscriptionExpiryDate) {
@@ -113,11 +114,13 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                 </YouMustBeLoggedIn>
               )}
             </section>
+
             <div className='flex items-center my-2'>
               <div className='w-full border-b border-slate-400' />
               <span className='mx-3 text-center text-slate-400 min-w-[140px]'>Or pay with card</span>
               <div className='w-full border-b border-slate-400' />
             </div>
+
             <section id='option-2-credit-card'>
               {user ? (
                 <Link href='/payments/checkout'>
@@ -136,6 +139,19 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                   </Button>
                 </YouMustBeLoggedIn>
               )}
+            </section>
+
+            <div className='flex items-center my-2'>
+              <div className='w-full border-b border-slate-400' />
+              <span className='mx-3 text-center text-slate-400 min-w-[140px]'>Or pay with crypto</span>
+              <div className='w-full border-b border-slate-400' />
+            </div>
+
+            <section id='option-3-crypto'>
+              <Checkout productId='5f86255d-bfe4-41b0-978a-3fe1a41dae98'>
+                <CheckoutButton coinbaseBranded />
+                <CheckoutStatus />
+              </Checkout>
             </section>
           </div>
         </div>
