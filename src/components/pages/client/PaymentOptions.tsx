@@ -1,8 +1,7 @@
 'use client';
-import { Twitch } from 'react-bootstrap-icons';
 import * as api from '@/services/osu-collector-api';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   usePaypalSubscription,
   useStripeSubscription,
@@ -11,11 +10,10 @@ import {
 } from '@/services/osu-collector-api-hooks';
 import useSubmit from '@/hooks/useSubmit';
 import { Button } from '@/components/shadcn/button';
-import { match } from 'ts-pattern';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import Link from 'next/link';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
-import { Checkout, CheckoutButton, CheckoutStatus } from '@coinbase/onchainkit/checkout';
+import CoinbaseCheckoutButton from '@/components/pages/client/CoinbaseCheckoutButton';
 
 const isPaypalOrStripeSubscriptionActive = (user, paypalSubscription, stripeSubscription) => {
   if (user?.private?.subscriptionExpiryDate) {
@@ -143,15 +141,12 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
 
             <div className='flex items-center my-2'>
               <div className='w-full border-b border-slate-400' />
-              <span className='mx-3 text-center text-slate-400 min-w-[140px]'>Or pay with crypto</span>
+              <span className='mx-3 text-center text-slate-400 whitespace-nowrap'>Если вы из России 🇷🇺</span>
               <div className='w-full border-b border-slate-400' />
             </div>
 
             <section id='option-3-crypto'>
-              <Checkout productId='5f86255d-bfe4-41b0-978a-3fe1a41dae98'>
-                <CheckoutButton coinbaseBranded />
-                <CheckoutStatus />
-              </Checkout>
+              <CoinbaseCheckoutButton />
             </section>
           </div>
         </div>
