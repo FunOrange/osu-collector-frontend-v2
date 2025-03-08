@@ -95,7 +95,3 @@ a {
   background-color: #ffffff5d; /* color of the scroll thumb */
   border-radius: 20px; /* radius of the scroll thumb */
 }
-
-.coinbase-button > div > span {
-  color: white !important;
-}
