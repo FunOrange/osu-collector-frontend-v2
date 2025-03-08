@@ -25,7 +25,6 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
 
   const [imageError, setImageError] = useState(false);
   const slimcoverfallback = '/images/slimcoverfallback.jpg';
-  const [imageHovered, setImageHovered] = useState(false);
 
   const textShadow = '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000';
 
@@ -47,7 +46,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
       className='w-full border rounded border-slate-900 self-start'
     >
       {/* beatmapset */}
-      <div className='relative w-full flex flex-col justify-end h-[96px]'>
+      <div className='relative w-full flex flex-col justify-end h-[96px] group'>
         <div className='absolute w-full overflow-hidden rounded-t'>
           <div className={cn('relative h-[96px] w-full')}>
             <Image
@@ -59,21 +58,12 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
               alt={beatmapset.title}
               sizes='(max-width: 340px) 100vw, 340px'
               fill
-              className='w-full rounded-t'
-              style={{
-                transition: 'filter 0.1s',
-                objectFit: 'cover',
-                filter: `brightness(${imageHovered ? 1 : 0.4})`,
-              }}
+              className='w-full rounded-t transition-[filter] object-cover brightness-[0.4] group-hover:brightness-100'
               onError={() => setImageError(true)}
             />
           </div>
         </div>
-        <div
-          className='relative z-10 pb-3 pl-3 pr-1'
-          onMouseEnter={() => setImageHovered(true)}
-          onMouseLeave={() => setImageHovered(false)}
-        >
+        <div className='relative z-10 pb-3 pl-3 pr-1'>
           <div className='grid' style={{ gridTemplateColumns: '1fr 50px' }}>
             <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target='_blank'>
               <div style={{ maxWidth: '264px' }}>
