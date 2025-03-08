@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { User } from '@/shared/entities/v1/User';
 import { cn } from '@/utils/shadcn-utils';
-import Flags from 'country-flag-icons/react/3x2';
+import * as Flags from 'country-flag-icons/react/3x2';
 import { s } from '@/utils/string-utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/shadcn/tooltip';
 import { InfoCircle } from 'react-bootstrap-icons';
