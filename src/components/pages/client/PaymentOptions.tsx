@@ -1,7 +1,8 @@
 'use client';
+import { Twitch } from 'react-bootstrap-icons';
 import * as api from '@/services/osu-collector-api';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   usePaypalSubscription,
   useStripeSubscription,
@@ -10,10 +11,10 @@ import {
 } from '@/services/osu-collector-api-hooks';
 import useSubmit from '@/hooks/useSubmit';
 import { Button } from '@/components/shadcn/button';
+import { match } from 'ts-pattern';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import Link from 'next/link';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
-import CoinbaseCheckoutButton from '@/components/pages/client/CoinbaseCheckoutButton';
 
 const isPaypalOrStripeSubscriptionActive = (user, paypalSubscription, stripeSubscription) => {
   if (user?.private?.subscriptionExpiryDate) {
@@ -112,13 +113,11 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                 </YouMustBeLoggedIn>
               )}
             </section>
-
             <div className='flex items-center my-2'>
               <div className='w-full border-b border-slate-400' />
               <span className='mx-3 text-center text-slate-400 min-w-[140px]'>Or pay with card</span>
               <div className='w-full border-b border-slate-400' />
             </div>
-
             <section id='option-2-credit-card'>
               {user ? (
                 <Link href='/payments/checkout'>
@@ -137,16 +136,6 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                   </Button>
                 </YouMustBeLoggedIn>
               )}
-            </section>
-
-            <div className='flex items-center my-2'>
-              <div className='w-full border-b border-slate-400' />
-              <span className='mx-3 text-center text-slate-400 whitespace-nowrap'>Если вы из России 🇷🇺</span>
-              <div className='w-full border-b border-slate-400' />
-            </div>
-
-            <section id='option-3-crypto'>
-              <CoinbaseCheckoutButton />
             </section>
           </div>
         </div>
