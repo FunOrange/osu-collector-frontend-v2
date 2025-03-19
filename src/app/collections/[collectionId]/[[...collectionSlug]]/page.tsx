@@ -38,9 +38,8 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 
 interface CollectionPageProps {
   params: { collectionId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
 }
-export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
+export default async function CollectionPage({ params }: CollectionPageProps) {
   const collection = await api.getCollection(params.collectionId).catch((e) => {
     if (e.response?.status === 404) return null;
     throw e;
