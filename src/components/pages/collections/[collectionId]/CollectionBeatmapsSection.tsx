@@ -22,10 +22,11 @@ export interface CollectionBeatmapsSectionProps {
 }
 
 export default function CollectionBeatmapsSection({ collection }: CollectionBeatmapsSectionProps) {
-  const topRef = useRef<HTMLDivElement>(null);
-  const scrollToTop = (offset = 0) => {
+  const filtersRef = useRef<HTMLDivElement>(null);
+  const listingRef = useRef<HTMLDivElement>(null);
+  const scrollTo = (divRef: React.RefObject<HTMLDivElement>, offset = 0) => {
     const body = document.getElementById('app-root');
-    body.scrollTo({ top: topRef.current?.offsetTop - navbarHeightPx + offset, behavior: 'smooth' });
+    body.scrollTo({ top: divRef.current?.offsetTop - navbarHeightPx + offset, behavior: 'smooth' });
   };
 
   const v2 = useSWR(endpoints.collections.id(collection.id).beatmapsv2.GET, (url) =>
@@ -40,7 +41,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   });
   const [frontendFilteringEnabled, setFrontendFilteringEnabled] = useState(false);
   const setFilters = (...args: Parameters<typeof _setFilters>): ReturnType<typeof _setFilters> => {
-    scrollToTop();
+    scrollTo(filtersRef);
     setFrontendFilteringEnabled(true);
     setPage(1);
     return _setFilters(...args);
@@ -64,7 +65,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   const listing = groupBeatmapsets(beatmaps);
 
   return (
-    <div ref={topRef} className='flex flex-col mb-10'>
+    <div ref={filtersRef} className='flex flex-col mb-16'>
       <CollectionBeatmapFilters
         collection={collection}
         filters={filters}
@@ -75,18 +76,21 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
           perPage: frontendResults.pagination.perPage,
         }}
         setPage={(value) => {
-          scrollToTop(190);
+          scrollTo(listingRef, -56);
           setPage(value);
         }}
       />
 
-      <div className='min-h-screen sm:p-4 sm:pt-0 rounded-b border-slate-900 shadow-inner bg-[#162032]'>
+      <div
+        ref={listingRef}
+        className='min-h-screen sm:p-4 sm:pt-0 rounded-b border-slate-900 shadow-inner bg-[#162032]'
+      >
         <BeatmapsetListing listing={listing ?? []} isLoading={isLoading} />
         {!frontendFilteringEnabled && hasMore && (
           <div
             className='mt-4 cursor-pointer w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'
             onClick={() => {
-              scrollToTop(190);
+              scrollTo(listingRef, -56);
               setFrontendFilteringEnabled(true);
               setPage(page + 1);
             }}

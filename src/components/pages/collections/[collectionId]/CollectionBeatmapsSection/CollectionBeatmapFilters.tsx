@@ -140,7 +140,7 @@ export default function CollectionBeatmapFilters({
         </div>
       </div>
 
-      <div ref={ref} className={cn('sm:sticky top-14 z-20')}>
+      <div ref={ref} className='sticky top-14 z-20'>
         {totalPages >= 2 && (
           <div className={`absolute w-full ${screenHeightMinusNavbar} flex flex-col justify-end pointer-events-none`}>
             <div className='w-full px-4 pb-2 pt-4 flex flex-col gap-y-2 bg-slate-950/80 backdrop-blur-sm rounded-lg pointer-events-auto'>
@@ -154,11 +154,18 @@ export default function CollectionBeatmapFilters({
               />
               <Pagination>
                 <PaginationContent>
-                  <PaginationItem className={cn(!showPreviousPage && 'invisible')}>
+                  <PaginationItem
+                    className={cn(
+                      'hidden sm:block transition-[opacity]',
+                      !showPreviousPage && 'opacity-20 pointer-events-none',
+                    )}
+                  >
                     <PaginationFirst onClick={() => setPage(1)} />
                   </PaginationItem>
 
-                  <PaginationItem className={cn(!showPreviousPage && 'invisible')}>
+                  <PaginationItem
+                    className={cn('transition-[opacity]', !showPreviousPage && 'opacity-20 pointer-events-none')}
+                  >
                     <PaginationPrevious onClick={() => setPage((prev) => prev - 1)} />
                   </PaginationItem>
 
@@ -170,11 +177,18 @@ export default function CollectionBeatmapFilters({
                     </PaginationItem>
                   ))}
 
-                  <PaginationItem className={cn(!showNextPage && 'invisible')}>
+                  <PaginationItem
+                    className={cn('transition-[opacity]', !showNextPage && 'opacity-20 pointer-events-none')}
+                  >
                     <PaginationNext onClick={() => setPage((prev) => prev + 1)} />
                   </PaginationItem>
 
-                  <PaginationItem className={cn(!showNextPage && 'invisible')}>
+                  <PaginationItem
+                    className={cn(
+                      'hidden sm:block transition-[opacity]',
+                      !showNextPage && 'opacity-20 pointer-events-none',
+                    )}
+                  >
                     <PaginationLast onClick={() => setPage(totalPages)} />
                   </PaginationItem>
                 </PaginationContent>
@@ -184,8 +198,8 @@ export default function CollectionBeatmapFilters({
         )}
         <div
           className={cn(
-            'grid py-2 sm:p-2 sm:grid-cols-2 gap-y-2 gap-x-2 lg:gap-x-4 sm:bg-slate-950/30',
-            isSticky && 'backdrop-blur-sm rounded-b-lg',
+            'p-2 gap-y-2 gap-x-2 lg:gap-x-4 sm:bg-slate-950/30',
+            isSticky && 'bg-slate-950/30 backdrop-blur-sm rounded-b-lg',
           )}
         >
           <div className='relative col-span-full'>
