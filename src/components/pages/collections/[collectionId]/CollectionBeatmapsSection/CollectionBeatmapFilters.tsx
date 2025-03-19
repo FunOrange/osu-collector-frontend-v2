@@ -11,7 +11,6 @@ import useDebouncedFunction from '@/hooks/useDebounce';
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationButton,
   PaginationNext,
@@ -20,6 +19,7 @@ import {
   PaginationLast,
   PaginationFirst,
 } from '@/components/shadcn/pagination';
+import { screenHeightMinusNavbar } from '@/components/Navbar';
 
 export interface BeatmapFilters {
   search: string;
@@ -142,7 +142,7 @@ export default function CollectionBeatmapFilters({
 
       <div ref={ref} className={cn('sm:sticky top-14 z-20')}>
         {totalPages >= 2 && (
-          <div className='absolute w-full h-[calc(100vh-56px)] flex flex-col justify-end pointer-events-none'>
+          <div className={`absolute w-full ${screenHeightMinusNavbar} flex flex-col justify-end pointer-events-none`}>
             <div className='w-full px-4 pb-2 pt-4 flex flex-col gap-y-2 bg-slate-950/80 backdrop-blur-sm rounded-lg pointer-events-auto'>
               <Slider
                 variant='white'

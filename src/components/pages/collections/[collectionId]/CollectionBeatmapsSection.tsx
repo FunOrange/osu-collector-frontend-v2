@@ -13,6 +13,7 @@ import { useRef, useState } from 'react';
 import { Beatmap, BeatmapWithBeatmapset } from '@/shared/entities/v2/Beatmap';
 import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
 import { PaginationProps } from '@/components/shadcn/pagination';
+import { navbarHeightPx } from '@/components/Navbar';
 
 const perPage = 50;
 
@@ -24,7 +25,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   const topRef = useRef<HTMLDivElement>(null);
   const scrollToTop = (offset = 0) => {
     const body = document.getElementById('app-root');
-    body.scrollTo({ top: topRef.current?.offsetTop - 56 + offset, behavior: 'smooth' });
+    body.scrollTo({ top: topRef.current?.offsetTop - navbarHeightPx + offset, behavior: 'smooth' });
   };
 
   const v2 = useSWR(endpoints.collections.id(collection.id).beatmapsv2.GET, (url) =>
