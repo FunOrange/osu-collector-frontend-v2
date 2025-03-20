@@ -37,10 +37,11 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
+  icon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, loading, children, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, loading, icon, children, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     if (loading) {
       props.disabled = true;
@@ -53,7 +54,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {children}
           </>
         ) : (
-          children
+          <>
+            {icon}
+            {children}
+          </>
         )}
       </Comp>
     );
