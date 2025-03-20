@@ -16,6 +16,8 @@ import NavbarSearch from '@/components/NavbarSearch';
 import UploadButton from '@/components/UploadButton';
 
 export const navbarHeight = 'h-14';
+export const navbarHeightPx = 56;
+export const screenHeightMinusNavbar = 'h-[calc(100vh-56px)]';
 export const navbarSpacer = 'pt-14';
 
 const navItems = [

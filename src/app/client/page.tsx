@@ -103,7 +103,9 @@ export default function DesktopClientPage() {
             <DownloadDesktopClient />
 
             <div className='flex flex-col items-center w-full max-w-6xl py-6 rounded gap-4'>
-              <h2 className='text-2xl text-center text-white'>Buy osu!Collector Desktop now!</h2>
+              <h2 id='buy-now' className='text-2xl text-center text-white'>
+                Buy osu!Collector Desktop now!
+              </h2>
               <PaymentOptions />
             </div>
           </div>

@@ -38,9 +38,8 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 
 interface CollectionPageProps {
   params: { collectionId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
 }
-export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
+export default async function CollectionPage({ params }: CollectionPageProps) {
   const collection = await api.getCollection(params.collectionId).catch((e) => {
     if (e.response?.status === 404) return null;
     throw e;
@@ -60,8 +59,12 @@ export default async function CollectionPage({ params, searchParams }: Collectio
             </div>
             <div className='flex flex-col gap-y-3 sm:grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
               <div className='flex flex-col gap-y-2 sm:gap-y-0'>
-                <div className='flex items-center gap-2'>
-                  <UserChip user={collection.uploader} href={`/users/${collection.uploader.id}/uploads/collections`} />
+                <div className='flex items-center'>
+                  <UserChip
+                    user={collection.uploader}
+                    href={`/users/${collection.uploader.id}/uploads/collections`}
+                    className='mr-2'
+                  />
                   <Popover>
                     <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
                       Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
@@ -70,6 +73,16 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                       {moment.unix(collection.dateUploaded._seconds).format('LLL')}
                     </PopoverContent>
                   </Popover>
+                  {collection.dateLastModified._seconds - collection.dateUploaded._seconds > 3600 && (
+                    <Popover>
+                      <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
+                        , last updated {moment.unix(collection.dateLastModified._seconds).fromNow()}
+                      </PopoverTrigger>
+                      <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+                        {moment.unix(collection.dateLastModified._seconds).format('LLL')}
+                      </PopoverContent>
+                    </Popover>
+                  )}
                 </div>
                 <div className='w-full sm:pt-4 sm:pr-4'>
                   <EditableCollectionDescription collection={collection} />

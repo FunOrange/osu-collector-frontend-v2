@@ -5,9 +5,21 @@ import { Collection } from '@/shared/entities/v1/Collection';
 import useSticky from '@/hooks/useSticky';
 import { Slider } from '@/components/shadcn/slider';
 import { useState } from 'react';
-import { assoc, equals } from 'ramda';
+import { assoc, equals, range } from 'ramda';
 import { Search } from 'react-bootstrap-icons';
 import useDebouncedFunction from '@/hooks/useDebounce';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationButton,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationProps,
+  PaginationLast,
+  PaginationFirst,
+} from '@/components/shadcn/pagination';
+import { screenHeightMinusNavbar } from '@/components/Navbar';
 
 export interface BeatmapFilters {
   search: string;
@@ -19,8 +31,16 @@ export interface CollectionBeatmapFiltersProps {
   collection: Collection;
   filters: BeatmapFilters;
   setFilters: React.Dispatch<React.SetStateAction<BeatmapFilters>>;
+  pagination: PaginationProps;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
-export default function CollectionBeatmapFilters({ collection, filters, setFilters }: CollectionBeatmapFiltersProps) {
+export default function CollectionBeatmapFilters({
+  collection,
+  filters,
+  setFilters,
+  pagination,
+  setPage,
+}: CollectionBeatmapFiltersProps) {
   const { isSticky, ref } = useSticky();
 
   const className = {
@@ -42,6 +62,13 @@ export default function CollectionBeatmapFilters({ collection, filters, setFilte
   const setSearch = useDebouncedFunction((search: string) => {
     setFilters(assoc('search', search));
   }, 100);
+
+  // #region pagination
+  const totalPages = Math.ceil(pagination.total / pagination.perPage);
+  const pagesToRender = range(pagination.page - 1, pagination.page + 2);
+  const showPreviousPage = pagination.page > 1;
+  const showNextPage = pagination.page < totalPages;
+  // #endregion pagination
 
   return (
     <>
@@ -113,11 +140,66 @@ export default function CollectionBeatmapFilters({ collection, filters, setFilte
         </div>
       </div>
 
-      <div ref={ref} className={cn('sm:sticky top-14 z-20')}>
+      <div ref={ref} className='sticky top-14 z-20'>
+        {totalPages >= 2 && (
+          <div className={`absolute w-full ${screenHeightMinusNavbar} flex flex-col justify-end pointer-events-none`}>
+            <div className='w-full px-4 pb-2 pt-4 flex flex-col gap-y-2 bg-slate-950/80 backdrop-blur-sm rounded-lg pointer-events-auto'>
+              <Slider
+                variant='white'
+                min={1}
+                max={totalPages}
+                step={1}
+                value={[pagination.page]}
+                onValueChange={(v) => setPage(v[0])}
+              />
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem
+                    className={cn(
+                      'hidden sm:block transition-[opacity]',
+                      !showPreviousPage && 'opacity-20 pointer-events-none',
+                    )}
+                  >
+                    <PaginationFirst onClick={() => setPage(1)} />
+                  </PaginationItem>
+
+                  <PaginationItem
+                    className={cn('transition-[opacity]', !showPreviousPage && 'opacity-20 pointer-events-none')}
+                  >
+                    <PaginationPrevious onClick={() => setPage((prev) => prev - 1)} />
+                  </PaginationItem>
+
+                  {pagesToRender.map((page) => (
+                    <PaginationItem key={page} className={cn((page < 1 || page > totalPages) && 'invisible')}>
+                      <PaginationButton isActive={page !== pagination.page} onClick={() => setPage(page)} size='icon'>
+                        {page}
+                      </PaginationButton>
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem
+                    className={cn('transition-[opacity]', !showNextPage && 'opacity-20 pointer-events-none')}
+                  >
+                    <PaginationNext onClick={() => setPage((prev) => prev + 1)} />
+                  </PaginationItem>
+
+                  <PaginationItem
+                    className={cn(
+                      'hidden sm:block transition-[opacity]',
+                      !showNextPage && 'opacity-20 pointer-events-none',
+                    )}
+                  >
+                    <PaginationLast onClick={() => setPage(totalPages)} />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          </div>
+        )}
         <div
           className={cn(
-            'grid py-2 sm:p-2 sm:grid-cols-2 gap-y-2 gap-x-2 lg:gap-x-4 sm:bg-slate-950/30',
-            isSticky && 'backdrop-blur-sm rounded-b-lg',
+            'p-2 gap-y-2 gap-x-2 lg:gap-x-4 sm:bg-slate-950/30',
+            isSticky && 'bg-slate-950/30 backdrop-blur-sm rounded-b-lg',
           )}
         >
           <div className='relative col-span-full'>

@@ -9,9 +9,11 @@ import { endpoints } from '@/shared/endpoints';
 import { groupBeatmapsets } from '@/shared/entities/v1/Beatmap';
 import axios from 'axios';
 import BeatmapsetListing from '@/components/pages/collections/[collectionId]/BeatmapsetListing';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Beatmap, BeatmapWithBeatmapset } from '@/shared/entities/v2/Beatmap';
 import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
+import { PaginationProps } from '@/components/shadcn/pagination';
+import { navbarHeightPx } from '@/components/Navbar';
 
 const perPage = 50;
 
@@ -20,6 +22,13 @@ export interface CollectionBeatmapsSectionProps {
 }
 
 export default function CollectionBeatmapsSection({ collection }: CollectionBeatmapsSectionProps) {
+  const filtersRef = useRef<HTMLDivElement>(null);
+  const listingRef = useRef<HTMLDivElement>(null);
+  const scrollTo = (divRef: React.RefObject<HTMLDivElement>, offset = 0) => {
+    const body = document.getElementById('app-root');
+    body.scrollTo({ top: divRef.current?.offsetTop - navbarHeightPx + offset, behavior: 'smooth' });
+  };
+
   const v2 = useSWR(endpoints.collections.id(collection.id).beatmapsv2.GET, (url) =>
     axios.get(url, { params: { perPage } }).then((res) => res.data),
   );
@@ -32,6 +41,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   });
   const [frontendFilteringEnabled, setFrontendFilteringEnabled] = useState(false);
   const setFilters = (...args: Parameters<typeof _setFilters>): ReturnType<typeof _setFilters> => {
+    scrollTo(filtersRef);
     setFrontendFilteringEnabled(true);
     setPage(1);
     return _setFilters(...args);
@@ -40,38 +50,47 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
     axios.get<{ beatmaps: Beatmap[]; beatmapsets: Beatmapset[] }>(url, { params: { perPage } }).then((res) => res.data),
   );
   const [page, setPage] = useState(1);
+  const frontendResults = frontendFilterSortPaginate(joinBeatmapsets(v3.data?.beatmaps, v3.data?.beatmapsets), {
+    filters,
+    sort: undefined,
+    page,
+    perPage,
+  });
   // #endregion frontend filtering and sorting
 
   // consolidate displaying backend vs frontend data
   const isLoading = v2.isLoading || v3.isLoading;
-  const hasMore = frontendFilteringEnabled
-    ? filterSortPaginate(joinBeatmapsets(v3.data?.beatmaps, v3.data?.beatmapsets), {
-        filters,
-        sort: undefined,
-        page: 1,
-        perPage: v3.data?.beatmaps?.length,
-      })?.length >
-      perPage * (page + 1)
-    : v2.data?.hasMore;
-  const beatmaps =
-    filterSortPaginate(joinBeatmapsets(v3.data?.beatmaps, v3.data?.beatmapsets), {
-      filters,
-      sort: undefined,
-      page,
-      perPage,
-    }) ?? v2.data?.beatmaps;
+  const hasMore = frontendFilteringEnabled ? frontendResults.pagination.total > perPage * (page + 1) : v2.data?.hasMore;
+  const beatmaps = frontendResults.beatmaps ?? v2.data?.beatmaps;
   const listing = groupBeatmapsets(beatmaps);
 
   return (
-    <div className='flex flex-col'>
-      <CollectionBeatmapFilters collection={collection} filters={filters} setFilters={setFilters} />
+    <div ref={filtersRef} className='flex flex-col mb-16'>
+      <CollectionBeatmapFilters
+        collection={collection}
+        filters={filters}
+        setFilters={setFilters}
+        pagination={{
+          total: frontendResults.pagination.total ?? null,
+          page: frontendResults.pagination.page,
+          perPage: frontendResults.pagination.perPage,
+        }}
+        setPage={(value) => {
+          scrollTo(listingRef, -56);
+          setPage(value);
+        }}
+      />
 
-      <div className='min-h-screen sm:p-4 sm:pt-0 rounded-b border-slate-900 shadow-inner bg-[#162032]'>
+      <div
+        ref={listingRef}
+        className='min-h-screen sm:p-4 sm:pt-0 rounded-b border-slate-900 shadow-inner bg-[#162032]'
+      >
         <BeatmapsetListing listing={listing ?? []} isLoading={isLoading} />
-        {!isLoading && hasMore && (
+        {!frontendFilteringEnabled && hasMore && (
           <div
             className='mt-4 cursor-pointer w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'
             onClick={() => {
+              scrollTo(listingRef, -56);
               setFrontendFilteringEnabled(true);
               setPage(page + 1);
             }}
@@ -87,10 +106,10 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
 const joinBeatmapsets = (beatmaps: Beatmap[], beatmapsets: Beatmapset[]): BeatmapWithBeatmapset[] =>
   beatmaps?.map((beatmap) => ({ ...beatmap, beatmapset: beatmapsets?.find((b) => b.id === beatmap.beatmapset_id) }));
 
-function filterSortPaginate(
+function frontendFilterSortPaginate(
   beatmaps: BeatmapWithBeatmapset[],
   { filters, sort, page, perPage }: { filters: BeatmapFilters; sort: string; page: number; perPage: number },
-) {
+): { beatmaps: BeatmapWithBeatmapset[]; pagination: PaginationProps } {
   const _filters = clone(filters);
   if (filters.stars[0] === 0) _filters.stars[0] = -Infinity;
   if (filters.stars[1] === 11) _filters.stars[1] = Infinity;
@@ -111,7 +130,8 @@ function filterSortPaginate(
   };
   const start = (page - 1) * perPage;
   const end = start + perPage;
-  return beatmaps
+
+  const results = beatmaps
     ?.filter(withinStarRange)
     ?.filter(withinBpmRange)
     ?.filter(matchesSearch)
@@ -119,6 +139,14 @@ function filterSortPaginate(
       if (a.beatmapset?.title !== b.beatmapset?.title) return a.beatmapset?.title.localeCompare(b.beatmapset?.title);
       if (a.beatmapset?.id !== b.beatmapset?.id) return b.beatmapset?.id - a.beatmapset?.id;
       return b.difficulty_rating - a.difficulty_rating;
-    })
-    ?.slice(start, end);
+    });
+
+  return {
+    beatmaps: results?.slice(start, end),
+    pagination: {
+      total: results?.length ?? 0,
+      page,
+      perPage,
+    },
+  };
 }

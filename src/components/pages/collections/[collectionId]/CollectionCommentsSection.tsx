@@ -16,7 +16,7 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
   const hasComments = Boolean(collection?.comments?.length > 0);
 
   const noCommentsClassName =
-    'flex items-center justify-center gap-2 py-3 text-center rounded cursor-pointer text-slate-500 border-slate-900 shadow-inner bg-[#162032] hover:bg-slate-700';
+    'flex items-center justify-center gap-2 p-3 text-center rounded cursor-pointer text-slate-500 border-slate-900 shadow-inner bg-[#162032] hover:bg-slate-700';
 
   return match({ hasComments, isLoggedIn })
     .with({ hasComments: true }, () => (
