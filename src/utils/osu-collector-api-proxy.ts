@@ -1,16 +1,16 @@
 import posthog from 'posthog-js';
 
-export async function proxy(method: string, req: Request) {
+export async function proxy(req: Request) {
   const upstreamUrl = new URL(req.url);
   upstreamUrl.hostname = withoutProtocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   upstreamUrl.protocol = protocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   upstreamUrl.port = port(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
   try {
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0];
+    // const ip = req.headers.get('x-forwarded-for')?.split(',')[0];
     const method = req.method;
-    const pathname = upstreamUrl.pathname;
-    posthog.capture('api_call', { ip, method, pathname });
-    console.log(`api_call ${method} ${pathname} ${ip}`);
+    // const pathname = upstreamUrl.pathname;
+    // posthog.capture('api_call', { ip, method, pathname });
+    // console.log(`api_call ${method} ${pathname} ${ip}`);
     const upstreamResponse = await fetch(upstreamUrl.toString(), {
       method,
       headers: removeHeader(req.headers, 'accept-encoding'),
@@ -31,17 +31,17 @@ export async function proxy(method: string, req: Request) {
   }
 }
 
-const protocol = (str: string) => str.match(/^https?:\/\//)?.[0] ?? 'https://';
-const port = (str: string) => str.match(/:(\d+)$/)?.[1] ?? '';
-const withoutProtocol = (str: string) => str.replace(/^https?:\/\//, '');
+export const protocol = (baseUrl: string) => baseUrl.match(/^https?:\/\//)?.[0] ?? 'https://';
+export const port = (baseUrl: string) => baseUrl.match(/:(\d+)$/)?.[1] ?? '';
+export const withoutProtocol = (baseUrl: string) => baseUrl.replace(/^https?:\/\//, '');
 
-function removeHeader(headers: Headers, headerToRemove: string) {
+export function removeHeader(headers: Headers, headerToRemove: string) {
   const newHeaders = new Headers(headers);
   newHeaders.delete(headerToRemove);
   return newHeaders;
 }
 
-function overwriteSetCookieDomain(headers: Headers, domain: string) {
+export function overwriteSetCookieDomain(headers: Headers, domain: string) {
   if (headers.get('set-cookie')) {
     const modifiedCookies = headers
       .get('set-cookie')
