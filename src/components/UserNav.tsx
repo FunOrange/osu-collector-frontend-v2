@@ -141,7 +141,7 @@ export function UserNav() {
             Morph
           </DropdownMenuItem>
         )}
-        {user.id === 2051389 && morphed && <DropdownMenuItem onClick={unmorph}>Unmorph</DropdownMenuItem>}
+        {morphed && <DropdownMenuItem onClick={unmorph}>Unmorph</DropdownMenuItem>}
         <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
