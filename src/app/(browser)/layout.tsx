@@ -5,7 +5,7 @@ import { Toaster } from '@/components/shadcn/toaster';
 import { PostHogProvider } from '@/providers/posthog';
 import TwitchSubEndOfSupportModal from '@/components/TwitchSubEndOfSupportModal';
 import Navbar, { navbarSpacer } from '@/components/Navbar';
-import './globals.css';
+import '../globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
