@@ -1,40 +1,28 @@
 'use client';
 import '../globals.css';
 import ElectronNavbar, { navbarSpacer } from '@/app/electron/ElectronNavbar';
+import { Button } from '@/components/shadcn/button';
 import { Toaster } from '@/components/shadcn/toaster';
-import { IpcRenderer } from '@/entities/ipc';
 import { cn } from '@/utils/shadcn-utils';
-import { Inter } from 'next/font/google';
-import { useRouter } from 'next/navigation';
-import {} from 'next/router';
-import { useEffect, useRef } from 'react';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export default function Page() {
-  const router = useRouter();
-  const ipcRendererRef = useRef<IpcRenderer | null>(null);
-  const ipcRenderer = ipcRendererRef.current;
+  const pathJoin = async () => {
+    const path = await window.ipc.pathJoin('/Users/funor/Downloads', 'test.txt');
+    console.log(path);
+  };
 
-  useEffect(() => {
-    if (typeof window.require !== 'function') {
-      router.push('/not-found');
-      return;
-    }
-    ipcRendererRef.current = window.require('electron').ipcRenderer;
-    if (!ipcRendererRef.current) {
-      router.push('/not-found');
-      return;
-    }
-
-    // TODO: handle event listeners
-  }, []);
+  const openDevTools = async () => {
+    await window.ipc.openDevTools();
+  };
 
   return (
     <html lang='en'>
-      <body id='app-root' className={cn('h-screen overflow-y-auto', inter.className)}>
+      <body>
         <ElectronNavbar />
-        <div className={cn(navbarSpacer, 'flex flex-col')}>Hello</div>
+        <div className={cn(navbarSpacer, 'flex flex-col')}>
+          <Button onClick={pathJoin}>pathJoin</Button>
+          <Button onClick={openDevTools}>openDevTools</Button>
+        </div>
         <Toaster />
       </body>
     </html>
