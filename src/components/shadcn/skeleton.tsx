@@ -1,7 +1,7 @@
 import { cn } from '@/utils/shadcn-utils';
 
 export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
-  loading: boolean;
+  loading?: boolean;
 }
 function Skeleton({ className, loading, children, ...props }: SkeletonProps) {
   return (
