@@ -1,5 +1,9 @@
 'use client';
-import { mappoolTemplate, parseMappool, getMappoolTextFromTournament } from '@/app/tournaments/upload/mappoolTemplate';
+import {
+  mappoolTemplate,
+  parseMappool,
+  getMappoolTextFromTournament,
+} from '@/app/(browser)/tournaments/upload/mappoolTemplate';
 import { Button } from '@/components/shadcn/button';
 import { Input } from '@/components/shadcn/input';
 import { Label } from '@/components/shadcn/label';
