@@ -13,7 +13,12 @@ export default function ElectronSettings() {
           <Button variant='ghost' size='sm' className='text-slate-400 hover:bg-slate-500/30'>
             Open log folder
           </Button>
-          <Button variant='ghost' size='sm' className='text-slate-400 hover:bg-slate-500/30'>
+          <Button
+            variant='ghost'
+            size='sm'
+            className='text-slate-400 hover:bg-slate-500/30'
+            onClick={() => window.ipc.openDevTools()}
+          >
             Open DevTools
           </Button>
           <Button variant='ghost' size='sm' className='text-slate-400 hover:bg-slate-500/30'>

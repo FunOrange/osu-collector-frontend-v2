@@ -6,6 +6,7 @@ export enum Status {
   Queued = 'queued',
   Fetching = 'fetching', // get osz-dl
   Fetched = 'fetched',
+  StartingDownload = 'starting-download',
   Downloading = 'downloading',
   Completed = 'completed',
   Failed = 'failed',
@@ -18,6 +19,14 @@ export enum Mirror {
 
 interface DownloadBase<S extends Status> {
   status: S;
+  collection: {
+    id: number;
+    name: string;
+    uploader: {
+      id: number;
+      username: string;
+    };
+  };
   beatmapsetId: number;
   downloadDirectory: string;
   cancelled: boolean;
@@ -35,6 +44,11 @@ interface DownloadExtended {
     remoteUrl: string;
     filename: string | undefined;
   };
+  [Status.StartingDownload]: {
+    mirror: Mirror;
+    remoteUrl: string;
+    filename: string | undefined;
+  };
   [Status.Downloading]: DownloadExtended[Status.Fetched] & {
     outputPath: string;
     size: {
@@ -45,7 +59,7 @@ interface DownloadExtended {
   };
   [Status.Completed]: Omit<DownloadExtended[Status.Downloading], 'abort'>;
   [Status.Failed]: Omit<DownloadExtended[Status.Downloading], 'abort'> & {
-    error: Error;
+    error: string;
   };
 }
 
@@ -57,6 +71,7 @@ export interface DownloadType {
   [Status.Queued]: DownloadBase<Status.Queued>;
   [Status.Fetching]: DownloadBase<Status.Fetching>;
   [Status.Fetched]: DownloadBase<Status.Fetched> & DownloadExtended[Status.Fetched];
+  [Status.StartingDownload]: DownloadBase<Status.StartingDownload> & DownloadExtended[Status.StartingDownload];
   [Status.Downloading]: DownloadBase<Status.Downloading> & DownloadExtended[Status.Downloading];
   [Status.Completed]: DownloadBase<Status.Completed> & DownloadExtended[Status.Completed];
   [Status.Failed]: DownloadBase<Status.Failed> & DownloadExtended[Status.Failed];
@@ -70,6 +85,7 @@ export type Download =
   | DownloadType[Status.Queued]
   | DownloadType[Status.Fetching]
   | DownloadType[Status.Fetched]
+  | DownloadType[Status.StartingDownload]
   | DownloadType[Status.Downloading]
   | DownloadType[Status.Completed]
   | DownloadType[Status.Failed];

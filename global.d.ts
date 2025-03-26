@@ -1,9 +1,9 @@
-import { Ipc } from './src/app/electron/ipc-types';
-
-export {};
+import { IpcHandlers } from './src/app/electron/ipc-types';
 
 declare global {
   interface Window {
-    ipc: Ipc;
+    ipc: IpcHandlers;
   }
 }
+
+export {};

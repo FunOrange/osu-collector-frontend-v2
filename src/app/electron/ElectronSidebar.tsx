@@ -57,7 +57,7 @@ export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps)
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.page}>
-                  <SidebarMenuButton isActive={page === item.page} onClick={() => setPage(item.page)}>
+                  <SidebarMenuButton isActive={page === item.page} onClick={() => setPage(item.page)} className='py-6'>
                     {item.icon}
                     <span>{item.title}</span>
                   </SidebarMenuButton>
