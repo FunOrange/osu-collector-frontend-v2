@@ -187,7 +187,7 @@ export async function getMetadata() {
   return api.get(`/metadata`, {}).then((res) => res.data);
 }
 
-export async function submitOtp(otp, y) {
+export async function submitOtp(otp: number, y: string) {
   return await api.post(`/authentication/otp?otp=${otp}&y=${y}`);
 }
 
@@ -328,3 +328,4 @@ export async function changeUser({ username, userId }) {
   }
   return res.data;
 }
+

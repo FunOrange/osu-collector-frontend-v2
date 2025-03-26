@@ -1,10 +1,6 @@
+import ElectronLogin from '@/app/electron/ElectronLogin';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/shadcn/avatar';
 import { Button } from '@/components/shadcn/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/shadcn/dropdown-menu';
 import {
   Sidebar,
   SidebarContent,
@@ -16,8 +12,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/shadcn/sidebar';
-import { User2 } from 'lucide-react';
-import { ChevronUp, Gear, House, QuestionCircle } from 'react-bootstrap-icons';
+import { Skeleton } from '@/components/shadcn/skeleton';
+import { useUser } from '@/services/osu-collector-api-hooks';
+import { cn } from '@/utils/shadcn-utils';
+import { Gear, House, QuestionCircle } from 'react-bootstrap-icons';
 
 export enum ElectronAppPage {
   Home = 'home',
@@ -48,6 +46,8 @@ export interface ElectronSidebarProps {
   setPage: React.Dispatch<React.SetStateAction<ElectronAppPage>>;
 }
 export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps) {
+  const { user, isLoading } = useUser();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -70,32 +70,25 @@ export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps)
       <SidebarFooter className='flex flex-col items-center'>
         <SidebarMenu>
           <SidebarMenuItem>
-            {true ? (
-              <Button variant='important' size='lg' className='w-full gap-2 justify-start'>
-                <User2 className='w-5 h-5' />
-                Login
-              </Button>
-            ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton>
-                    <User2 /> Username
-                    <ChevronUp className='ml-auto' />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side='top' className='w-[--radix-popper-anchor-width]'>
-                  <DropdownMenuItem>
-                    <span>Account</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <span>Billing</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <span>Sign out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+            <Skeleton loading={isLoading} className='w-full h-10'>
+              {user ? (
+                <Button
+                  variant='ghost'
+                  className={cn(
+                    'w-full px-2 py-2 gap-2 justify-start cursor-default',
+                    user.paidFeaturesAccess && 'bg-pink-500/90 hover:bg-pink-500 text-white',
+                  )}
+                >
+                  <Avatar className='w-6 h-6'>
+                    <AvatarImage src={user.osuweb.avatar_url} alt='avatar' />
+                    <AvatarFallback>{user.osuweb.username[0].toLocaleUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <div className='line-clamp-1'>{user.osuweb.username}</div>
+                </Button>
+              ) : (
+                <ElectronLogin />
+              )}
+            </Skeleton>
           </SidebarMenuItem>
         </SidebarMenu>
         <div className='text-xs text-slate-500 dark:text-slate-400'>version: 2.0.0</div>

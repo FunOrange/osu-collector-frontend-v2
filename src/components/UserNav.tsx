@@ -36,6 +36,7 @@ export function UserNav() {
     const callback = encodeURIComponent(process.env.NEXT_PUBLIC_OSU_OAUTH_CALLBACK);
     const oauthUrl = `https://osu.ppy.sh/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${callback}`;
     const otpLogin = () => {
+      // @ts-expect-error
       const x = md5(Date.now());
       localStorage.setItem('authX', x);
       const oauthUrlWithOtp = `${oauthUrl}&state=${x}`;
@@ -73,7 +74,7 @@ export function UserNav() {
           }`}
         >
           <Avatar className='w-8 h-8'>
-            <AvatarImage src={user.osuweb.avatar_url} alt='@shadcn' />
+            <AvatarImage src={user.osuweb.avatar_url} alt='avatar' />
             <AvatarFallback>{user.osuweb.username[0].toLocaleUpperCase()}</AvatarFallback>
           </Avatar>
           <div className='line-clamp-1'>{user.osuweb.username}</div>
