@@ -1,5 +1,12 @@
+import ElectronDownloads from '@/app/electron/ElectronDownloads';
+import ElectronLogs from '@/app/electron/ElectronLogs';
 import { SidebarTrigger } from '@/components/shadcn/sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs';
+
+// TODO: When adding a new collection, review the following steps:
+// 1. Close osu! if it's open
+// 2. Merge collection into collection.db
+// 3. Queue downloads for all selected beatmaps
 
 export default function ElectronHome() {
   return (
@@ -12,8 +19,12 @@ export default function ElectronHome() {
             <TabsTrigger value='logs'>Logs</TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value='downloads'>Downloads</TabsContent>
-        <TabsContent value='logs'>Logs</TabsContent>
+        <TabsContent value='downloads'>
+          <ElectronDownloads />
+        </TabsContent>
+        <TabsContent value='logs'>
+          <ElectronLogs />
+        </TabsContent>
       </Tabs>
     </main>
   );
