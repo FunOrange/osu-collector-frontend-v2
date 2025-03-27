@@ -1,3 +1,4 @@
+import { Preferences } from "@/app/electron/preferences";
 import { Download } from "./downloader-types";
 
 export enum Channel {
@@ -11,6 +12,10 @@ export enum Channel {
   RetryDownload = "retryDownload",
   RevealPath = 'revealPath',
   OpenLinkInBrowser = 'openLinkInBrowser',
+  GetPreferences = 'getPreferences',
+  SetPreferences = 'setPreferences',
+  OpenFolderDialog = 'openFolderDialog',
+  PathExists = 'pathExists',
 }
 
 type IpcHandlersBase = {
@@ -26,4 +31,8 @@ export interface IpcHandlers extends IpcHandlersBase {
   [Channel.RetryDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.RevealPath]: (path: string) => Promise<void>;
   [Channel.OpenLinkInBrowser]: (url: string) => Promise<void>;
+  [Channel.GetPreferences]: () => Promise<Preferences>;
+  [Channel.SetPreferences]: (preferences: Preferences) => Promise<void>;
+  [Channel.OpenFolderDialog]: () => Promise<string | undefined>;
+  [Channel.PathExists]: (path: string) => Promise<boolean>;
 }

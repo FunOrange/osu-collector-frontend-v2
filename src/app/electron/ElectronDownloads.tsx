@@ -17,9 +17,10 @@ import { useEffect, useState } from 'react';
 import { Progress } from '@/components/shadcn/progress';
 import { match } from 'ts-pattern';
 import { cn } from '@/utils/shadcn-utils';
-import { Code, StopCircle, X } from 'react-bootstrap-icons';
+import { StopCircle, X } from 'react-bootstrap-icons';
 import { RefreshCw } from 'lucide-react';
 import { equals } from 'ramda';
+import useSubmit from '@/hooks/useSubmit';
 
 const linkStyle = 'text-xs text-slate-400 line-clamp-1 break-all cursor-pointer hover:text-blue-500 transition-colors';
 
@@ -29,17 +30,26 @@ const columns: ColumnDef<Download>[] = [
     header: 'Name',
     meta: { className: 'w-full min-w-[200px]' },
     cell: ({ row }) => {
-      const document = row.original as DownloadType[Status.Downloading];
-      const filename = document.filename as string;
-      const outputPath = document.outputPath as string;
+      const [name, outputPath] = match(row.original)
+        .with({ status: Status.AlreadyInstalled }, (d) => [null, d.installLocation])
+        .with({ status: Status.AlreadyDownloaded }, (d) => [null, d.downloadPath])
+        .with({ status: Status.Fetched }, (d) => [d.filename, null])
+        .with({ status: Status.StartingDownload }, (d) => [d.filename, null])
+        .with({ status: Status.Downloading }, (d) => [d.filename, d.outputPath])
+        .with({ status: Status.Completed }, (d) => [d.filename, d.outputPath])
+        .with({ status: Status.Failed }, (d) => [d.filename, d.outputPath])
+        .otherwise(() => []);
+      const download = row.original as DownloadType[Status.Downloading];
       return (
-        <div>
-          <div className='line-clamp-1 break-all'>{filename}</div>
-          {outputPath && (
-            <div className={linkStyle} onClick={() => window.ipc.revealPath(document.downloadDirectory)}>
-              {outputPath}
-            </div>
-          )}
+        <div className='flex'>
+          <div>
+            <div className='line-clamp-1 break-all'>{name}</div>
+            {outputPath && (
+              <div className={linkStyle} onClick={() => window.ipc.revealPath(download.downloadDirectory)}>
+                {outputPath}
+              </div>
+            )}
+          </div>
         </div>
       );
     },
@@ -89,7 +99,7 @@ const columns: ColumnDef<Download>[] = [
   {
     accessorKey: 'size.downloaded',
     header: 'Progress',
-    meta: { className: 'min-w-[200px]' },
+    meta: { className: 'min-w-[calc(20vw)]' },
     cell: ({ row }) => {
       const download = row.original as DownloadType[Status.Downloading];
       const remoteUrl = download.remoteUrl;
@@ -145,9 +155,9 @@ const columns: ColumnDef<Download>[] = [
       );
       const visibleButtons = match(row.original.status)
         .with(Status.Pending, () => [cancelButton])
-        .with(Status.CheckingLocalFiles, () => [cancelButton])
-        .with(Status.AlreadyDownloaded, () => [cancelButton])
-        .with(Status.AlreadyInstalled, () => [cancelButton])
+        .with(Status.CheckingLocalFiles, () => [])
+        .with(Status.AlreadyDownloaded, () => [])
+        .with(Status.AlreadyInstalled, () => [])
         .with(Status.Queued, () => [cancelButton])
         .with(Status.Fetching, () => [cancelButton])
         .with(Status.Fetched, () => [cancelButton])
@@ -180,6 +190,8 @@ export default function ElectronDownloads() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const [add] = useSubmit(() => window.ipc.addDownload(Number(beatmapsetId)));
+
   return (
     <div className='flex flex-col items-start gap-4 p-4'>
       <div className='flex items-center gap-2'>
@@ -189,11 +201,7 @@ export default function ElectronDownloads() {
           className='w-full'
           placeholder='Enter beatmapset ID'
         />
-        <Button
-          variant='outline'
-          className='text-slate-400 hover:bg-slate-500/30'
-          onClick={() => window.ipc.addDownload(Number(beatmapsetId))}
-        >
+        <Button variant='outline' onClick={add}>
           Add
         </Button>
         <Button
