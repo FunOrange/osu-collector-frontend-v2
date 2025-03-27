@@ -19,12 +19,19 @@ export default function ElectronHome() {
             <TabsTrigger value='logs'>Logs</TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value='downloads'>
-          <ElectronDownloads />
-        </TabsContent>
-        <TabsContent value='logs'>
-          <ElectronLogs />
-        </TabsContent>
+        {(() => {
+          if (typeof window === 'undefined') return null;
+          return (
+            <>
+              <TabsContent value='downloads'>
+                <ElectronDownloads />
+              </TabsContent>
+              <TabsContent value='logs'>
+                <ElectronLogs />
+              </TabsContent>
+            </>
+          );
+        })()}
       </Tabs>
     </main>
   );
