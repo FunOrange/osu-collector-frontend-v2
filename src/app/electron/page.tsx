@@ -8,7 +8,6 @@ import { useState } from 'react';
 import useClientValue from '@/hooks/useClientValue';
 import { match } from 'ts-pattern';
 import ElectronHome from '@/app/electron/ElectronHome';
-import ElectronHelp from '@/app/electron/ElectronHelp';
 import ElectronSettings from '@/app/electron/ElectronSettings';
 
 export default function ElectronApp() {
@@ -22,7 +21,6 @@ export default function ElectronApp() {
           <ElectronSidebar page={page} setPage={setPage} />
           {match(page)
             .with(ElectronAppPage.Home, () => <ElectronHome />)
-            .with(ElectronAppPage.Help, () => <ElectronHelp />)
             .with(ElectronAppPage.Settings, () => <ElectronSettings />)
             .exhaustive()}
         </SidebarProvider>

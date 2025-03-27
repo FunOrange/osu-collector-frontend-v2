@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/shadcn/dialog';
-import { ColumnDef, flexRender, getCoreRowModel, RowData, useReactTable } from '@tanstack/react-table';
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table';
 import { useEffect, useState } from 'react';
 import { Progress } from '@/components/shadcn/progress';
@@ -28,7 +28,7 @@ const columns: ColumnDef<Download>[] = [
   {
     accessorKey: 'filename',
     header: 'Name',
-    meta: { className: 'w-full min-w-[200px]' },
+    meta: { className: 'w-full min-w-[148px]' },
     cell: ({ row }) => {
       const [name, outputPath] = match(row.original)
         .with({ status: Status.AlreadyInstalled }, (d) => [null, d.installLocation])

@@ -15,11 +15,10 @@ import {
 import { Skeleton } from '@/components/shadcn/skeleton';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { cn } from '@/utils/shadcn-utils';
-import { Gear, House, QuestionCircle } from 'react-bootstrap-icons';
+import { Gear, House } from 'react-bootstrap-icons';
 
 export enum ElectronAppPage {
   Home = 'home',
-  Help = 'help',
   Settings = 'settings',
 }
 
@@ -28,11 +27,6 @@ const items = [
     title: 'Home',
     page: ElectronAppPage.Home,
     icon: <House className='w-4 h-4' />,
-  },
-  {
-    title: 'How to',
-    page: ElectronAppPage.Help,
-    icon: <QuestionCircle className='w-4 h-4' />,
   },
   {
     title: 'Settings',
