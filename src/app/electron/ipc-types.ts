@@ -16,6 +16,7 @@ export enum Channel {
   SetPreferences = 'setPreferences',
   OpenFolderDialog = 'openFolderDialog',
   PathExists = 'pathExists',
+  GetLogs = 'getLogs',
 }
 
 type IpcHandlersBase = {
@@ -35,4 +36,5 @@ export interface IpcHandlers extends IpcHandlersBase {
   [Channel.SetPreferences]: (preferences: Preferences) => Promise<void>;
   [Channel.OpenFolderDialog]: () => Promise<string | undefined>;
   [Channel.PathExists]: (path: string) => Promise<boolean>;
+  [Channel.GetLogs]: () => Promise<{ path: string; lines: string[] }>;
 }
