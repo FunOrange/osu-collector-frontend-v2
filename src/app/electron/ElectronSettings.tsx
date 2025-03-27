@@ -14,9 +14,9 @@ import { match } from 'ts-pattern';
 
 export default function ElectronSettings() {
   const { toast } = useToast();
-  const pathSeparator = useClientValue(window.ipc.pathSep, '\\');
+  const pathSeparator = useClientValue(window.ipc?.pathSep, '\\');
   const trimPath = (path: string | undefined) => path?.replace(new RegExp(pathSeparator + '+$'), '');
-  const { data: preferences, mutate } = useSWR('preferences.json', window.ipc.getPreferences);
+  const { data: preferences, mutate } = useSWR('preferences.json', window.ipc?.getPreferences);
   const [touchedFields, setTouchedFields] = useState<Preferences>({});
   const fields: Preferences = {
     ...preferences,

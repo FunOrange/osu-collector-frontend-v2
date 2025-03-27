@@ -23,6 +23,7 @@ import { equals } from 'ramda';
 import useSubmit from '@/hooks/useSubmit';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import useSWR from 'swr';
+import useClientValue from '@/hooks/useClientValue';
 
 const linkStyle = 'text-xs text-slate-400 line-clamp-1 break-all cursor-pointer hover:text-blue-500 transition-colors';
 
@@ -174,13 +175,14 @@ const columns: ColumnDef<Download>[] = [
 ];
 
 export default function ElectronDownloads() {
+  const isElectron = useClientValue(() => Boolean(window.ipc), false);
   const [beatmapsetId, setBeatmapsetId] = useState<string>('155749');
 
   const {
     data: downloads,
     isLoading,
     mutate,
-  } = useSWR('downloads', window.ipc.getDownloads, {
+  } = useSWR(window.ipc && 'downloads', window.ipc?.getDownloads, {
     refreshInterval: 160,
     dedupingInterval: 0,
   });
@@ -253,7 +255,7 @@ export default function ElectronDownloads() {
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isElectron && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (

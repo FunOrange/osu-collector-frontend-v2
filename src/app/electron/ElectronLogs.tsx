@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
 
 export default function ElectronLogs() {
-  const { data, isLoading } = useSWR('logs', window.ipc.getLogs, { refreshInterval: 500 });
+  const { data, isLoading } = useSWR(window.ipc && 'logs', window.ipc?.getLogs, { refreshInterval: 500 });
   const path = data?.path;
   const lines = data?.lines;
 
