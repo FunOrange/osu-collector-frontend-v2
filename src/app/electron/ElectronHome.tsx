@@ -2,6 +2,7 @@ import ElectronDownloads from '@/app/electron/ElectronDownloads';
 import ElectronLogs from '@/app/electron/ElectronLogs';
 import { SidebarTrigger } from '@/components/shadcn/sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs';
+import useClientValue from '@/hooks/useClientValue';
 
 // TODO: When adding a new collection, review the following steps:
 // 1. Close osu! if it's open
@@ -9,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/ta
 // 3. Queue downloads for all selected beatmaps
 
 export default function ElectronHome() {
+  const isClient = useClientValue(() => true, false);
   return (
     <main className='w-full relative'>
       <SidebarTrigger className='absolute top-[6px] left-2' />
@@ -20,7 +22,7 @@ export default function ElectronHome() {
           </TabsList>
         </div>
         {(() => {
-          if (typeof window === 'undefined') return null;
+          if (!isClient) return null;
           return (
             <>
               <TabsContent value='downloads'>

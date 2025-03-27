@@ -15,28 +15,30 @@ export default function ElectronApp() {
   const [page, setPage] = useState(ElectronAppPage.Home);
 
   return (
-    <>
-      <SidebarProvider>
-        <ElectronSidebar page={page} setPage={setPage} />
-        {match(page)
-          .with(ElectronAppPage.Home, () => <ElectronHome />)
-          .with(ElectronAppPage.Settings, () => <ElectronSettings />)
-          .exhaustive()}
-      </SidebarProvider>
+    <html lang='en'>
+      <body>
+        <SidebarProvider>
+          <ElectronSidebar page={page} setPage={setPage} />
+          {match(page)
+            .with(ElectronAppPage.Home, () => <ElectronHome />)
+            .with(ElectronAppPage.Settings, () => <ElectronSettings />)
+            .exhaustive()}
+        </SidebarProvider>
 
-      <>
-        <Toaster />
+        <>
+          <Toaster />
 
-        <Dialog open={notElectron} onOpenChange={(open) => setNotElectron(open)}>
-          <DialogContent>
-            <DialogTitle>You are probably not supposed to be here</DialogTitle>
-            <DialogDescription>
-              This page is meant to be viewed from the osu!Collector app, not from within a web browser. You may poke
-              around, but nothing will work.
-            </DialogDescription>
-          </DialogContent>
-        </Dialog>
-      </>
-    </>
+          <Dialog open={notElectron} onOpenChange={(open) => setNotElectron(open)}>
+            <DialogContent>
+              <DialogTitle>You are probably not supposed to be here</DialogTitle>
+              <DialogDescription>
+                This page is meant to be viewed from the osu!Collector app, not from within a web browser. You may poke
+                around, but nothing will work.
+              </DialogDescription>
+            </DialogContent>
+          </Dialog>
+        </>
+      </body>
+    </html>
   );
 }
