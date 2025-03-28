@@ -16,7 +16,7 @@ import { useUser } from '@/services/osu-collector-api-hooks';
 import { s } from '@/utils/string-utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 enum ImportMethod {
   SingleCollection = 'SingleCollection',
@@ -29,9 +29,13 @@ export interface AddTournamentToOsuButtonProps {
   tournament: Tournament;
 }
 export default function AddTournamentToOsuButton({ tournament }: AddTournamentToOsuButtonProps) {
-  const router = useRouter();
   const { user } = useUser();
   const [desktopClientOpened, setDesktopClientOpened] = useState(false);
+  useEffect(() => {
+    if (desktopClientOpened) {
+      setTimeout(() => setDesktopClientOpened(false), 5000);
+    }
+  }, [desktopClientOpened]);
   const [previewOpened, setPreviewOpened] = useState(false);
 
   const [importMethod, setImportMethod] = useState(ImportMethod.SingleCollection);
@@ -56,7 +60,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
         </DialogTrigger>
         <DialogContent onPointerDownOutside={() => setDesktopClientOpened(false)}>
           <DialogHeader>
-            <DialogTitle>Collection launched in osu!Collector desktop client!</DialogTitle>
+            <DialogTitle>Tournament launched in osu!Collector desktop client!</DialogTitle>
           </DialogHeader>
           <DialogDescription>
             Don&apos;t have the desktop client installed?{' '}

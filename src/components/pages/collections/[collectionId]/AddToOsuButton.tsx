@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/shadcn/dropdown-menu';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ThreeDotsVertical } from 'react-bootstrap-icons';
 import * as api from '@/services/osu-collector-api';
 import { useRouter } from 'next/navigation';
@@ -28,6 +28,11 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
   const router = useRouter();
   const { user } = useUser();
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => setOpen(false), 5000);
+    }
+  }, [open]);
 
   return user ? (
     <div className='flex w-full items-stretch'>

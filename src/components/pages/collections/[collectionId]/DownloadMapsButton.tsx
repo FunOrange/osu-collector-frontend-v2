@@ -11,7 +11,7 @@ import {
 import { Collection } from '@/shared/entities/v1/Collection';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface DownloadMapsButtonProps {
   collection: Collection;
@@ -20,6 +20,13 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
   const { user } = useUser();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [clientOpened, setClientOpened] = useState(false);
+
+  useEffect(() => {
+    if (clientOpened) {
+      setTimeout(() => setClientOpened(false), 5000);
+    }
+  }, [clientOpened]);
+
   if (user?.paidFeaturesAccess) {
     return (
       <Dialog open={clientOpened} onOpenChange={(open) => setClientOpened(open)}>

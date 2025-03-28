@@ -8,21 +8,29 @@ import { useToast } from '@/components/shadcn/use-toast';
 import useClientValue from '@/hooks/useClientValue';
 import useSubmit from '@/hooks/useSubmit';
 import { cn } from '@/utils/shadcn-utils';
+import { swrKeyIncludes } from '@/utils/swr-utils';
 import { assoc, omit } from 'ramda';
 import { useState } from 'react';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { match } from 'ts-pattern';
 
 export default function ElectronSettings() {
   const { toast } = useToast();
   const pathSeparator = useClientValue(window.ipc?.pathSep, '\\');
   const trimPath = (path: string | undefined) => path?.replace(new RegExp(pathSeparator + '+$'), '');
-  const { data: preferences, mutate } = useSWR(Channel.GetPreferences, window.ipc?.getPreferences);
+  const { data: preferences, mutate: mutatePreferences } = useSWR(Channel.GetPreferences, window.ipc?.getPreferences);
   const [touchedFields, setTouchedFields] = useState<Preferences>({});
   const fields: Preferences = {
     ...preferences,
     ...touchedFields,
   };
+
+  const mutateRelatedChannels = () => {
+    mutate(swrKeyIncludes(Channel.GetPreferences));
+    mutate(swrKeyIncludes(Channel.GetDownloadDirectory));
+    mutate(swrKeyIncludes(Channel.PathExists));
+  };
+
   const computedFields = (key: 'osuSongsDirectory' | 'downloadDirectoryOverride') =>
     match(key)
       .with(
@@ -33,9 +41,11 @@ export default function ElectronSettings() {
       .exhaustive();
   const [setPreference] = useSubmit(async (key: keyof Preferences, value: any) => {
     if (value === undefined) return;
-    await mutate(window.ipc.setPreferences({ ...preferences, [key]: value }).then(window.ipc.getPreferences), {
-      optimisticData: assoc(key, value),
-    });
+    await mutatePreferences(
+      window.ipc.setPreferences({ ...preferences, [key]: value }).then(window.ipc.getPreferences),
+      { optimisticData: assoc(key, value) },
+    );
+    mutateRelatedChannels();
     setTouchedFields(omit([key]));
     toast({ title: 'Preference updated!', description: 'Changes have been saved.' });
   });
@@ -43,9 +53,11 @@ export default function ElectronSettings() {
   const selectFolder = async (key: 'osuInstallDirectory' | 'osuSongsDirectory' | 'downloadDirectoryOverride') => {
     const path = await window.ipc.openFolderDialog();
     if (path) {
-      await mutate(window.ipc.setPreferences({ ...preferences, [key]: path }).then(window.ipc.getPreferences), {
-        optimisticData: assoc(key, path),
-      });
+      await mutatePreferences(
+        window.ipc.setPreferences({ ...preferences, [key]: path }).then(window.ipc.getPreferences),
+        { optimisticData: assoc(key, path) },
+      );
+      mutateRelatedChannels();
       setTouchedFields(omit([key]));
       toast({ title: 'Preference updated!', description: 'Changes have been saved.' });
     }

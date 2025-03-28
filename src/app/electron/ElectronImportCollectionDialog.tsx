@@ -20,8 +20,6 @@ import { assoc } from 'ramda';
 import { ArrowClockwise, ArrowLeft, ArrowRight, ArrowUp, ThreeDots } from 'react-bootstrap-icons';
 import { File } from 'lucide-react';
 import { formatBytes } from '@/utils/string-utils';
-import axios from 'axios';
-import { endpoints } from '@/shared/endpoints';
 
 export function ElectronImportCollectionDialog() {
   const { data: uri, mutate } = useSWR(window.ipc && Channel.GetURI, window.ipc?.getURI);
@@ -42,17 +40,38 @@ export function ElectronImportCollectionDialog() {
   }, []);
 
   const { collection, isLoading } = useCollection(collectionId);
-  const { data: beatmapsv3 } = useSWR(endpoints.collections.id(collectionId).beatmapsv3.GET, (url: string) =>
-    axios.get(url).then((res) => res.data),
+  const { data: preferences } = useSWR(Channel.GetPreferences, () => window.ipc?.getPreferences());
+  const { data: downloadDirectory } = useSWR(Channel.GetDownloadDirectory, () => window.ipc?.getDownloadDirectory());
+  const { data: downloadDirectoryExists } = useSWR([Channel.PathExists, downloadDirectory], ([_, path]) =>
+    window.ipc?.pathExists(path),
   );
-  const beatmapsetCount = beatmapsv3?.beatmapsets?.length as number;
-  const preferences = useClientValue(window.ipc?.getPreferences, undefined);
-  const downloadDirectory = useClientValue(window.ipc?.getDownloadDirectory, undefined);
+  const pathSep = useClientValue(window.ipc?.pathSep, '\\');
+  const collectionDbPath = preferences?.osuInstallDirectory + pathSep + 'collection.db';
+  const { data: collectionDbExists } = useSWR([Channel.PathExists, collectionDbPath], ([_, path]) =>
+    window.ipc?.pathExists(path),
+  );
+  const mergeDisabledReason = (() => {
+    if (!preferences?.osuInstallDirectory) return 'Please set your osu! install folder in settings!';
+    if (!collectionDbExists)
+      return `File not found: ${collectionDbPath}\nPlease fix your osu! install folder in settings!`;
+    return false;
+  })();
+
+  const downloadsDisabledReason = (() => {
+    if (!downloadDirectory) return 'Please set your download directory in settings!';
+    if (!downloadDirectoryExists)
+      return `This folder does not exist: ${downloadDirectory} - please fix this in settings!`;
+    return false;
+  })();
 
   const [options, setOptions] = useState({
     modifyCollectionDb: true,
     queueDownloads: true,
   });
+  const skipping = {
+    modifyCollectionDb: !options.modifyCollectionDb || Boolean(mergeDisabledReason),
+    queueDownloads: !options.queueDownloads || Boolean(downloadsDisabledReason),
+  };
 
   const oszFile = (
     <div className='flex flex-col gap-1 items-center'>
@@ -67,7 +86,7 @@ export function ElectronImportCollectionDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
-        <Skeleton loading={isLoading} className='min-h-[34px]'>
+        <Skeleton loading={isLoading} className='min-h-[38px]'>
           <DialogTitle className='mb-1'>{collection?.name}</DialogTitle>
           <div className='text-xs text-slate-400'>
             {collection?.beatmapCount} beatmaps, uploaded by {collection?.uploader.username}
@@ -77,8 +96,8 @@ export function ElectronImportCollectionDialog() {
           <label
             htmlFor='modify-collection-db-checkbox'
             className={cn(
-              'flex flex-col gap-1 self-start p-2 rounded',
-              'transition-colors cursor-pointer hover:bg-slate-700',
+              'w-full flex flex-col items-start gap-1 self-start p-2 rounded',
+              'transition-colors cursor-pointer hover:bg-slate-700/50',
             )}
           >
             <div className='flex items-center gap-2'>
@@ -87,15 +106,19 @@ export function ElectronImportCollectionDialog() {
                 checked={options.modifyCollectionDb}
                 onCheckedChange={(checked) => setOptions(assoc('modifyCollectionDb', checked))}
               />
-              <span className={cn('text-sm', options.modifyCollectionDb && 'text-white')}>
-                modify collection.db file {!options.modifyCollectionDb && `(skipping)`}
+              <span className={cn('text-sm', !skipping.modifyCollectionDb && 'text-white')}>
+                modify collection.db file {skipping.modifyCollectionDb && `(skipping)`}
               </span>
             </div>
-            <span className='text-xs text-slate-400 mb-2'>This will allow the collection to appear in osu!</span>
-
+            <div>
+              <div className='text-xs'>This will allow the collection to appear in osu! stable</div>
+              <div className='text-xs text-red-400 whitespace-pre-line'>
+                {options.modifyCollectionDb && mergeDisabledReason}
+              </div>
+            </div>
             <WindowsFileExplorer
               addressBar={preferences?.osuInstallDirectory}
-              className={fadeOutStyle(!options.modifyCollectionDb)}
+              className={cn('mt-2', fadeOutStyle(Boolean(skipping.modifyCollectionDb)))}
             >
               <div className='flex flex-col gap-1 items-center text-white'>
                 <File className='w-8 h-8' />
@@ -108,8 +131,8 @@ export function ElectronImportCollectionDialog() {
           <label
             htmlFor='queue-downloads-checkbox'
             className={cn(
-              'flex flex-col gap-1 self-start p-2 rounded',
-              'transition-colors cursor-pointer hover:bg-slate-700',
+              'w-full flex flex-col items-start gap-1 self-start p-2 rounded',
+              'transition-colors cursor-pointer hover:bg-slate-700/50',
             )}
           >
             <div className='flex items-center gap-2'>
@@ -118,12 +141,20 @@ export function ElectronImportCollectionDialog() {
                 checked={options.queueDownloads}
                 onCheckedChange={(checked) => setOptions(assoc('queueDownloads', checked))}
               />
-              <span className={cn('text-sm', options.queueDownloads && 'text-white')}>
-                download all maps {!options.queueDownloads && `(skipping)`}
+              <span className={cn('text-sm', !skipping.queueDownloads && 'text-white')}>
+                download required maps {skipping.queueDownloads && `(skipping)`}
               </span>
             </div>
-            <div className='text-xs'>{beatmapsetCount} files will be downloaded here</div>
-            <WindowsFileExplorer addressBar={downloadDirectory} className={fadeOutStyle(!options.queueDownloads)}>
+            <div>
+              <div className='text-xs'>osu!Collector will skip the maps you already have</div>
+              <div className='text-xs text-red-400 whitespace-pre-line'>
+                {options.queueDownloads && downloadsDisabledReason}
+              </div>
+            </div>
+            <WindowsFileExplorer
+              addressBar={downloadDirectory}
+              className={cn('mt-2', fadeOutStyle(Boolean(skipping.queueDownloads)))}
+            >
               <div className='text-white'>
                 <div className='flex items-center gap-3'>
                   {oszFile}
@@ -140,7 +171,9 @@ export function ElectronImportCollectionDialog() {
           <DialogClose asChild>
             <Button>Cancel</Button>
           </DialogClose>
-          <Button variant='important'>Continue</Button>
+          <Button variant='important' disabled={skipping.modifyCollectionDb && skipping.queueDownloads}>
+            Continue
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
