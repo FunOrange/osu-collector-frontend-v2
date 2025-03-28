@@ -8,8 +8,11 @@ import { useEffect, useState } from 'react';
 import { match } from 'ts-pattern';
 import ElectronHome from '@/app/electron/ElectronHome';
 import ElectronSettings from '@/app/electron/ElectronSettings';
+import useClientValue from '@/hooks/useClientValue';
+import { ElectronImportCollectionDialog } from '@/app/electron/ElectronImportCollectionDialog';
 
 export default function ElectronApp() {
+  const isClient = useClientValue(() => true, false);
   const [notElectron, setNotElectron] = useState(false);
   useEffect(() => setNotElectron(!window.ipc), []);
   const [page, setPage] = useState(ElectronAppPage.Home);
@@ -37,6 +40,16 @@ export default function ElectronApp() {
               </DialogDescription>
             </DialogContent>
           </Dialog>
+
+          {(() => {
+            if (!isClient) return null;
+            return (
+              <>
+                <ElectronImportCollectionDialog />
+                {/* <ImportTournamentDialog /> */}
+              </>
+            );
+          })()}
         </>
       </body>
     </html>

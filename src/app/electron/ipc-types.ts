@@ -17,12 +17,13 @@ export enum Channel {
   OpenFolderDialog = 'openFolderDialog',
   PathExists = 'pathExists',
   GetLogs = 'getLogs',
+  GetURI = 'getURI',
+  ClearURI = 'clearURI',
+  OnURI = 'onURI',
+  GetDownloadDirectory = 'getDownloadDirectory',
 }
 
-type IpcHandlersBase = {
-  [C in Channel]: (...args: any[]) => any;
-};
-export interface IpcHandlers extends IpcHandlersBase {
+export interface IpcHandlers {
   [Channel.PathJoin]: (...args: string[]) => Promise<string>;
   [Channel.PathSep]: () => Promise<string>;
   [Channel.GetDownloads]: () => Promise<Download[]>;
@@ -37,4 +38,8 @@ export interface IpcHandlers extends IpcHandlersBase {
   [Channel.OpenFolderDialog]: () => Promise<string | undefined>;
   [Channel.PathExists]: (path: string) => Promise<boolean>;
   [Channel.GetLogs]: () => Promise<{ path: string; lines: string[] }>;
+  [Channel.GetURI]: () => Promise<string | undefined>;
+  [Channel.ClearURI]: () => Promise<void>;
+  [Channel.OnURI]: (callback: ((_: true) => any)) => void;
+  [Channel.GetDownloadDirectory]: () => Promise<string | undefined>;
 }

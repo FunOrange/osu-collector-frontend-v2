@@ -4,6 +4,7 @@ import useSubmit from '@/hooks/useSubmit';
 import axios from 'axios';
 import useSWRImmutable from 'swr/immutable';
 import { match } from 'ts-pattern';
+import { Collection } from '@/shared/entities/v1';
 
 export const api = axios.create({
   baseURL: '/api',
@@ -51,9 +52,9 @@ export function useCancellableSWRImmutable(key, query = undefined) {
 }
 
 export function useCollection(id) {
-  const { data, error, mutate } = useSWRImmutable(`/collections/${id}`, (url) => api.get(url).then((res) => res.data));
+  const { data, error, mutate, ...rest } = useSWRImmutable(`/collections/${id}`, (url) => api.get(url).then((res) => res.data));
   if (error) console.error(error);
-  return { collection: data, collectionError: error, mutateCollection: mutate };
+  return { collection: data as Collection, collectionError: error, mutateCollection: mutate, ...rest };
 }
 
 export function useUserUploads(userId) {
