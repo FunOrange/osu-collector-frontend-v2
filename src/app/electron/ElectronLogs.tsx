@@ -1,9 +1,10 @@
+import { Channel } from '@/app/electron/ipc-types';
 import { Button } from '@/components/shadcn/button';
 import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
 
 export default function ElectronLogs() {
-  const { data, isLoading } = useSWR(window.ipc && 'logs', window.ipc?.getLogs, { refreshInterval: 500 });
+  const { data, isLoading } = useSWR(window.ipc && Channel.GetLogs, window.ipc?.getLogs, { refreshInterval: 500 });
   const path = data?.path;
   const lines = data?.lines;
 

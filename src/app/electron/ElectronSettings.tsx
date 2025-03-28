@@ -1,3 +1,4 @@
+import { Channel } from '@/app/electron/ipc-types';
 import { Preferences } from '@/app/electron/preferences';
 import { Button } from '@/components/shadcn/button';
 import { Checkbox } from '@/components/shadcn/checkbox';
@@ -16,7 +17,7 @@ export default function ElectronSettings() {
   const { toast } = useToast();
   const pathSeparator = useClientValue(window.ipc?.pathSep, '\\');
   const trimPath = (path: string | undefined) => path?.replace(new RegExp(pathSeparator + '+$'), '');
-  const { data: preferences, mutate } = useSWR('preferences.json', window.ipc?.getPreferences);
+  const { data: preferences, mutate } = useSWR(Channel.GetPreferences, window.ipc?.getPreferences);
   const [touchedFields, setTouchedFields] = useState<Preferences>({});
   const fields: Preferences = {
     ...preferences,

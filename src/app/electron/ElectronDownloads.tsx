@@ -13,17 +13,134 @@ import {
 } from '@/components/shadcn/dialog';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Progress } from '@/components/shadcn/progress';
 import { match } from 'ts-pattern';
 import { cn } from '@/utils/shadcn-utils';
 import { StopCircle, X } from 'react-bootstrap-icons';
 import { RefreshCw } from 'lucide-react';
-import { equals } from 'ramda';
 import useSubmit from '@/hooks/useSubmit';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import useSWR from 'swr';
 import useClientValue from '@/hooks/useClientValue';
+import { Channel } from '@/app/electron/ipc-types';
+
+export default function ElectronDownloads() {
+  const isElectron = useClientValue(() => Boolean(window.ipc), false);
+  const [beatmapsetId, setBeatmapsetId] = useState<string>('155749');
+
+  const {
+    data: downloads,
+    isLoading,
+    mutate,
+  } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
+    refreshInterval: 160,
+    dedupingInterval: 0,
+  });
+
+  const table = useReactTable({
+    data: downloads ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  // @ts-expect-error
+  const [add] = useSubmit(() => mutate(window.ipc.addDownload(Number(beatmapsetId)).then(window.ipc.getDownloads)));
+
+  return (
+    <div className='flex flex-col items-start gap-4 p-4'>
+      <div className='flex items-center gap-2'>
+        <Input
+          value={beatmapsetId}
+          onChange={(e) => setBeatmapsetId(e.target.value)}
+          className='w-full'
+          placeholder='Enter beatmapset ID'
+        />
+        <Button variant='outline' onClick={add}>
+          Add
+        </Button>
+        <Button
+          variant='outline'
+          className='text-slate-400 hover:bg-slate-500/30'
+          onClick={() => {
+            mutate(
+              Promise.all([
+                window.ipc.addDownload(930062),
+                window.ipc.addDownload(1205078),
+                window.ipc.addDownload(1936120),
+                window.ipc.addDownload(1846855),
+                window.ipc.addDownload(1019398),
+                window.ipc.addDownload(1160766),
+                window.ipc.addDownload(506155),
+                window.ipc.addDownload(732994),
+                window.ipc.addDownload(526167),
+                window.ipc.addDownload(868543),
+              ]).then(window.ipc.getDownloads),
+            );
+          }}
+        >
+          Add Collection
+        </Button>
+        <Button
+          variant='outline'
+          className='text-slate-400 hover:bg-slate-500/30'
+          onClick={() => mutate(window.ipc.clearDownloads().then(window.ipc.getDownloads))}
+        >
+          Clear All
+        </Button>
+      </div>
+
+      <Skeleton loading={isLoading} className='w-full'>
+        <Table className='px-4 py-2 rounded-lg overflow-hidden bg-slate-900/30 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_4px_10px_rgba(0,0,0,0.1)]'>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className='hover:bg-transparent'>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {isElectron && table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className={(cell.column.columnDef.meta as any)?.className}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className='h-24 text-center text-slate-400'>
+                  <div>
+                    To get started, browse for collections on{' '}
+                    <span
+                      className={cn(linkStyle, 'inline text-slate-300 text-sm')}
+                      onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com')}
+                    >
+                      osucollector.com
+                    </span>
+                  </div>
+                  <div>
+                    Click the <b className='text-slate-300'>Add to osu!</b> button on a collection or tournament you
+                    want to add.
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </Skeleton>
+    </div>
+  );
+}
 
 const linkStyle = 'text-xs text-slate-400 line-clamp-1 break-all cursor-pointer hover:text-blue-500 transition-colors';
 
@@ -173,120 +290,3 @@ const columns: ColumnDef<Download>[] = [
     },
   },
 ];
-
-export default function ElectronDownloads() {
-  const isElectron = useClientValue(() => Boolean(window.ipc), false);
-  const [beatmapsetId, setBeatmapsetId] = useState<string>('155749');
-
-  const {
-    data: downloads,
-    isLoading,
-    mutate,
-  } = useSWR(window.ipc && 'downloads', window.ipc?.getDownloads, {
-    refreshInterval: 160,
-    dedupingInterval: 0,
-  });
-
-  const table = useReactTable({
-    data: downloads ?? [],
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
-  // @ts-expect-error
-  const [add] = useSubmit(() => mutate(window.ipc.addDownload(Number(beatmapsetId)).then(window.ipc.getDownloads)));
-
-  return (
-    <div className='flex flex-col items-start gap-4 p-4'>
-      <div className='flex items-center gap-2'>
-        <Input
-          value={beatmapsetId}
-          onChange={(e) => setBeatmapsetId(e.target.value)}
-          className='w-full'
-          placeholder='Enter beatmapset ID'
-        />
-        <Button variant='outline' onClick={add}>
-          Add
-        </Button>
-        <Button
-          variant='outline'
-          className='text-slate-400 hover:bg-slate-500/30'
-          onClick={() => {
-            mutate(
-              Promise.all([
-                window.ipc.addDownload(930062),
-                window.ipc.addDownload(1205078),
-                window.ipc.addDownload(1936120),
-                window.ipc.addDownload(1846855),
-                window.ipc.addDownload(1019398),
-                window.ipc.addDownload(1160766),
-                window.ipc.addDownload(506155),
-                window.ipc.addDownload(732994),
-                window.ipc.addDownload(526167),
-                window.ipc.addDownload(868543),
-              ]).then(window.ipc.getDownloads),
-            );
-          }}
-        >
-          Add Collection
-        </Button>
-        <Button
-          variant='outline'
-          className='text-slate-400 hover:bg-slate-500/30'
-          onClick={() => mutate(window.ipc.clearDownloads().then(window.ipc.getDownloads))}
-        >
-          Clear All
-        </Button>
-      </div>
-
-      <Skeleton loading={isLoading} className='w-full'>
-        <Table className='px-4 py-2 rounded-lg overflow-hidden bg-slate-900/30 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_4px_10px_rgba(0,0,0,0.1)]'>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className='hover:bg-transparent'>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {isElectron && table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className={(cell.column.columnDef.meta as any)?.className}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className='h-24 text-center text-slate-400'>
-                  <div>
-                    To get started, browse for collections on{' '}
-                    <span
-                      className={cn(linkStyle, 'inline text-slate-300 text-sm')}
-                      onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com')}
-                    >
-                      osucollector.com
-                    </span>
-                  </div>
-                  <div>
-                    Click the <b className='text-slate-300'>Add to osu!</b> button on a collection or tournament you
-                    want to add.
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </Skeleton>
-    </div>
-  );
-}
