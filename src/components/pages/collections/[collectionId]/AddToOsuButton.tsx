@@ -20,11 +20,15 @@ import { useEffect, useState } from 'react';
 import { ThreeDotsVertical } from 'react-bootstrap-icons';
 import * as api from '@/services/osu-collector-api';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/shadcn/button';
+import { useToast } from '@/components/shadcn/use-toast';
+import { ToastAction } from '@/components/shadcn/toast';
 
 export interface AddToOsuButtonProps {
   collection: Collection;
 }
 export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
+  const { toast } = useToast();
   const router = useRouter();
   const { user } = useUser();
   const [open, setOpen] = useState(false);
@@ -34,30 +38,34 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
     }
   }, [open]);
 
-  return user ? (
+  return (
     <div className='flex w-full items-stretch'>
-      <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-        <DialogTrigger
-          className='w-full p-3 text-center transition rounded sm:rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+      {user?.paidFeaturesAccess ? (
+        <Button
+          className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => {
             window.open(`osucollector://collections/${collection.id}`, '_blank', 'noreferrer');
+            toast({
+              title: 'App launched!',
+              description: "Don't have it installed?",
+              action: (
+                <ToastAction altText='osu!Collector app download link'>
+                  <Link href='/client#download-links'>Download App</Link>
+                </ToastAction>
+              ),
+            });
           }}
         >
           Add to osu!
-        </DialogTrigger>
-        <DialogContent onPointerDownOutside={() => setOpen(false)}>
-          <DialogHeader>
-            <DialogTitle>Collection launched in osu!Collector desktop client!</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            Don&apos;t have the desktop client installed?{' '}
-            <Link href='/client#download-links' className='font-semibold hover:underline text-gray-50'>
-              Click here
-            </Link>{' '}
-            to download it.
-          </DialogDescription>
-        </DialogContent>
-      </Dialog>
+        </Button>
+      ) : (
+        <Link
+          href='/client'
+          className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+        >
+          Add to osu!
+        </Link>
+      )}
 
       <DropdownMenu>
         <DropdownMenuTrigger
@@ -71,10 +79,6 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
         <DropdownMenuContent className='w-56' align='end' forceMount sideOffset={0}>
           <DropdownMenuItem
             onClick={async () => {
-              if (!user?.paidFeaturesAccess) {
-                return router.push('/client');
-              }
-
               const data = await api.downloadCollectionDb(collection.id).catch((err) => alert(err.message));
               if (!data) return;
 
@@ -92,12 +96,5 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
-  ) : (
-    <Link
-      href='/client'
-      className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
-    >
-      Add to osu!
-    </Link>
   );
 }

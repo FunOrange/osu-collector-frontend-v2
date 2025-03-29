@@ -15,8 +15,9 @@ import { Tournament } from '@/shared/entities/v1/Tournament';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { s } from '@/utils/string-utils';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ToastAction } from '@/components/shadcn/toast';
+import { useToast } from '@/components/shadcn/use-toast';
 
 enum ImportMethod {
   SingleCollection = 'SingleCollection',
@@ -29,6 +30,7 @@ export interface AddTournamentToOsuButtonProps {
   tournament: Tournament;
 }
 export default function AddTournamentToOsuButton({ tournament }: AddTournamentToOsuButtonProps) {
+  const { toast } = useToast();
   const { user } = useUser();
   const [desktopClientOpened, setDesktopClientOpened] = useState(false);
   useEffect(() => {
@@ -47,31 +49,24 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
     setOverlayVisible(false);
   };
 
-  return user ? (
-    <div className='flex w-full'>
-      <Dialog open={desktopClientOpened} onOpenChange={(open) => setDesktopClientOpened(open)}>
-        <DialogTrigger
-          className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
-          onClick={() => {
-            window.open(`osucollector://tournaments/${tournament.id}`, '_blank', 'noreferrer');
-          }}
-        >
-          Add mappool to osu!
-        </DialogTrigger>
-        <DialogContent onPointerDownOutside={() => setDesktopClientOpened(false)}>
-          <DialogHeader>
-            <DialogTitle>Tournament launched in osu!Collector desktop client!</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            Don&apos;t have the desktop client installed?{' '}
-            <Link href='/client#download-links' className='font-semibold hover:underline text-gray-50'>
-              Click here
-            </Link>{' '}
-            to download it.
-          </DialogDescription>
-        </DialogContent>
-      </Dialog>
-    </div>
+  return user?.paidFeaturesAccess ? (
+    <Button
+      className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+      onClick={() => {
+        window.open(`osucollector://tournaments/${tournament.id}`, '_blank', 'noreferrer');
+        toast({
+          title: 'App launched!',
+          description: "Don't have it installed?",
+          action: (
+            <ToastAction altText='osu!Collector app download link'>
+              <Link href='/client#download-links'>Download App</Link>
+            </ToastAction>
+          ),
+        });
+      }}
+    >
+      Add mappool to osu!
+    </Button>
   ) : (
     <div className='flex w-full'>
       <Dialog
