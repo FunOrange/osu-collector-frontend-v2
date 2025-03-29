@@ -185,7 +185,7 @@ export function ElectronImportCollectionDialog() {
                 <div className='flex flex-col gap-1 items-center text-white'>
                   <File className='w-8 h-8' />
                   <div className='text-xs'>collection.db</div>
-                  <div className='text-xs text-green-400'>+{formatBytes(32 * collection?.beatmapCount ?? 0, 1)}</div>
+                  <div className='text-xs text-green-400'>+{formatBytes(32 * (collection?.beatmapCount ?? 0), 1)}</div>
                 </div>
               </WindowsFileExplorer>
             </label>

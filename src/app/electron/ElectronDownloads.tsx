@@ -44,9 +44,6 @@ export default function ElectronDownloads() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // @ts-expect-error
-  const [add] = useSubmit(() => mutate(window.ipc.addDownload(Number(beatmapsetId)).then(window.ipc.getDownloads)));
-
   return (
     <div className='flex flex-col items-start gap-4 p-4'>
       <div className='flex items-center gap-2'>
@@ -56,37 +53,12 @@ export default function ElectronDownloads() {
           className='w-full'
           placeholder='Enter beatmapset ID'
         />
-        <Button variant='outline' onClick={add}>
-          Add
-        </Button>
-        <Button
-          variant='outline'
-          className='text-slate-400 hover:bg-slate-500/30'
-          onClick={() => {
-            mutate(
-              Promise.all([
-                window.ipc.addDownload(930062),
-                window.ipc.addDownload(1205078),
-                window.ipc.addDownload(1936120),
-                window.ipc.addDownload(1846855),
-                window.ipc.addDownload(1019398),
-                window.ipc.addDownload(1160766),
-                window.ipc.addDownload(506155),
-                window.ipc.addDownload(732994),
-                window.ipc.addDownload(526167),
-                window.ipc.addDownload(868543),
-              ]).then(window.ipc.getDownloads),
-            );
-          }}
-        >
-          Add Collection
-        </Button>
         <Button
           variant='outline'
           className='text-slate-400 hover:bg-slate-500/30'
           onClick={() => mutate(window.ipc.clearDownloads().then(window.ipc.getDownloads))}
         >
-          Clear All
+          Clear
         </Button>
       </div>
 

@@ -28,6 +28,7 @@ export enum Channel {
 export interface IpcHandlers {
   [Channel.PathJoin]: (...args: string[]) => Promise<string>;
   [Channel.PathSep]: () => Promise<string>;
+  [Channel.OpenDevTools]: () => Promise<void>;
   [Channel.GetDownloads]: () => Promise<Download[]>;
   [Channel.AddDownloads]: (options: {
     beatmapsetIds: number[];
