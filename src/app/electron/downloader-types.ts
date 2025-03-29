@@ -17,16 +17,24 @@ export enum Mirror {
   OsuCollector = 'osu-collector',
 }
 
-interface DownloadBase<S extends Status> {
-  status: S;
-  collection: {
+export interface DownloadMetadata {
+  collection?: {
     id: number;
     name: string;
     uploader: {
       id: number;
       username: string;
     };
-  };
+  },
+  tournament?: {
+    id: number;
+    name: string;
+  },
+}
+
+interface DownloadBase<S extends Status> {
+  status: S;
+  metadata: DownloadMetadata;
   beatmapsetId: number;
   downloadDirectory: string;
   cancelled: boolean;
@@ -58,7 +66,7 @@ interface DownloadExtended {
     abort: () => void;
   };
   [Status.Completed]: Omit<DownloadExtended[Status.Downloading], 'abort'>;
-  [Status.Failed]: Omit<DownloadExtended[Status.Downloading], 'abort'> & {
+  [Status.Failed]: Omit<Partial<DownloadExtended[Status.Downloading]>, 'abort'> & {
     error: string;
   };
 }

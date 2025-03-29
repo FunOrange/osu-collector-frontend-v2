@@ -1,12 +1,12 @@
 import { Preferences } from "@/app/electron/preferences";
-import { Download } from "./downloader-types";
+import { Download, DownloadMetadata } from "./downloader-types";
 
 export enum Channel {
   PathJoin = "pathJoin",
   PathSep = "pathSep",
   OpenDevTools = "openDevTools",
   GetDownloads = "getDownloads",
-  AddDownload = "addDownload",
+  AddDownloads = "addDownloads",
   CancelDownload = "cancelDownload",
   ClearDownloads = "clearDownloads",
   RetryDownload = "retryDownload",
@@ -21,13 +21,18 @@ export enum Channel {
   ClearURI = 'clearURI',
   OnURI = 'onURI',
   GetDownloadDirectory = 'getDownloadDirectory',
+  CheckIfOsuIsRunning = 'checkIfOsuIsRunning',
+  MergeCollectionDb = 'mergeCollectionDb',
 }
 
 export interface IpcHandlers {
   [Channel.PathJoin]: (...args: string[]) => Promise<string>;
   [Channel.PathSep]: () => Promise<string>;
   [Channel.GetDownloads]: () => Promise<Download[]>;
-  [Channel.AddDownload]: (beatmapsetId: number) => Promise<void>;
+  [Channel.AddDownloads]: (options: {
+    beatmapsetIds: number[];
+    metadata: DownloadMetadata;
+  }) => Promise<void>;
   [Channel.CancelDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.ClearDownloads]: () => Promise<void>;
   [Channel.RetryDownload]: (beatmapsetId: number) => Promise<void>;
@@ -42,4 +47,6 @@ export interface IpcHandlers {
   [Channel.ClearURI]: () => Promise<void>;
   [Channel.OnURI]: (callback: ((_: true) => any)) => void;
   [Channel.GetDownloadDirectory]: () => Promise<string | undefined>;
+  [Channel.CheckIfOsuIsRunning]: () => Promise<boolean>;
+  [Channel.MergeCollectionDb]: (collectionId: number) => Promise<void>;
 }

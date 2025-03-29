@@ -13,9 +13,9 @@ import { parseCollectionDb } from '@/services/osu-collection-db';
 import { getUrlSlug } from '@/utils/string-utils';
 import { useToast } from '@/components/shadcn/use-toast';
 import { cn } from '@/utils/shadcn-utils';
-import { propertyEquals } from '@/utils/object-utils';
 import { Checkbox } from '@/components/shadcn/checkbox';
 import { DialogProps } from '@radix-ui/react-alert-dialog';
+import { isMatching } from 'ts-pattern';
 
 export interface UploadCollectionModalProps {
   children?: ReactNode;
@@ -113,7 +113,7 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
                               last updated{' '}
                               {moment
                                 .unix(
-                                  remoteCollections?.find(propertyEquals('name', collection.name))?.dateLastModified
+                                  remoteCollections?.find(isMatching({ name: collection.name }))?.dateLastModified
                                     ._seconds,
                                 )
                                 .fromNow()}
