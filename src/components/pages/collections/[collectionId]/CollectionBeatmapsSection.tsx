@@ -24,9 +24,10 @@ export interface CollectionBeatmapsSectionProps {
 export default function CollectionBeatmapsSection({ collection }: CollectionBeatmapsSectionProps) {
   const filtersRef = useRef<HTMLDivElement>(null);
   const listingRef = useRef<HTMLDivElement>(null);
+
   const scrollTo = (divRef: React.RefObject<HTMLDivElement>, offset = 0) => {
-    const body = document.getElementById('app-root');
-    body.scrollTo({ top: divRef.current?.offsetTop - navbarHeightPx + offset, behavior: 'smooth' });
+    const root = document.getElementById('app-root');
+    root.scrollTo({ top: divRef.current?.offsetTop - navbarHeightPx + offset, behavior: 'smooth' });
   };
 
   const v2 = useSWR(endpoints.collections.id(collection.id).beatmapsv2.GET, (url) =>

@@ -140,7 +140,7 @@ export default function CollectionBeatmapFilters({
         </div>
       </div>
 
-      <div ref={ref} className='sticky top-14 z-20'>
+      <div ref={ref} className='sticky top-0 z-20'>
         {totalPages >= 2 && (
           <div className={`absolute w-full ${screenHeightMinusNavbar} flex flex-col justify-end pointer-events-none`}>
             <div className='w-full px-4 pb-2 pt-4 flex flex-col gap-y-2 bg-slate-950/80 backdrop-blur-sm rounded-lg pointer-events-auto'>
