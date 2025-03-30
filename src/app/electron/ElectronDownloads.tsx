@@ -16,36 +16,49 @@ import { Progress } from '@/components/shadcn/progress';
 import { match } from 'ts-pattern';
 import { cn } from '@/utils/shadcn-utils';
 import { StopCircle, X } from 'react-bootstrap-icons';
-import { RefreshCw } from 'lucide-react';
+import { CircleEllipsis, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import useSWR from 'swr';
 import useClientValue from '@/hooks/useClientValue';
 import { Channel } from '@/app/electron/ipc-types';
+import { tryCatch } from '@/utils/try-catch';
 
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
   const downloadDirectory = useClientValue(() => window.ipc?.getDownloadDirectory(), '');
 
   const {
-    data: downloads,
+    data: _downloads,
     isLoading,
     mutate,
   } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
-    refreshInterval: 160,
+    refreshInterval: 200,
     dedupingInterval: 0,
   });
+  const downloads = _downloads ?? [];
 
   const table = useReactTable({
-    data: downloads ?? [],
+    data: downloads,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const showStopAllButton = downloads?.some((d) => !d.cancelled && !finalizedStatuses.includes(d.status));
-  const showClearButton = downloads?.some((d) => d.cancelled || finalizedStatuses.includes(d.status));
+  const showStopAllButton = downloads.some((d) => !d.cancelled && !finalizedStatuses.includes(d.status));
+  const showClearButton = downloads.some((d) => d.cancelled || finalizedStatuses.includes(d.status));
+
+  const byStatus = (status: Status) => (d: Download) => d.status === status;
+  const statusCounts = {
+    queued: downloads.filter((d) => !d.cancelled && [Status.Pending, Status.Fetching, Status.Queued].includes(d.status))
+      .length,
+    downloading: downloads.filter(
+      (d) => !d.cancelled && [Status.StartingDownload, Status.Downloading].includes(d.status),
+    ).length,
+    completed: downloads.filter(byStatus(Status.Completed)).length,
+    failed: downloads.filter(byStatus(Status.Failed)).length,
+  };
 
   return (
-    <div className='flex flex-col items-start gap-4 p-4'>
+    <div className='flex flex-col items-start gap-2 p-4'>
       <div className='flex items-center gap-2'>
         <Button
           variant='outline'
@@ -70,10 +83,19 @@ export default function ElectronDownloads() {
             className='text-slate-400 hover:bg-slate-500/30'
             onClick={() => mutate(window.ipc.clearDownloads().then(window.ipc.getDownloads))}
           >
-            Clear
+            Clear Finished
           </Button>
         )}
       </div>
+
+      {Object.values(statusCounts).some((count) => count > 0) && (
+        <div className='flex items-center gap-2'>
+          {statusChip('failed', statusCounts.failed)}
+          {statusChip('completed', statusCounts.completed)}
+          {statusChip('downloading', statusCounts.downloading)}
+          {statusChip('queued', statusCounts.queued)}
+        </div>
+      )}
 
       <Skeleton loading={isLoading} className='w-full'>
         <Table className='px-4 py-2 rounded-lg overflow-hidden bg-slate-900/30 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_4px_10px_rgba(0,0,0,0.1)]'>
@@ -127,6 +149,24 @@ export default function ElectronDownloads() {
   );
 }
 
+const statusChip = (status: 'queued' | 'downloading' | 'completed' | 'failed', count: number) => {
+  if (count === 0) return null;
+  const [Icon, iconStyle, style] = match(status)
+    .with('queued', () => [CircleEllipsis, 'text-white', 'border-yellow-500/50 text-white bg-yellow-700/70'])
+    .with('downloading', () => [XCircle, 'text-white', 'border-blue-500/50 text-white bg-blue-700/70'])
+    .with('completed', () => [CheckCircle, 'text-white', 'border-green-500/50 text-white bg-green-700/70'])
+    .with('failed', () => [XCircle, 'text-white', 'border-red-500/50 text-white bg-red-700/70'])
+    .exhaustive();
+  return (
+    <div className={cn('flex items-center pl-1 pr-2 py-1 gap-1 border shadow-md rounded-full', style)}>
+      <Icon className={cn('w-4 h-4', iconStyle)} />
+      <div className='text-xs'>
+        {status} {count}
+      </div>
+    </div>
+  );
+};
+
 const linkStyle = 'text-xs text-slate-400 line-clamp-1 break-all cursor-pointer hover:text-blue-500 transition-colors';
 
 const columns: ColumnDef<Download>[] = [
@@ -150,7 +190,7 @@ const columns: ColumnDef<Download>[] = [
         .otherwise(() => []);
       const download = row.original as DownloadType[Status.Downloading];
       return (
-        <div className='flex'>
+        <div className='flex min-h-[36px]'>
           <div>
             <div className='line-clamp-1 break-all'>{name}</div>
             {outputPath && (
@@ -199,7 +239,7 @@ const columns: ColumnDef<Download>[] = [
                   <DialogHeader>
                     <DialogTitle>{statusCode && statusText ? `${statusCode} - ${statusText}` : 'Reason:'}</DialogTitle>
                   </DialogHeader>
-                  <DialogDescription className='whitespace-pre-line break-all overflow-y-auto max-h-[calc(100vh-200px)]'>
+                  <DialogDescription className='whitespace-pre-wrap break-all overflow-y-auto max-h-[calc(100vh-200px)]'>
                     {message?.join(' - ') || download.error}
                   </DialogDescription>
                 </DialogContent>
@@ -245,28 +285,29 @@ const columns: ColumnDef<Download>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
+      const beatmapsetId = row.original.beatmapsetId;
       const props: ButtonProps = {
         variant: 'outline',
         size: 'icon',
         className: 'text-slate-400 bg-slate-900 hover:bg-slate-700/40',
       };
       const clearButton = (
-        <Button {...props} key='cancel-btn' onClick={() => window.ipc.clearDownload(row.original.beatmapsetId)}>
+        <Button {...props} key='cancel-btn' onClick={() => window.ipc.clearDownload(beatmapsetId)}>
           <X className='w-5 h-5 text-red-400' />
         </Button>
       );
       const cancelButton = (
-        <Button {...props} key='cancel-btn' onClick={() => window.ipc.cancelDownload(row.original.beatmapsetId)}>
+        <Button {...props} key='cancel-btn' onClick={() => window.ipc.cancelDownload(beatmapsetId)}>
           <X className='w-5 h-5' />
         </Button>
       );
       const stopButton = (
-        <Button {...props} key='stop-btn' onClick={() => window.ipc.cancelDownload(row.original.beatmapsetId)}>
+        <Button {...props} key='stop-btn' onClick={() => window.ipc.cancelDownload(beatmapsetId)}>
           <StopCircle className='text-red-400' />
         </Button>
       );
       const retryButton = (
-        <Button {...props} key='retry-btn' onClick={() => window.ipc.retryDownload(row.original.beatmapsetId)}>
+        <Button {...props} key='retry-btn' onClick={() => tryCatch(window.ipc.retryDownload(beatmapsetId))}>
           <RefreshCw className='text-yellow-200 w-4 h-4' />
         </Button>
       );
