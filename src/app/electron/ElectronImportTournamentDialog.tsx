@@ -10,6 +10,7 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/components/shadcn/dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/shadcn/tooltip';
 import { useTournament } from '@/services/osu-collector-api-hooks';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import { Button } from '@/components/shadcn/button';
@@ -28,6 +29,7 @@ import { ONE_MEGABYTE } from '@/utils/number-utils';
 import { swrKeyIncludes } from '@/utils/swr-utils';
 import { match } from 'ts-pattern';
 import { Tournament } from '@/shared/entities/v1';
+import { Tabs, TabsList, TabsTrigger } from '@/components/shadcn/tabs';
 
 export type TournamentImportMethod = 'tournament' | 'round' | 'mod' | 'beatmap';
 
@@ -162,54 +164,98 @@ export function ElectronImportTournamentDialog() {
     return collectionNamesSize + checksumsSize;
   };
 
+  const withTooltip = (groupBy: TournamentImportMethod, children: ReactNode) => {
+    const collections = getCollectionsSchema(tournament, groupBy);
+    return (
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipContent>
+          <div className='text-xs text-slate-300 mb-1'>
+            This will add {collections.length} collection{groupBy !== 'tournament' && 's'} to your game:
+          </div>
+          {collections.slice(0, 5).map((c, i) => (
+            <div key={i}>{c.name}</div>
+          ))}
+          {collections.length > 5 && <div className='text-xs text-slate-300'>...and {collections.length - 5} more</div>}
+        </TooltipContent>
+      </Tooltip>
+    );
+  };
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
+        <DialogContent
+          onInteractOutside={(e) => e.preventDefault()}
+          onEscapeKeyDown={(e) => e.preventDefault()}
+          // className='max-w-[800px]'
+        >
           <Skeleton loading={isLoading} className='min-h-[38px]'>
             <DialogTitle className='mb-1'>{tournament?.name}</DialogTitle>
             <div className='text-xs text-slate-400'>uploaded by {tournament?.uploader.username}</div>
           </Skeleton>
-          <DialogDescription className='flex flex-col gap-4 max-h-[calc(100vh-200px)] overflow-y-auto'>
-            <label
-              htmlFor='modify-collection-db-checkbox'
-              className={cn(
-                'w-full flex flex-col items-start gap-1 self-start p-2 rounded',
-                'transition-colors cursor-pointer hover:bg-slate-700/50',
-              )}
-            >
-              <div className='flex items-center gap-2'>
-                <Checkbox
-                  id='modify-collection-db-checkbox'
-                  checked={Boolean(options.importMethod)}
-                  onCheckedChange={(checked) => setOptions(assoc('importMethod', checked ? 'tournament' : null))}
-                />
-                <span className={cn('text-sm', !skipping.modifyCollectionDb && 'text-white')}>
-                  modify collection.db file {skipping.modifyCollectionDb && `(skipping)`}
-                </span>
-              </div>
-              <div>
-                <div className='text-xs'>This will allow the collection to appear in osu! stable</div>
-                <div className='text-xs text-red-400 whitespace-pre-line'>
-                  {Boolean(options.importMethod) && mergeDisabledReason}
-                </div>
-              </div>
-              <WindowsFileExplorer
-                addressBar={preferences?.osuInstallDirectory}
-                className={cn('mt-2', fadeOutStyle(Boolean(skipping.modifyCollectionDb)))}
+          <DialogDescription className='flex flex-col items-start gap-4 max-h-[calc(100vh-200px)] overflow-y-auto'>
+            <div className='flex flex-col gap-1'>
+              <label
+                htmlFor='modify-collection-db-checkbox'
+                className={cn(
+                  'w-full flex flex-col items-start gap-1 self-start p-2 rounded',
+                  'transition-colors cursor-pointer hover:bg-slate-700/50',
+                )}
               >
-                <div className='flex flex-col gap-1 items-center text-white'>
-                  <File className='w-8 h-8' />
-                  <div className='text-xs'>collection.db</div>
-                  <div className='text-xs text-green-400'>+{formatBytes(collectionDbSizeIncrease())}</div>
+                <div className='flex items-center gap-2'>
+                  <Checkbox
+                    id='modify-collection-db-checkbox'
+                    checked={Boolean(options.importMethod)}
+                    onCheckedChange={(checked) => setOptions(assoc('importMethod', checked ? 'tournament' : null))}
+                  />
+                  <span className={cn('text-sm', !skipping.modifyCollectionDb && 'text-white')}>
+                    modify collection.db file {skipping.modifyCollectionDb && `(skipping)`}
+                  </span>
                 </div>
-              </WindowsFileExplorer>
-            </label>
+                <div>
+                  <div className='text-xs'>This will allow the collection to appear in osu! stable</div>
+                  <div className='text-xs text-red-400 whitespace-pre-line'>
+                    {Boolean(options.importMethod) && mergeDisabledReason}
+                  </div>
+                </div>
+                <WindowsFileExplorer
+                  addressBar={preferences?.osuInstallDirectory}
+                  className={cn('mt-2', fadeOutStyle(Boolean(skipping.modifyCollectionDb)))}
+                >
+                  <div className='flex flex-col gap-1 items-center text-white'>
+                    <File className='w-8 h-8' />
+                    <div className='text-xs'>collection.db</div>
+                    <div className='text-xs text-green-400'>+{formatBytes(collectionDbSizeIncrease())}</div>
+                  </div>
+                </WindowsFileExplorer>
+              </label>
+
+              <div
+                className={cn('transition-[opacity]', skipping.modifyCollectionDb && 'opacity-60 pointer-events-none')}
+              >
+                <div className='text-xs'>(optional) import as multiple collections grouped by:</div>
+                <Tabs
+                  defaultValue='tournament'
+                  value={options.importMethod}
+                  onValueChange={(value) => setOptions(assoc('importMethod', value))}
+                >
+                  <TabsList className='gap-1 bg-slate-800 shadow-[inset_0_0_4px_rgba(0,0,0,0.25)]'>
+                    <TooltipProvider>
+                      {withTooltip('tournament', <TabsTrigger value='tournament'>none</TabsTrigger>)}
+                      {withTooltip('round', <TabsTrigger value='round'>round</TabsTrigger>)}
+                      {withTooltip('mod', <TabsTrigger value='mod'>mod</TabsTrigger>)}
+                      {withTooltip('beatmap', <TabsTrigger value='beatmap'>beatmap</TabsTrigger>)}
+                    </TooltipProvider>
+                  </TabsList>
+                </Tabs>
+              </div>
+            </div>
 
             <label
               htmlFor='queue-downloads-checkbox'
               className={cn(
-                'w-full flex flex-col items-start gap-1 self-start p-2 rounded',
+                'flex flex-col items-start gap-1 self-start p-2 rounded',
                 'transition-colors cursor-pointer hover:bg-slate-700/50',
               )}
             >
@@ -304,8 +350,8 @@ const getCollectionsSchema = (tournament: Tournament | undefined, method: Tourna
     )
     .with('beatmap', () =>
       tournament.rounds.flatMap((r) =>
-        r.mods.flatMap((m, modIndex) =>
-          m.maps.map((map) => ({
+        r.mods.flatMap((m) =>
+          m.maps.map((map, modIndex) => ({
             name: tournament.name + ' - ' + r.round + ' ' + m.mod + modIndex,
             maps: [map],
           })),
