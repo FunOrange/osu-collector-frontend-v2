@@ -8,7 +8,9 @@ export enum Channel {
   GetDownloads = "getDownloads",
   AddDownloads = "addDownloads",
   CancelDownload = "cancelDownload",
+  ClearDownload = "clearDownload",
   ClearDownloads = "clearDownloads",
+  StopAllDownloads = "stopAllDownloads",
   RetryDownload = "retryDownload",
   RevealPath = 'revealPath',
   OpenLinkInBrowser = 'openLinkInBrowser',
@@ -35,7 +37,9 @@ export interface IpcHandlers {
     metadata: DownloadMetadata;
   }) => Promise<void>;
   [Channel.CancelDownload]: (beatmapsetId: number) => Promise<void>;
+  [Channel.ClearDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.ClearDownloads]: () => Promise<void>;
+  [Channel.StopAllDownloads]: () => Promise<void>;
   [Channel.RetryDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.RevealPath]: (path: string) => Promise<void>;
   [Channel.OpenLinkInBrowser]: (url: string) => Promise<void>;

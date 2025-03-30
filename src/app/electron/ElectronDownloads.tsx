@@ -1,8 +1,7 @@
 'use client';
 
-import { Download, DownloadType, Status } from '@/app/electron/downloader-types';
+import { Download, DownloadType, finalizedStatuses, Status } from '@/app/electron/downloader-types';
 import { Button, ButtonProps } from '@/components/shadcn/button';
-import { Input } from '@/components/shadcn/input';
 import {
   Dialog,
   DialogContent,
@@ -13,13 +12,11 @@ import {
 } from '@/components/shadcn/dialog';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table';
-import { useState } from 'react';
 import { Progress } from '@/components/shadcn/progress';
 import { match } from 'ts-pattern';
 import { cn } from '@/utils/shadcn-utils';
 import { StopCircle, X } from 'react-bootstrap-icons';
 import { RefreshCw } from 'lucide-react';
-import useSubmit from '@/hooks/useSubmit';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import useSWR from 'swr';
 import useClientValue from '@/hooks/useClientValue';
@@ -27,7 +24,7 @@ import { Channel } from '@/app/electron/ipc-types';
 
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
-  const [beatmapsetId, setBeatmapsetId] = useState<string>('155749');
+  const downloadDirectory = useClientValue(() => window.ipc?.getDownloadDirectory(), '');
 
   const {
     data: downloads,
@@ -44,22 +41,38 @@ export default function ElectronDownloads() {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const showStopAllButton = downloads?.some((d) => !d.cancelled && !finalizedStatuses.includes(d.status));
+  const showClearButton = downloads?.some((d) => d.cancelled || finalizedStatuses.includes(d.status));
+
   return (
     <div className='flex flex-col items-start gap-4 p-4'>
       <div className='flex items-center gap-2'>
-        <Input
-          value={beatmapsetId}
-          onChange={(e) => setBeatmapsetId(e.target.value)}
-          className='w-full'
-          placeholder='Enter beatmapset ID'
-        />
         <Button
           variant='outline'
           className='text-slate-400 hover:bg-slate-500/30'
-          onClick={() => mutate(window.ipc.clearDownloads().then(window.ipc.getDownloads))}
+          onClick={() => window.ipc.revealPath(downloadDirectory)}
         >
-          Clear
+          Open Downloads Folder
         </Button>
+        {showStopAllButton && (
+          <Button
+            variant='outline'
+            className='text-red-400 group hover:bg-slate-500/30'
+            onClick={() => mutate(window.ipc.stopAllDownloads().then(window.ipc.getDownloads))}
+            icon={<StopCircle className='transition-colors text-red-400 group-hover:text-white mr-2' />}
+          >
+            Stop all
+          </Button>
+        )}
+        {showClearButton && (
+          <Button
+            variant='outline'
+            className='text-slate-400 hover:bg-slate-500/30'
+            onClick={() => mutate(window.ipc.clearDownloads().then(window.ipc.getDownloads))}
+          >
+            Clear
+          </Button>
+        )}
       </div>
 
       <Skeleton loading={isLoading} className='w-full'>
@@ -232,16 +245,19 @@ const columns: ColumnDef<Download>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      if (row.original.cancelled) return;
-
       const props: ButtonProps = {
         variant: 'outline',
         size: 'icon',
         className: 'text-slate-400 bg-slate-900 hover:bg-slate-700/40',
       };
+      const clearButton = (
+        <Button {...props} key='cancel-btn' onClick={() => window.ipc.clearDownload(row.original.beatmapsetId)}>
+          <X className='w-5 h-5 text-red-400' />
+        </Button>
+      );
       const cancelButton = (
         <Button {...props} key='cancel-btn' onClick={() => window.ipc.cancelDownload(row.original.beatmapsetId)}>
-          <X />
+          <X className='w-5 h-5' />
         </Button>
       );
       const stopButton = (
@@ -254,19 +270,21 @@ const columns: ColumnDef<Download>[] = [
           <RefreshCw className='text-yellow-200 w-4 h-4' />
         </Button>
       );
-      const visibleButtons = match(row.original.status)
-        .with(Status.Pending, () => [cancelButton])
-        .with(Status.CheckingLocalFiles, () => [])
-        .with(Status.AlreadyDownloaded, () => [])
-        .with(Status.AlreadyInstalled, () => [])
-        .with(Status.Queued, () => [cancelButton])
-        .with(Status.Fetching, () => [cancelButton])
-        .with(Status.Fetched, () => [cancelButton])
-        .with(Status.StartingDownload, () => [stopButton])
-        .with(Status.Downloading, () => [stopButton])
-        .with(Status.Completed, () => [])
-        .with(Status.Failed, () => [retryButton])
-        .exhaustive();
+      const visibleButtons = row.original.cancelled
+        ? [retryButton, clearButton]
+        : match(row.original.status)
+            .with(Status.Pending, () => [cancelButton])
+            .with(Status.CheckingLocalFiles, () => [])
+            .with(Status.AlreadyDownloaded, () => [])
+            .with(Status.AlreadyInstalled, () => [])
+            .with(Status.Queued, () => [cancelButton])
+            .with(Status.Fetching, () => [cancelButton])
+            .with(Status.Fetched, () => [cancelButton])
+            .with(Status.StartingDownload, () => [stopButton])
+            .with(Status.Downloading, () => [stopButton])
+            .with(Status.Completed, () => [])
+            .with(Status.Failed, () => [retryButton, clearButton])
+            .exhaustive();
       return <div className='w-full flex justify-center items-center gap-1'>{visibleButtons}</div>;
     },
   },

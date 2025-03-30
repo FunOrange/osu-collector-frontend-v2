@@ -11,6 +11,12 @@ export enum Status {
   Completed = 'completed',
   Failed = 'failed',
 }
+export const finalizedStatuses = [
+  Status.AlreadyDownloaded,
+  Status.AlreadyInstalled,
+  Status.Completed,
+  Status.Failed,
+];
 
 export enum Mirror {
   Beatconnect = 'beatconnect',
