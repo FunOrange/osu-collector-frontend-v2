@@ -22,8 +22,9 @@ import useSWR, { mutate } from 'swr';
 import useClientValue from '@/hooks/useClientValue';
 import { Channel } from '@/app/electron/ipc-types';
 import { tryCatch } from '@/utils/try-catch';
-import { useEffect, useState } from 'react';
 import { swrKeyIncludes } from '@/utils/swr-utils';
+import React from 'react';
+import { equals } from 'ramda';
 
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
@@ -34,7 +35,7 @@ export default function ElectronDownloads() {
     isLoading,
     mutate,
   } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
-    refreshInterval: 1000,
+    refreshInterval: 150,
     dedupingInterval: 0,
   });
   const downloads = _downloads ?? [];
@@ -360,17 +361,7 @@ function StatusChips({ downloads }: { downloads: Download[] }) {
   );
 }
 
-function DownloadRow({ row }: { row: Row<Download> }) {
-  const [data, setData] = useState<Download | undefined>();
-  useEffect(() => {
-    window.ipc?.onDownloadUpdate(row.original.beatmapsetId, (download) => setData(download));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (data) {
-    row.original = data;
-  }
-
+function _DownloadRow({ row }: { row: Row<Download> }) {
   return (
     <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
       {row.getVisibleCells().map((cell) => (
@@ -381,3 +372,4 @@ function DownloadRow({ row }: { row: Row<Download> }) {
     </TableRow>
   );
 }
+const DownloadRow = React.memo(_DownloadRow, (a, b) => equals(a.row.original, b.row.original));
