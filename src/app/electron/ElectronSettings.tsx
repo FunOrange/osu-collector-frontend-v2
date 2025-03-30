@@ -224,25 +224,25 @@ export default function ElectronSettings() {
           </span>
         </label>
 
-        <label
-          htmlFor='desktop-notifications-checkbox'
-          className={cn(
-            'flex flex-col gap-1 self-start p-2 rounded',
-            'transition-colors cursor-pointer hover:bg-slate-700',
-          )}
-        >
-          <div className='flex items-center gap-2'>
-            <Checkbox
-              id='desktop-notifications-checkbox'
-              checked={preferences?.notifyOnDownloadsComplete ?? false}
-              onCheckedChange={(checked) => setPreference('notifyOnDownloadsComplete', checked as boolean)}
-            />
-            <span className='text-sm text-white'>desktop notifications</span>
-          </div>
-          <div className='text-xs text-slate-400'>
-            When a collection has been completely downloaded, a desktop notification will be shown.
-          </div>
-        </label>
+        {/* <label */}
+        {/*   htmlFor='desktop-notifications-checkbox' */}
+        {/*   className={cn( */}
+        {/*     'flex flex-col gap-1 self-start p-2 rounded', */}
+        {/*     'transition-colors cursor-pointer hover:bg-slate-700', */}
+        {/*   )} */}
+        {/* > */}
+        {/*   <div className='flex items-center gap-2'> */}
+        {/*     <Checkbox */}
+        {/*       id='desktop-notifications-checkbox' */}
+        {/*       checked={preferences?.notifyOnDownloadsComplete ?? false} */}
+        {/*       onCheckedChange={(checked) => setPreference('notifyOnDownloadsComplete', checked as boolean)} */}
+        {/*     /> */}
+        {/*     <span className='text-sm text-white'>desktop notifications</span> */}
+        {/*   </div> */}
+        {/*   <div className='text-xs text-slate-400'> */}
+        {/*     When a collection has been completely downloaded, a desktop notification will be shown. */}
+        {/*   </div> */}
+        {/* </label> */}
       </div>
     </main>
   );
