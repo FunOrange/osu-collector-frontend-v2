@@ -98,7 +98,7 @@ export default function CollectionBeatmapFilters({
               variant='orange'
               min={1}
               max={11}
-              step={1}
+              step={0.5}
               value={pendingFilters.stars}
               onValueChange={(v) => setPendingFilters(assoc('stars', v))}
               onValueCommit={(v) => setFilters(assoc('stars', v))}
