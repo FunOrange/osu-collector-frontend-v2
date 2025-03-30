@@ -24,7 +24,6 @@ import { Channel } from '@/app/electron/ipc-types';
 import { tryCatch } from '@/utils/try-catch';
 import { useEffect, useState } from 'react';
 import { swrKeyIncludes } from '@/utils/swr-utils';
-import useStateRef from '@/utils/state-ref';
 
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
@@ -34,17 +33,10 @@ export default function ElectronDownloads() {
     data: _downloads,
     isLoading,
     mutate,
-  } = useSWR(
-    window.ipc && Channel.GetDownloads,
-    () => {
-      console.log('getDownloads');
-      return window.ipc?.getDownloads();
-    },
-    {
-      refreshInterval: 3000,
-      dedupingInterval: 0,
-    },
-  );
+  } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
+    refreshInterval: 1000,
+    dedupingInterval: 0,
+  });
   const downloads = _downloads ?? [];
 
   const table = useReactTable({
@@ -146,7 +138,7 @@ export default function ElectronDownloads() {
 }
 
 const statusChip = (status: 'queued' | 'downloading' | 'completed' | 'failed', count: number) => {
-  if (count === 0) return null;
+  if (!count) return null;
   const [Icon, iconStyle, style] = match(status)
     .with('queued', () => [CircleEllipsis, 'text-white', 'border-yellow-500/50 text-white bg-yellow-700/70'])
     .with('downloading', () => [XCircle, 'text-white', 'border-blue-500/50 text-white bg-blue-700/70'])
@@ -342,33 +334,18 @@ const columns: ColumnDef<Download>[] = [
 ];
 
 function StatusChips({ downloads }: { downloads: Download[] }) {
-  const [getLatestDownloads, setLatestDownloads] = useStateRef<Download[]>(downloads);
-
-  useEffect(() => {
-    window.ipc?.onDownloadUpdate(null, (download) => {
-      const index = getLatestDownloads().findIndex((d) => d.beatmapsetId === download.beatmapsetId);
-      getLatestDownloads()[index] = download;
-      setLatestDownloads([...getLatestDownloads()]);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setLatestDownloads(downloads);
-  }, [downloads, setLatestDownloads]);
-
   const byStatus = (status: Status) => (d: Download) => d.status === status;
   const statusCounts = {
-    queued: getLatestDownloads().filter(
+    queued: downloads?.filter(
       (d) =>
         !d.cancelled &&
         [Status.Pending, Status.CheckingLocalFiles, Status.Queued, Status.Fetching, Status.Fetched].includes(d.status),
     ).length,
-    downloading: getLatestDownloads().filter(
+    downloading: downloads?.filter(
       (d) => !d.cancelled && [Status.StartingDownload, Status.Downloading].includes(d.status),
     ).length,
-    completed: getLatestDownloads().filter(byStatus(Status.Completed)).length,
-    failed: getLatestDownloads().filter(byStatus(Status.Failed)).length,
+    completed: downloads?.filter(byStatus(Status.Completed)).length,
+    failed: downloads?.filter(byStatus(Status.Failed)).length,
   };
 
   return (
