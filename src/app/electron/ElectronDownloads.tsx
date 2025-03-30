@@ -122,21 +122,18 @@ const columns: ColumnDef<Download>[] = [
     header: 'Name',
     meta: { className: 'w-full min-w-[148px]' },
     cell: ({ row }) => {
+      const osuwebUrl = `https://osu.ppy.sh/beatmapsets/${row.original.beatmapsetId}`;
       const [name, outputPath, link] = match(row.original)
-        .with({ status: Status.Pending }, (d) => [null, null, `https://osu.ppy.sh/beatmapsets/${d.beatmapsetId}`])
-        .with({ status: Status.CheckingLocalFiles }, (d) => [
-          null,
-          null,
-          `https://osu.ppy.sh/beatmapsets/${d.beatmapsetId}`,
-        ])
+        .with({ status: Status.Pending }, (d) => [null, null, osuwebUrl])
+        .with({ status: Status.CheckingLocalFiles }, (d) => [null, null, osuwebUrl])
         .with({ status: Status.AlreadyInstalled }, (d) => [null, d.installLocation])
         .with({ status: Status.AlreadyDownloaded }, (d) => [null, d.downloadPath])
-        .with({ status: Status.Queued }, (d) => [null, null, `https://osu.ppy.sh/beatmapsets/${d.beatmapsetId}`])
+        .with({ status: Status.Queued }, (d) => [null, null, osuwebUrl])
         .with({ status: Status.Fetched }, (d) => [d.filename, null])
         .with({ status: Status.StartingDownload }, (d) => [d.filename, null])
         .with({ status: Status.Downloading }, (d) => [d.filename, d.outputPath])
         .with({ status: Status.Completed }, (d) => [d.filename, d.outputPath])
-        .with({ status: Status.Failed }, (d) => [d.filename, d.outputPath])
+        .with({ status: Status.Failed }, (d) => [d.filename, d.outputPath, !d.outputPath ? osuwebUrl : null])
         .otherwise(() => []);
       const download = row.original as DownloadType[Status.Downloading];
       return (
