@@ -90,9 +90,6 @@ export default function ElectronSettings() {
       <section className='h-12 flex justify-between items-center gap-2 px-2 py-1 bg-slate-900'>
         <SidebarTrigger />
         <div className='flex items-center gap-1 p-1'>
-          <Button variant='ghost' size='sm' className='text-slate-400 hover:bg-slate-500/30'>
-            Open log folder
-          </Button>
           <Button
             variant='ghost'
             size='sm'
@@ -101,9 +98,9 @@ export default function ElectronSettings() {
           >
             Open DevTools
           </Button>
-          <Button variant='ghost' size='sm' className='text-slate-400 hover:bg-slate-500/30'>
-            Special login
-          </Button>
+          {/* <Button variant='ghost' size='sm' className='text-slate-400 hover:bg-slate-500/30'> */}
+          {/*   Special login */}
+          {/* </Button> */}
         </div>
       </section>
 
