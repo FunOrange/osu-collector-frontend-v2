@@ -4,7 +4,7 @@ import useSubmit from '@/hooks/useSubmit';
 import axios from 'axios';
 import useSWRImmutable from 'swr/immutable';
 import { match } from 'ts-pattern';
-import { Collection } from '@/shared/entities/v1';
+import { Collection, Tournament } from '@/shared/entities/v1';
 import { safe } from '@/utils/string-utils';
 
 export const api = axios.create({
@@ -73,10 +73,8 @@ export function useUserUploads(userId) {
 
 export const useMetadata = () => useCancellableSWRImmutable(`/metadata`);
 
-export function useTournament(id) {
-  const { data, error, mutate } = useSWRImmutable(`/tournaments/${id}`, (url) => api.get(url).then((res) => res.data));
-  if (error) console.error(error);
-  return { tournament: data, tournamentError: error, mutateTournament: mutate };
+export function useTournament(id: number) {
+  return useSWRImmutable<Tournament>(safe`/tournaments/${id}`, (url: string) => api.get(url).then((res) => res.data));
 }
 
 export const useTwitchSubcription = () => {

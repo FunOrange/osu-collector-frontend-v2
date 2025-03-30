@@ -1,5 +1,6 @@
 import { Preferences } from "@/app/electron/preferences";
 import { Download, DownloadMetadata } from "./downloader-types";
+import { TournamentImportMethod } from "@/app/electron/ElectronImportTournamentDialog";
 
 export enum Channel {
   PathJoin = "pathJoin",
@@ -57,5 +58,9 @@ export interface IpcHandlers {
   [Channel.OnURI]: (callback: ((_: true) => any)) => void;
   [Channel.GetDownloadDirectory]: () => Promise<string | undefined>;
   [Channel.CheckIfOsuIsRunning]: () => Promise<boolean>;
-  [Channel.MergeCollectionDb]: (collectionId: number) => Promise<void>;
+  [Channel.MergeCollectionDb]: (
+    options:
+    | { collectionId: number }
+    | { tournamentId: number, groupBy: TournamentImportMethod }
+  ) => Promise<void>;
 }

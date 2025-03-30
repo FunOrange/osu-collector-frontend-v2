@@ -10,13 +10,13 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/components/shadcn/dialog';
-import { useCollection } from '@/services/osu-collector-api-hooks';
+import { useTournament } from '@/services/osu-collector-api-hooks';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import { Button } from '@/components/shadcn/button';
 import { cn } from '@/utils/shadcn-utils';
 import { Checkbox } from '@/components/shadcn/checkbox';
 import useClientValue from '@/hooks/useClientValue';
-import { assoc } from 'ramda';
+import { assoc, sum } from 'ramda';
 import { ArrowClockwise, ArrowLeft, ArrowRight, ArrowUp, ThreeDots } from 'react-bootstrap-icons';
 import { File, RefreshCw } from 'lucide-react';
 import { formatBytes } from '@/utils/string-utils';
@@ -26,32 +26,36 @@ import { tryCatch } from '@/utils/try-catch';
 import { useToast } from '@/components/shadcn/use-toast';
 import { ONE_MEGABYTE } from '@/utils/number-utils';
 import { swrKeyIncludes } from '@/utils/swr-utils';
+import { match } from 'ts-pattern';
+import { Tournament } from '@/shared/entities/v1';
 
-interface CollectionImportOptions {
-  modifyCollectionDb: boolean;
+export type TournamentImportMethod = 'tournament' | 'round' | 'mod' | 'beatmap';
+
+interface TournamentImportOptions {
+  importMethod: TournamentImportMethod | null;
   queueDownloads: boolean;
 }
 
-export function ElectronImportCollectionDialog() {
+export function ElectronImportTournamentDialog() {
   const { toast } = useToast();
   const { data: uri, mutate: mutateURI } = useSWR(window.ipc && Channel.GetURI, window.ipc?.getURI);
-  const [collectionId, setCollectionId] = useState<number | undefined>();
+  const [tournamentId, setTournamentId] = useState<number | undefined>();
   const [open, setOpen] = useState<boolean>(false);
   useEffect(() => {
-    const collectionId = Number(uri?.match(/osucollector:\/\/collections\/(\d+)/)?.[1]);
-    if (collectionId) {
+    const tournamentId = Number(uri?.match(/osucollector:\/\/tournaments\/(\d+)/)?.[1]);
+    if (tournamentId) {
       setOpen(true);
-      setCollectionId(collectionId);
+      setTournamentId(tournamentId);
       mutateURI(window.ipc.clearURI().then(() => undefined));
     }
-  }, [uri, setCollectionId, mutateURI]);
+  }, [uri, setTournamentId, mutateURI]);
 
   useEffect(() => {
     window.ipc?.onURI(() => mutateURI());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { collection, isLoading } = useCollection(collectionId);
+  const { data: tournament, isLoading } = useTournament(tournamentId);
   const { data: preferences } = useSWR(Channel.GetPreferences, () => window.ipc?.getPreferences());
   const { data: downloadDirectory } = useSWR(Channel.GetDownloadDirectory, () => window.ipc?.getDownloadDirectory());
   const { data: downloadDirectoryExists } = useSWR([Channel.PathExists, downloadDirectory], ([_, path]) =>
@@ -78,12 +82,13 @@ export function ElectronImportCollectionDialog() {
 
   const [options, setOptions] = useState(
     (() => {
-      const [options, err] = JSONParse<CollectionImportOptions>(localStorage.getItem('collection-import-options'));
-      return options ?? { modifyCollectionDb: true, queueDownloads: true };
+      const [options, err] = JSONParse<TournamentImportOptions>(localStorage.getItem('tournament-import-options'));
+      return options ?? { importMethod: null, queueDownloads: true };
     })(),
   );
+
   const skipping = {
-    modifyCollectionDb: !options.modifyCollectionDb || Boolean(mergeDisabledReason),
+    modifyCollectionDb: !options.importMethod || Boolean(mergeDisabledReason),
     queueDownloads: !options.queueDownloads || Boolean(downloadsDisabledReason),
   };
 
@@ -99,7 +104,7 @@ export function ElectronImportCollectionDialog() {
 
   const [modifyingCollectionDb, setModifyingCollectionDb] = useState(false);
   const [submit, submitting] = useSubmit(async () => {
-    localStorage.setItem('collection-import-options', JSON.stringify(options));
+    localStorage.setItem('tournament-import-options', JSON.stringify(options));
 
     const isOsuRunning = await window.ipc.checkIfOsuIsRunning();
     if (isOsuRunning) {
@@ -108,7 +113,9 @@ export function ElectronImportCollectionDialog() {
 
     if (!skipping.modifyCollectionDb) {
       setModifyingCollectionDb(true);
-      const [_, collectionDbError] = await tryCatch(window.ipc.mergeCollectionDb({ collectionId }));
+      const [_, collectionDbError] = await tryCatch(
+        window.ipc.mergeCollectionDb({ tournamentId, groupBy: options.importMethod }),
+      );
       setModifyingCollectionDb(false);
       if (collectionDbError) {
         throw new DisplayableError(collectionDbError.message);
@@ -121,14 +128,14 @@ export function ElectronImportCollectionDialog() {
 
     if (!skipping.queueDownloads) {
       const payload = {
-        beatmapsetIds: collection?.beatmapsets.map((b) => b.id),
+        beatmapsetIds: getBeatmapsetIds(tournament),
         metadata: {
-          collection: {
-            id: collectionId,
-            name: collection!.name,
+          tournament: {
+            id: tournamentId,
+            name: tournament!.name,
             uploader: {
-              id: collection!.uploader.id,
-              username: collection!.uploader.username,
+              id: tournament!.uploader.id,
+              username: tournament!.uploader.username,
             },
           },
         },
@@ -140,21 +147,28 @@ export function ElectronImportCollectionDialog() {
       }
       toast({
         title: 'Downloads started!',
-        description: collection!.beatmapsets.length + ' maps have been queued for download',
+        description: getBeatmapsetIds(tournament).length + ' maps have been queued for download',
       });
     }
     setOpen(false);
   });
+
+  const collectionDbSizeIncrease = () => {
+    if (!tournament) return 0;
+    const collections = getCollectionsSchema(tournament, options.importMethod ?? 'tournament');
+    const addOverhead = (size: number) => size + 2;
+    const collectionNamesSize = sum(collections.map((c) => c.name.length).map(addOverhead));
+    const checksumsSize = sum(collections.map((c) => c.maps.length * 32).map(addOverhead));
+    return collectionNamesSize + checksumsSize;
+  };
 
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
           <Skeleton loading={isLoading} className='min-h-[38px]'>
-            <DialogTitle className='mb-1'>{collection?.name}</DialogTitle>
-            <div className='text-xs text-slate-400'>
-              {collection?.beatmapCount} beatmaps, uploaded by {collection?.uploader.username}
-            </div>
+            <DialogTitle className='mb-1'>{tournament?.name}</DialogTitle>
+            <div className='text-xs text-slate-400'>uploaded by {tournament?.uploader.username}</div>
           </Skeleton>
           <DialogDescription className='flex flex-col gap-4 max-h-[calc(100vh-200px)] overflow-y-auto'>
             <label
@@ -167,8 +181,8 @@ export function ElectronImportCollectionDialog() {
               <div className='flex items-center gap-2'>
                 <Checkbox
                   id='modify-collection-db-checkbox'
-                  checked={options.modifyCollectionDb}
-                  onCheckedChange={(checked) => setOptions(assoc('modifyCollectionDb', checked))}
+                  checked={Boolean(options.importMethod)}
+                  onCheckedChange={(checked) => setOptions(assoc('importMethod', checked ? 'tournament' : null))}
                 />
                 <span className={cn('text-sm', !skipping.modifyCollectionDb && 'text-white')}>
                   modify collection.db file {skipping.modifyCollectionDb && `(skipping)`}
@@ -177,7 +191,7 @@ export function ElectronImportCollectionDialog() {
               <div>
                 <div className='text-xs'>This will allow the collection to appear in osu! stable</div>
                 <div className='text-xs text-red-400 whitespace-pre-line'>
-                  {options.modifyCollectionDb && mergeDisabledReason}
+                  {Boolean(options.importMethod) && mergeDisabledReason}
                 </div>
               </div>
               <WindowsFileExplorer
@@ -187,7 +201,7 @@ export function ElectronImportCollectionDialog() {
                 <div className='flex flex-col gap-1 items-center text-white'>
                   <File className='w-8 h-8' />
                   <div className='text-xs'>collection.db</div>
-                  <div className='text-xs text-green-400'>+{formatBytes(32 * (collection?.beatmapCount ?? 0), 1)}</div>
+                  <div className='text-xs text-green-400'>+{formatBytes(collectionDbSizeIncrease())}</div>
                 </div>
               </WindowsFileExplorer>
             </label>
@@ -211,7 +225,7 @@ export function ElectronImportCollectionDialog() {
               </div>
               <div>
                 <div className='text-xs'>
-                  Estimated size of all items: {formatBytes(collection?.beatmapsets?.length * 10 * ONE_MEGABYTE)}
+                  Estimated size of all items: {formatBytes(getBeatmapsetIds(tournament).length * 10 * ONE_MEGABYTE)}
                 </div>
                 <div className='text-xs'>osu!Collector will skip the maps you already have</div>
                 <div className='text-xs text-red-400 whitespace-pre-line'>
@@ -240,7 +254,7 @@ export function ElectronImportCollectionDialog() {
             </DialogClose>
             <Button
               variant='important'
-              disabled={!collectionId || (skipping.modifyCollectionDb && skipping.queueDownloads)}
+              disabled={!tournamentId || (skipping.modifyCollectionDb && skipping.queueDownloads)}
               loading={submitting}
               onClick={submit}
             >
@@ -263,6 +277,46 @@ export function ElectronImportCollectionDialog() {
     </>
   );
 }
+
+const getCollectionsSchema = (tournament: Tournament | undefined, method: TournamentImportMethod | null) => {
+  if (!method) return [];
+  if (!tournament) return [];
+  return match(method)
+    .with('tournament', () => [
+      {
+        name: tournament.name,
+        maps: tournament.rounds.flatMap((r) => r.mods).flatMap((m) => m.maps),
+      },
+    ])
+    .with('round', () =>
+      tournament.rounds.map((r) => ({
+        name: tournament.name + ' - ' + r.round,
+        maps: r.mods.flatMap((m) => m.maps),
+      })),
+    )
+    .with('mod', () =>
+      tournament.rounds.flatMap((r) =>
+        r.mods.map((m) => ({
+          name: tournament.name + ' - ' + r.round + ' ' + m.mod,
+          maps: m.maps,
+        })),
+      ),
+    )
+    .with('beatmap', () =>
+      tournament.rounds.flatMap((r) =>
+        r.mods.flatMap((m, modIndex) =>
+          m.maps.map((map) => ({
+            name: tournament.name + ' - ' + r.round + ' ' + m.mod + modIndex,
+            maps: [map],
+          })),
+        ),
+      ),
+    )
+    .exhaustive();
+};
+
+const getBeatmapsetIds = (tournament: Tournament | undefined) =>
+  tournament?.rounds.flatMap((r) => r.mods.flatMap((m) => m.maps.map((map) => map.beatmapset.id))) ?? [];
 
 interface WindowsFileExplorerProps {
   addressBar: string;
