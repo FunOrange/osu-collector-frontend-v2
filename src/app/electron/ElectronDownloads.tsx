@@ -122,9 +122,16 @@ const columns: ColumnDef<Download>[] = [
     header: 'Name',
     meta: { className: 'w-full min-w-[148px]' },
     cell: ({ row }) => {
-      const [name, outputPath] = match(row.original)
+      const [name, outputPath, link] = match(row.original)
+        .with({ status: Status.Pending }, (d) => [null, null, `https://osu.ppy.sh/beatmapsets/${d.beatmapsetId}`])
+        .with({ status: Status.CheckingLocalFiles }, (d) => [
+          null,
+          null,
+          `https://osu.ppy.sh/beatmapsets/${d.beatmapsetId}`,
+        ])
         .with({ status: Status.AlreadyInstalled }, (d) => [null, d.installLocation])
         .with({ status: Status.AlreadyDownloaded }, (d) => [null, d.downloadPath])
+        .with({ status: Status.Queued }, (d) => [null, null, `https://osu.ppy.sh/beatmapsets/${d.beatmapsetId}`])
         .with({ status: Status.Fetched }, (d) => [d.filename, null])
         .with({ status: Status.StartingDownload }, (d) => [d.filename, null])
         .with({ status: Status.Downloading }, (d) => [d.filename, d.outputPath])
@@ -141,6 +148,11 @@ const columns: ColumnDef<Download>[] = [
                 {outputPath}
               </div>
             )}
+            {link && (
+              <div className={linkStyle} onClick={() => window.ipc.openLinkInBrowser(link)}>
+                {link}
+              </div>
+            )}
           </div>
         </div>
       );
@@ -155,12 +167,12 @@ const columns: ColumnDef<Download>[] = [
       return match(row.original)
         .with({ status: Status.Pending }, () => 'Pending')
         .with({ status: Status.CheckingLocalFiles }, () => 'Checking files')
-        .with({ status: Status.AlreadyDownloaded }, () => 'Already downloaded')
-        .with({ status: Status.AlreadyInstalled }, () => 'Already installed')
+        .with({ status: Status.AlreadyDownloaded }, () => <div className='text-xs'>Already downloaded</div>)
+        .with({ status: Status.AlreadyInstalled }, () => <div className='text-xs'>Already installed</div>)
         .with({ status: Status.Queued }, () => 'Queued')
         .with({ status: Status.Fetching }, () => 'Fetching')
         .with({ status: Status.Fetched }, () => 'Fetched')
-        .with({ status: Status.StartingDownload }, () => 'Starting download')
+        .with({ status: Status.StartingDownload }, () => <div className='text-xs'>Starting download</div>)
         .with({ status: Status.Downloading }, () => 'Downloading')
         .with({ status: Status.Completed }, () => 'Completed')
         .with({ status: Status.Failed }, (download) => {
