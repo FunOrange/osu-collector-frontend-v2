@@ -6,10 +6,12 @@ export enum Channel {
   PathSep = "pathSep",
   OpenDevTools = "openDevTools",
   GetDownloads = "getDownloads",
+  OnDownloadUpdate = "onDownloadUpdate",
   AddDownloads = "addDownloads",
   CancelDownload = "cancelDownload",
   ClearDownload = "clearDownload",
-  ClearDownloads = "clearDownloads",
+  ClearInactiveDownloads = "clearInactiveDownloads",
+  ClearCompletedDownloads = "clearCompletedDownloads",
   StopAllDownloads = "stopAllDownloads",
   RetryDownload = "retryDownload",
   RevealPath = 'revealPath',
@@ -32,13 +34,15 @@ export interface IpcHandlers {
   [Channel.PathSep]: () => Promise<string>;
   [Channel.OpenDevTools]: () => Promise<void>;
   [Channel.GetDownloads]: () => Promise<Download[]>;
+  [Channel.OnDownloadUpdate]: (beatmapsetId: number, callback: (download: Download) => any) => void;
   [Channel.AddDownloads]: (options: {
     beatmapsetIds: number[];
     metadata: DownloadMetadata;
   }) => Promise<void>;
   [Channel.CancelDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.ClearDownload]: (beatmapsetId: number) => Promise<void>;
-  [Channel.ClearDownloads]: () => Promise<void>;
+  [Channel.ClearInactiveDownloads]: () => Promise<void>;
+  [Channel.ClearCompletedDownloads]: () => Promise<void>;
   [Channel.StopAllDownloads]: () => Promise<void>;
   [Channel.RetryDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.RevealPath]: (path: string) => Promise<void>;

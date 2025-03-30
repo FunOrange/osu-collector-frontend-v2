@@ -1,7 +1,7 @@
 'use client';
 import { Channel } from '@/app/electron/ipc-types';
 import { ReactNode, useEffect, useState } from 'react';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import {
   Dialog,
   DialogClose,
@@ -25,6 +25,7 @@ import { JSONParse } from '@/utils/object-utils';
 import { tryCatch } from '@/utils/try-catch';
 import { useToast } from '@/components/shadcn/use-toast';
 import { ONE_MEGABYTE } from '@/utils/number-utils';
+import { swrKeyIncludes } from '@/utils/swr-utils';
 
 interface ImportOptions {
   modifyCollectionDb: boolean;
@@ -33,7 +34,7 @@ interface ImportOptions {
 
 export function ElectronImportCollectionDialog() {
   const { toast } = useToast();
-  const { data: uri, mutate } = useSWR(window.ipc && Channel.GetURI, window.ipc?.getURI);
+  const { data: uri, mutate: mutateURI } = useSWR(window.ipc && Channel.GetURI, window.ipc?.getURI);
   const [collectionId, setCollectionId] = useState<number | undefined>();
   const [open, setOpen] = useState<boolean>(false);
   useEffect(() => {
@@ -41,12 +42,12 @@ export function ElectronImportCollectionDialog() {
     if (collectionId) {
       setOpen(true);
       setCollectionId(collectionId);
-      mutate(window.ipc.clearURI().then(() => undefined));
+      mutateURI(window.ipc.clearURI().then(() => undefined));
     }
-  }, [uri, setCollectionId, mutate]);
+  }, [uri, setCollectionId, mutateURI]);
 
   useEffect(() => {
-    window.ipc?.onURI(() => mutate());
+    window.ipc?.onURI(() => mutateURI());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -133,6 +134,7 @@ export function ElectronImportCollectionDialog() {
         },
       };
       const [__, downloadsError] = await tryCatch(window.ipc.addDownloads(payload));
+      mutate(swrKeyIncludes(Channel.GetDownloads));
       if (downloadsError) {
         throw new DisplayableError(downloadsError.message);
       }

@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/shadcn/dialog';
-import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { ColumnDef, flexRender, getCoreRowModel, Row, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table';
 import { Progress } from '@/components/shadcn/progress';
 import { match } from 'ts-pattern';
@@ -18,10 +18,13 @@ import { cn } from '@/utils/shadcn-utils';
 import { StopCircle, X } from 'react-bootstrap-icons';
 import { CircleEllipsis, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { Skeleton } from '@/components/shadcn/skeleton';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import useClientValue from '@/hooks/useClientValue';
 import { Channel } from '@/app/electron/ipc-types';
 import { tryCatch } from '@/utils/try-catch';
+import { useEffect, useState } from 'react';
+import { swrKeyIncludes } from '@/utils/swr-utils';
+import useStateRef from '@/utils/state-ref';
 
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
@@ -31,10 +34,17 @@ export default function ElectronDownloads() {
     data: _downloads,
     isLoading,
     mutate,
-  } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
-    refreshInterval: 200,
-    dedupingInterval: 0,
-  });
+  } = useSWR(
+    window.ipc && Channel.GetDownloads,
+    () => {
+      console.log('getDownloads');
+      return window.ipc?.getDownloads();
+    },
+    {
+      refreshInterval: 3000,
+      dedupingInterval: 0,
+    },
+  );
   const downloads = _downloads ?? [];
 
   const table = useReactTable({
@@ -44,18 +54,10 @@ export default function ElectronDownloads() {
   });
 
   const showStopAllButton = downloads.some((d) => !d.cancelled && !finalizedStatuses.includes(d.status));
-  const showClearButton = downloads.some((d) => d.cancelled || finalizedStatuses.includes(d.status));
-
-  const byStatus = (status: Status) => (d: Download) => d.status === status;
-  const statusCounts = {
-    queued: downloads.filter((d) => !d.cancelled && [Status.Pending, Status.Fetching, Status.Queued].includes(d.status))
-      .length,
-    downloading: downloads.filter(
-      (d) => !d.cancelled && [Status.StartingDownload, Status.Downloading].includes(d.status),
-    ).length,
-    completed: downloads.filter(byStatus(Status.Completed)).length,
-    failed: downloads.filter(byStatus(Status.Failed)).length,
-  };
+  const hasCompletedDownloads = downloads.some((d) => d.status === Status.Completed);
+  const hasInactiveDownloads = downloads.some(
+    (d) => d.cancelled || [Status.AlreadyDownloaded, Status.AlreadyInstalled].includes(d.status),
+  );
 
   return (
     <div className='flex flex-col items-start gap-2 p-4'>
@@ -77,25 +79,27 @@ export default function ElectronDownloads() {
             Stop all
           </Button>
         )}
-        {showClearButton && (
+        {hasInactiveDownloads && (
           <Button
             variant='outline'
             className='text-slate-400 hover:bg-slate-500/30'
-            onClick={() => mutate(window.ipc.clearDownloads().then(window.ipc.getDownloads))}
+            onClick={() => mutate(window.ipc.clearInactiveDownloads().then(window.ipc.getDownloads))}
           >
-            Clear Finished
+            Clear Inactive
+          </Button>
+        )}
+        {hasCompletedDownloads && (
+          <Button
+            variant='outline'
+            className='text-slate-400 hover:bg-slate-500/30'
+            onClick={() => mutate(window.ipc.clearCompletedDownloads().then(window.ipc.getDownloads))}
+          >
+            Clear Completed
           </Button>
         )}
       </div>
 
-      {Object.values(statusCounts).some((count) => count > 0) && (
-        <div className='flex items-center gap-2'>
-          {statusChip('failed', statusCounts.failed)}
-          {statusChip('completed', statusCounts.completed)}
-          {statusChip('downloading', statusCounts.downloading)}
-          {statusChip('queued', statusCounts.queued)}
-        </div>
-      )}
+      <StatusChips downloads={downloads} />
 
       <Skeleton loading={isLoading} className='w-full'>
         <Table className='px-4 py-2 rounded-lg overflow-hidden bg-slate-900/30 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_4px_10px_rgba(0,0,0,0.1)]'>
@@ -114,15 +118,7 @@ export default function ElectronDownloads() {
           </TableHeader>
           <TableBody>
             {isElectron && table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className={(cell.column.columnDef.meta as any)?.className}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              table.getRowModel().rows.map((row) => <DownloadRow key={row.original.beatmapsetId} row={row} />)
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className='h-24 text-center text-slate-400'>
@@ -182,6 +178,7 @@ const columns: ColumnDef<Download>[] = [
         .with({ status: Status.AlreadyInstalled }, (d) => [null, d.installLocation])
         .with({ status: Status.AlreadyDownloaded }, (d) => [null, d.downloadPath])
         .with({ status: Status.Queued }, (d) => [null, null, osuwebUrl])
+        .with({ status: Status.Fetching }, (d) => [null, null, osuwebUrl])
         .with({ status: Status.Fetched }, (d) => [d.filename, null])
         .with({ status: Status.StartingDownload }, (d) => [d.filename, null])
         .with({ status: Status.Downloading }, (d) => [d.filename, d.outputPath])
@@ -190,7 +187,7 @@ const columns: ColumnDef<Download>[] = [
         .otherwise(() => []);
       const download = row.original as DownloadType[Status.Downloading];
       return (
-        <div className='flex min-h-[36px]'>
+        <div className='flex items-center min-h-[36px]'>
           <div>
             <div className='line-clamp-1 break-all'>{name}</div>
             {outputPath && (
@@ -291,23 +288,36 @@ const columns: ColumnDef<Download>[] = [
         size: 'icon',
         className: 'text-slate-400 bg-slate-900 hover:bg-slate-700/40',
       };
+      const mutateDownloads = () => mutate(swrKeyIncludes(Channel.GetDownloads));
       const clearButton = (
-        <Button {...props} key='cancel-btn' onClick={() => window.ipc.clearDownload(beatmapsetId)}>
+        <Button
+          {...props}
+          key='cancel-btn'
+          onClick={() => window.ipc.clearDownload(beatmapsetId).then(mutateDownloads)}
+        >
           <X className='w-5 h-5 text-red-400' />
         </Button>
       );
       const cancelButton = (
-        <Button {...props} key='cancel-btn' onClick={() => window.ipc.cancelDownload(beatmapsetId)}>
+        <Button
+          {...props}
+          key='cancel-btn'
+          onClick={() => window.ipc.cancelDownload(beatmapsetId).then(mutateDownloads)}
+        >
           <X className='w-5 h-5' />
         </Button>
       );
       const stopButton = (
-        <Button {...props} key='stop-btn' onClick={() => window.ipc.cancelDownload(beatmapsetId)}>
+        <Button {...props} key='stop-btn' onClick={() => window.ipc.cancelDownload(beatmapsetId).then(mutateDownloads)}>
           <StopCircle className='text-red-400' />
         </Button>
       );
       const retryButton = (
-        <Button {...props} key='retry-btn' onClick={() => tryCatch(window.ipc.retryDownload(beatmapsetId))}>
+        <Button
+          {...props}
+          key='retry-btn'
+          onClick={() => tryCatch(window.ipc.retryDownload(beatmapsetId).then(mutateDownloads))}
+        >
           <RefreshCw className='text-yellow-200 w-4 h-4' />
         </Button>
       );
@@ -330,3 +340,67 @@ const columns: ColumnDef<Download>[] = [
     },
   },
 ];
+
+function StatusChips({ downloads }: { downloads: Download[] }) {
+  const [getLatestDownloads, setLatestDownloads] = useStateRef<Download[]>(downloads);
+
+  useEffect(() => {
+    window.ipc?.onDownloadUpdate(null, (download) => {
+      const index = getLatestDownloads().findIndex((d) => d.beatmapsetId === download.beatmapsetId);
+      getLatestDownloads()[index] = download;
+      setLatestDownloads([...getLatestDownloads()]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setLatestDownloads(downloads);
+  }, [downloads, setLatestDownloads]);
+
+  const byStatus = (status: Status) => (d: Download) => d.status === status;
+  const statusCounts = {
+    queued: getLatestDownloads().filter(
+      (d) =>
+        !d.cancelled &&
+        [Status.Pending, Status.CheckingLocalFiles, Status.Queued, Status.Fetching, Status.Fetched].includes(d.status),
+    ).length,
+    downloading: getLatestDownloads().filter(
+      (d) => !d.cancelled && [Status.StartingDownload, Status.Downloading].includes(d.status),
+    ).length,
+    completed: getLatestDownloads().filter(byStatus(Status.Completed)).length,
+    failed: getLatestDownloads().filter(byStatus(Status.Failed)).length,
+  };
+
+  return (
+    Object.values(statusCounts).some((count) => count > 0) && (
+      <div className='flex items-center gap-2'>
+        {statusChip('failed', statusCounts.failed)}
+        {statusChip('completed', statusCounts.completed)}
+        {statusChip('downloading', statusCounts.downloading)}
+        {statusChip('queued', statusCounts.queued)}
+      </div>
+    )
+  );
+}
+
+function DownloadRow({ row }: { row: Row<Download> }) {
+  const [data, setData] = useState<Download | undefined>();
+  useEffect(() => {
+    window.ipc?.onDownloadUpdate(row.original.beatmapsetId, (download) => setData(download));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (data) {
+    row.original = data;
+  }
+
+  return (
+    <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+      {row.getVisibleCells().map((cell) => (
+        <TableCell key={cell.id} className={(cell.column.columnDef.meta as any)?.className}>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
+  );
+}
