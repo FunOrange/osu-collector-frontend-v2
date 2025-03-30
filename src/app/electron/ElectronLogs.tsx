@@ -13,7 +13,7 @@ export default function ElectronLogs() {
     let color: string | undefined;
     for (const line of lines) {
       if (line.match(/^\[\d+-\d+-\d+ \d+:\d+:\d+.\d+\] \[info\] /)) {
-        color = 'text-blue-300';
+        color = '';
       } else if (line.match(/^\[\d+-\d+-\d+ \d+:\d+:\d+.\d+\] \[error\] /)) {
         color = 'text-red-400';
       } else if (line.match(/^\[\d+-\d+-\d+ \d+:\d+:\d+.\d+\] \[warn\] /)) {
