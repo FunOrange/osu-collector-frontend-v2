@@ -18,7 +18,7 @@ export default function BarGraph({ title, data, onBarClick, className, barClassN
   const length = data.x.length;
   const maxValue = Math.max(...data.y);
   const barStyle = (x: number, y: number, i: number) => ({
-    opacity: filter ? 1 : 0.3 + 0.7 * calculateOverlap([x, x + 1], filter),
+    opacity: filter ? 0.3 + 0.7 * calculateOverlap([x, x + 1], filter) : 1,
     backgroundColor: data.barColors[i],
     height: `${Math.round(100 * y) / maxValue}%`,
     borderBottom: y / maxValue < 0.02 ? '1px solid #2b2f46' : undefined,
