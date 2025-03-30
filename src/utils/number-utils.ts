@@ -1,7 +1,7 @@
 export const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
 export const ONE_MEGABYTE = 1024 * 1024;
 
-export const calculateOverlap = (target: [number, number] = [0, 0], value: [number, number] = [0, 0]) => {
+export const calculateOverlap = (target: [number, number] = [0, 1], value: [number, number] = [0, 1]) => {
   const [tStart, tEnd] = target;
   const [vStart, vEnd] = value;
   const overlapStart = Math.max(tStart, vStart);
