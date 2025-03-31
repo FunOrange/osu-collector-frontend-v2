@@ -3,6 +3,7 @@ import { Download, DownloadMetadata } from "./downloader-types";
 import { TournamentImportMethod } from "@/app/electron/ElectronImportTournamentDialog";
 
 export enum Channel {
+  GetAppVersion = "getAppVersion",
   PathJoin = "pathJoin",
   PathSep = "pathSep",
   OpenDevTools = "openDevTools",
@@ -31,6 +32,7 @@ export enum Channel {
 }
 
 export interface IpcHandlers {
+  [Channel.GetAppVersion]: () => Promise<string>;
   [Channel.PathJoin]: (...args: string[]) => Promise<string>;
   [Channel.PathSep]: () => Promise<string>;
   [Channel.OpenDevTools]: () => Promise<void>;

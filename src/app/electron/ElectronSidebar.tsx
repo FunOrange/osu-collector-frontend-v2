@@ -13,6 +13,7 @@ import {
   SidebarMenuItem,
 } from '@/components/shadcn/sidebar';
 import { Skeleton } from '@/components/shadcn/skeleton';
+import useClientValue from '@/hooks/useClientValue';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { cn } from '@/utils/shadcn-utils';
 import { Gear, House } from 'react-bootstrap-icons';
@@ -41,6 +42,7 @@ export interface ElectronSidebarProps {
 }
 export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps) {
   const { user, isLoading } = useUser();
+  const appVersion = useClientValue(window.ipc?.getAppVersion, '');
 
   return (
     <Sidebar>
@@ -85,7 +87,7 @@ export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps)
             </Skeleton>
           </SidebarMenuItem>
         </SidebarMenu>
-        <div className='text-xs text-slate-500 dark:text-slate-400'>version: 2.0.0</div>
+        <div className='text-xs text-slate-500 dark:text-slate-400'>version: {appVersion}</div>
       </SidebarFooter>
     </Sidebar>
   );
