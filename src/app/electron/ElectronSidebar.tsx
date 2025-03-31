@@ -42,7 +42,7 @@ export interface ElectronSidebarProps {
 }
 export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps) {
   const { user, isLoading } = useUser();
-  const appVersion = useClientValue(window.ipc?.getAppVersion, '');
+  const appVersion = useClientValue(typeof window !== 'undefined' && window.ipc?.getAppVersion, '');
 
   return (
     <Sidebar>
