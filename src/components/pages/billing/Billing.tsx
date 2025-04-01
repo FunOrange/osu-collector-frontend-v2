@@ -408,13 +408,15 @@ export default function Billing() {
         <div className='flex flex-col gap-4'>
           <div className='w-full max-w-screen-lg'>
             <h1 className='text-2xl text-slate-400'>
-              Twitch Sub <span className='text-red-300'> - DEPRECATED</span>
+              Twitch Sub <span className='text-red-400'> - DEPRECATED</span>
             </h1>
             <div className='text-sm text-slate-400 mb-1'>
               An osu!Collector subscription can be obtained by subbing to FunOrange on Twitch. Existing Twitch Prime
               users can use a <span className='text-white'>prime sub</span> for no additional cost.
             </div>
-            <div className='text-sm text-white'>NOTE: This subscription method will stop working in April.</div>
+            <div className='text-sm text-white'>
+              NOTE: This subscription method has stopped working as of April 1st, 2025.
+            </div>
           </div>
 
           <div className='flex gap-16 px-5 py-6 rounded border-slate-900 shadow-inner bg-[#162032]'>
