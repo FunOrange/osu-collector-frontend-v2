@@ -115,7 +115,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
 
             <div className='flex items-center my-2'>
               <div className='w-full border-b border-slate-400' />
-              <span className='mx-3 text-center text-slate-400 min-w-[140px]'>Or pay with card</span>
+              <span className='mx-3 text-center text-slate-400 min-w-[140px]'>or pay with card</span>
               <div className='w-full border-b border-slate-400' />
             </div>
 
@@ -141,7 +141,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
 
             <div className='flex items-center my-2'>
               <div className='w-full border-b border-slate-400' />
-              <span className='mx-3 text-center text-slate-400 whitespace-nowrap'>Если вы из России 🇷🇺</span>
+              <span className='mx-3 text-center text-slate-400 whitespace-nowrap'>or pay with crypto:</span>
               <div className='w-full border-b border-slate-400' />
             </div>
 
