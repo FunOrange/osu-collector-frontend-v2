@@ -1,5 +1,5 @@
 'use client';
-import { clone } from 'ramda';
+import { clone, equals } from 'ramda';
 import CollectionBeatmapFilters, {
   BeatmapFilters,
 } from '@/components/pages/collections/[collectionId]/CollectionBeatmapsSection/CollectionBeatmapFilters';
@@ -35,17 +35,26 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   );
 
   // #region frontend filtering and sorting
-  const [filters, _setFilters] = useState<BeatmapFilters>({
+  const defaultFilters: BeatmapFilters = {
     search: '',
     stars: [0, 11],
     bpm: [150, 310],
-  });
+  };
+  const [filters, setFilters] = useState<BeatmapFilters>(defaultFilters);
   const [frontendFilteringEnabled, setFrontendFilteringEnabled] = useState(false);
-  const setFilters = (...args: Parameters<typeof _setFilters>): ReturnType<typeof _setFilters> => {
+  const applyFilters = (arg: ((prev: BeatmapFilters) => BeatmapFilters) | BeatmapFilters) => {
+    const updateSearchParams = () => {
+      const newFilters = typeof arg === 'function' ? arg(filters) : arg;
+      const qs = new URLSearchParams(Object.entries(newFilters));
+      const url = new URL(window.location.href);
+      url.search = equals(newFilters, defaultFilters) ? '' : qs.toString();
+      window.history.replaceState(null, '', url);
+    };
+    updateSearchParams();
     scrollTo(filtersRef);
     setFrontendFilteringEnabled(true);
     setPage(1);
-    return _setFilters(...args);
+    return setFilters(arg);
   };
   const v3 = useSWR(frontendFilteringEnabled && endpoints.collections.id(collection.id).beatmapsv3.GET, (url) =>
     axios.get<{ beatmaps: Beatmap[]; beatmapsets: Beatmapset[] }>(url, { params: { perPage } }).then((res) => res.data),
@@ -70,7 +79,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
       <CollectionBeatmapFilters
         collection={collection}
         filters={filters}
-        setFilters={setFilters}
+        setFilters={applyFilters}
         pagination={{
           total: frontendResults.pagination.total ?? null,
           page: frontendResults.pagination.page,

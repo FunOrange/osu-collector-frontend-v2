@@ -44,7 +44,9 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
         <Button
           className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => {
-            window.open(`osucollector://collections/${collection.id}`, '_blank', 'noreferrer');
+            const url = new URL(`osucollector://collections/${collection.id}`);
+            // url.search = window.location.search;
+            window.open(url.toString(), '_blank', 'noreferrer');
             toast({
               title: 'App launched!',
               description: "Don't have it installed?",

@@ -1,13 +1,6 @@
 'use client';
 import DownloadPreviewModal from '@/components/DownloadPreviewModal';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/shadcn/dialog';
+import { Dialog, DialogTrigger } from '@/components/shadcn/dialog';
 import { Collection } from '@/shared/entities/v1/Collection';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import Link from 'next/link';
@@ -36,7 +29,9 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
       <Button
         className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
         onClick={() => {
-          window.open(`osucollector://collections/${collection.id}`, '_blank', 'noreferrer');
+          const url = new URL(`osucollector://collections/${collection.id}`);
+          // url.search = window.location.search;
+          window.open(url.toString(), '_blank', 'noreferrer');
           toast({
             title: 'App launched!',
             description: "Don't have it installed?",
