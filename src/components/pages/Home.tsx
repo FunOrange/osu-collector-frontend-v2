@@ -4,7 +4,6 @@ import CollectionCard from '@/components/CollectionCard';
 import { Collection } from '@/shared/entities/v1/Collection';
 import Link from 'next/link';
 import { Discord, Fire, Stars } from 'react-bootstrap-icons';
-import Snowfall from 'react-snowfall';
 
 export interface HomeProps {
   metadata: any;
@@ -14,7 +13,6 @@ export interface HomeProps {
 export default function Home({ metadata, popularCollections, recentCollections }: HomeProps) {
   return (
     <div className='flex justify-center w-full'>
-      <Snowfall style={{ position: 'fixed' }} snowflakeCount={50} />
       <div className='px-2 py-5 md:px-10 w-full max-w-screen-2xl'>
         <div className='p-4 mb-4 text-center rounded bg-sky-900 text-sky-200'>
           <Discord className='inline mb-1 mr-2' size={20} />
@@ -28,7 +26,6 @@ export default function Home({ metadata, popularCollections, recentCollections }
         <div className='items-center justify-between gap-6 mb-4 md:flex'>
           <div className='my-2'>
             <div className='flex items-end gap-3 mb-1'>
-              <Image width={44} height={44} src='/icons/santa-hat.svg' unoptimized alt='santa hat' />
               <h1 className='text-3xl'>Welcome to osu!Collector!</h1>
             </div>
             <p>
