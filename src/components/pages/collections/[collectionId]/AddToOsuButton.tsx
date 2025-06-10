@@ -44,7 +44,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
         <Button
           className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
           onClick={() => {
-            const url = new URL(`osucollector://collections/${collection.id}`);
+            const url = new URL(`osucollector://collections/${collection.id}` + window.location.search);
             // url.search = window.location.search;
             window.open(url.toString(), '_blank', 'noreferrer');
             toast({

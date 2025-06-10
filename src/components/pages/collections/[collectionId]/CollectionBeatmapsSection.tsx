@@ -113,7 +113,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   );
 }
 
-const joinBeatmapsets = (beatmaps: Beatmap[], beatmapsets: Beatmapset[]): BeatmapWithBeatmapset[] =>
+export const joinBeatmapsets = (beatmaps: Beatmap[], beatmapsets: Beatmapset[]): BeatmapWithBeatmapset[] =>
   beatmaps?.map((beatmap) => ({ ...beatmap, beatmapset: beatmapsets?.find((b) => b.id === beatmap.beatmapset_id) }));
 
 function frontendFilterSortPaginate(

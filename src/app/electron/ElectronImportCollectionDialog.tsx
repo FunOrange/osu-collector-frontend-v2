@@ -16,7 +16,7 @@ import { Button } from '@/components/shadcn/button';
 import { cn } from '@/utils/shadcn-utils';
 import { Checkbox } from '@/components/shadcn/checkbox';
 import useClientValue from '@/hooks/useClientValue';
-import { assoc } from 'ramda';
+import { assoc, clone, equals, uniq } from 'ramda';
 import { ArrowClockwise, ArrowLeft, ArrowRight, ArrowUp, ThreeDots } from 'react-bootstrap-icons';
 import { File, RefreshCw } from 'lucide-react';
 import { formatBytes } from '@/utils/string-utils';
@@ -26,16 +26,36 @@ import { tryCatch } from '@/utils/try-catch';
 import { useToast } from '@/components/shadcn/use-toast';
 import { ONE_MEGABYTE } from '@/utils/number-utils';
 import { swrKeyIncludes } from '@/utils/swr-utils';
+import BarGraphStars from '@/components/pages/collections/[collectionId]/BarGraphStars';
+import { Slider } from '@/components/shadcn/slider';
+import BarGraphBpm from '@/components/pages/collections/[collectionId]/BarGraphBpm';
+import { api } from '@/services/osu-collector-api';
+import { Beatmap, BeatmapWithBeatmapset } from '@/shared/entities/v2/Beatmap';
+import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
+import { joinBeatmapsets } from '@/components/pages/collections/[collectionId]/CollectionBeatmapsSection';
 
 interface CollectionImportOptions {
   modifyCollectionDb: boolean;
   queueDownloads: boolean;
 }
 
+interface BeatmapFilters {
+  stars: [number, number];
+  bpm: [number, number];
+}
+
+const defaultFilters: BeatmapFilters = { stars: [0, 11], bpm: [150, 310] };
+
 export function ElectronImportCollectionDialog() {
   const { toast } = useToast();
   const { data: uri, mutate: mutateURI } = useSWR(window.ipc && Channel.GetURI, window.ipc?.getURI);
   const [collectionId, setCollectionId] = useState<number | undefined>();
+  const [filters, setFilters] = useState<BeatmapFilters>(defaultFilters);
+  const [pendingFilters, setPendingFilters] = useState<BeatmapFilters>(defaultFilters);
+  const resetFilters = () => {
+    setPendingFilters(defaultFilters);
+    setFilters(defaultFilters);
+  };
   const [open, setOpen] = useState<boolean>(false);
   useEffect(() => {
     const collectionId = Number(uri?.match(/osucollector:\/\/collections\/(\d+)/)?.[1]);
@@ -43,6 +63,15 @@ export function ElectronImportCollectionDialog() {
       setOpen(true);
       setCollectionId(collectionId);
       mutateURI(window.ipc.clearURI().then(() => undefined));
+      const search = new URLSearchParams(uri?.match(/osucollector:\/\/collections\/\d+(.+)$/)?.[1]);
+      if (search.size > 0) {
+        const filters = {
+          stars: (search.get('stars')?.split(',').map(Number) as [number, number]) || defaultFilters.stars,
+          bpm: (search.get('bpm')?.split(',').map(Number) as [number, number]) || defaultFilters.bpm,
+        };
+        setPendingFilters(filters);
+        setFilters(filters);
+      }
     }
   }, [uri, setCollectionId, mutateURI]);
 
@@ -120,8 +149,32 @@ export function ElectronImportCollectionDialog() {
     }
 
     if (!skipping.queueDownloads) {
+      const beatmapsetIds = await (async () => {
+        if (equals(filters, defaultFilters)) {
+          return collection?.beatmapsets.map((b) => b.id);
+        } else {
+          const v3 = await api
+            .get<{ beatmaps: Beatmap[]; beatmapsets: Beatmapset[] }>(`/collections/${collectionId}/beatmapsv3`)
+            .then((res) => res.data);
+
+          // apply filters
+          const _filters = clone(filters);
+          if (filters.stars[0] === 0) _filters.stars[0] = -Infinity;
+          if (filters.stars[1] === 11) _filters.stars[1] = Infinity;
+          if (filters.bpm[0] === 150) _filters.bpm[0] = -Infinity;
+          if (filters.bpm[1] === 310) _filters.bpm[1] = Infinity;
+
+          const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value < max;
+          const withinStarRange = (beatmap: BeatmapWithBeatmapset) =>
+            isWithinRange(_filters.stars, beatmap.difficulty_rating);
+          const withinBpmRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.bpm, beatmap.bpm);
+          const beatmapsWithBeatmapsets = joinBeatmapsets(v3.beatmaps, v3.beatmapsets);
+          const results = beatmapsWithBeatmapsets.filter(withinStarRange)?.filter(withinBpmRange);
+          return uniq(results.map((beatmap) => beatmap.beatmapset_id));
+        }
+      })();
       const payload = {
-        beatmapsetIds: collection?.beatmapsets.map((b) => b.id),
+        beatmapsetIds: beatmapsetIds,
         metadata: {
           collection: {
             id: collectionId,
@@ -171,7 +224,10 @@ export function ElectronImportCollectionDialog() {
                   onCheckedChange={(checked) => setOptions(assoc('modifyCollectionDb', checked))}
                 />
                 <span className={cn('text-sm', !skipping.modifyCollectionDb && 'text-white')}>
-                  modify collection.db file {skipping.modifyCollectionDb && `(skipping)`}
+                  modify collection.db file{' '}
+                  {skipping.modifyCollectionDb && (
+                    <span className={cn(options.modifyCollectionDb && 'text-red-400')}>(skipping)</span>
+                  )}
                 </span>
               </div>
               <div>
@@ -206,7 +262,10 @@ export function ElectronImportCollectionDialog() {
                   onCheckedChange={(checked) => setOptions(assoc('queueDownloads', checked))}
                 />
                 <span className={cn('text-sm', !skipping.queueDownloads && 'text-white')}>
-                  download maps {skipping.queueDownloads && `(skipping)`}
+                  download maps{' '}
+                  {skipping.queueDownloads && (
+                    <span className={cn(options.queueDownloads && 'text-red-400')}>(skipping)</span>
+                  )}
                 </span>
               </div>
               <div>
@@ -233,6 +292,65 @@ export function ElectronImportCollectionDialog() {
                 </div>
               </WindowsFileExplorer>
             </label>
+
+            {options.queueDownloads && !skipping.queueDownloads && (
+              <div className='w-full flex flex-col gap-1 self-start p-2 rounded'>
+                Maps matching these filters will be downloaded:
+                {equals(filters, defaultFilters) ? (
+                  <div className='text-green-500 text-xs'>all maps will be downloaded</div>
+                ) : (
+                  <div className='cursor-pointer hover:underline text-blue-500 text-xs' onClick={resetFilters}>
+                    click here to download all maps
+                  </div>
+                )}
+                <div className={className.graphTitle}>Filter by Star Rating</div>
+                <BarGraphStars
+                  title=''
+                  collection={collection}
+                  className={className.graph}
+                  barClassName='rounded-t-lg'
+                  filter={pendingFilters.stars}
+                  onBarClick={(star) => {
+                    setPendingFilters(assoc('stars', [star, star + 1]));
+                    setFilters(assoc('stars', [star, star + 1]));
+                  }}
+                />
+                <div className='px-5 pb-4'>
+                  <Slider
+                    variant='orange'
+                    min={1}
+                    max={11}
+                    step={0.5}
+                    value={pendingFilters.stars}
+                    onValueChange={(v) => setPendingFilters(assoc('stars', v))}
+                    onValueCommit={(v) => setFilters(assoc('stars', v))}
+                  />
+                </div>
+                <div className={className.graphTitle}>Filter by BPM</div>
+                <BarGraphBpm
+                  title=''
+                  collection={collection}
+                  className={className.graph}
+                  barClassName='rounded-t-md'
+                  filter={pendingFilters.bpm}
+                  onBarClick={(bpm) => {
+                    setPendingFilters(assoc('bpm', [bpm, bpm + 10]));
+                    setFilters(assoc('bpm', [bpm, bpm + 10]));
+                  }}
+                />
+                <div className='px-5 pb-4'>
+                  <Slider
+                    variant='sky'
+                    min={150}
+                    max={310}
+                    step={10}
+                    value={pendingFilters.bpm}
+                    onValueChange={(v) => setPendingFilters(assoc('bpm', v))}
+                    onValueCommit={(v) => setFilters(assoc('bpm', v))}
+                  />
+                </div>
+              </div>
+            )}
           </DialogDescription>
           <DialogFooter>
             <DialogClose asChild>
@@ -285,3 +403,8 @@ function WindowsFileExplorer({ addressBar, children, className }: WindowsFileExp
     </div>
   );
 }
+
+const className = {
+  graphTitle: cn('font-semibold text-white text-lg'),
+  graph: cn('transition-all px-6 pb-2 h-[130px] rounded-lg', 'lg:h-[120px]'),
+};
