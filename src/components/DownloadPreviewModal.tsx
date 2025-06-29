@@ -2,16 +2,18 @@
 /* eslint-disable no-unused-vars */
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/shadcn/dialog';
 import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 import previewBeatmaps from '@/utils/downloadPreviewBeatmaps.json';
 import { Button } from '@/components/shadcn/button';
 import Image from 'next/image';
-import Link from 'next/link';
 import { getRandomFromArray } from '@/utils/array-utils';
 import { Progress } from '@/components/shadcn/progress';
-import { DialogClose } from '@radix-ui/react-dialog';
 import { Collection } from '@/shared/entities/v1/Collection';
 import DesktopFeaturePreviewOverlay from '@/components/DesktopFeaturePreviewOverlay';
+import useSWR from 'swr';
+import { endpoints } from '@/shared/endpoints';
+import axios from 'axios';
+import { Beatmap } from '@/shared/entities/v2/Beatmap';
+import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
 
 enum DownloadStates {
   NotStarted = 'Starting download...',
@@ -29,20 +31,32 @@ export interface DownloadPreviewModalProps {
 function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalProps) {
   // simulate downloads
   const [collectionDownloads, setCollectionDownloads] = useState([new CollectionDownload(collection)]);
+  const v3 = useSWR(open && endpoints.collections.id(collection.id).beatmapsv3.GET, (url) =>
+    axios.get<{ beatmaps: Beatmap[]; beatmapsets: Beatmapset[] }>(url).then((res) => res.data),
+  );
+  useEffect(() => {
+    const beatmapsets = v3.data?.beatmapsets;
+    setCollectionDownloads([
+      new CollectionDownload({
+        ...collection,
+        beatmapsets: beatmapsets?.map(({ id }) => ({ id })) ?? [],
+      }),
+    ]);
+  }, [collection, v3.data?.beatmapsets]);
   const intervalRef = useRef(null);
   useEffect(() => {
-    if (open) {
+    if (open && v3.data?.beatmapsets) {
       collectionDownloads[0].reset(collection);
       intervalRef.current = setInterval(simulateDownload, 200);
     }
     return () => clearInterval(intervalRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, v3.data?.beatmapsets]);
   const simulateDownload = () => {
     // progress currently downloading beatmapset
     setCollectionDownloads((prev) => {
       const _collectionDownloads = [...prev];
-      const collectionDownload = collectionDownloads[0];
+      const collectionDownload = prev[0];
       let currentBeatmapset = collectionDownload.beatmapsets.find(
         (beatmapset) => beatmapset.downloadStatus === DownloadStates.Downloading,
       );
@@ -81,11 +95,11 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
 
   const [overlayVisible, setOverlayVisible] = useState(false);
   useEffect(() => {
-    if (open) {
+    if (open && v3.data?.beatmapsets) {
       setOverlayVisible(false);
       setTimeout(() => setOverlayVisible(true), 1000);
     }
-  }, [open]);
+  }, [open, v3.data?.beatmapsets]);
 
   return (
     <DialogContent className='max-w-4xl' onPointerDownOutside={close}>
