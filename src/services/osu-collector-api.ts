@@ -319,13 +319,3 @@ export async function favouriteTournament(tournamentId, favourited) {
     })
     .then((res) => res.data);
 }
-
-export async function changeUser({ username, userId }) {
-  const route = '/users/changeUser';
-  const res = await api.post(route, { username, userId });
-  if (res.status !== 200) {
-    throw new Error(`${route} responded with ${res.status}: ${res.data}`);
-  }
-  return res.data;
-}
-
