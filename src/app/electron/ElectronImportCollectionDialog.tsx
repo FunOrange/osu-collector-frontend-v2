@@ -33,6 +33,7 @@ import { api } from '@/services/osu-collector-api';
 import { Beatmap, BeatmapWithBeatmapset } from '@/shared/entities/v2/Beatmap';
 import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
 import { joinBeatmapsets } from '@/components/pages/collections/[collectionId]/CollectionBeatmapsSection';
+import { match } from 'ts-pattern';
 
 interface CollectionImportOptions {
   modifyCollectionDb: boolean;
@@ -42,6 +43,7 @@ interface CollectionImportOptions {
 interface BeatmapFilters {
   stars: [number, number];
   bpm: [number, number];
+  status?: 'any' | 'ranked' | 'qualified' | 'loved' | 'pending' | 'graveyard';
 }
 
 const defaultFilters: BeatmapFilters = { stars: [0, 11], bpm: [150, 310] };
@@ -164,12 +166,22 @@ export function ElectronImportCollectionDialog() {
           if (filters.bpm[0] === 150) _filters.bpm[0] = -Infinity;
           if (filters.bpm[1] === 310) _filters.bpm[1] = Infinity;
 
+          const byRankedStatus = (beatmap: BeatmapWithBeatmapset) =>
+            match(filters.status)
+              .with('any', () => true)
+              .with('ranked', () => beatmap.status === 'ranked')
+              .with('qualified', () => beatmap.status === 'qualified')
+              .with('loved', () => beatmap.status === 'loved')
+              .with('pending', () => beatmap.status === 'pending')
+              .with('graveyard', () => beatmap.status === 'graveyard')
+              .with(undefined, () => true)
+              .exhaustive();
           const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value < max;
           const withinStarRange = (beatmap: BeatmapWithBeatmapset) =>
             isWithinRange(_filters.stars, beatmap.difficulty_rating);
           const withinBpmRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.bpm, beatmap.bpm);
           const beatmapsWithBeatmapsets = joinBeatmapsets(v3.beatmaps, v3.beatmapsets);
-          const results = beatmapsWithBeatmapsets.filter(withinStarRange)?.filter(withinBpmRange);
+          const results = beatmapsWithBeatmapsets.filter(byRankedStatus).filter(withinStarRange).filter(withinBpmRange);
           return uniq(results.map((beatmap) => beatmap.beatmapset_id));
         }
       })();
