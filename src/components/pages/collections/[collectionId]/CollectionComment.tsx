@@ -8,12 +8,14 @@ import * as api from '@/services/osu-collector-api';
 import useSubmit from '@/hooks/useSubmit';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { cn } from '@/utils/shadcn-utils';
 
 export interface CollectionCommentProps {
   collectionId: number;
   comment: Comment;
+  preview?: boolean;
 }
-export default function CollectionComment({ comment, collectionId }: CollectionCommentProps) {
+export default function CollectionComment({ comment, collectionId, preview }: CollectionCommentProps) {
   const { user } = useUser();
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
@@ -50,7 +52,7 @@ export default function CollectionComment({ comment, collectionId }: CollectionC
               </>
             )}
           </div>
-          <div className='text-sm whitespace-pre'>{comment.message}</div>
+          <div className={cn('text-sm whitespace-pre-wrap', preview && 'line-clamp-1')}>{comment.message}</div>
           <div className='mt-1'>
             <CollectionCommentLikeButton collectionId={collectionId} comment={comment} />
           </div>

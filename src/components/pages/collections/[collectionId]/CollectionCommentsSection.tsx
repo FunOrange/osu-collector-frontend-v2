@@ -24,6 +24,7 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
         <CollectionComment
           collectionId={collection.id}
           comment={collection.comments.sort((a, b) => b.upvotes.length - a.upvotes.length)[0]}
+          preview
         />
         <CollectionCommentsModal
           collection={collection}
