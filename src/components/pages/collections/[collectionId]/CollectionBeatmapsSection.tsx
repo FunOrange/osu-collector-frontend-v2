@@ -14,6 +14,7 @@ import { Beatmap, BeatmapWithBeatmapset } from '@/shared/entities/v2/Beatmap';
 import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
 import { PaginationProps } from '@/components/shadcn/pagination';
 import { navbarHeightPx } from '@/components/Navbar';
+import { match } from 'ts-pattern';
 
 const perPage = 50;
 
@@ -39,6 +40,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
     search: '',
     stars: [0, 11],
     bpm: [150, 310],
+    status: 'any',
   };
   const [filters, setFilters] = useState<BeatmapFilters>(defaultFilters);
   const [frontendFilteringEnabled, setFrontendFilteringEnabled] = useState(false);
@@ -128,9 +130,18 @@ function frontendFilterSortPaginate(
   _filters.search = filters.search.trim();
 
   const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value < max;
+  const byRankedStatus = (beatmap: BeatmapWithBeatmapset) =>
+    match(filters.status)
+      .with('any', () => true)
+      .with('ranked', () => beatmap.status === 'ranked')
+      .with('qualified', () => beatmap.status === 'qualified')
+      .with('loved', () => beatmap.status === 'loved')
+      .with('pending', () => beatmap.status === 'pending')
+      .with('graveyard', () => beatmap.status === 'graveyard')
+      .exhaustive();
   const withinStarRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.stars, beatmap.difficulty_rating);
   const withinBpmRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.bpm, beatmap.bpm);
-  const matchesSearch = (beatmap: BeatmapWithBeatmapset) => {
+  const matchesKeyword = (beatmap: BeatmapWithBeatmapset) => {
     if (!_filters.search) return true;
     const caseInsensitiveMatch = (field: string) => field.toLowerCase().includes(_filters.search.toLowerCase());
     if (caseInsensitiveMatch(beatmap.beatmapset?.title)) return true;
@@ -144,7 +155,8 @@ function frontendFilterSortPaginate(
   const results = beatmaps
     ?.filter(withinStarRange)
     ?.filter(withinBpmRange)
-    ?.filter(matchesSearch)
+    ?.filter(matchesKeyword)
+    ?.filter(byRankedStatus)
     ?.sort((a, b) => {
       if (a.beatmapset?.title !== b.beatmapset?.title) return a.beatmapset?.title.localeCompare(b.beatmapset?.title);
       if (a.beatmapset?.id !== b.beatmapset?.id) return b.beatmapset?.id - a.beatmapset?.id;

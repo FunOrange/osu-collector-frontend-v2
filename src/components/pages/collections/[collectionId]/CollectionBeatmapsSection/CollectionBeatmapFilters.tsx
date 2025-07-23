@@ -6,7 +6,7 @@ import useSticky from '@/hooks/useSticky';
 import { Slider } from '@/components/shadcn/slider';
 import { useState } from 'react';
 import { assoc, equals, range } from 'ramda';
-import { Search } from 'react-bootstrap-icons';
+import { Search, ThreeDotsVertical } from 'react-bootstrap-icons';
 import useDebouncedFunction from '@/hooks/useDebounce';
 import {
   Pagination,
@@ -20,11 +20,19 @@ import {
   PaginationFirst,
 } from '@/components/shadcn/pagination';
 import { screenHeightMinusNavbar } from '@/components/Navbar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/shadcn/dropdown-menu';
+import { match } from 'ts-pattern';
 
 export interface BeatmapFilters {
   search: string;
   stars: [number, number];
   bpm: [number, number];
+  status: 'any' | 'ranked' | 'qualified' | 'loved' | 'pending' | 'graveyard';
 }
 
 export interface CollectionBeatmapFiltersProps {
@@ -62,6 +70,10 @@ export default function CollectionBeatmapFilters({
   const setSearch = useDebouncedFunction((search: string) => {
     setFilters(assoc('search', search));
   }, 100);
+  const setRankedStatusFilter = (status: BeatmapFilters['status']) => {
+    setPendingFilters(assoc('status', status));
+    setFilters(assoc('status', status));
+  };
 
   // #region pagination
   const totalPages = Math.ceil(pagination.total / pagination.perPage);
@@ -199,10 +211,37 @@ export default function CollectionBeatmapFilters({
         <div
           className={cn(
             'p-2 gap-y-2 gap-x-2 lg:gap-x-4 sm:bg-slate-950/30',
+            'flex items-center',
             isSticky && 'bg-slate-950/30 backdrop-blur-sm rounded-b-lg',
           )}
         >
-          <div className='relative col-span-full'>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              asChild
+              className='h-full ml-2 py-1 px-3 hidden sm:flex text-sm whitespace-nowrap transition rounded cursor-pointer bg-pink-600 hover:shadow-xl hover:bg-pink-500'
+            >
+              <span>
+                {match(filters.status)
+                  .with('any', () => 'All maps')
+                  .with('ranked', () => 'Ranked')
+                  .with('qualified', () => 'Qualified')
+                  .with('loved', () => 'Loved')
+                  .with('pending', () => 'Pending')
+                  .with('graveyard', () => 'Graveyard')
+                  .exhaustive()}
+              </span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='w-56' align='end' forceMount sideOffset={0}>
+              <DropdownMenuItem onClick={() => setRankedStatusFilter('any')}>All maps</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRankedStatusFilter('ranked')}>Ranked</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRankedStatusFilter('qualified')}>Qualified</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRankedStatusFilter('loved')}>Loved</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRankedStatusFilter('pending')}>Pending</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setRankedStatusFilter('graveyard')}>Graveyard</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <div className='relative w-full'>
             <div className='absolute inset-y-0 flex items-center pointer-events-none start-0 ps-4'>
               <Search size={20} />
             </div>
