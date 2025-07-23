@@ -70,6 +70,7 @@ export function ElectronImportCollectionDialog() {
         const filters = {
           stars: (search.get('stars')?.split(',').map(Number) as [number, number]) || defaultFilters.stars,
           bpm: (search.get('bpm')?.split(',').map(Number) as [number, number]) || defaultFilters.bpm,
+          status: search.get('status') as BeatmapFilters['status'],
         };
         setPendingFilters(filters);
         setFilters(filters);
