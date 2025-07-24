@@ -43,7 +43,7 @@ interface CollectionImportOptions {
 interface BeatmapFilters {
   stars: [number, number];
   bpm: [number, number];
-  status?: 'any' | 'ranked' | 'qualified' | 'loved' | 'pending' | 'graveyard';
+  status?: 'any' | 'ranked' | 'qualified' | 'loved' | 'pending' | 'graveyard' | null;
 }
 
 const defaultFilters: BeatmapFilters = { stars: [0, 11], bpm: [150, 310] };
@@ -176,6 +176,7 @@ export function ElectronImportCollectionDialog() {
               .with('pending', () => beatmap.status === 'pending')
               .with('graveyard', () => beatmap.status === 'graveyard')
               .with(undefined, () => true)
+              .with(null, () => true)
               .exhaustive();
           const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value < max;
           const withinStarRange = (beatmap: BeatmapWithBeatmapset) =>
