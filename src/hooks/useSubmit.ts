@@ -1,7 +1,10 @@
 import { useState } from 'react';
 
 export class DisplayableError extends Error {
-  constructor(message: string, public readonly childError?: Error) {
+  constructor(
+    message: string,
+    public readonly childError?: Error,
+  ) {
     super(message);
   }
 }
@@ -22,7 +25,7 @@ export default function useSubmit<TFunction extends (...args: any[]) => Promise<
         alert(error.message);
       } else {
         console.error(error);
-        alert('An unknown error occurred. Please try again later.');
+        alert(`An unknown error occurred: ${error?.message}`);
       }
     } finally {
       setLoading(false);
