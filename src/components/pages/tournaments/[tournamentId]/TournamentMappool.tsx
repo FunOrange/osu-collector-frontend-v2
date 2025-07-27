@@ -141,7 +141,10 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
               onMouseLeave={() => setImageHovered(false)}
             >
               <div className='grid gap-2' style={{ gridTemplateColumns: '1fr 50px' }}>
-                <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target='_blank'>
+                <a
+                  href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}#${beatmap.mode}/${beatmap.id}`}
+                  target='_blank'
+                >
                   <div style={{ maxWidth: '264px' }}>
                     <div
                       className='text-lg font-medium text-white truncate'
