@@ -259,12 +259,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea
-                  // value={value}
-                  // onChange={(e) => setUserInput(e.target.value)}
-                  autoFocus
-                  style={{ minHeight: '100px' }}
-                />
+                <Textarea {...form.inputProps('description')} autoFocus style={{ minHeight: '100px' }} />
               </div>
             </div>
             <div>
