@@ -424,22 +424,19 @@ export default function Billing() {
               <div>
                 <div className='mb-1 text-xs text-slate-400'>TWITCH ACCOUNT</div>
                 {!user && (
-                  <YouMustBeLoggedIn>
-                    <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
-                      Link Twitch account
-                    </Button>
-                  </YouMustBeLoggedIn>
+                  <Button size='sm' disabled className='font-bold text-white h-7 bg-cyan-600'>
+                    Link Twitch account
+                  </Button>
                 )}
                 {user && !user?.private?.linkedTwitchAccount && (
                   <Button
                     size='sm'
                     variant='important'
                     className={cn('h-7', !user?.paidFeaturesAccess ? 'bg-cyan-600 font-bold text-white' : '')}
+                    disabled
                     asChild
                   >
-                    <a href='https://id.twitch.tv/oauth2/authorize?client_id=q0uygwcj9cplrb0sb20x7fthkc4wcd&redirect_uri=https%3A%2F%2Fosucollector.com%2Fauthentication%2Ftwitch&response_type=code&scope=user:read:subscriptions'>
-                      Link Twitch Account
-                    </a>
+                    <span>Link Twitch Account</span>
                   </Button>
                 )}
                 {user?.private?.linkedTwitchAccount && (
