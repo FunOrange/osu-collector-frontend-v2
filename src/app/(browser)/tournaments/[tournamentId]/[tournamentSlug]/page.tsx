@@ -14,6 +14,7 @@ import { Pattern, match } from 'ts-pattern';
 import { Metadata } from 'next';
 import UserChip from '@/components/UserChip';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
+import { cn } from '@/utils/shadcn-utils';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const tournament = await api.getTournament(params.tournamentId).catch(() => null);
@@ -141,6 +142,12 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   ) : (
                     <div className='text-slate-500'>No download link provided.</div>
                   )}
+
+                  <div className='relative'>
+                    <div className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800 mt-2')}>
+                      {tournament.description || 'No description provided.'}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className='flex flex-col justify-end gap-2 pl-4 border-l border-slate-700'>
