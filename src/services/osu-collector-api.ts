@@ -232,7 +232,8 @@ export async function unlinkTwitchAccount() {
   return await api.post(`/users/me/unlinkTwitch`).then((res) => res.data);
 }
 
-export async function getInstallerURL(platform = undefined) {
+export type Platform = 'windows' | 'mac' | 'deb' | 'flatpak';
+export async function getInstallerURL(platform: Platform) {
   return await api.get('/installerURL', { params: { platform } }).then((res) => res.data);
 }
 
