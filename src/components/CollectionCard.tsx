@@ -1,3 +1,4 @@
+'use client';
 import moment from 'moment';
 import BarGraph from '@/components/BarGraph';
 import ModeCounters from '@/components/ModeCounters';
@@ -7,11 +8,18 @@ import { starToColor } from '@/utils/theme-utils';
 import FavouriteButton from '@/components/FavouriteButton';
 import UserChip from '@/components/UserChip';
 import { Collection } from '@/shared/entities/v1/Collection';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
+import { useRef } from 'react';
+import { useHover } from '@/hooks/useHover';
 
 export interface CollectionCardProps {
   collection: Collection;
 }
 export default function CollectionCard({ collection }: CollectionCardProps) {
+  const dateUploadedRef = useRef<HTMLAnchorElement>(null);
+  const wasUpdated = collection.dateLastModified._seconds - collection.dateUploaded._seconds > 3600;
+  const isDateHovered = useHover(dateUploadedRef);
+
   if (!collection) return <div></div>;
 
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
@@ -53,9 +61,24 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
           className='hover:bg-slate-700 ml-[-8px]'
           href={`/users/${collection.uploader.id}/uploads/collections`}
         />
-        <small className='pb-2 truncate text-slate-400'>
-          {moment.unix(collection.dateUploaded._seconds).fromNow()}
-        </small>
+        <Popover open={isDateHovered}>
+          <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
+            <small className='pb-2 truncate text-slate-400' ref={dateUploadedRef}>
+              {moment.unix(collection.dateUploaded._seconds).fromNow()}
+            </small>
+          </PopoverTrigger>
+          <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+            <div>
+              {wasUpdated && (
+                <>
+                  Updated {moment.unix(collection.dateLastModified._seconds).format('LLL')}
+                  <br />
+                </>
+              )}
+              {wasUpdated && 'Uploaded'} {moment.unix(collection.dateUploaded._seconds).format('LLL')}
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );
