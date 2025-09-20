@@ -17,7 +17,7 @@ export interface CollectionCardProps {
 }
 export default function CollectionCard({ collection }: CollectionCardProps) {
   const dateUploadedRef = useRef<HTMLAnchorElement>(null);
-  const wasUpdated = collection.dateLastModified._seconds - collection.dateUploaded._seconds > 3600;
+  const wasUpdated = collection.dateLastModified?._seconds - collection.dateUploaded?._seconds > 3600;
   const isDateHovered = useHover(dateUploadedRef);
 
   if (!collection) return <div></div>;
@@ -64,18 +64,18 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
         <Popover open={isDateHovered}>
           <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
             <small className='pb-2 truncate text-slate-400' ref={dateUploadedRef}>
-              {moment.unix(collection.dateUploaded._seconds).fromNow()}
+              {moment.unix(collection.dateUploaded?._seconds).fromNow()}
             </small>
           </PopoverTrigger>
           <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
             <div>
               {wasUpdated && (
                 <>
-                  Updated {moment.unix(collection.dateLastModified._seconds).format('LLL')}
+                  Updated {moment.unix(collection.dateLastModified?._seconds).format('LLL')}
                   <br />
                 </>
               )}
-              {wasUpdated && 'Uploaded'} {moment.unix(collection.dateUploaded._seconds).format('LLL')}
+              {wasUpdated && 'Uploaded'} {moment.unix(collection.dateUploaded?._seconds).format('LLL')}
             </div>
           </PopoverContent>
         </Popover>
