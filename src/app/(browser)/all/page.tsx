@@ -2,12 +2,19 @@ import CollectionCard from '@/components/CollectionCard';
 import MoreResultsButton from '@/components/MoreResultsButton';
 import * as api from '@/services/osu-collector-api';
 import Link from 'next/link';
-import { Search } from 'react-bootstrap-icons';
+import { Search, ThreeDotsVertical } from 'react-bootstrap-icons';
 import { formatQueryParams } from '@/utils/string-utils';
 import { mergeRight } from 'ramda';
 import { cn } from '@/utils/shadcn-utils';
 import { isMatching } from 'ts-pattern';
 import SearchInput from '@/components/pages/all/SearchInput';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/shadcn/dropdown-menu';
+import { Button } from '@/components/shadcn/button';
 
 interface CollectionsPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -24,6 +31,29 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
   return (
     <div className='flex justify-center w-full'>
       <div className='flex flex-col items-center gap-6 px-2 py-5 md:px-10 max-w-screen-2xl'>
+        {searchParams.tutorial === 'true' && (
+          <div className='flex flex-col items-center gap-2 w-full p-6 bg-cyan-700 rounded-xl border-2 border-cyan-900 text-cyan-100'>
+            To download a collection, browse for collections here, then look for these buttons!
+            <div className='flex flex-col gap-2 w-full max-w-[200px] pointer-events-none'>
+              <Button className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
+                Download maps
+              </Button>
+              <div className='flex w-full'>
+                <Button className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
+                  Add to osu!
+                </Button>
+                <div className='h-full hidden sm:flex transition rounded rounded-l-none cursor-pointer bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
+                  <div className='flex items-center'>
+                    <ThreeDotsVertical className='mx-2' />
+                  </div>
+                </div>
+              </div>
+              <Button className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500 opacity-40'>
+                Favorite (0)
+              </Button>
+            </div>
+          </div>
+        )}
         <div className='flex flex-col items-center gap-3'>
           <SearchInput searchParams={searchParams} className='text-center' />
           <div className='flex gap-2 text-2xl'>

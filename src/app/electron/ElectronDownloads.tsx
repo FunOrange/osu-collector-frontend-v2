@@ -15,7 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Progress } from '@/components/shadcn/progress';
 import { match } from 'ts-pattern';
 import { cn } from '@/utils/shadcn-utils';
-import { StopCircle, X } from 'react-bootstrap-icons';
+import { Plus, StopCircle, X } from 'react-bootstrap-icons';
 import { CircleEllipsis, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import useSWR, { mutate } from 'swr';
@@ -115,19 +115,13 @@ export default function ElectronDownloads() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className='h-24 text-center text-slate-400'>
-                  <div>
-                    To get started, browse for collections on{' '}
-                    <span
-                      className={cn(linkStyle, 'inline text-slate-300 text-sm')}
-                      onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com')}
-                    >
-                      osucollector.com
-                    </span>
-                  </div>
-                  <div>
-                    Click the <b className='text-slate-300'>Add to osu!</b> button on a collection or tournament you
-                    want to add.
-                  </div>
+                  <Button
+                    onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com/all?tutorial=true')}
+                    className='text-3xl text-white w-full p-10'
+                  >
+                    <Plus className='text-6xl' />
+                    Click here to add a collection!
+                  </Button>
                 </TableCell>
               </TableRow>
             )}
