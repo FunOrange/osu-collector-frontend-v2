@@ -29,7 +29,7 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
           onChange={setCurrentRound}
         />
       </div>
-      <div className='flex flex-col gap-2 p-4'>
+      <div className='flex flex-col gap-10 md:gap-2 p-4'>
         {round?.mods.map((mod, j) => (
           <React.Fragment key={j}>
             {mod.maps.map((beatmap, k) => {
@@ -80,7 +80,7 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
   if (!beatmap.beatmapset?.id) {
     const url = `https://osu.ppy.sh/beatmaps/${beatmap.id}`;
     return (
-      <div className='flex items-center gap-3 rounded bg-slate-800 p-4'>
+      <div className='flex items-center gap-3 rounded bg-slate-950/50 p-4'>
         <div
           className='p-3 text-lg font-semibold rounded'
           style={{
@@ -91,9 +91,9 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
           {mod}
           {modIndex}
         </div>
-        <div className='flex flex-col text-slate-400'>
-          We are currently looking up this beatmap...{' '}
-          <a href={url} className='text-slate-300 underline text-sm'>
+        <div className='text-slate-400'>
+          <div className='line-clamp-1'>We are currently looking up this beatmap... </div>
+          <a href={url} className='text-slate-300 underline text-sm line-clamp-1'>
             {url}
           </a>
         </div>
@@ -102,29 +102,22 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
   }
 
   return (
-    <div
-      className='grid items-center gap-2'
-      style={{
-        gridTemplateColumns: '340px auto auto 1fr auto auto',
-      }}
-    >
-      <div>
+    <div className='w-full flex gap-2 flex-col md:flex-row'>
+      <div className='shrink-0 w-full md:w-[340px] h-[84px]'>
         {/* song background */}
         <div className='relative rounded'>
           {beatmap.beatmapset?.covers?.card && (
-            <div className='absolute overflow-hidden rounded'>
-              <div className={cn(imageHovered ? undefined : 'blur-sm')}>
+            <div className='w-full h-full absolute overflow-hidden rounded'>
+              <div className={cn('relative w-full h-full', imageHovered ? undefined : 'blur-sm')}>
                 <ImageWithFallback
                   src={beatmap.beatmapset?.covers?.card}
                   fallbackSrc={'/images/slimcoverfallback.jpg'}
                   alt={beatmap.beatmapset?.title}
-                  width={340}
-                  height={84}
-                  className='rounded'
+                  fill
+                  sizes='340px'
+                  className='rounded object-cover'
                   style={{
                     transition: 'filter 0.1s',
-                    height: '84px',
-                    objectFit: 'cover',
                     filter: `brightness(${imageHovered ? 1 : 0.5})`,
                   }}
                 />
@@ -147,7 +140,7 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
                 >
                   <div style={{ maxWidth: '264px' }}>
                     <div
-                      className='text-lg font-medium text-white truncate'
+                      className='text-lg font-medium text-white line-clamp-1'
                       style={{
                         textShadow: '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000',
                       }}
@@ -155,14 +148,14 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
                       {beatmapset.title}
                     </div>
                     <div
-                      className='text-sm font-medium text-gray-100 truncate'
+                      className='text-sm font-medium text-gray-100 line-clamp-1'
                       style={{
                         textShadow: '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000',
                       }}
                     >
                       {beatmapset.artist}
                     </div>
-                    <div className='text-sm font-medium text-gray-100 truncate'>
+                    <div className='text-sm font-medium text-gray-100 line-clamp-1'>
                       <span
                         className='text-slate-200 opacity-70'
                         style={{
@@ -181,85 +174,97 @@ function MappoolBeatmap({ mod, modIndex, beatmap }: MappoolBeatmapProps) {
                     </div>
                   </div>
                 </a>
-                <BeatmapsetCardPlayButton beatmapsetId={beatmapset.id} />
+                <BeatmapsetCardPlayButton beatmapsetId={beatmapset.id} duration={duration} />
               </div>
             </div>
           )}
         </div>
       </div>
-      <div
-        className='flex items-center self-stretch justify-center w-20 p-4 text-xl font-semibold rounded'
-        style={{
-          background: modToColor(mod),
-          color: getContrastColor(modToColor(mod)),
-        }}
-      >
-        {mod}
-        {modIndex}
-      </div>
-      {!beatmapBeingProcessed && (
-        <div>
-          <div className='flex items-center gap-2 mb-2'>
-            <div className='text-xl'>{`[${beatmap?.version}]`}</div>
-            <div
-              className='px-2 text-sm font-bold rounded-sm'
-              style={{
-                background: starToColor(stars),
-                color: getContrastColor(starToColor(stars)),
-              }}
+      <div className='group relative flex gap-2 items-center flex-grow'>
+        <div
+          className='flex items-center self-stretch justify-center w-20 p-4 text-xl font-semibold rounded'
+          style={{
+            background: modToColor(mod),
+            color: getContrastColor(modToColor(mod)),
+          }}
+        >
+          {mod}
+          {modIndex}
+        </div>
+        {!beatmapBeingProcessed && (
+          <div className='w-full'>
+            <div className='flex items-center gap-2 mb-2'>
+              <div className='text-xl'>{`[${beatmap?.version}]`}</div>
+              <div
+                className='px-2 text-sm font-bold rounded-sm'
+                style={{
+                  background: starToColor(stars),
+                  color: getContrastColor(starToColor(stars)),
+                }}
+              >
+                {stars} ★
+              </div>
+            </div>
+            <div className='flex gap-2 text-sm flex-wrap'>
+              <div className={cn('px-2 rounded-sm bg-slate-700')}>{Math.round(beatmap.bpm)} bpm</div>
+              <div className={cn('px-2 rounded-sm bg-slate-700')}>
+                {hr && diffUp}
+                CS {beatmap.cs}
+              </div>
+              <div className={cn('px-2 bg-slate-700 rounded-sm')}>
+                {(dt || hr) && diffUp}
+                AR {beatmap.ar}
+              </div>
+              <div className={cn('px-2 rounded-sm bg-slate-700')}>
+                {(dt || hr) && diffUp}
+                OD {beatmap.accuracy}
+              </div>
+            </div>
+          </div>
+        )}
+        {beatmapBeingProcessed && (
+          <div className='text-slate-500'>
+            Beatmap not in database.{' '}
+            <a href={`https://osu.ppy.sh/b/${beatmap}`} target='_blank' className='text-blue-300 underline'>
+              Go to beatmap page
+            </a>
+          </div>
+        )}
+
+        <div
+          className={cn(
+            'absolute h-full right-0 pl-2 hidden sm:flex',
+            'transition-[opacity] opacity-0 group-hover:opacity-100',
+          )}
+        >
+          <div className='w-8 h-full bg-gradient-to-l from-slate-950 to-transparent' />
+          <div className='h-full right-0 pl-2 flex items-center gap-1 bg-slate-950 pr-1'>
+            <a
+              className='px-2 py-1 text-sm transition rounded ms-auto hover:bg-slate-600'
+              href={`osu://b/${beatmapId}`}
             >
-              {stars} ★
-            </div>
-          </div>
-          <div className='flex gap-2'>
-            <div className={cn('px-2 rounded-sm bg-slate-700')}>{duration}</div>
-            <div className={cn('px-2 rounded-sm bg-slate-700')}>{Math.round(beatmap.bpm)} bpm</div>
-            <div className={cn('px-2 rounded-sm bg-slate-700')}>
-              {hr && diffUp}
-              CS {beatmap.cs}
-            </div>
-            <div className={cn('px-2 bg-slate-700 rounded-sm')}>
-              {(dt || hr) && diffUp}
-              AR {beatmap.ar}
-            </div>
-            <div className={cn('px-2 rounded-sm bg-slate-700')}>
-              {(dt || hr) && diffUp}
-              OD {beatmap.accuracy}
-            </div>
+              Direct
+            </a>
+            <Popover open={showCopiedToClipboard.includes(beatmapId)}>
+              <PopoverTrigger>
+                <div
+                  className='p-2 transition rounded cursor-pointer hover:bg-slate-600'
+                  onClick={() => {
+                    navigator.clipboard.writeText(beatmapId.toString());
+                    setShowCopiedToClipboard((prev) => [...prev, beatmapId]);
+                    setTimeout(() => setShowCopiedToClipboard((prev) => prev.filter((id) => id !== beatmapId)), 2000);
+                  }}
+                >
+                  <Clipboard size={12} />
+                </div>
+              </PopoverTrigger>
+              <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+                copied beatmap ID!
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
-      )}
-      {beatmapBeingProcessed && (
-        <div className='text-slate-500'>
-          Beatmap not in database.{' '}
-          <a href={`https://osu.ppy.sh/b/${beatmap}`} target='_blank' className='text-blue-300 underline'>
-            Go to beatmap page
-          </a>
-        </div>
-      )}
-      <div />
-      <div>
-        <a className='px-2 py-2 text-sm transition rounded ms-auto hover:bg-slate-600' href={`osu://b/${beatmapId}`}>
-          Direct
-        </a>
       </div>
-      <Popover open={showCopiedToClipboard.includes(beatmapId)}>
-        <PopoverTrigger>
-          <div
-            className='p-2 transition rounded cursor-pointer hover:bg-slate-600'
-            onClick={() => {
-              navigator.clipboard.writeText(beatmapId.toString());
-              setShowCopiedToClipboard((prev) => [...prev, beatmapId]);
-              setTimeout(() => setShowCopiedToClipboard((prev) => prev.filter((id) => id !== beatmapId)), 2000);
-            }}
-          >
-            <Clipboard size={12} />
-          </div>
-        </PopoverTrigger>
-        <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
-          copied beatmap ID!
-        </PopoverContent>
-      </Popover>
     </div>
   );
 }

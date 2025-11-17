@@ -80,13 +80,12 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
   const replaceQueryParams = (newParams: any) =>
     `${pathname}?${formatQueryParams(mergeRight(searchParams, newParams))}`;
 
-  const bannerHeight = 330;
   return (
     <div className='flex justify-center w-full'>
-      <div className='flex flex-col w-full max-w-screen-xl gap-2 px-2 py-5 md:px-10'>
+      <div className='flex flex-col w-full max-w-screen-xl gap-2 px-2 py-5 lg:px-10'>
         <div className='rounded border-slate-900 bg-[#162032] shadow-inner'>
-          <div className='relative' style={{ height: `${bannerHeight}px` }}>
-            <div className='absolute w-full overflow-hidden rounded-t-lg' style={{ height: `${bannerHeight}px` }}>
+          <div className='relative h-[120px] sm:h-[330px]'>
+            <div className='absolute w-full overflow-hidden rounded-t-lg h-[120px] sm:h-[330px]'>
               <ImageWithFallback
                 src={tournament.banner}
                 fallbackSrc={'/images/slimcoverfallback.jpg'}
@@ -98,9 +97,9 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
               />
             </div>
           </div>
-          <div className='p-6'>
-            <h1 className='text-4xl rounded'>{tournament.name}</h1>
-            <div className='grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
+          <div className='flex flex-col gap-4 sm:gap-0 p-2 sm:p-6'>
+            <h1 className='text-lg md:text-4xl rounded'>{tournament.name}</h1>
+            <div className='flex flex-col-reverse sm:grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
               <div className='pr-4'>
                 <Popover>
                   <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
@@ -132,7 +131,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                     </>
                   )}
                 </div>
-                <div className='grid mt-2 gap-x-3 gap-y-1' style={{ gridTemplateColumns: 'auto 1fr' }}>
+                <div className='flex flex-col sm:grid mt-2 gap-x-3 gap-y-1' style={{ gridTemplateColumns: 'auto 1fr' }}>
                   <div>Forum post:</div>
                   <a target='_blank' href={tournament.link} className='underline truncate'>
                     {tournament.link}
@@ -154,14 +153,14 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                     <div className='text-slate-500'>No download link provided.</div>
                   )}
 
-                  <div className='relative'>
+                  <div className='relative col-span-full'>
                     <div className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800 mt-2')}>
                       {tournament.description || 'No description provided.'}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className='flex flex-col justify-end gap-2 pl-4 border-l border-slate-700'>
+              <div className='flex flex-col justify-end gap-2 sm:pl-4 sm:border-l border-slate-700'>
                 <TournamentDeleteButton tournament={tournament} />
                 <TournamentEditButton tournament={tournament} />
                 <DownloadMapsButton tournament={tournament} />
