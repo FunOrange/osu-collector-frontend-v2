@@ -5,19 +5,21 @@ import { Checkbox } from '@/components/shadcn/checkbox';
 import { Input } from '@/components/shadcn/input';
 import { SidebarTrigger } from '@/components/shadcn/sidebar';
 import { useToast } from '@/components/shadcn/use-toast';
-import useClientValue from '@/hooks/useClientValue';
 import useSubmit from '@/hooks/useSubmit';
 import { cn } from '@/utils/shadcn-utils';
 import { swrKeyIncludes } from '@/utils/swr-utils';
 import { assoc, omit } from 'ramda';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import { match } from 'ts-pattern';
 
 export default function ElectronSettings() {
   const { toast } = useToast();
-  const pathSeparator = useClientValue(window.ipc?.pathSep, '\\');
-  const trimPath = (path: string | undefined) => path?.replace(new RegExp(pathSeparator + '+$'), '');
+  const [pathSep, setPathSep] = useState<string>('\\');
+  useEffect(() => {
+    window.ipc?.pathSep().then(setPathSep);
+  }, []);
+  const trimPath = (path: string | undefined) => path?.replace(new RegExp(pathSep + '+$'), '');
   const { data: preferences, mutate: mutatePreferences } = useSWR(Channel.GetPreferences, window.ipc?.getPreferences);
   const [touchedFields, setTouchedFields] = useState<Preferences>({});
   const fields: Preferences = {
@@ -35,7 +37,7 @@ export default function ElectronSettings() {
     match(key)
       .with(
         'osuSongsDirectory',
-        () => fields.osuSongsDirectory || fields.osuInstallDirectory?.concat(pathSeparator + 'Songs'),
+        () => fields.osuSongsDirectory || fields.osuInstallDirectory?.concat(pathSep + 'Songs'),
       )
       .with('downloadDirectoryOverride', () => fields.downloadDirectoryOverride || computedFields('osuSongsDirectory'))
       .exhaustive();
@@ -70,7 +72,7 @@ export default function ElectronSettings() {
     onChange: (e: any) => setTouchedFields(assoc(key, e.target.value)),
     onBlur: async (e: any) => {
       const value = trimPath(e.target.value)?.trim();
-      if (value === preferences[key]) return;
+      if (value === preferences?.[key]) return;
       const exists = await window.ipc.pathExists(value);
       if (value && !exists) {
         toast({ title: 'Path does not exist', description: value, variant: 'destructive' });

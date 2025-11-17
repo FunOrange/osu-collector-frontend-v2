@@ -1,4 +1,4 @@
-import { Tournament } from '@/shared/entities/v1/Tournament';
+import { Round, Tournament } from '@/shared/entities/v1/Tournament';
 
 export const mappoolTemplate = `# Lines beginning with '#' are ignored
 
@@ -204,9 +204,9 @@ export function parseMappool(text: string) {
   const urlRegex3 = /^https:\/\/osu\.ppy\.sh\/beatmaps\/(\d+)/;
   const beatmapIdRegex = /^(\d+)\s*$/;
 
-  const rounds = [];
-  let roundString = null;
-  let modString = null;
+  const rounds: Round[] = [];
+  let roundString: string | null = null;
+  let modString: string | null = null;
   for (const line of lines) {
     const sectionMatch = line.match(sectionRegex);
     if (sectionMatch) {
@@ -257,7 +257,7 @@ export function parseMappool(text: string) {
 }
 
 export function getMappoolTextFromTournament(tournament: Tournament) {
-  const lines = [];
+  const lines: string[] = [];
   for (const round of tournament.rounds) {
     for (const mod of round.mods) {
       const section = `[${round.round}.${mod.mod}]`;

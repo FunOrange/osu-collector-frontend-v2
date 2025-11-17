@@ -13,12 +13,12 @@ const throttle = (func: Function, delay: number) => {
 
 export default function useSticky() {
   const [isSticky, setIsSticky] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   let stickyElementStyleRef = useRef<CSSStyleDeclaration | null>(null);
   let stickyElementTopRef = useRef(0);
 
   useEffect(() => {
-    const body = document.getElementById('app-root');
+    const body = document.getElementById('app-root')!;
     const handleScroll = () => {
       if (!ref.current) return;
       const element = ref.current;

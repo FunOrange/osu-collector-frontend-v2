@@ -138,7 +138,7 @@ export function getContrastColor(originalColor) {
   const originalRgb = hexToRgb(originalColor);
   if (!originalRgb) {
     console.error('Invalid color format');
-    return null;
+    return undefined;
   }
 
   const originalHsl = rgbToHsl(originalRgb);

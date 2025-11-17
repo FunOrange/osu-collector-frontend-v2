@@ -48,12 +48,12 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
     reader.readAsArrayBuffer(file);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-  const [localCollections, setLocalCollections] = useState(null);
+  const [localCollections, setLocalCollections] = useState<ReturnType<typeof parseCollectionDb> | null>(null);
   const localCollection = localCollections?.find((collection) => collection.name === remoteCollection.name);
   const localCount = localCollection?.beatmapChecksums?.length;
   const remoteCount = remoteChecksums?.length;
   const localAdditions = localCollection?.beatmapChecksums?.filter(
-    (checksum) => !remoteChecksums.includes(checksum),
+    (checksum) => !remoteChecksums?.includes(checksum),
   ).length;
   const localRemovals = remoteChecksums?.filter(
     (checksum) => !localCollection?.beatmapChecksums.includes(checksum),
@@ -113,8 +113,8 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
                   <div>
                     {localCount} beatmaps {isIdentical && <span className='ml-1 text-slate-500'>(no change)</span>}
                   </div>
-                  {localAdditions > 0 && <div className='text-green-500'>+{localAdditions} added beatmap(s)</div>}
-                  {localRemovals > 0 && <div className='text-red-500'>-{localRemovals} removed beatmap(s)</div>}
+                  {localAdditions! > 0 && <div className='text-green-500'>+{localAdditions} added beatmap(s)</div>}
+                  {localRemovals! > 0 && <div className='text-red-500'>-{localRemovals} removed beatmap(s)</div>}
                 </div>
               ))
               .with({ loaded: true, hasCollection: false }, () => (
@@ -123,10 +123,10 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
                     You do not have a collection named {remoteCollection.name}
                   </div>
                   <div>
-                    Found {localCollections.length} collection{s(localCollections.length)}:
+                    Found {localCollections!.length} collection{s(localCollections!.length)}:
                   </div>
                   <ul className='text-sm text-slate-400'>
-                    {localCollections.map((collection) => (
+                    {localCollections!.map((collection) => (
                       <li key={collection.name}>
                         <span className='text-cyan-500'>{collection.name}</span> {collection.beatmapChecksums?.length}{' '}
                         beatmaps

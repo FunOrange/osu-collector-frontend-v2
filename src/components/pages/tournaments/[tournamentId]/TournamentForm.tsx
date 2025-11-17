@@ -21,9 +21,10 @@ import { Dialog, DialogClose, DialogContent, DialogTrigger } from '@/components/
 import { getUrlSlug } from '@/utils/string-utils';
 import { UpdateTournamentDto } from '@/services/osu-collector-api';
 import { isNil, prop } from 'ramda';
+import { Assert } from '@/utils/assert';
 
 interface TournamentsFormProps {
-  tournament?: Tournament;
+  tournament?: Tournament | null;
 }
 export default function TournamentsForm({ tournament = null }: TournamentsFormProps) {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
     downloadUrl: string;
   }>();
   useEffect(() => {
-    const tournamentDraft = JSON.parse(localStorage.getItem('Create Tournament Draft'));
+    const tournamentDraft = JSON.parse(localStorage.getItem('Create Tournament Draft')!);
     if (creating && tournamentDraft) {
       setTournamentDraft(tournamentDraft);
       setTouchedMappoolText(tournamentDraft?.mappoolText ?? mappoolTemplate);
@@ -49,9 +50,9 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const queueSaveDraft = () => {
-    clearTimeout(saveTimeoutRef.current);
+    clearTimeout(saveTimeoutRef.current!);
     saveTimeoutRef.current = setTimeout(() => {
       const draft = {
         ...form.fields,
@@ -67,7 +68,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
 
   // #region organizers
   const [organizerField, setOrganizerField] = useState('');
-  const [touchedOrganizers, setTouchedOrganizers] = useState<number[]>(undefined);
+  const [touchedOrganizers, setTouchedOrganizers] = useState<number[] | undefined>();
   const organizers = touchedOrganizers ?? tournament?.organizers?.map(prop('id')) ?? [];
   const [organizerError, setOrganizerError] = useState('');
   const addOrganizer = () => {
@@ -86,7 +87,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
 
   // #region mappool definition
   const fallbackMappoolText = creating ? mappoolTemplate : getMappoolTextFromTournament(tournament);
-  const [touchedMappoolText, setTouchedMappoolText] = useState<string>(undefined);
+  const [touchedMappoolText, setTouchedMappoolText] = useState<string | undefined>();
   const mappoolText = touchedMappoolText ?? fallbackMappoolText;
   const [mappoolError, setMappoolError] = useState('');
   // #endregion mappool definition
@@ -144,6 +145,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
       window.scrollTo(0, 0);
       return;
     }
+    Assert.notNil(tournament, 'tournament');
     const { rounds, error: mappoolError } = parseMappool(mappoolText);
     if (mappoolError) {
       setMappoolError('Invalid line: ' + mappoolError.line);

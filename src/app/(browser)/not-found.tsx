@@ -1,7 +1,7 @@
 import { match } from 'ts-pattern';
 
 export default function NotFound() {
-  const pathname = undefined;
+  const pathname = ''; // FIXME: how to get pathname from server component?
   const type: 'collection' | 'tournament' | 'user' | 'other' = pathname?.startsWith('collections')
     ? 'collection'
     : pathname?.startsWith('tournaments')

@@ -1,21 +1,21 @@
-import { Preferences } from "@/app/electron/preferences";
-import { Download, DownloadMetadata } from "./downloader-types";
-import { TournamentImportMethod } from "@/app/electron/ElectronImportTournamentDialog";
+import { Preferences } from '@/app/electron/preferences';
+import { Download, DownloadMetadata } from './downloader-types';
+import { TournamentImportMethod } from '@/app/electron/ElectronImportTournamentDialog';
 
 export enum Channel {
-  GetAppVersion = "getAppVersion",
-  PathJoin = "pathJoin",
-  PathSep = "pathSep",
-  OpenDevTools = "openDevTools",
-  GetDownloads = "getDownloads",
-  OnDownloadUpdate = "onDownloadUpdate",
-  AddDownloads = "addDownloads",
-  CancelDownload = "cancelDownload",
-  ClearDownload = "clearDownload",
-  ClearInactiveDownloads = "clearInactiveDownloads",
-  ClearCompletedDownloads = "clearCompletedDownloads",
-  StopAllDownloads = "stopAllDownloads",
-  RetryDownload = "retryDownload",
+  GetAppVersion = 'getAppVersion',
+  PathJoin = 'pathJoin',
+  PathSep = 'pathSep',
+  OpenDevTools = 'openDevTools',
+  GetDownloads = 'getDownloads',
+  OnDownloadUpdate = 'onDownloadUpdate',
+  AddDownloads = 'addDownloads',
+  CancelDownload = 'cancelDownload',
+  ClearDownload = 'clearDownload',
+  ClearInactiveDownloads = 'clearInactiveDownloads',
+  ClearCompletedDownloads = 'clearCompletedDownloads',
+  StopAllDownloads = 'stopAllDownloads',
+  RetryDownload = 'retryDownload',
   RevealPath = 'revealPath',
   OpenLinkInBrowser = 'openLinkInBrowser',
   GetPreferences = 'getPreferences',
@@ -38,10 +38,7 @@ export interface IpcHandlers {
   [Channel.OpenDevTools]: () => Promise<void>;
   [Channel.GetDownloads]: () => Promise<Download[]>;
   [Channel.OnDownloadUpdate]: (beatmapsetId: number, callback: (download: Download) => any) => void;
-  [Channel.AddDownloads]: (options: {
-    beatmapsetIds: number[];
-    metadata: DownloadMetadata;
-  }) => Promise<void>;
+  [Channel.AddDownloads]: (options: { beatmapsetIds: number[]; metadata: DownloadMetadata }) => Promise<void>;
   [Channel.CancelDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.ClearDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.ClearInactiveDownloads]: () => Promise<void>;
@@ -53,16 +50,14 @@ export interface IpcHandlers {
   [Channel.GetPreferences]: () => Promise<Preferences>;
   [Channel.SetPreferences]: (preferences: Preferences) => Promise<void>;
   [Channel.OpenFolderDialog]: () => Promise<string | undefined>;
-  [Channel.PathExists]: (path: string) => Promise<boolean>;
+  [Channel.PathExists]: (path: string | undefined) => Promise<boolean>;
   [Channel.GetLogs]: () => Promise<{ path: string; lines: string[] }>;
   [Channel.GetURI]: () => Promise<string | undefined>;
   [Channel.ClearURI]: () => Promise<void>;
-  [Channel.OnURI]: (callback: ((_: true) => any)) => void;
+  [Channel.OnURI]: (callback: (_: true) => any) => void;
   [Channel.GetDownloadDirectory]: () => Promise<string | undefined>;
   [Channel.CheckIfOsuIsRunning]: () => Promise<boolean>;
   [Channel.MergeCollectionDb]: (
-    options:
-    | { collectionId: number }
-    | { tournamentId: number, groupBy: TournamentImportMethod }
+    options: { collectionId: number } | { tournamentId: number; groupBy: TournamentImportMethod },
   ) => Promise<void>;
 }

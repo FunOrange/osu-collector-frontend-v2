@@ -3,13 +3,13 @@ import * as api from '@/services/osu-collector-api';
 import Link from 'next/link';
 import { CloudUploadFill, Search, TrophyFill } from 'react-bootstrap-icons';
 import { formatQueryParams } from '@/utils/string-utils';
-import { mergeRight } from 'ramda';
+import { defaultTo, mergeRight } from 'ramda';
 import SearchInput from '@/components/pages/all/SearchInput';
 import TournamentCard from '@/components/TournamentCard';
 import { Button } from '@/components/shadcn/button';
 
 interface TournamentsPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | undefined };
 }
 export default async function TournamentsPage({ searchParams }: TournamentsPageProps) {
   const { tournaments, hasMore, nextPageCursor } = await (async () => {
@@ -24,7 +24,7 @@ export default async function TournamentsPage({ searchParams }: TournamentsPageP
       return { tournaments, hasMore, nextPageCursor };
     } else {
       const { tournaments, hasMore, nextPageCursor } = await api.getRecentTournaments({
-        cursor: searchParams.cursor,
+        cursor: defaultTo(undefined, Number(searchParams.cursor)),
         perPage: 48,
       });
       return { tournaments, hasMore, nextPageCursor };

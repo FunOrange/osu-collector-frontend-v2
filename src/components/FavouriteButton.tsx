@@ -25,27 +25,27 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
   const [hovered, setHovered] = useState(false);
 
   const [localOffset, setLocalOffset] = useState(0);
-  const favouriteCount = collection?.favourites + localOffset;
+  const favouriteCount = collection?.favourites! + localOffset;
   const onClick = async () => {
     if (!user) return;
 
     if (collection && favourited) {
       setLocalOffset((prev) => prev - 1);
       await mutate(api.unfavouriteCollection(collection.id) as any, {
-        optimisticData: (data) =>
+        optimisticData: (data: any) =>
           assocPath(['user', 'favourites'], without([collection.id], user?.favourites ?? []), data),
         populateCache: false,
       });
     } else if (collection && !favourited) {
       setLocalOffset((prev) => prev + 1);
       await mutate(api.favouriteCollection(collection.id) as any, {
-        optimisticData: (data) =>
+        optimisticData: (data: any) =>
           assocPath(['user', 'favourites'], concat([collection.id], user?.favourites ?? []), data),
         populateCache: false,
       });
     } else if (tournament && favourited) {
       await mutate(api.favouriteTournament(tournament.id, false) as any, {
-        optimisticData: (data) =>
+        optimisticData: (data: any) =>
           assocPath(
             ['user', 'favouriteTournaments'],
             concat([tournament.id], data.user.favouriteTournaments ?? []),
@@ -55,7 +55,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
       });
     } else if (tournament && !favourited) {
       await mutate(api.favouriteTournament(tournament.id, true) as any, {
-        optimisticData: (data) =>
+        optimisticData: (data: any) =>
           assocPath(
             ['user', 'favouriteTournaments'],
             concat([tournament.id], data.user.favouriteTournaments ?? []),

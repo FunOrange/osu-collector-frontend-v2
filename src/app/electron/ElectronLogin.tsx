@@ -30,7 +30,7 @@ export default function ElectronLogin() {
   const initiateOtpLogin = () => {
     setOtpInput('');
     const clientId = process.env.NEXT_PUBLIC_OSU_CLIENT_ID;
-    const callback = encodeURIComponent(process.env.NEXT_PUBLIC_OSU_OAUTH_CALLBACK);
+    const callback = encodeURIComponent(process.env.NEXT_PUBLIC_OSU_OAUTH_CALLBACK!);
     // @ts-expect-error
     const x = md5(Date.now());
     setAuthX(x);

@@ -1,6 +1,6 @@
 export const getRandomFromArray = (items) => items[Math.floor(Math.random() * items.length)];
 
-export const unorderedArrayEquals = <T>(a: T[], b: T[]) => {
+export const unorderedArrayEquals = <T>(a: T[] | undefined, b: T[] | undefined) => {
   if (a?.length !== b?.length) return false;
   return a?.every((item) => b?.includes(item));
 };

@@ -4,23 +4,23 @@ import { getPopularCollections } from '@/services/osu-collector-api';
 import Link from 'next/link';
 import { Fire } from 'react-bootstrap-icons';
 import { match } from 'ts-pattern';
-import { identity } from 'ramda';
+import { defaultTo, identity } from 'ramda';
 import { formatQueryParams } from '@/utils/string-utils';
 
 interface PopularPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | undefined };
 }
 export default async function PopularPage({ searchParams }: PopularPageProps) {
   const activeRange = match(searchParams.range)
-    .with('today', () => 'today')
-    .with('week', () => 'week')
-    .with('month', () => 'month')
-    .with('year', () => 'year')
-    .with('alltime', () => 'alltime')
-    .otherwise(() => 'week');
+    .with('today', () => 'today' as const)
+    .with('week', () => 'week' as const)
+    .with('month', () => 'month' as const)
+    .with('year', () => 'year' as const)
+    .with('alltime', () => 'alltime' as const)
+    .otherwise(() => 'week' as const);
   const popular = await getPopularCollections({
     range: activeRange,
-    cursor: searchParams.cursor,
+    cursor: defaultTo(undefined, Number(searchParams.cursor)),
     perPage: 48,
   });
   const { collections: popularCollections, hasMore, nextPageCursor } = popular;

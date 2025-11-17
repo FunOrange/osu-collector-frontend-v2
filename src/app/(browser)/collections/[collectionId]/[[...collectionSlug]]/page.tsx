@@ -16,6 +16,7 @@ import UserChip from '@/components/UserChip';
 import { notFound } from 'next/navigation';
 import CollectionBeatmapsSection from '@/components/pages/collections/[collectionId]/CollectionBeatmapsSection';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
+import { defaultTo } from 'ramda';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const collection = await api.getCollection(params.collectionId).catch(() => null);
@@ -40,7 +41,7 @@ interface CollectionPageProps {
   params: { collectionId: string };
 }
 export default async function CollectionPage({ params }: CollectionPageProps) {
-  const collection = await api.getCollection(params.collectionId).catch((e) => {
+  const collection = await api.getCollection(Number(params.collectionId)).catch((e) => {
     if (e.response?.status === 404) return null;
     throw e;
   });

@@ -63,8 +63,11 @@ export function ElectronImportTournamentDialog() {
   const { data: downloadDirectoryExists } = useSWR([Channel.PathExists, downloadDirectory], ([_, path]) =>
     window.ipc?.pathExists(path),
   );
-  const pathSep = useClientValue(window.ipc?.pathSep, '\\');
-  const collectionDbPath = preferences?.osuInstallDirectory + pathSep + 'collection.db';
+  const [pathSep, setPathSep] = useState<string>('\\');
+  useEffect(() => {
+    window.ipc?.pathSep().then(setPathSep);
+  }, []);
+  const collectionDbPath = preferences?.osuInstallDirectory! + pathSep + 'collection.db';
   const { data: collectionDbExists } = useSWR([Channel.PathExists, collectionDbPath], ([_, path]) =>
     window.ipc?.pathExists(path),
   );
@@ -84,7 +87,9 @@ export function ElectronImportTournamentDialog() {
 
   const [options, setOptions] = useState(
     (() => {
-      const [options, err] = JSONParse<TournamentImportOptions>(localStorage.getItem('tournament-import-options'));
+      const [options, err] = JSONParse<TournamentImportOptions>(
+        localStorage.getItem('tournament-import-options') ?? undefined,
+      );
       return options ?? { importMethod: null, queueDownloads: true };
     })(),
   );
@@ -116,7 +121,7 @@ export function ElectronImportTournamentDialog() {
     if (!skipping.modifyCollectionDb) {
       setModifyingCollectionDb(true);
       const [_, collectionDbError] = await tryCatch(
-        window.ipc.mergeCollectionDb({ tournamentId, groupBy: options.importMethod }),
+        window.ipc.mergeCollectionDb({ tournamentId: tournamentId!, groupBy: options.importMethod! }),
       );
       setModifyingCollectionDb(false);
       if (collectionDbError) {
@@ -133,7 +138,7 @@ export function ElectronImportTournamentDialog() {
         beatmapsetIds: getBeatmapsetIds(tournament),
         metadata: {
           tournament: {
-            id: tournamentId,
+            id: tournamentId!,
             name: tournament!.name,
             uploader: {
               id: tournament!.uploader.id,
@@ -237,7 +242,7 @@ export function ElectronImportTournamentDialog() {
                 <div className='text-xs'>(optional) import as multiple collections grouped by:</div>
                 <Tabs
                   defaultValue='tournament'
-                  value={options.importMethod}
+                  value={options.importMethod ?? undefined}
                   onValueChange={(value) => setOptions(assoc('importMethod', value))}
                 >
                   <TabsList className='gap-1 bg-slate-800 shadow-[inset_0_0_4px_rgba(0,0,0,0.25)]'>
@@ -365,7 +370,7 @@ const getBeatmapsetIds = (tournament: Tournament | undefined) =>
   tournament?.rounds.flatMap((r) => r.mods.flatMap((m) => m.maps.map((map) => map.beatmapset.id))) ?? [];
 
 interface WindowsFileExplorerProps {
-  addressBar: string;
+  addressBar: string | undefined;
   children: ReactNode;
   className?: string;
 }

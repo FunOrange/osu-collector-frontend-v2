@@ -40,7 +40,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
   const { paypalSubscription, mutate: mutatePaypalSubscription } = usePaypalSubscription();
   const { stripeSubscription, mutate: mutateStripeSubscription } = useStripeSubscription();
 
-  const [paypalError, setPaypalError] = useState(null);
+  const [paypalError, setPaypalError] = useState<any>(null);
 
   // Unlink Twitch
   const [unlinkTwitchAccount, unlinkingTwitchAccount] = useSubmit(async () => {

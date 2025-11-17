@@ -27,8 +27,8 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   const listingRef = useRef<HTMLDivElement>(null);
 
   const scrollTo = (divRef: React.RefObject<HTMLDivElement>, offset = 0) => {
-    const root = document.getElementById('app-root');
-    root.scrollTo({ top: divRef.current?.offsetTop - navbarHeightPx + offset, behavior: 'smooth' });
+    const root = document.getElementById('app-root')!;
+    root.scrollTo({ top: divRef.current?.offsetTop! - navbarHeightPx + offset, behavior: 'smooth' });
   };
 
   const v2 = useSWR(endpoints.collections.id(collection.id).beatmapsv2.GET, (url) =>
@@ -115,13 +115,21 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   );
 }
 
-export const joinBeatmapsets = (beatmaps: Beatmap[], beatmapsets: Beatmapset[]): BeatmapWithBeatmapset[] =>
-  beatmaps?.map((beatmap) => ({ ...beatmap, beatmapset: beatmapsets?.find((b) => b.id === beatmap.beatmapset_id) }));
+export const joinBeatmapsets = (
+  beatmaps: Beatmap[] | undefined,
+  beatmapsets: Beatmapset[] | undefined,
+): BeatmapWithBeatmapset[] | undefined =>
+  beatmaps?.map((beatmap) => ({ ...beatmap, beatmapset: beatmapsets?.find((b) => b.id === beatmap.beatmapset_id)! }));
 
 function frontendFilterSortPaginate(
-  beatmaps: BeatmapWithBeatmapset[],
-  { filters, sort, page, perPage }: { filters: BeatmapFilters; sort: string; page: number; perPage: number },
-): { beatmaps: BeatmapWithBeatmapset[]; pagination: PaginationProps } {
+  beatmaps: BeatmapWithBeatmapset[] | undefined,
+  {
+    filters,
+    sort,
+    page,
+    perPage,
+  }: { filters: BeatmapFilters; sort: string | undefined; page: number; perPage: number },
+): { beatmaps: BeatmapWithBeatmapset[] | undefined; pagination: PaginationProps } {
   const _filters = clone(filters);
   if (filters.stars[0] === 0) _filters.stars[0] = -Infinity;
   if (filters.stars[1] === 11) _filters.stars[1] = Infinity;

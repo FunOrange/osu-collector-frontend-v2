@@ -2,9 +2,9 @@ import posthog from 'posthog-js';
 
 export async function proxy(req: Request) {
   const upstreamUrl = new URL(req.url);
-  upstreamUrl.hostname = withoutProtocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
-  upstreamUrl.protocol = protocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
-  upstreamUrl.port = port(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST);
+  upstreamUrl.hostname = withoutProtocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST!);
+  upstreamUrl.protocol = protocol(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST!);
+  upstreamUrl.port = port(process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST!);
   try {
     // const ip = req.headers.get('x-forwarded-for')?.split(',')[0];
     const method = req.method;
@@ -44,10 +44,10 @@ export function removeHeader(headers: Headers, headerToRemove: string) {
 export function overwriteSetCookieDomain(headers: Headers, domain: string) {
   if (headers.get('set-cookie')) {
     const modifiedCookies = headers
-      .get('set-cookie')
+      .get('set-cookie')!
       .split(',')
       .map((cookie) => cookie.replace(/Domain=[^;]+/i, `Domain=${domain}`))
-      .join(',');
+      .join(',')!;
     const newHeaders = new Headers(headers);
     newHeaders.set('set-cookie', modifiedCookies);
     return newHeaders;

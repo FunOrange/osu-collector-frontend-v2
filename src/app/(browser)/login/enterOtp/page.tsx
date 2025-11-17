@@ -20,20 +20,20 @@ export default function EnterOtpPage() {
     }
 
     const authX = localStorage.getItem('authX');
-    const y = md5(authX);
+    const y = md5(authX!);
 
     // Submit
     try {
       await api.submitOtp(otp, y);
       mutate('/users/me');
       if (searchParams.get('redirectTo')) {
-        router.push(searchParams.get('redirectTo'));
+        router.push(searchParams.get('redirectTo')!);
       } else {
         router.push('/');
       }
     } catch (error) {
       alert('OTP is probably expired, please try to log in again.');
-      router.push(searchParams.get('redirectTo'));
+      router.push(searchParams.get('redirectTo')!);
       return;
     }
   };

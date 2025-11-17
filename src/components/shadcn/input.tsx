@@ -4,7 +4,7 @@ import { cn } from '@/utils/shadcn-utils';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   parentClassName?: string;
-  error?: string;
+  error?: string | null;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(

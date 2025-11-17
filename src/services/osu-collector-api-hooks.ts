@@ -53,7 +53,7 @@ export function useCancellableSWRImmutable(key, query = undefined) {
   return { data, error, loading: !data, cancelToken: source };
 }
 
-export function useCollection(id: string | number) {
+export function useCollection(id: string | number | undefined) {
   const { data, error, mutate, ...rest } = useSWRImmutable(safe`/collections/${id}`, (url) =>
     api.get(url).then((res) => res.data),
   );
@@ -76,7 +76,7 @@ export function useUserUploads(userId) {
 
 export const useMetadata = () => useCancellableSWRImmutable(`/metadata`);
 
-export function useTournament(id: number) {
+export function useTournament(id: number | string | undefined) {
   return useSWRImmutable<Tournament>(safe`/tournaments/${id}`, (url: string) => api.get(url).then((res) => res.data));
 }
 
@@ -93,11 +93,11 @@ export const usePaypalSubscription = () => {
     api.get(url).then((res) => res.data),
   );
   const isPaypalSubscriptionInEffect =
-    new Date(user?.private?.subscriptionExpiryDate?._seconds * 1000) > new Date() ||
+    new Date(user?.private?.subscriptionExpiryDate?._seconds! * 1000) > new Date() ||
     paypalSubscription?.status.toLowerCase() === 'active';
   const canCancelPaypalSubscription = paypalSubscription && paypalSubscription?.status?.toLowerCase() === 'active';
   const paypalEndDate = new Date(
-    paypalSubscription?.billing_info.next_billing_time || user?.private?.subscriptionExpiryDate?._seconds * 1000,
+    paypalSubscription?.billing_info.next_billing_time || user?.private?.subscriptionExpiryDate?._seconds! * 1000,
   );
   const paypalEndDateVerb =
     new Date() > paypalEndDate ? 'Ended' : paypalSubscription?.status.toLowerCase() === 'active' ? 'Renews' : 'Ends';
@@ -118,10 +118,10 @@ export const useStripeSubscription = () => {
     (url) => api.get(url).then((res) => res.data),
   );
   const stripeEndDate = ['canceled', 'past_due', 'incomplete', 'incomplete_expired'].includes(
-    stripeSubscription?.status,
+    stripeSubscription?.status as any,
   )
-    ? new Date(user?.private?.subscriptionExpiryDate?._seconds * 1000)
-    : new Date(stripeSubscription?.current_period_end * 1000);
+    ? new Date(user?.private?.subscriptionExpiryDate?._seconds! * 1000)
+    : new Date(stripeSubscription?.current_period_end! * 1000);
   const stripeEndDateVerb =
     new Date() > stripeEndDate
       ? 'Ended'

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { cn } from '@/utils/shadcn-utils';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  error?: string;
+  error?: string | null;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(({ className, error, ...props }, ref) => {

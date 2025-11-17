@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 
-export default function useClientValue<T>(func: (() => Promise<T> | T) = (() => undefined), initialValue = null) {
-  const [value, setValue] = useState<T>(initialValue);
+export default function useClientValue<TClient>(clientValue: () => TClient): TClient | undefined;
+export default function useClientValue<TClient>(clientValue: () => TClient, serverValue: TClient): TClient;
+export default function useClientValue<TClient>(
+  clientValue: () => TClient,
+  serverValue?: TClient,
+): TClient | undefined {
+  const [value, setValue] = useState<TClient | undefined>(serverValue);
   useEffect(() => {
-    (async () => {
-      if (typeof window !== 'undefined') {
-        setValue(await func?.());
-      }
-    })()
+    setValue(clientValue());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return value;

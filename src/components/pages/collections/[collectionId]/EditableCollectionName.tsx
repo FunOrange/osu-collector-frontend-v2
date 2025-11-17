@@ -17,7 +17,7 @@ export default function EditableCollectionName({ collection, className }: Editab
   const [editing, setEditing] = useState(false);
 
   const [collectionName, setCollectionName] = useState(collection.name);
-  const [userInput, setUserInput] = useState<string>(undefined);
+  const [userInput, setUserInput] = useState<string | undefined>();
   const value = userInput ?? collectionName;
   const renameCollection = () => {
     if (userInput && userInput !== collectionName) {

@@ -18,7 +18,7 @@ export default function CollectionCommentLikeButton({ collectionId, comment }: C
     const likingComment = match(localLikeOffset)
       .with(-1, () => true)
       .with(-0.01, () => false)
-      .with(0, () => !comment.upvotes.includes(user.id))
+      .with(0, () => !comment.upvotes.includes(user?.id!))
       .with(0.01, () => true)
       .with(1, () => false)
       .exhaustive();
@@ -30,7 +30,7 @@ export default function CollectionCommentLikeButton({ collectionId, comment }: C
       match(localLikeOffset)
         .with(-1, () => -0.01 as const)
         .with(-0.01, () => -1 as const)
-        .with(0, () => (!comment.upvotes.includes(user.id) ? (1 as const) : (-1 as const)))
+        .with(0, () => (!comment.upvotes.includes(user?.id!) ? (1 as const) : (-1 as const)))
         .with(0.01, () => 1 as const)
         .with(1, () => 0.01 as const)
         .exhaustive(),

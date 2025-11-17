@@ -87,12 +87,16 @@ export function ElectronImportCollectionDialog() {
   const { data: preferences } = useSWR(Channel.GetPreferences, () => window.ipc?.getPreferences());
   const { data: downloadDirectory } = useSWR(Channel.GetDownloadDirectory, () => window.ipc?.getDownloadDirectory());
   const { data: downloadDirectoryExists } = useSWR([Channel.PathExists, downloadDirectory], ([_, path]) =>
-    window.ipc?.pathExists(path),
+    window.ipc?.pathExists(path!),
   );
-  const pathSep = useClientValue(window.ipc?.pathSep, '\\');
-  const collectionDbPath = preferences?.osuInstallDirectory + pathSep + 'collection.db';
+  const [pathSep, setPathSep] = useState<string>('\\');
+  useEffect(() => {
+    window.ipc?.pathSep().then(setPathSep);
+  }, []);
+
+  const collectionDbPath = preferences?.osuInstallDirectory! + pathSep + 'collection.db';
   const { data: collectionDbExists } = useSWR([Channel.PathExists, collectionDbPath], ([_, path]) =>
-    window.ipc?.pathExists(path),
+    window.ipc?.pathExists(path!),
   );
   const mergeDisabledReason = (() => {
     if (!preferences?.osuInstallDirectory) return 'Please set your osu! install folder in settings!';
@@ -110,7 +114,9 @@ export function ElectronImportCollectionDialog() {
 
   const [options, setOptions] = useState(
     (() => {
-      const [options, err] = JSONParse<CollectionImportOptions>(localStorage.getItem('collection-import-options'));
+      const [options, err] = JSONParse<CollectionImportOptions>(
+        localStorage.getItem('collection-import-options') ?? undefined,
+      );
       return options ?? { modifyCollectionDb: true, queueDownloads: true };
     })(),
   );
@@ -140,7 +146,7 @@ export function ElectronImportCollectionDialog() {
 
     if (!skipping.modifyCollectionDb) {
       setModifyingCollectionDb(true);
-      const [_, collectionDbError] = await tryCatch(window.ipc.mergeCollectionDb({ collectionId }));
+      const [_, collectionDbError] = await tryCatch(window.ipc.mergeCollectionDb({ collectionId: collectionId! }));
       setModifyingCollectionDb(false);
       if (collectionDbError) {
         throw new DisplayableError(collectionDbError.message);
@@ -183,15 +189,18 @@ export function ElectronImportCollectionDialog() {
             isWithinRange(_filters.stars, beatmap.difficulty_rating);
           const withinBpmRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.bpm, beatmap.bpm);
           const beatmapsWithBeatmapsets = joinBeatmapsets(v3.beatmaps, v3.beatmapsets);
-          const results = beatmapsWithBeatmapsets.filter(byRankedStatus).filter(withinStarRange).filter(withinBpmRange);
-          return uniq(results.map((beatmap) => beatmap.beatmapset_id));
+          const results = beatmapsWithBeatmapsets
+            ?.filter(byRankedStatus)
+            .filter(withinStarRange)
+            .filter(withinBpmRange);
+          return uniq(results?.map((beatmap) => beatmap.beatmapset_id) ?? []);
         }
       })();
       const payload = {
         beatmapsetIds: beatmapsetIds,
         metadata: {
           collection: {
-            id: collectionId,
+            id: collectionId!,
             name: collection!.name,
             uploader: {
               id: collection!.uploader.id,
@@ -397,7 +406,7 @@ export function ElectronImportCollectionDialog() {
 }
 
 interface WindowsFileExplorerProps {
-  addressBar: string;
+  addressBar: string | undefined;
   children: ReactNode;
   className?: string;
 }

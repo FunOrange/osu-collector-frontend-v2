@@ -11,7 +11,7 @@ interface TournamentFormFields {
   description: string;
 }
 export default function useTournamentForm(
-  tournament?: Tournament,
+  tournament?: Tournament | null,
   tournamentDraft?: TournamentFormFields,
   afterChange?: () => void,
 ) {

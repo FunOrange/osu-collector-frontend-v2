@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     // set cookie and redirect to home
     const url = process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST + `/api/authentication/osu-oauth-callback?code=${code}`;
     const upstreamResponse = await fetch(url, { method: 'POST' });
-    const jwt = upstreamResponse.headers.get('set-cookie').match(/jwt=(.+?);/)[1];
+    const jwt = upstreamResponse.headers.get('set-cookie')!.match(/jwt=(.+?);/)![1];
     cookies().set('jwt', jwt, {
       httpOnly: true,
       sameSite: 'strict',

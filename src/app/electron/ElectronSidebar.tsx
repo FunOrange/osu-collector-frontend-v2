@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/shadcn/skeleton';
 import useClientValue from '@/hooks/useClientValue';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { cn } from '@/utils/shadcn-utils';
+import { useEffect, useState } from 'react';
 import { Gear, House } from 'react-bootstrap-icons';
 
 export enum ElectronAppPage {
@@ -42,7 +43,10 @@ export interface ElectronSidebarProps {
 }
 export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps) {
   const { user, isLoading } = useUser();
-  const appVersion = useClientValue(typeof window !== 'undefined' && window.ipc?.getAppVersion, '');
+  const [appVersion, setAppVersion] = useState('');
+  useEffect(() => {
+    window.ipc?.getAppVersion().then(setAppVersion);
+  }, []);
 
   return (
     <Sidebar>

@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { audioAtom, nowPlayingBeatmapsetIdAtom } from '@/atoms/audio-player';
 import { PlayFill, StopFill } from 'react-bootstrap-icons';
-import { secondsToHHMMSS } from '@/utils/date-time-utils';
 
 export interface BeatmapsetCardPlayButtonProps {
   beatmapsetId: number;
@@ -17,22 +16,26 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId, duration }: Bea
 
   useEffect(() => {
     const onAudioEnd = () => setGlobalPlaying(false);
-    audio.addEventListener('ended', onAudioEnd);
-    return () => audio.removeEventListener('ended', onAudioEnd);
+    if (audio) {
+      audio.addEventListener('ended', onAudioEnd);
+    }
+    return () => audio?.removeEventListener('ended', onAudioEnd);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onPlayClick = () => {
+    if (!audio) return;
     if (!playing) {
       audio.src = `https://b.ppy.sh/preview/${beatmapsetId}.mp3`;
       audio.volume = 0.2;
       audio.play();
+
       setGlobalPlaying(true);
-      setNowPlayingBeatmapsetId(beatmapsetId);
+      (setNowPlayingBeatmapsetId as any)(beatmapsetId);
     } else if (playing) {
       audio.pause();
       setGlobalPlaying(false);
-      setNowPlayingBeatmapsetId(undefined);
+      (setNowPlayingBeatmapsetId as any)(undefined);
     }
   };
 

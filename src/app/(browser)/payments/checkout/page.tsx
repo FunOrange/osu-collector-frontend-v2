@@ -18,8 +18,8 @@ export default function CheckoutPage({}: CheckoutPageProps) {
   const { user, mutate: mutateUser } = useUser();
 
   const router = useRouter();
-  const stripe = useStripe();
-  const elements = useElements();
+  const stripe = useStripe()!;
+  const elements = useElements()!;
 
   const handleCardDetailsChange = (ev) => {
     if (ev.error) {
@@ -42,7 +42,7 @@ export default function CheckoutPage({}: CheckoutPageProps) {
       return;
     }
 
-    const cardElement = elements.getElement('card');
+    const cardElement = elements.getElement('card')!;
 
     // Create customer by sending request to backend
     setProcessingTo(1);

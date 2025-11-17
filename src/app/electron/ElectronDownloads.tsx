@@ -23,12 +23,15 @@ import useClientValue from '@/hooks/useClientValue';
 import { Channel } from '@/app/electron/ipc-types';
 import { tryCatch } from '@/utils/try-catch';
 import { swrKeyIncludes } from '@/utils/swr-utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { equals } from 'ramda';
 
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
-  const downloadDirectory = useClientValue(() => window.ipc?.getDownloadDirectory(), '');
+  const [downloadDirectory, setDownloadDirectory] = useState<string | undefined>();
+  useEffect(() => {
+    window.ipc?.getDownloadDirectory().then(setDownloadDirectory);
+  }, []);
 
   const {
     data: _downloads,
@@ -58,7 +61,10 @@ export default function ElectronDownloads() {
         <Button
           variant='outline'
           className='text-slate-400 hover:bg-slate-500/30'
-          onClick={() => window.ipc.revealPath(downloadDirectory)}
+          disabled={!downloadDirectory}
+          onClick={() => {
+            if (downloadDirectory) window.ipc.revealPath(downloadDirectory);
+          }}
         >
           Open Downloads Folder
         </Button>

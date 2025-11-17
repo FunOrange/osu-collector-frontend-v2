@@ -43,13 +43,13 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
       }),
     ]);
   }, [collection, v3.data?.beatmapsets]);
-  const intervalRef = useRef(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
     if (open && v3.data?.beatmapsets) {
       collectionDownloads[0].reset(collection);
       intervalRef.current = setInterval(simulateDownload, 200);
     }
-    return () => clearInterval(intervalRef.current);
+    return () => clearInterval(intervalRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, v3.data?.beatmapsets]);
   const simulateDownload = () => {

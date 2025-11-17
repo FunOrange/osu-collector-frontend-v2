@@ -17,7 +17,7 @@ export default function EditableCollectionDescription({ collection }: EditableCo
   const [editing, setEditing] = useState(false);
 
   const [collectionDescription, setCollectionDescription] = useState(collection.description);
-  const [userInput, setUserInput] = useState<string>(undefined);
+  const [userInput, setUserInput] = useState<string | undefined>();
   const value = userInput ?? collectionDescription;
   const editDescription = () => {
     if (userInput !== undefined && userInput !== collectionDescription) {

@@ -9,7 +9,10 @@ import { decodeUtf8 } from './utf8-decoder';
 }
 */
 function parseCollectionDb(buffer) {
-  let collections = [];
+  let collections: {
+    name: string;
+    beatmapChecksums: string[];
+  }[] = [];
   let offset = 0;
 
   // skip version (Int32, 4 bytes)
@@ -30,7 +33,7 @@ function parseCollectionDb(buffer) {
     offset += 4;
 
     // read each beatmap MD5 hash
-    let beatmapChecksums = [];
+    let beatmapChecksums: string[] = [];
     for (let i = 0; i < numBeatmaps; i++) {
       let [beatmapMd5, bytesParsed] = parsePeppyString(buffer, offset);
       beatmapChecksums.push(beatmapMd5);

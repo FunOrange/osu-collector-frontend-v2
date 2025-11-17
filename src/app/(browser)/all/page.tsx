@@ -4,25 +4,19 @@ import * as api from '@/services/osu-collector-api';
 import Link from 'next/link';
 import { Search, ThreeDotsVertical } from 'react-bootstrap-icons';
 import { formatQueryParams } from '@/utils/string-utils';
-import { mergeRight } from 'ramda';
+import { defaultTo, isNotNil, mergeRight } from 'ramda';
 import { cn } from '@/utils/shadcn-utils';
 import { isMatching } from 'ts-pattern';
 import SearchInput from '@/components/pages/all/SearchInput';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/shadcn/dropdown-menu';
 import { Button } from '@/components/shadcn/button';
 
 interface CollectionsPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | undefined };
 }
 export default async function CollectionsPage({ searchParams }: CollectionsPageProps) {
   const { collections, hasMore, nextPageCursor, results } = await api.searchCollections({
     search: searchParams.search ?? '',
-    cursor: searchParams.cursor,
+    cursor: defaultTo(undefined, Number(searchParams.cursor)),
     sortBy: searchParams.sortBy ?? '_text_match',
     orderBy: searchParams.orderBy ?? 'desc',
     perPage: 48,
@@ -73,7 +67,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
               { label: 'mania', sortBy: 'maniaCount', orderBy: 'desc' },
               { label: 'ctb', sortBy: 'catchCount', orderBy: 'desc' },
             ]
-              .filter(Boolean)
+              .filter(isNotNil)
               .map(({ label, sortBy, orderBy }, i) => (
                 <Link
                   key={i}

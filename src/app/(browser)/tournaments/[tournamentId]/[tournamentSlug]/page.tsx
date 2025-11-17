@@ -15,6 +15,10 @@ import { Metadata } from 'next';
 import UserChip from '@/components/UserChip';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 import { cn } from '@/utils/shadcn-utils';
+import { notFound } from 'next/navigation';
+import { tryCatch } from '@/utils/try-catch';
+import { Tournament } from '@/shared/entities/v1';
+import { AxiosError } from 'axios';
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const tournament = await api.getTournament(params.tournamentId).catch(() => null);
@@ -40,7 +44,14 @@ interface TournamentPageProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 export default async function TournamentPage({ params, searchParams }: TournamentPageProps) {
-  const tournament = await api.getTournament(params.tournamentId);
+  const [tournament, error] = await tryCatch<Tournament, AxiosError>(api.getTournament(params.tournamentId));
+  if (error) {
+    if (error?.response?.status === 404) {
+      notFound();
+    } else {
+      throw error;
+    }
+  }
 
   const searchParamsSortBy = match(searchParams.sortBy)
     .with('beatmapset.artist', identity)

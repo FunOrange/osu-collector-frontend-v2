@@ -2,14 +2,15 @@ import CollectionCard from '@/components/CollectionCard';
 import MoreResultsButton from '@/components/MoreResultsButton';
 import { getRecentCollections } from '@/services/osu-collector-api';
 import Link from 'next/link';
+import { defaultTo } from 'ramda';
 import { Stars } from 'react-bootstrap-icons';
 
 interface RecentPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | undefined };
 }
 export default async function RecentPage({ searchParams }: RecentPageProps) {
   const recent = await getRecentCollections({
-    cursor: searchParams.cursor,
+    cursor: defaultTo(undefined, Number(searchParams.cursor)),
     perPage: 48,
   });
   const { collections: recentCollections, hasMore, nextPageCursor } = recent;

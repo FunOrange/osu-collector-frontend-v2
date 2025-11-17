@@ -39,19 +39,21 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
     reader.readAsArrayBuffer(file);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-  const [localCollections, setLocalCollections] = useState(undefined);
+  const [localCollections, setLocalCollections] = useState<ReturnType<typeof parseCollectionDb> | undefined>();
   // #endregion local collection.db
 
   const { collections: remoteCollections } = useUserUploads(user?.id);
   const isUploaded = (collection) => remoteCollections?.map((c) => c.name).includes(collection?.name);
 
-  const [selectedCollection, setSelectedCollection] = useState(undefined);
+  const [selectedCollection, setSelectedCollection] = useState<ReturnType<typeof parseCollectionDb>[0] | undefined>(
+    undefined,
+  );
 
   const [uploadCollection, uploading] = useSubmit(async () => {
     const collections = await api.uploadCollections([selectedCollection]);
     router.push(`/collections/${collections[0].id}/${getUrlSlug(collections[0].name)}`);
     toast({ title: 'Collection uploaded!', description: 'Redirecting to collection page...' });
-    onOpenChange(false);
+    onOpenChange?.(false);
   });
   const uploadDisabled = uploading || !selectedCollection;
 

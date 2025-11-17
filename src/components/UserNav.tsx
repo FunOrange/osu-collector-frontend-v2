@@ -33,7 +33,7 @@ export function UserNav() {
   }
   if (!user) {
     const clientId = process.env.NEXT_PUBLIC_OSU_CLIENT_ID;
-    const callback = encodeURIComponent(process.env.NEXT_PUBLIC_OSU_OAUTH_CALLBACK);
+    const callback = encodeURIComponent(process.env.NEXT_PUBLIC_OSU_OAUTH_CALLBACK!);
     const oauthUrl = `https://osu.ppy.sh/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${callback}`;
     const otpLogin = () => {
       // @ts-expect-error

@@ -23,7 +23,7 @@ export default function UserChip({ user, className, href = '#' }: UserChipProps)
       />
       <div className='flex flex-col text-sm'>
         <div className='whitespace-nowrap'>{user.username}</div>
-        {user.rank > 0 && <small className='text-xs text-slate-500'>#{user.rank}</small>}
+        {user?.rank! > 0 && <small className='text-xs text-slate-500'>#{user.rank}</small>}
       </div>
     </>
   );

@@ -16,7 +16,7 @@ export interface TournamentMappoolProps {
   tournament: Tournament;
 }
 export default function TournamentMappool({ tournament }: TournamentMappoolProps) {
-  const [_currentRound, setCurrentRound] = useState(undefined);
+  const [_currentRound, setCurrentRound] = useState<string | undefined>();
   const currentRound = _currentRound ?? tournament.rounds[0]?.round;
   const round = tournament.rounds.find((round) => round.round === currentRound);
 
@@ -33,7 +33,7 @@ export default function TournamentMappool({ tournament }: TournamentMappoolProps
         {round?.mods.map((mod, j) => (
           <React.Fragment key={j}>
             {mod.maps.map((beatmap, k) => {
-              let moddedBeatmap: TournamentBeatmap;
+              let moddedBeatmap: TournamentBeatmap | undefined;
               if (typeof beatmap === 'object') {
                 moddedBeatmap = { ...beatmap };
                 if (mod.mod.toLowerCase() === 'hr') {

@@ -19,7 +19,7 @@ export default function ElectronLogs() {
       } else if (line.match(/^\[\d+-\d+-\d+ \d+:\d+:\d+.\d+\] \[warn\] /)) {
         color = 'text-yellow-200';
       }
-      lineColors.push(color);
+      if (color) lineColors.push(color);
     }
     return lineColors;
   })();
@@ -37,7 +37,9 @@ export default function ElectronLogs() {
         size='sm'
         variant='link'
         className='text-white mb-1'
-        onClick={() => window.ipc.revealPath(path.replace(/[^\\/]+$/, ''))}
+        onClick={() => {
+          if (path) window.ipc.revealPath(path.replace(/[^\\/]+$/, ''));
+        }}
       >
         {path}
       </Button>
