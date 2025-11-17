@@ -15,6 +15,7 @@ import { useToast } from '@/components/shadcn/use-toast';
 import useSubmit from '@/hooks/useSubmit';
 import * as api from '@/services/osu-collector-api';
 import {
+  useCoinbaseCharges,
   usePaypalSubscription,
   useStripeSubscription,
   useTwitchSubcription,
@@ -26,6 +27,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { match } from 'ts-pattern';
+import dayjs, { Dayjs } from 'dayjs';
 
 export default function Billing() {
   const { toast } = useToast();
@@ -88,6 +90,22 @@ export default function Billing() {
     setShowCancelStripeConfirmationModal(false);
   });
   // #endregion stripe
+
+  const { coinbaseCharges, isLoading: coinbaseChargesLoading } = useCoinbaseCharges();
+  const coinbaseActiveUntil = (() => {
+    if (!user || !coinbaseCharges) return undefined;
+
+    let coinbaseActiveUntil: Dayjs | undefined;
+    for (const coinbaseCharge of coinbaseCharges) {
+      const datePaid = dayjs(coinbaseCharge.date_paid);
+      if (coinbaseActiveUntil === undefined || datePaid.isAfter(coinbaseActiveUntil)) {
+        coinbaseActiveUntil = datePaid;
+      }
+      coinbaseActiveUntil = coinbaseActiveUntil.add(1, 'month');
+    }
+    return coinbaseActiveUntil;
+  })();
+  const coinbaseSubscriptionIsActive = Boolean(coinbaseActiveUntil?.isAfter(dayjs()));
 
   return (
     <div className='flex justify-center w-full mt-8 mb-16'>
@@ -368,7 +386,7 @@ export default function Billing() {
                       .otherwise(() => '**** **** **** ');
                     return (
                       <div className='flex items-start gap-3'>
-                        {src && <Image src={src} alt={brand} width={64} height={40} />}
+                        {src && <Image src={src} alt={brand ?? 'unknown'} width={64} height={40} />}
                         <div>
                           {!src && <div>{display_brand}</div>}
                           <div>
@@ -403,6 +421,67 @@ export default function Billing() {
               </div>
             </div>
           )}
+        </div>
+
+        <div className='flex flex-col gap-2'>
+          <div className='w-full max-w-screen-lg'>
+            <h1 className='text-2xl'>Crypto</h1>
+          </div>
+          <div>
+            Crypto payments are one-time and non-recurring. Each payment extends the active subscription period by one
+            month.
+          </div>
+          {coinbaseActiveUntil?.isAfter(dayjs()) && (
+            <div className='border border-green-400 bg-green-500/20 px-4 py-2 rounded-md text-sm text-green-400'>
+              Your crypto subscription is active until {coinbaseActiveUntil.format('MMM DD, YYYY')}
+            </div>
+          )}
+          {coinbaseActiveUntil?.isBefore(dayjs()) && (
+            <div className='border border-gray-400 bg-gray-500/20 px-4 py-2 rounded-md text-sm text-gray-400'>
+              Your crypto subscription was active until {coinbaseActiveUntil.format('MMM DD, YYYY')}
+            </div>
+          )}
+          <div className='relative overflow-x-auto bg-slate-900 shadow-sm rounded-md border border-slate-700'>
+            <Skeleton loading={!user || coinbaseChargesLoading}>
+              <table className='w-full text-sm text-left rtl:text-right text-slate-300'>
+                <thead className='text-sm  border-b rounded-md text-slate-200 bg-slate-800 border-slate-700'>
+                  <tr>
+                    <th scope='col' className='px-6 py-3 font-medium'>
+                      Transaction Date
+                    </th>
+                    <th scope='col' className='px-6 py-3 font-medium'>
+                      Status
+                    </th>
+                    <th scope='col' className='px-6 py-3 font-medium'>
+                      Amount
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {!!coinbaseCharges?.length ? (
+                    coinbaseCharges.map((coinbaseCharge) => (
+                      <tr key={coinbaseCharge.id} className='border-b border-slate-600 last:border-b-0'>
+                        <th scope='row' className='px-6 py-4 font-medium text-slate-100 whitespace-nowrap'>
+                          {dayjs(coinbaseCharge.date_paid).format('MMM DD, YYYY [at] h:mm A')}
+                        </th>
+                        <td className='px-6 py-4 flex'>
+                          <div className='text-xs bg-green-500 text-white px-2 py-[2px] rounded-sm'>Paid</div>
+                        </td>
+                        <td className='px-6 py-4 font-medium'>1.99 USDC</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td className='text-slate-600 px-8 py-4'>
+                        <Skeleton>No transactions</Skeleton>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </Skeleton>
+          </div>
         </div>
 
         <div className='flex flex-col gap-4'>

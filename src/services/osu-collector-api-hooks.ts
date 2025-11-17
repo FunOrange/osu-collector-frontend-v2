@@ -6,6 +6,7 @@ import useSWRImmutable from 'swr/immutable';
 import { match } from 'ts-pattern';
 import { Collection, Tournament } from '@/shared/entities/v1';
 import { safe } from '@/utils/string-utils';
+import { CoinbaseCharge } from '@/shared/entities/v2/CoinbaseCharge';
 
 export const api = axios.create({
   baseURL: '/api',
@@ -53,7 +54,9 @@ export function useCancellableSWRImmutable(key, query = undefined) {
 }
 
 export function useCollection(id: string | number) {
-  const { data, error, mutate, ...rest } = useSWRImmutable(safe`/collections/${id}`, (url) => api.get(url).then((res) => res.data));
+  const { data, error, mutate, ...rest } = useSWRImmutable(safe`/collections/${id}`, (url) =>
+    api.get(url).then((res) => res.data),
+  );
   if (error) console.error(error);
   return { collection: data as Collection, collectionError: error, mutateCollection: mutate, ...rest };
 }
@@ -136,6 +139,17 @@ export const useStripeSubscription = () => {
     stripeEndDate,
     stripeEndDateVerb,
     canCancelStripeSubscription,
+    ...rest,
+  };
+};
+
+export const useCoinbaseCharges = () => {
+  const { user } = useUser();
+  const { data: coinbaseCharges, ...rest } = useSWRImmutable(user && '/payments/coinbase/charges', (url: string) =>
+    api.get<CoinbaseCharge[]>(url).then((res) => res.data),
+  );
+  return {
+    coinbaseCharges,
     ...rest,
   };
 };
