@@ -71,7 +71,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
               .map(({ label, sortBy, orderBy }, i) => (
                 <Link
                   key={i}
-                  href={`/all?${formatQueryParams(mergeRight(searchParams, { sortBy, orderBy }))}`}
+                  href={`/all?${formatQueryParams(mergeRight(searchParams, { sortBy, orderBy, cursor: undefined }))}`}
                   className={cn(
                     'px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
                     isMatching({ sortBy, orderBy })(searchParams)
