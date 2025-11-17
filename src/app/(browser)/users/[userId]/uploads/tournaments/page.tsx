@@ -37,7 +37,7 @@ export default async function UserUploadedTournamentsPage({ params }: PageProps)
 
   return (
     <div className='flex justify-center w-full'>
-      <div className='w-full px-2 py-5 md:px-10 max-w-screen-2xl'>
+      <div className='w-full px-2 py-5 lg:px-10 max-w-screen-2xl'>
         <div className='p-4 mb-4 rounded border-slate-900 shadow-inner bg-[#162032] md:p-7'>
           <h2 className='flex items-center gap-3 mb-6'>
             <Avatar className='w-10 h-10'>

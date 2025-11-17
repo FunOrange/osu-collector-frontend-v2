@@ -17,13 +17,13 @@ export default async function RecentPage({ searchParams }: RecentPageProps) {
 
   return (
     <div className='flex justify-center w-full'>
-      <div className='px-2 py-5 md:px-10 max-w-screen-2xl'>
+      <div className='px-2 py-5 lg:px-10 max-w-screen-2xl'>
         <div className='p-4 mb-4 rounded border-slate-900 shadow-inner bg-[#162032] md:p-7'>
           <h1 className='mb-6 text-3xl'>
             <Stars className='inline mb-1 mr-3 text-yellow-400' size={24} />
             Recent collections
           </h1>
-          <div className='grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='grid grid-cols-1 gap-4 mb-5 lg:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {!recentCollections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (

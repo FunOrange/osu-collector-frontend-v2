@@ -24,7 +24,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
 
   return (
     <div className='flex justify-center w-full'>
-      <div className='flex flex-col items-center gap-6 px-2 py-5 md:px-10 max-w-screen-2xl'>
+      <div className='flex flex-col items-center gap-6 px-2 py-5 lg:px-10 max-w-screen-2xl'>
         {searchParams.tutorial === 'true' && (
           <div className='flex flex-col items-center gap-2 w-full p-6 bg-cyan-700 rounded-xl border-2 border-cyan-900 text-cyan-100'>
             To download a collection, browse for collections here, then look for these buttons!
@@ -83,7 +83,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
                 </Link>
               ))}
           </div>
-          <div className='grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='grid grid-cols-1 gap-4 mb-5 lg:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {!collections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (

@@ -27,7 +27,7 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
 
   return (
     <div className='flex justify-center w-full'>
-      <div className='px-2 py-5 md:px-10 max-w-screen-2xl'>
+      <div className='px-2 py-5 lg:px-10 max-w-screen-2xl'>
         <div className='p-4 mb-4 rounded border-slate-900 shadow-inner bg-[#162032] md:p-7'>
           <div className='flex items-center justify-between gap-2 mb-6' style={{ maxWidth: '740px' }}>
             <h1 className='mt-2 text-3xl'>
@@ -61,7 +61,7 @@ export default async function PopularPage({ searchParams }: PopularPageProps) {
               })}
             </div>
           </div>
-          <div className='grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='grid grid-cols-1 gap-4 mb-5 lg:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {!popularCollections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (

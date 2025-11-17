@@ -64,7 +64,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
             <Fire className='inline mb-2 mr-3 text-orange-400' size={32} />
             Popular this month
           </h2>
-          <div className='grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='grid grid-cols-1 gap-4 mb-5 lg:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {!popularCollections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (
