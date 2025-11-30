@@ -178,20 +178,22 @@ export default function ElectronDownloads() {
         size: 100,
         cell: ({ row }) => {
           const beatmapsetId = row.original.beatmapsetId;
-          const button = (ipcHandler: (beatmapsetId: number) => Promise<void>, icon: React.ReactNode) => (
+          const button = (channel: Channel, icon: React.ReactNode) => (
             <Button
+              key={channel}
               variant='outline'
               size='icon'
               className='text-slate-400 bg-slate-900 hover:bg-slate-700/40'
-              onClick={() => tryCatch(mutate(ipcHandler(beatmapsetId).then(window.ipc.getDownloads)))}
+              onClick={() => tryCatch(mutate((window.ipc[channel] as any)(beatmapsetId).then(window.ipc.getDownloads)))}
             >
               {icon}
             </Button>
           );
-          const clearButton = button(window.ipc.clearDownload, <X className='w-5 h-5 text-red-400' />);
-          const cancelButton = button(window.ipc.cancelDownload, <X className='w-5 h-5' />);
-          const stopButton = button(window.ipc.cancelDownload, <StopCircle className='text-red-400' />);
-          const retryButton = button(window.ipc.retryDownload, <RefreshCw className='text-yellow-200 w-4 h-4' />);
+
+          const clearButton = button(Channel.ClearDownload, <X className='w-5 h-5 text-red-400' />);
+          const cancelButton = button(Channel.CancelDownload, <X className='w-5 h-5' />);
+          const stopButton = button(Channel.CancelDownload, <StopCircle className='text-red-400' />);
+          const retryButton = button(Channel.RetryDownload, <RefreshCw className='text-yellow-200 w-4 h-4' />);
           const visibleButtons = row.original.cancelled
             ? [retryButton, clearButton]
             : match(row.original.status)
