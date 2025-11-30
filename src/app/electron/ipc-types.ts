@@ -12,6 +12,7 @@ export enum Channel {
   AddDownloads = 'addDownloads',
   CancelDownload = 'cancelDownload',
   ClearDownload = 'clearDownload',
+  ClearCancelledDownloads = 'clearCancelledDownloads',
   ClearInactiveDownloads = 'clearInactiveDownloads',
   ClearFailedDownloads = 'clearFailedDownloads',
   ClearCompletedDownloads = 'clearCompletedDownloads',
@@ -42,6 +43,7 @@ export interface IpcHandlers {
   [Channel.AddDownloads]: (options: { beatmapsetIds: number[]; metadata: DownloadMetadata }) => Promise<void>;
   [Channel.CancelDownload]: (beatmapsetId: number) => Promise<void>;
   [Channel.ClearDownload]: (beatmapsetId: number) => Promise<void>;
+  [Channel.ClearCancelledDownloads]: () => Promise<void>;
   [Channel.ClearInactiveDownloads]: () => Promise<void>;
   [Channel.ClearFailedDownloads]: () => Promise<void>;
   [Channel.ClearCompletedDownloads]: () => Promise<void>;
