@@ -40,8 +40,6 @@ import useClientValue from '@/hooks/useClientValue';
 import { Channel } from '@/app/electron/ipc-types';
 import { tryCatch } from '@/utils/try-catch';
 
-const linkStyle = 'text-xs text-slate-400 line-clamp-1 break-all cursor-pointer hover:text-blue-500 transition-colors';
-
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
   const [downloadDirectory, setDownloadDirectory] = useState<string | undefined>();
@@ -96,6 +94,7 @@ export default function ElectronDownloads() {
             </div>
           );
         },
+        enableSorting: false,
       },
       {
         accessorKey: 'status',
@@ -145,6 +144,7 @@ export default function ElectronDownloads() {
         accessorKey: 'size.downloaded',
         header: 'Progress',
         meta: { className: 'flex-[1]' },
+        enableSorting: false,
         cell: ({ row }) => {
           const download = row.original as DownloadType[Status.Downloading];
           const remoteUrl = download.remoteUrl;
@@ -164,6 +164,7 @@ export default function ElectronDownloads() {
       },
       {
         accessorKey: 'size.total',
+        sortUndefined: 'last',
         size: 120,
         header: 'Size',
         cell: ({ row }) => {
@@ -441,3 +442,5 @@ function StatusChips({ downloads, onClearCompleted, onClearCancelled, onClearFai
     )
   );
 }
+
+const linkStyle = 'text-xs text-slate-400 line-clamp-1 break-all cursor-pointer hover:text-blue-500 transition-colors';
