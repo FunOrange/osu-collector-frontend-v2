@@ -15,7 +15,7 @@ export const api = axios.create({
 
 export function useUser() {
   type Response = { loggedIn: true; user: User; morphed: boolean } | { loggedIn: false; user: null };
-  const { data, mutate, ...rest } = useSWRImmutable<Response>('/users/me', (url) =>
+  const { data, mutate, ...rest } = useSWRImmutable<Response>('/users/me', (url: string) =>
     api.get(url).then((res) => res.data),
   );
   const user = match(data)

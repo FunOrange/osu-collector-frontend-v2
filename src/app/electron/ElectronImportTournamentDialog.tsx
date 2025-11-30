@@ -11,12 +11,11 @@ import {
   DialogTitle,
 } from '@/components/shadcn/dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/shadcn/tooltip';
-import { useTournament } from '@/services/osu-collector-api-hooks';
+import { useTournament, useUser } from '@/services/osu-collector-api-hooks';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import { Button } from '@/components/shadcn/button';
 import { cn } from '@/utils/shadcn-utils';
 import { Checkbox } from '@/components/shadcn/checkbox';
-import useClientValue from '@/hooks/useClientValue';
 import { assoc, sum } from 'ramda';
 import { ArrowClockwise, ArrowLeft, ArrowRight, ArrowUp, ThreeDots } from 'react-bootstrap-icons';
 import { File, RefreshCw } from 'lucide-react';
@@ -40,6 +39,7 @@ interface TournamentImportOptions {
 
 export function ElectronImportTournamentDialog() {
   const { toast } = useToast();
+  const { user } = useUser();
   const { data: uri, mutate: mutateURI } = useSWR(window.ipc && Channel.GetURI, window.ipc?.getURI);
   const [tournamentId, setTournamentId] = useState<number | undefined>();
   const [open, setOpen] = useState<boolean>(false);
@@ -112,6 +112,10 @@ export function ElectronImportTournamentDialog() {
   const [modifyingCollectionDb, setModifyingCollectionDb] = useState(false);
   const [submit, submitting] = useSubmit(async () => {
     localStorage.setItem('tournament-import-options', JSON.stringify(options));
+    if (!user) {
+      toast({ title: 'Please log in to continue', variant: 'destructive' });
+      return;
+    }
 
     const isOsuRunning = await window.ipc.checkIfOsuIsRunning();
     if (isOsuRunning) {

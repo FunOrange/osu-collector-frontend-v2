@@ -10,12 +10,11 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/components/shadcn/dialog';
-import { useCollection } from '@/services/osu-collector-api-hooks';
+import { useCollection, useUser } from '@/services/osu-collector-api-hooks';
 import { Skeleton } from '@/components/shadcn/skeleton';
 import { Button } from '@/components/shadcn/button';
 import { cn } from '@/utils/shadcn-utils';
 import { Checkbox } from '@/components/shadcn/checkbox';
-import useClientValue from '@/hooks/useClientValue';
 import { assoc, clone, equals, uniq } from 'ramda';
 import { ArrowClockwise, ArrowLeft, ArrowRight, ArrowUp, ThreeDots } from 'react-bootstrap-icons';
 import { File, RefreshCw } from 'lucide-react';
@@ -50,6 +49,7 @@ const defaultFilters: BeatmapFilters = { stars: [0, 11], bpm: [150, 310] };
 
 export function ElectronImportCollectionDialog() {
   const { toast } = useToast();
+  const { user } = useUser();
   const { data: uri, mutate: mutateURI } = useSWR(window.ipc && Channel.GetURI, window.ipc?.getURI);
   const [collectionId, setCollectionId] = useState<number | undefined>();
   const [filters, setFilters] = useState<BeatmapFilters>(defaultFilters);
@@ -138,6 +138,10 @@ export function ElectronImportCollectionDialog() {
   const [modifyingCollectionDb, setModifyingCollectionDb] = useState(false);
   const [submit, submitting] = useSubmit(async () => {
     localStorage.setItem('collection-import-options', JSON.stringify(options));
+    if (!user) {
+      toast({ title: 'Please log in to continue', variant: 'destructive' });
+      return;
+    }
 
     const isOsuRunning = await window.ipc.checkIfOsuIsRunning();
     if (isOsuRunning) {

@@ -54,6 +54,7 @@ export default function ElectronDownloads() {
   const hasInactiveDownloads = downloads.some(
     (d) => d.cancelled || [Status.AlreadyDownloaded, Status.AlreadyInstalled].includes(d.status),
   );
+  const hasFailedDownloads = downloads.some((d) => d.status === Status.Failed);
 
   return (
     <div className='flex flex-col items-start gap-2 p-4'>
@@ -85,6 +86,15 @@ export default function ElectronDownloads() {
             onClick={() => mutate(window.ipc.clearInactiveDownloads().then(window.ipc.getDownloads))}
           >
             Clear Inactive
+          </Button>
+        )}
+        {hasFailedDownloads && (
+          <Button
+            variant='outline'
+            className='text-slate-400 hover:bg-slate-500/30'
+            onClick={() => mutate(window.ipc.clearFailedDownloads().then(window.ipc.getDownloads))}
+          >
+            Clear Failed
           </Button>
         )}
         {hasCompletedDownloads && (
