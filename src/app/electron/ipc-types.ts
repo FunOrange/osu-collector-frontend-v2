@@ -8,6 +8,7 @@ export enum Channel {
   PathSep = 'pathSep',
   OpenDevTools = 'openDevTools',
   GetDownloads = 'getDownloads',
+  GetDownloadByBeatmapsetId = 'getDownloadByBeatmapsetId',
   OnDownloadUpdate = 'onDownloadUpdate',
   AddDownloads = 'addDownloads',
   CancelDownload = 'cancelDownload',
@@ -39,6 +40,7 @@ export interface IpcHandlers {
   [Channel.PathSep]: () => Promise<string>;
   [Channel.OpenDevTools]: () => Promise<void>;
   [Channel.GetDownloads]: () => Promise<Download[]>;
+  [Channel.GetDownloadByBeatmapsetId]: (beatmapsetId: number) => Download | undefined;
   [Channel.OnDownloadUpdate]: (beatmapsetId: number, callback: (download: Download) => any) => void;
   [Channel.AddDownloads]: (options: { beatmapsetIds: number[]; metadata: DownloadMetadata }) => Promise<void>;
   [Channel.CancelDownload]: (beatmapsetId: number) => Promise<void>;

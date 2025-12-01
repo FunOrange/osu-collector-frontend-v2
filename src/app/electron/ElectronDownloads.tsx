@@ -11,9 +11,12 @@ import {
   DialogTrigger,
 } from '@/components/shadcn/dialog';
 import {
+  Column,
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getSortedRowModel,
   Row,
   Table as TanstackTable,
@@ -22,9 +25,9 @@ import {
 import { useVirtualizer, VirtualItem, Virtualizer } from '@tanstack/react-virtual';
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shadcn/table';
 import { Progress } from '@/components/shadcn/progress';
-import { match } from 'ts-pattern';
+import { isMatching, match, P } from 'ts-pattern';
 import { cn } from '@/utils/shadcn-utils';
-import { Plus, StopCircle, X } from 'react-bootstrap-icons';
+import { Filter, Plus, StopCircle, X } from 'react-bootstrap-icons';
 import {
   CircleEllipsis,
   CheckCircle,
@@ -39,6 +42,29 @@ import useSWR from 'swr';
 import useClientValue from '@/hooks/useClientValue';
 import { Channel } from '@/app/electron/ipc-types';
 import { tryCatch } from '@/utils/try-catch';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuTrigger,
+} from '@/components/shadcn/dropdown-menu';
+
+const downloadPatterns = {
+  cancelled: isMatching({ cancelled: true }),
+  queued: isMatching({
+    cancelled: false,
+    status: P.union(Status.Pending, Status.CheckingLocalFiles, Status.Queued, Status.Fetching, Status.Fetched),
+  }),
+  downloading: isMatching({
+    cancelled: false,
+    status: P.union(Status.StartingDownload, Status.Downloading),
+  }),
+  completed: isMatching({
+    status: P.union(Status.AlreadyDownloaded, Status.AlreadyInstalled, Status.Completed),
+  }),
+  failed: isMatching({ status: Status.Failed }),
+};
 
 export default function ElectronDownloads() {
   const isElectron = useClientValue(() => Boolean(window.ipc), false);
@@ -49,9 +75,16 @@ export default function ElectronDownloads() {
 
   const { data: _downloads, mutate } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
     refreshInterval: 2000,
-    dedupingInterval: 0,
   });
   const downloads = useMemo(() => _downloads ?? [], [_downloads]);
+  const statusCounts = {
+    all: downloads?.length,
+    cancelled: downloads?.filter(downloadPatterns.cancelled).length,
+    queued: downloads?.filter(downloadPatterns.queued).length,
+    downloading: downloads?.filter(downloadPatterns.downloading).length,
+    completed: downloads?.filter(downloadPatterns.completed).length,
+    failed: downloads?.filter(downloadPatterns.failed).length,
+  };
 
   const columns = React.useMemo<ColumnDef<Download>[]>(
     () => [
@@ -59,6 +92,7 @@ export default function ElectronDownloads() {
         accessorKey: 'filename',
         header: 'Name',
         meta: { className: 'min-h-[56px] flex-[2]' },
+        enableColumnFilter: false,
         size: 148,
         cell: ({ row }) => {
           const osuwebUrl = `https://osu.ppy.sh/beatmapsets/${row.original.beatmapsetId}`;
@@ -100,6 +134,19 @@ export default function ElectronDownloads() {
         accessorKey: 'status',
         header: 'Status',
         size: 120,
+        enableSorting: false,
+        enableColumnFilter: true,
+        meta: { filterVariant: 'select' },
+        filterFn: (row, _, value: 'queued' | 'downloading' | 'completed' | 'failed' | 'cancelled' | undefined) => {
+          if (!value) return true;
+          return match(value)
+            .with('cancelled', () => downloadPatterns.cancelled(row.original))
+            .with('queued', () => downloadPatterns.queued(row.original))
+            .with('downloading', () => downloadPatterns.downloading(row.original))
+            .with('completed', () => downloadPatterns.completed(row.original))
+            .with('failed', () => downloadPatterns.failed(row.original))
+            .exhaustive();
+        },
         cell: ({ row }) => {
           if (row.original.cancelled) return 'Cancelled';
           return match(row.original)
@@ -145,6 +192,7 @@ export default function ElectronDownloads() {
         header: 'Progress',
         meta: { className: 'flex-[1]' },
         enableSorting: false,
+        enableColumnFilter: false,
         cell: ({ row }) => {
           const download = row.original as DownloadType[Status.Downloading];
           const remoteUrl = download.remoteUrl;
@@ -164,8 +212,11 @@ export default function ElectronDownloads() {
       },
       {
         accessorKey: 'size.total',
+        accessorFn: (download) => (download as DownloadType[Status.Downloading]).size?.total,
         sortUndefined: 'last',
-        size: 120,
+        enableSorting: true,
+        enableColumnFilter: false,
+        size: 100,
         header: 'Size',
         cell: ({ row }) => {
           const size = (row.original as any).size?.total as number;
@@ -176,6 +227,8 @@ export default function ElectronDownloads() {
       {
         id: 'actions',
         header: 'Actions',
+        enableSorting: false,
+        enableColumnFilter: false,
         size: 100,
         cell: ({ row }) => {
           const beatmapsetId = row.original.beatmapsetId;
@@ -217,14 +270,16 @@ export default function ElectronDownloads() {
     [mutate],
   );
 
-  // The virtualizer will need a reference to the scrollable container element
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
-
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data: downloads,
     columns,
+    state: { columnFilters },
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   const showStopAllButton = downloads.some((d) => !d.cancelled && !finalizedStatuses.includes(d.status));
@@ -255,12 +310,21 @@ export default function ElectronDownloads() {
             Stop all
           </Button>
         )}
-        <StatusChips
-          downloads={downloads}
-          onClearCompleted={() => mutate(window.ipc.clearCompletedDownloads().then(window.ipc.getDownloads))}
-          onClearCancelled={() => mutate(window.ipc.clearCancelledDownloads().then(window.ipc.getDownloads))}
-          onClearFailed={() => mutate(window.ipc.clearFailedDownloads().then(window.ipc.getDownloads))}
-        />
+        {Object.values(statusCounts).some((count) => count > 0) && (
+          <>
+            {statusChip('cancelled', statusCounts.cancelled, () =>
+              mutate(window.ipc.clearCancelledDownloads().then(window.ipc.getDownloads)),
+            )}
+            {statusChip('failed', statusCounts.failed, () =>
+              mutate(window.ipc.clearFailedDownloads().then(window.ipc.getDownloads)),
+            )}
+            {statusChip('completed', statusCounts.completed, () =>
+              mutate(window.ipc.clearCompletedDownloads().then(window.ipc.getDownloads)),
+            )}
+            {statusChip('downloading', statusCounts.downloading)}
+            {statusChip('queued', statusCounts.queued)}
+          </>
+        )}
       </div>
 
       <div ref={tableContainerRef} className='overflow-auto w-full relative h-full'>
@@ -274,24 +338,36 @@ export default function ElectronDownloads() {
                     style={{ width: header.getSize() }}
                     className={cn(
                       'flex items-center',
-                      header.column.getCanSort() &&
+                      (header.column.getCanSort() || header.column.getCanFilter()) &&
                         'cursor-pointer select-none transition-colors rounded-lg hover:bg-slate-600/50',
+                      header.column.getCanFilter() && 'px-0',
                       (header.column.columnDef as any).meta?.className,
                       '!min-h-0',
                     )}
                     onClick={header.column.getToggleSortingHandler()}
                   >
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                    {match(header.column.getIsSorted())
-                      .with('asc', () => <ChevronUp className='ml-2 h-4 w-4' />)
-                      .with('desc', () => <ChevronDown className='ml-2 h-4 w-4' />)
-                      .otherwise(() => null)}
+                    <StatusFilter column={header.column} statusCounts={statusCounts}>
+                      <div
+                        className={cn(
+                          'w-full h-full flex items-center',
+                          header.column.getCanFilter() && 'px-4',
+                          !!header.column.getFilterValue() && 'text-yellow-400',
+                        )}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {match(header.column.getIsSorted())
+                          .with('asc', () => <ChevronUp className='ml-2 h-4 w-4' />)
+                          .with('desc', () => <ChevronDown className='ml-2 h-4 w-4' />)
+                          .otherwise(() => null)}
+                        {!!header.column.getFilterValue() && <Filter className='ml-2 h-4 w-4' />}
+                      </div>
+                    </StatusFilter>
                   </TableHead>
                 ))}
               </TableRow>
             ))}
           </TableHeader>
-          {isElectron && table.getRowModel().rows?.length ? (
+          {isElectron && downloads?.length ? (
             <VirtualizedTableBody table={table} tableContainerRef={tableContainerRef} />
           ) : (
             <TableBody className='flex col-span-full'>
@@ -352,6 +428,18 @@ interface VirtualizedTableBodyRowProps {
   rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>;
 }
 function VirtualizedTableBodyRow({ row, virtualRow, rowVirtualizer }: VirtualizedTableBodyRowProps) {
+  // poll download at higher frequency
+  const { data: download } = useSWR(
+    window.ipc && [Channel.GetDownloadByBeatmapsetId, row.original.beatmapsetId],
+    ([_, beatmapsetId]) => window.ipc?.getDownloadByBeatmapsetId(beatmapsetId),
+    { refreshInterval: 150, dedupingInterval: 0 },
+  );
+  const cells = row.getVisibleCells();
+  if (download) {
+    for (const cell of cells) {
+      cell.row.original = download;
+    }
+  }
   return (
     <TableRow
       data-index={virtualRow.index} //needed for dynamic row height measurement
@@ -360,7 +448,7 @@ function VirtualizedTableBodyRow({ row, virtualRow, rowVirtualizer }: Virtualize
       className='flex absolute w-full'
       style={{ transform: `translateY(${virtualRow.start}px)` }}
     >
-      {row.getVisibleCells().map((cell) => (
+      {cells.map((cell) => (
         <TableCell
           key={cell.id}
           className={cn('flex items-center', (cell.column.columnDef as any).meta?.className)}
@@ -371,6 +459,55 @@ function VirtualizedTableBodyRow({ row, virtualRow, rowVirtualizer }: Virtualize
       ))}
     </TableRow>
   );
+}
+
+interface FilterProps {
+  column: Column<any, unknown>;
+  children: React.ReactNode;
+  statusCounts: {
+    all: number;
+    queued: number;
+    downloading: number;
+    completed: number;
+    failed: number;
+    cancelled: number;
+  };
+}
+function StatusFilter({ column, children, statusCounts }: FilterProps) {
+  const columnFilterValue = column.getFilterValue();
+  const { filterVariant } = (column.columnDef.meta as any) ?? {};
+  if (!column.getCanFilter()) return children;
+
+  const item = (label: string, value: string | undefined) => {
+    const count = statusCounts[value ?? 'all'];
+    return (
+      <DropdownMenuCheckboxItem
+        checked={columnFilterValue?.toString() === value}
+        onCheckedChange={() => column.setFilterValue(value)}
+        className={cn(!count && 'text-slate-500')}
+      >
+        {label}
+        {!!count && ` (${count})`}
+      </DropdownMenuCheckboxItem>
+    );
+  };
+  return match(filterVariant)
+    .with('select', () => (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+        <DropdownMenuContent className='w-56' align='start'>
+          <DropdownMenuGroup>
+            {item('All', undefined)}
+            {item('Queued', 'queued')}
+            {item('Downloading', 'downloading')}
+            {item('Completed', 'completed')}
+            {item('Failed', 'failed')}
+            {item('Cancelled', 'cancelled')}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ))
+    .otherwise(() => children);
 }
 
 const statusChip = (
@@ -405,42 +542,5 @@ const statusChip = (
     </div>
   );
 };
-
-interface StatusChipsProps {
-  downloads: Download[];
-  onClearCompleted: () => void;
-  onClearCancelled?: () => void;
-  onClearFailed?: () => void;
-}
-function StatusChips({ downloads, onClearCompleted, onClearCancelled, onClearFailed }: StatusChipsProps) {
-  const byStatus = (status: Status | Status[]) => (d: Download) =>
-    Array.isArray(status) ? status.includes(d.status) : d.status === status;
-  const statusCounts = {
-    cancelled: downloads?.filter((d) => d.cancelled).length,
-    queued: downloads?.filter(
-      (d) =>
-        !d.cancelled &&
-        [Status.Pending, Status.CheckingLocalFiles, Status.Queued, Status.Fetching, Status.Fetched].includes(d.status),
-    ).length,
-    downloading: downloads?.filter(
-      (d) => !d.cancelled && [Status.StartingDownload, Status.Downloading].includes(d.status),
-    ).length,
-    completed: downloads?.filter(byStatus([Status.AlreadyInstalled, Status.AlreadyDownloaded, Status.Completed]))
-      .length,
-    failed: downloads?.filter(byStatus(Status.Failed)).length,
-  };
-
-  return (
-    Object.values(statusCounts).some((count) => count > 0) && (
-      <>
-        {statusChip('cancelled', statusCounts.cancelled, onClearCancelled)}
-        {statusChip('failed', statusCounts.failed, onClearFailed)}
-        {statusChip('completed', statusCounts.completed, onClearCompleted)}
-        {statusChip('downloading', statusCounts.downloading)}
-        {statusChip('queued', statusCounts.queued)}
-      </>
-    )
-  );
-}
 
 const linkStyle = 'text-xs text-slate-400 line-clamp-1 break-all cursor-pointer hover:text-blue-500 transition-colors';
