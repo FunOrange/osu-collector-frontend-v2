@@ -385,7 +385,7 @@ export function ElectronImportCollectionDialog() {
             </DialogClose>
             <Button
               variant='important'
-              disabled={!collectionId || (skipping.modifyCollectionDb && skipping.queueDownloads)}
+              disabled={!collection || !collectionId || (skipping.modifyCollectionDb && skipping.queueDownloads)}
               loading={submitting}
               onClick={submit}
             >
