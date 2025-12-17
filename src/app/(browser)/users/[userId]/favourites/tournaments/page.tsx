@@ -4,9 +4,10 @@ import * as api from '@/services/osu-collector-api';
 import { s } from '@/utils/string-utils';
 
 interface PageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
-export default async function UserFavouriteTournamentsPage({ params }: PageProps) {
+export default async function UserFavouriteTournamentsPage(props: PageProps) {
+  const params = await props.params;
   const [pageUser, tournaments] = await Promise.all([
     api.getUser(params.userId),
     api.getUserFavouriteTournaments(params.userId),

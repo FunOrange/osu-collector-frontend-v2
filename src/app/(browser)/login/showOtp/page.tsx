@@ -1,4 +1,5 @@
-export default function EnterOtpPage({ searchParams }) {
+export default async function EnterOtpPage(props) {
+  const searchParams = await props.searchParams;
   const otp = searchParams.otp as string;
 
   return (

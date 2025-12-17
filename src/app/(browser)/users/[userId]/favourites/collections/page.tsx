@@ -5,7 +5,8 @@ import { s } from '@/utils/string-utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+  const params = await props.params;
   const pageUser = await api.getUser(params.userId).catch(() => null);
   if (!pageUser) return {};
 
@@ -25,9 +26,10 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 
 interface PageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
-export default async function UserFavouriteCollectionsPage({ params }: PageProps) {
+export default async function UserFavouriteCollectionsPage(props: PageProps) {
+  const params = await props.params;
   const [pageUser, collections] = await Promise.all([
     api.getUser(params.userId),
     api.getUserFavouriteCollections(params.userId),

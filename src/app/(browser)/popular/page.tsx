@@ -8,9 +8,10 @@ import { defaultTo, identity } from 'ramda';
 import { formatQueryParams } from '@/utils/string-utils';
 
 interface PopularPageProps {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
-export default async function PopularPage({ searchParams }: PopularPageProps) {
+export default async function PopularPage(props: PopularPageProps) {
+  const searchParams = await props.searchParams;
   const activeRange = match(searchParams.range)
     .with('today', () => 'today' as const)
     .with('week', () => 'week' as const)

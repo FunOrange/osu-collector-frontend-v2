@@ -392,7 +392,7 @@ export default function ElectronDownloads() {
 
 interface TableBodyProps {
   table: TanstackTable<Download>;
-  tableContainerRef: React.RefObject<HTMLDivElement>;
+  tableContainerRef: React.RefObject<HTMLDivElement | null>;
 }
 function VirtualizedTableBody({ table, tableContainerRef }: TableBodyProps) {
   const { rows } = table.getRowModel();
@@ -443,7 +443,9 @@ function VirtualizedTableBodyRow({ row, virtualRow, rowVirtualizer }: Virtualize
   return (
     <TableRow
       data-index={virtualRow.index} //needed for dynamic row height measurement
-      ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
+      ref={node => {
+        rowVirtualizer.measureElement(node);
+      }} //measure dynamic row height
       key={row.id}
       className='absolute flex w-full'
       style={{ transform: `translateY(${virtualRow.start}px)` }}

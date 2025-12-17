@@ -14,9 +14,10 @@ export const metadata: Metadata = {
 };
 
 interface UsersPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
-export default async function UsersPage({ searchParams }: UsersPageProps) {
+export default async function UsersPage(props: UsersPageProps) {
+  const searchParams = await props.searchParams;
   const { users, nextPage } = await api.getUsers({
     page: searchParams.page || 1,
     perPage: searchParams.perPage || 48,

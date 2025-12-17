@@ -6,9 +6,10 @@ import { defaultTo } from 'ramda';
 import { Stars } from 'react-bootstrap-icons';
 
 interface RecentPageProps {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
-export default async function RecentPage({ searchParams }: RecentPageProps) {
+export default async function RecentPage(props: RecentPageProps) {
+  const searchParams = await props.searchParams;
   const recent = await getRecentCollections({
     cursor: defaultTo(undefined, Number(searchParams.cursor)),
     perPage: 48,

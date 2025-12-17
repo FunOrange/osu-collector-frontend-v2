@@ -11,9 +11,10 @@ import SearchInput from '@/components/pages/all/SearchInput';
 import { Button } from '@/components/shadcn/button';
 
 interface CollectionsPageProps {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
-export default async function CollectionsPage({ searchParams }: CollectionsPageProps) {
+export default async function CollectionsPage(props: CollectionsPageProps) {
+  const searchParams = await props.searchParams;
   const { collections, hasMore, nextPageCursor, results } = await api.searchCollections({
     search: searchParams.search ?? '',
     cursor: defaultTo(undefined, Number(searchParams.cursor)),

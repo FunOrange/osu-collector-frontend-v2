@@ -20,7 +20,8 @@ import { tryCatch } from '@/utils/try-catch';
 import { Tournament } from '@/shared/entities/v1';
 import { AxiosError } from 'axios';
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+  const params = await props.params;
   const tournament = await api.getTournament(params.tournamentId).catch(() => null);
   if (!tournament) return {};
 
@@ -40,10 +41,12 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 
 interface TournamentPageProps {
-  params: { tournamentId: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ tournamentId: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
-export default async function TournamentPage({ params, searchParams }: TournamentPageProps) {
+export default async function TournamentPage(props: TournamentPageProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const [tournament, error] = await tryCatch<Tournament, AxiosError>(api.getTournament(params.tournamentId));
   if (error) {
     if (error?.response?.status === 404) {

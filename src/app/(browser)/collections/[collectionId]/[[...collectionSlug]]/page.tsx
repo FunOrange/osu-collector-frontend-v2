@@ -18,7 +18,8 @@ import CollectionBeatmapsSection from '@/components/pages/collections/[collectio
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 import { defaultTo } from 'ramda';
 
-export async function generateMetadata({ params }): Promise<Metadata> {
+export async function generateMetadata(props): Promise<Metadata> {
+  const params = await props.params;
   const collection = await api.getCollection(params.collectionId).catch(() => null);
   if (!collection) return {};
 
@@ -38,9 +39,10 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 
 interface CollectionPageProps {
-  params: { collectionId: string };
+  params: Promise<{ collectionId: string }>;
 }
-export default async function CollectionPage({ params }: CollectionPageProps) {
+export default async function CollectionPage(props: CollectionPageProps) {
+  const params = await props.params;
   const collection = await api.getCollection(Number(params.collectionId)).catch((e) => {
     if (e.response?.status === 404) return null;
     throw e;

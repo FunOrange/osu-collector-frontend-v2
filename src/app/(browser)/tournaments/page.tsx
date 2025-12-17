@@ -9,9 +9,10 @@ import TournamentCard from '@/components/TournamentCard';
 import { Button } from '@/components/shadcn/button';
 
 interface TournamentsPageProps {
-  searchParams: { [key: string]: string | undefined };
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
-export default async function TournamentsPage({ searchParams }: TournamentsPageProps) {
+export default async function TournamentsPage(props: TournamentsPageProps) {
+  const searchParams = await props.searchParams;
   const { tournaments, hasMore, nextPageCursor } = await (async () => {
     if (searchParams.search) {
       const { tournaments, hasMore, nextPageCursor } = await api.searchTournaments({

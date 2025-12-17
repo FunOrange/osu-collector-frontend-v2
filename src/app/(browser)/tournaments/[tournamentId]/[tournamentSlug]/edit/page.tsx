@@ -2,7 +2,8 @@ import TournamentForm from '@/components/pages/tournaments/[tournamentId]/Tourna
 import * as api from '@/services/osu-collector-api';
 import { redirect } from 'next/navigation';
 
-export default async function Page({ params }) {
+export default async function Page(props) {
+  const params = await props.params;
   try {
     const tournament = await api.getTournament(params.tournamentId);
     return <TournamentForm tournament={tournament} />;

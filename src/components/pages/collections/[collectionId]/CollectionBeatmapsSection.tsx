@@ -26,7 +26,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   const filtersRef = useRef<HTMLDivElement>(null);
   const listingRef = useRef<HTMLDivElement>(null);
 
-  const scrollTo = (divRef: React.RefObject<HTMLDivElement>, offset = 0) => {
+  const scrollTo = (divRef: React.RefObject<HTMLDivElement | null>, offset = 0) => {
     const root = document.getElementById('app-root')!;
     root.scrollTo({ top: divRef.current?.offsetTop! - navbarHeightPx + offset, behavior: 'smooth' });
   };
