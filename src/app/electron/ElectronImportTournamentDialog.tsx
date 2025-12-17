@@ -297,7 +297,7 @@ export function ElectronImportTournamentDialog() {
                     {oszFile}
                     {oszFile}
                     {oszFile}
-                    <ThreeDots className='ml-1 text-xl text-gray-400' />
+                    <ThreeDots className='ml-1 text-xl text-gray-400' color='currentColor' />
                   </div>
                 </div>
               </WindowsFileExplorer>
@@ -318,7 +318,6 @@ export function ElectronImportTournamentDialog() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
       <Dialog open={modifyingCollectionDb}>
         <DialogContent onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
           <DialogTitle>Modifying collection.db...</DialogTitle>
@@ -382,12 +381,12 @@ function WindowsFileExplorer({ addressBar, children, className }: WindowsFileExp
   return (
     <div className={cn('rounded border border-black/50 bg-[#1F1F1F]', className)}>
       <div className='flex items-center gap-2 px-2 py-2 text-white'>
-        <ArrowLeft className='text-md' />
-        <ArrowRight className='text-md text-gray-400' />
-        <ArrowUp className='text-md' />
+        <ArrowLeft className='text-md' color='currentColor' />
+        <ArrowRight className='text-md text-gray-400' color='currentColor' />
+        <ArrowUp className='text-md' color='currentColor' />
         <div className='bg-slate line-clamp-1 flex items-center justify-between gap-4 rounded bg-[#2D2C2C] px-2 py-1 text-xs'>
           {addressBar}
-          <ArrowClockwise className='text-md text-gray-400' />
+          <ArrowClockwise className='text-md text-gray-400' color='currentColor' />
         </div>
       </div>
       <div className='flex flex-col items-start bg-[#191919] p-4'>{children}</div>

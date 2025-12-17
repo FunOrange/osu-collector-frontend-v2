@@ -28,12 +28,12 @@ const items = [
   {
     title: 'Home',
     page: ElectronAppPage.Home,
-    icon: <House className='h-4 w-4' />,
+    icon: <House className='h-4 w-4' color='currentColor' />,
   },
   {
     title: 'Settings',
     page: ElectronAppPage.Settings,
-    icon: <Gear className='h-4 w-4' />,
+    icon: <Gear className='h-4 w-4' color='currentColor' />,
   },
 ];
 

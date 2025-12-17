@@ -21,7 +21,7 @@ export default async function RecentPage(props: RecentPageProps) {
       <div className='max-w-screen-2xl px-2 py-5 lg:px-10'>
         <div className='mb-4 rounded border-slate-900 bg-[#162032] p-4 shadow-inner md:p-7'>
           <h1 className='mb-6 text-3xl'>
-            <Stars className='mb-1 mr-3 inline text-yellow-400' size={24} />
+            <Stars className='mb-1 mr-3 inline text-yellow-400' size={24} color='currentColor' />
             Recent collections
           </h1>
           <div className='mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4'>
@@ -33,7 +33,7 @@ export default async function RecentPage(props: RecentPageProps) {
           </div>
           {hasMore ? (
             <Link href={`/recent?cursor=${nextPageCursor}`}>
-              <MoreResultsButton>More results</MoreResultsButton>
+              <MoreResultsButton searchParams={searchParams}>More results</MoreResultsButton>
             </Link>
           ) : (
             <div className='text-center text-slate-400'>Reached end of results</div>

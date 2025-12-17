@@ -244,9 +244,15 @@ export default function ElectronDownloads() {
             </Button>
           );
 
-          const clearButton = button(Channel.ClearDownload, <X className='h-5 w-5 text-red-400' />);
-          const cancelButton = button(Channel.CancelDownload, <X className='h-5 w-5' />);
-          const stopButton = button(Channel.CancelDownload, <StopCircle className='text-red-400' />);
+          const clearButton = button(
+            Channel.ClearDownload,
+            <X className='h-5 w-5 text-red-400' color='currentColor' />,
+          );
+          const cancelButton = button(Channel.CancelDownload, <X className='h-5 w-5' color='currentColor' />);
+          const stopButton = button(
+            Channel.CancelDownload,
+            <StopCircle className='text-red-400' color='currentColor' />,
+          );
           const retryButton = button(Channel.RetryDownload, <RefreshCw className='h-4 w-4 text-yellow-200' />);
           const visibleButtons = row.original.cancelled
             ? [retryButton, clearButton]
@@ -305,7 +311,9 @@ export default function ElectronDownloads() {
           <Button
             {...buttonProps}
             onClick={() => mutate(window.ipc.stopAllDownloads().then(window.ipc.getDownloads))}
-            icon={<StopCircle className='mr-2 text-red-400 transition-colors group-hover:text-white' />}
+            icon={
+              <StopCircle className='mr-2 text-red-400 transition-colors group-hover:text-white' color='currentColor' />
+            }
           >
             Stop all
           </Button>
@@ -326,7 +334,6 @@ export default function ElectronDownloads() {
           </>
         )}
       </div>
-
       <div ref={tableContainerRef} className='relative h-full w-full overflow-auto'>
         <table className='grid rounded-lg'>
           <TableHeader className='sticky top-0 z-[1] grid rounded-t bg-slate-900/80 p-1 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_4px_10px_rgba(0,0,0,0.1)] backdrop-blur-md'>
@@ -359,7 +366,7 @@ export default function ElectronDownloads() {
                           .with('asc', () => <ChevronUp className='ml-2 h-4 w-4' />)
                           .with('desc', () => <ChevronDown className='ml-2 h-4 w-4' />)
                           .otherwise(() => null)}
-                        {!!header.column.getFilterValue() && <Filter className='ml-2 h-4 w-4' />}
+                        {!!header.column.getFilterValue() && <Filter className='ml-2 h-4 w-4' color='currentColor' />}
                       </div>
                     </StatusFilter>
                   </TableHead>
@@ -377,7 +384,7 @@ export default function ElectronDownloads() {
                     onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com/all?tutorial=true')}
                     className='w-full rounded-xl border border-4 border-dashed border-teal-600 p-10 text-3xl text-white'
                   >
-                    <Plus className='text-6xl' />
+                    <Plus className='text-6xl' color='currentColor' />
                     Click here to add a collection!
                   </Button>
                 </TableCell>
@@ -443,7 +450,7 @@ function VirtualizedTableBodyRow({ row, virtualRow, rowVirtualizer }: Virtualize
   return (
     <TableRow
       data-index={virtualRow.index} //needed for dynamic row height measurement
-      ref={node => {
+      ref={(node) => {
         rowVirtualizer.measureElement(node);
       }} //measure dynamic row height
       key={row.id}

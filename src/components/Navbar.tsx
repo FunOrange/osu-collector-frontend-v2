@@ -14,6 +14,7 @@ import { buttonVariants } from '@/components/shadcn/button';
 import { cn } from '@/utils/shadcn-utils';
 import NavbarSearch from '@/components/NavbarSearch';
 import UploadButton from '@/components/UploadButton';
+import { Suspense } from 'react';
 
 export const navbarHeight = 'h-14';
 export const navbarHeightPx = 56;
@@ -48,7 +49,7 @@ export default function Navbar() {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <button className='rounded px-2 py-1 text-sm transition hover:bg-slate-600'>
-                <List size={30} />
+                <List size={30} color='currentColor' />
               </button>
             </AlertDialogTrigger>
             <AlertDialogContent>
@@ -82,11 +83,14 @@ export default function Navbar() {
           ))}
         </nav>
       </div>
-
       <div className='flex items-center gap-2'>
-        <NavbarSearch />
-        <UploadButton className='hidden sm:flex' />
-        <UserNav />
+        {/* <NavbarSearch /> */}
+        <Suspense>
+          <UploadButton className='hidden sm:flex' />
+        </Suspense>
+        {/* <Suspense> */}
+        {/*   <UserNav /> */}
+        {/* </Suspense> */}
       </div>
     </div>
   );

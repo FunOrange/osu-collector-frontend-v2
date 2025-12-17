@@ -14,7 +14,7 @@ import { getUrlSlug } from '@/utils/string-utils';
 import { useToast } from '@/components/shadcn/use-toast';
 import { cn } from '@/utils/shadcn-utils';
 import { Checkbox } from '@/components/shadcn/checkbox';
-import { DialogProps } from '@radix-ui/react-alert-dialog';
+import { DialogProps } from '@radix-ui/react-dialog';
 import { isMatching } from 'ts-pattern';
 
 export interface UploadCollectionModalProps {

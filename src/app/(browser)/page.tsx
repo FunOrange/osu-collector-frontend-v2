@@ -1,8 +1,7 @@
 import Home from '@/components/pages/Home';
 import { getMetadata, getPopularCollections, getRecentCollections } from '@/services/osu-collector-api';
 
-// const ONE_MINUTE = 60;
-export const revalidate = 60 * 60;
+export const revalidate = 3600; // one minute
 
 export default async function HomePage() {
   const [metadata, popularCollections, recentCollections] = await Promise.all([

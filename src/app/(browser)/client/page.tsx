@@ -21,7 +21,6 @@ export default function DesktopClientPage() {
   return (
     <div className='flex flex-col gap-12'>
       <div className='w-full bg-black py-20 text-center text-4xl'>Support us to gain access to these features!</div>
-
       <div className='flex w-full justify-center py-16'>
         <div className='flex w-full flex-col-reverse items-center justify-center gap-4 lg:flex-row lg:gap-16'>
           <div className='max-w-xl text-center'>
@@ -37,7 +36,6 @@ export default function DesktopClientPage() {
           <Image width={624} height={455} src='/images/downloads.png' alt='Download collections' />
         </div>
       </div>
-
       <div className='flex w-full justify-center py-16'>
         <div className='flex w-full flex-col items-center justify-center gap-4 lg:flex-row lg:gap-16'>
           <Image width={624} height={345} src='/images/import.png' alt='Download collections' />
@@ -48,7 +46,6 @@ export default function DesktopClientPage() {
           </div>
         </div>
       </div>
-
       <div className='flex w-full justify-center py-16'>
         <div className='flex w-full flex-col-reverse items-center justify-center gap-4 lg:flex-row lg:gap-24'>
           <div className='max-w-xl text-center'>
@@ -59,10 +56,9 @@ export default function DesktopClientPage() {
               appreciated!
             </div>
           </div>
-          <HeartFill className='text-pink-500' style={{ width: '250px', height: '300px' }} />
+          <HeartFill className='text-pink-500' style={{ width: '250px', height: '300px' }} color='currentColor' />
         </div>
       </div>
-
       <div className='flex w-full flex-col'>
         <div className='flex w-full flex-col items-center font-semibold text-black'>
           {yellowStripes}

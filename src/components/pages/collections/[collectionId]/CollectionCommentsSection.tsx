@@ -39,14 +39,14 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
     ))
     .with({ hasComments: false, isLoggedIn: true }, () => (
       <CollectionCommentsModal collection={collection} className={noCommentsClassName}>
-        <ChatFill size={20} />
+        <ChatFill size={20} color='currentColor' />
         No comments. Be the first to leave a comment!
       </CollectionCommentsModal>
     ))
     .with({ hasComments: false, isLoggedIn: false }, () => (
       <YouMustBeLoggedIn>
         <div className={noCommentsClassName}>
-          <ChatFill size={20} />
+          <ChatFill size={20} color='currentColor' />
           No comments. Be the first to leave a comment!
         </div>
       </YouMustBeLoggedIn>

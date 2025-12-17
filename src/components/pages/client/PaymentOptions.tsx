@@ -1,7 +1,7 @@
 'use client';
 import * as api from '@/services/osu-collector-api';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import {
   usePaypalSubscription,
   useStripeSubscription,
@@ -31,8 +31,7 @@ const isPaypalOrStripeSubscriptionActive = (user, paypalSubscription, stripeSubs
   return false;
 };
 
-export interface PaymentOptionsProps {}
-export default function PaymentOptions({}: PaymentOptionsProps) {
+export default function PaymentOptions() {
   const router = useRouter();
   const { user, mutate: mutateUser } = useUser();
 
@@ -131,11 +130,13 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                   </Button>
                 </Link>
               ) : (
-                <YouMustBeLoggedIn>
-                  <Button variant='important' className='w-full bg-cyan-700 py-6 text-lg'>
-                    Pay with credit card
-                  </Button>
-                </YouMustBeLoggedIn>
+                <Suspense>
+                  <YouMustBeLoggedIn>
+                    <Button variant='important' className='w-full bg-cyan-700 py-6 text-lg'>
+                      Pay with credit card
+                    </Button>
+                  </YouMustBeLoggedIn>
+                </Suspense>
               )}
             </section>
 

@@ -47,7 +47,7 @@ export default function Loading() {
         </div>
 
         <div className='flex items-center justify-center gap-2 rounded border-slate-900 bg-[#162032] p-4 text-center text-slate-500 shadow-inner'>
-          <ChatFill size={20} />
+          <ChatFill size={20} color='currentColor' />
           No comments. Be the first to leave a comment!
         </div>
 

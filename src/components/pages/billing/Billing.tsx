@@ -25,7 +25,7 @@ import { cn } from '@/utils/shadcn-utils';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { match } from 'ts-pattern';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -175,11 +175,13 @@ export default function Billing() {
                         </Button>
                       )}
                       {!user && (
-                        <YouMustBeLoggedIn>
-                          <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white'>
-                            Subscribe
-                          </Button>
-                        </YouMustBeLoggedIn>
+                        <Suspense>
+                          <YouMustBeLoggedIn>
+                            <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white'>
+                              Subscribe
+                            </Button>
+                          </YouMustBeLoggedIn>
+                        </Suspense>
                       )}
                     </>
                   )}
@@ -301,11 +303,13 @@ export default function Billing() {
                         </Button>
                       )}
                       {!user && (
-                        <YouMustBeLoggedIn>
-                          <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white'>
-                            Subscribe
-                          </Button>
-                        </YouMustBeLoggedIn>
+                        <Suspense>
+                          <YouMustBeLoggedIn>
+                            <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white'>
+                              Subscribe
+                            </Button>
+                          </YouMustBeLoggedIn>
+                        </Suspense>
                       )}
                     </>
                   )}

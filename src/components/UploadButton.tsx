@@ -21,7 +21,7 @@ export default function UploadButton({ className }: UploadButtonProps) {
     return (
       <YouMustBeLoggedIn>
         <Button variant='important' className={cn('gap-2', className)}>
-          <CloudUploadFill size={20} className='mt-1' />
+          <CloudUploadFill size={20} className='mt-1' color='currentColor' />
           Upload
         </Button>
       </YouMustBeLoggedIn>
@@ -32,7 +32,7 @@ export default function UploadButton({ className }: UploadButtonProps) {
         <Dialog open={makingSelection} onOpenChange={setMakingSelection}>
           <DialogTrigger asChild className={className}>
             <Button variant='important' className='gap-2'>
-              <CloudUploadFill size={20} className='mt-1' />
+              <CloudUploadFill size={20} className='mt-1' color='currentColor' />
               Upload
             </Button>
           </DialogTrigger>
@@ -49,20 +49,19 @@ export default function UploadButton({ className }: UploadButtonProps) {
                   setUploadingCollection(true);
                 }}
               >
-                <MusicNoteList className='mb-2 inline' size={48} />
+                <MusicNoteList className='mb-2 inline' size={48} color='currentColor' />
                 <h2 className='text-xl font-semibold'>Collection</h2>
               </button>
 
               <Link href='/tournaments/upload' onClick={() => setMakingSelection(false)}>
                 <button className='w-full rounded-xl border px-4 py-14 transition-colors hover:bg-slate-600'>
-                  <Trophy className='mb-2 inline' size={48} />
+                  <Trophy className='mb-2 inline' size={48} color='currentColor' />
                   <h2 className='text-xl font-semibold'>Tournament Mappool</h2>
                 </button>
               </Link>
             </div>
           </DialogContent>
         </Dialog>
-
         <UploadCollectionModal open={uploadingCollection} onOpenChange={setUploadingCollection} />
       </>
     );

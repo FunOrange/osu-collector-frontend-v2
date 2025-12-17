@@ -68,14 +68,13 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
           Add to osu!
         </Link>
       )}
-
       <DropdownMenu>
         <DropdownMenuTrigger
           asChild
           className='hidden h-full cursor-pointer rounded rounded-l-none bg-slate-600 transition hover:bg-slate-500 hover:shadow-xl sm:flex'
         >
           <div className='flex items-center'>
-            <ThreeDotsVertical className='mx-2' />
+            <ThreeDotsVertical className='mx-2' color='currentColor' />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-56' align='end' forceMount sideOffset={0}>

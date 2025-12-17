@@ -48,18 +48,18 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
       </div>
       <div className='flex gap-2'>
         <Button {...buttonProps} onClick={downloadExe} loading={downloadingExe}>
-          {!downloadingExe && <Windows className='mr-2' />}
+          {!downloadingExe && <Windows className='mr-2' color='currentColor' />}
           Windows x64
         </Button>
         <Button {...buttonProps} onClick={downloadMac} loading={downloadingMac}>
-          {!downloadingMac && <Apple className='mr-2' />}
+          {!downloadingMac && <Apple className='mr-2' color='currentColor' />}
           Mac Silicon
         </Button>
       </div>
       <hr className='my-2 border-slate-500' />
       <div className='flex gap-2'>
         <Button {...buttonProps} onClick={downloadDeb} loading={downloadingDeb}>
-          {!downloadingDeb && <Ubuntu className='mr-2' />}
+          {!downloadingDeb && <Ubuntu className='mr-2' color='currentColor' />}
           Linux x64 .deb
         </Button>
         <Button {...buttonProps} onClick={downloadFlatpak} loading={downloadingFlatpak}>

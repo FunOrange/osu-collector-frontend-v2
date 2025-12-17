@@ -1,5 +1,4 @@
 'use client';
-
 import { mutate } from 'swr';
 import md5 from 'md5';
 import * as api from '@/services/osu-collector-api';

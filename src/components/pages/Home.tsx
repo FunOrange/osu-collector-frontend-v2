@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import CollectionCard from '@/components/CollectionCard';
 import { Collection } from '@/shared/entities/v1/Collection';
 import Link from 'next/link';
@@ -15,7 +14,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
     <div className='flex w-full justify-center'>
       <div className='w-full max-w-screen-2xl px-2 py-5 md:px-10'>
         <div className='mb-4 rounded bg-sky-900 p-4 text-center text-sky-200'>
-          <Discord className='mb-1 mr-2 inline' size={20} />
+          <Discord className='mb-1 mr-2 inline' size={20} color='currentColor' />
           Join the{' '}
           <a href='https://discord.gg/WZMQjwF5Vr' className='text-blue-500'>
             osu!Collector discord
@@ -61,7 +60,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
 
         <div className='mb-4 rounded border-slate-900 bg-[#162032] p-2 pt-4 shadow-inner md:p-7 md:pt-7'>
           <h2 className='mb-3 text-2xl md:mb-6 md:text-3xl'>
-            <Fire className='mb-2 mr-3 inline text-orange-400' size={32} />
+            <Fire className='mb-2 mr-3 inline text-orange-400' size={32} color='currentColor' />
             Popular this month
           </h2>
           <div className='mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4'>
@@ -80,7 +79,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
 
         <div className='mb-4 rounded border-slate-900 bg-[#162032] p-2 pt-4 shadow-inner md:p-7 md:pt-7'>
           <h2 className='mb-3 text-2xl md:mb-6 md:text-3xl'>
-            <Stars className='mb-1 mr-3 inline text-yellow-400' size={24} />
+            <Stars className='mb-1 mr-3 inline text-yellow-400' size={24} color='currentColor' />
             Recently Uploaded
           </h2>
           <div className='mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4'>

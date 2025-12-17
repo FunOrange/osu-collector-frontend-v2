@@ -45,9 +45,9 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId, duration }: Bea
   return (
     <button className='media-play-button flex flex-col items-center p-1' onClick={onPlayClick}>
       {playing ? (
-        <StopFill className='text-white' style={style} size={40} />
+        <StopFill className='text-white' style={style} size={40} color='currentColor' />
       ) : (
-        <PlayFill className='text-white' style={style} size={40} />
+        <PlayFill className='text-white' style={style} size={40} color='currentColor' />
       )}
       {duration && (
         <div className='text-sm font-medium text-gray-100' style={{ textShadow }}>

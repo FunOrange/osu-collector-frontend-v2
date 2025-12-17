@@ -22,6 +22,7 @@ const get = async <T>(url: string) => {
 };
 
 const baseURL = typeof window !== 'undefined' ? '/api' : process.env.NEXT_PUBLIC_OSU_COLLECTOR_API_HOST + '/api';
+// TODO: replace axios with fetch
 export const api = axios.create({
   baseURL,
   withCredentials: true,

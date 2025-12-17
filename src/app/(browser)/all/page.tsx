@@ -39,7 +39,7 @@ export default async function CollectionsPage(props: CollectionsPageProps) {
                 </Button>
                 <div className='hidden h-full cursor-pointer rounded rounded-l-none bg-slate-600 transition hover:bg-slate-500 hover:shadow-xl sm:flex'>
                   <div className='flex items-center'>
-                    <ThreeDotsVertical className='mx-2' />
+                    <ThreeDotsVertical className='mx-2' color='currentColor' />
                   </div>
                 </div>
               </div>
@@ -52,7 +52,7 @@ export default async function CollectionsPage(props: CollectionsPageProps) {
         <div className='flex flex-col items-center gap-3'>
           <SearchInput searchParams={searchParams} className='text-center' />
           <div className='flex gap-2 text-2xl'>
-            <Search className='mt-1' />
+            <Search className='mt-1' color='currentColor' />
             {results} results
           </div>
         </div>
@@ -93,7 +93,7 @@ export default async function CollectionsPage(props: CollectionsPageProps) {
           </div>
           {hasMore ? (
             <Link href={`/all?${formatQueryParams(mergeRight(searchParams, { cursor: nextPageCursor }))}`}>
-              <MoreResultsButton>More results</MoreResultsButton>
+              <MoreResultsButton searchParams={searchParams}>More results</MoreResultsButton>
             </Link>
           ) : (
             <div className='text-center text-slate-400'>Reached end of results</div>

@@ -32,7 +32,7 @@ export default async function PopularPage(props: PopularPageProps) {
         <div className='mb-4 rounded border-slate-900 bg-[#162032] p-4 shadow-inner md:p-7'>
           <div className='mb-6 flex items-center justify-between gap-2' style={{ maxWidth: '740px' }}>
             <h1 className='mt-2 text-3xl'>
-              <Fire className='mb-2 mr-3 inline text-orange-400' size={32} />
+              <Fire className='mb-2 mr-3 inline text-orange-400' size={32} color='currentColor' />
               Popular collections
             </h1>
             <div className='flex items-center gap-2'>
@@ -76,7 +76,7 @@ export default async function PopularPage(props: PopularPageProps) {
                 cursor: nextPageCursor,
               })}`}
             >
-              <MoreResultsButton>More results</MoreResultsButton>
+              <MoreResultsButton searchParams={searchParams}>More results</MoreResultsButton>
             </Link>
           ) : (
             <div className='text-center text-slate-400'>Reached end of results</div>

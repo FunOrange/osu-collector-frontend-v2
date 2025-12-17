@@ -1,16 +1,13 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 
 export interface MoreResultsButtonProps {
+  searchParams: Record<string, string | undefined>;
   children: ReactNode;
 }
-export default function MoreResultsButton({ children }: MoreResultsButtonProps) {
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    setLoading(false);
-  }, [searchParams]);
+export default function MoreResultsButton({ searchParams, children }: MoreResultsButtonProps) {
   const [loading, setLoading] = useState(false);
+  useEffect(() => setLoading(false), [searchParams]);
   return (
     <button
       className={

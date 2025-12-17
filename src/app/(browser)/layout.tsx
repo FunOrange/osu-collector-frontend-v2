@@ -6,6 +6,7 @@ import { PostHogProvider } from '@/providers/posthog';
 import TwitchSubEndOfSupportModal from '@/components/TwitchSubEndOfSupportModal';
 import Navbar from '@/components/Navbar';
 import '../globals.css';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
 
           <div id='page-content' className={cn('flex flex-col')}>
-            {children}
+            <Suspense>{children}</Suspense>
           </div>
 
           <Toaster />

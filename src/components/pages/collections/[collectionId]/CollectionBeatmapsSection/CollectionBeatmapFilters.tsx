@@ -151,7 +151,6 @@ export default function CollectionBeatmapFilters({
           </div>
         </div>
       </div>
-
       <div ref={ref} className='sticky top-0 z-20'>
         {totalPages >= 2 && (
           <div className={`absolute w-full ${screenHeightMinusNavbar} pointer-events-none flex flex-col justify-end`}>
@@ -243,7 +242,7 @@ export default function CollectionBeatmapFilters({
 
           <div className='relative w-full'>
             <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4'>
-              <Search size={20} />
+              <Search size={20} color='currentColor' />
             </div>
             <input
               className='text w-full rounded-full border border-slate-900 bg-slate-950 px-2 py-2 pl-11 ring-offset-background placeholder:text-muted-foreground'

@@ -47,6 +47,7 @@ export default function CollectionCommentLikeButton({ collectionId, comment }: C
               ? 'text-sky-600'
               : undefined
           }
+          color='currentColor'
         />
         {Math.round(comment.upvotes.length + localLikeOffset)}
       </div>
@@ -55,7 +56,7 @@ export default function CollectionCommentLikeButton({ collectionId, comment }: C
     return (
       <YouMustBeLoggedIn>
         <div className='flex cursor-pointer items-center gap-1 text-sm'>
-          <HandThumbsUpFill size={14} />
+          <HandThumbsUpFill size={14} color='currentColor' />
           {comment.upvotes.length}
         </div>
       </YouMustBeLoggedIn>

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 interface UsersPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 export default async function UsersPage(props: UsersPageProps) {
   const searchParams = await props.searchParams;
@@ -30,7 +30,7 @@ export default async function UsersPage(props: UsersPageProps) {
         <div className='mb-4 w-full max-w-screen-2xl rounded border-slate-900 bg-[#162032] p-4 shadow-inner md:p-7'>
           <div className='mb-6 flex items-center gap-6'>
             <h1 className='whitespace-nowrap text-3xl'>
-              <PersonFill className='mb-1 mr-3 inline text-blue-200' size={24} />
+              <PersonFill className='mb-1 mr-3 inline text-blue-200' size={24} color='currentColor' />
               Users
             </h1>
             <div className='flex flex-col gap-3'>
@@ -47,7 +47,7 @@ export default async function UsersPage(props: UsersPageProps) {
           </div>
           {nextPage ? (
             <Link href={`/users?${formatQueryParams(mergeRight(searchParams, { page: nextPage }))}`}>
-              <MoreResultsButton>More results</MoreResultsButton>
+              <MoreResultsButton searchParams={searchParams}>More results</MoreResultsButton>
             </Link>
           ) : (
             <div className='text-center text-slate-400'>Reached end of results</div>

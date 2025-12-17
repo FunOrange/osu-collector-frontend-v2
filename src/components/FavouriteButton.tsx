@@ -83,6 +83,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
             onClick={onClick}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+            color='currentColor'
           />
           {collection && <div>{favouriteCount}</div>}
         </div>

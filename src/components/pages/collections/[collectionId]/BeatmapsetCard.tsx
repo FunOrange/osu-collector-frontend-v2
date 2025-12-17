@@ -142,7 +142,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
                         className='cursor-pointer rounded p-2 transition hover:bg-slate-600'
                         onClick={() => copyToClipboard(beatmap.id)}
                       >
-                        <Clipboard size={12} />
+                        <Clipboard size={12} color='currentColor' />
                       </div>
                     </PopoverTrigger>
                     <PopoverContent side='top' align='center' className='w-38 py-2 text-xs'>

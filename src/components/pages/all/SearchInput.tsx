@@ -42,7 +42,7 @@ export default function SearchInput({ searchParams, withIcon, className }: Searc
     return (
       <div className='relative'>
         <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4'>
-          <Search size={20} />
+          <Search size={20} color='currentColor' />
         </div>
         {input}
       </div>

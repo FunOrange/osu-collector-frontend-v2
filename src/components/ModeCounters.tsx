@@ -70,7 +70,7 @@ const modeCountersFull = ({ collection }: Omit<ModeCountersProps, 'variant'>) =>
       unknownChecksums={collection.unknownChecksums}
     >
       <div className='flex items-center pl-4'>
-        <ExclamationTriangleFill className='mr-1' style={{ color: '#ffd966' }} />
+        <ExclamationTriangleFill className='mr-1' style={{ color: '#ffd966' }} color='currentColor' />
         {(collection.unsubmittedBeatmapCount || 0) + (collection.unknownChecksums?.length || 0)}
       </div>
     </UnsubmittedBeatmapsTooltip>

@@ -49,7 +49,7 @@ function UserCard({ user }: UserCardProps) {
                 <div className='text-sm'>Global #{user.osuweb.statistics.global_rank}</div>
               </TooltipTrigger>
               <TooltipContent className='flex items-center gap-1'>
-                <InfoCircle />
+                <InfoCircle color='currentColor' />
                 At time of last login
               </TooltipContent>
             </Tooltip>

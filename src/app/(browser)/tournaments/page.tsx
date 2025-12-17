@@ -38,7 +38,7 @@ export default async function TournamentsPage(props: TournamentsPageProps) {
         <div className='mb-4 w-full max-w-screen-2xl rounded bg-[#162032] p-4 md:p-7'>
           <div className='mb-6 flex items-center justify-between'>
             <h1 className='whitespace-nowrap text-3xl'>
-              <TrophyFill className='mb-1 mr-3 inline text-yellow-400' size={24} />
+              <TrophyFill className='mb-1 mr-3 inline text-yellow-400' size={24} color='currentColor' />
               Tournaments
             </h1>
             <div className='ml-6 flex w-full flex-col gap-3'>
@@ -46,7 +46,7 @@ export default async function TournamentsPage(props: TournamentsPageProps) {
             </div>
             <Link href='/tournaments/upload'>
               <Button className='gap-x-2'>
-                <CloudUploadFill className='mt-1' />
+                <CloudUploadFill className='mt-1' color='currentColor' />
                 Upload Tournament
               </Button>
             </Link>
@@ -60,7 +60,7 @@ export default async function TournamentsPage(props: TournamentsPageProps) {
           </div>
           {hasMore ? (
             <Link href={`/tournaments?${formatQueryParams(mergeRight(searchParams, { cursor: nextPageCursor }))}`}>
-              <MoreResultsButton>More results</MoreResultsButton>
+              <MoreResultsButton searchParams={searchParams}>More results</MoreResultsButton>
             </Link>
           ) : (
             <div className='text-center text-slate-400'>Reached end of results</div>
