@@ -43,10 +43,10 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
   return (
     <div
       style={{ gridRow: `span ${6 + 2 * beatmaps.length + 1}` }}
-      className='w-full border rounded border-slate-900 self-start'
+      className='w-full self-start rounded border border-slate-900'
     >
       {/* beatmapset */}
-      <div className='relative w-full flex flex-col justify-end h-[96px] group'>
+      <div className='group relative flex h-[96px] w-full flex-col justify-end'>
         <div className='absolute w-full overflow-hidden rounded-t'>
           <div className={cn('relative h-[96px] w-full')}>
             <Image
@@ -58,7 +58,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
               alt={beatmapset.title}
               sizes='(max-width: 340px) 100vw, 340px'
               fill
-              className='w-full rounded-t transition-[filter] object-cover brightness-[0.4] group-hover:brightness-100'
+              className='w-full rounded-t object-cover brightness-[0.4] transition-[filter] group-hover:brightness-100'
               onError={() => setImageError(true)}
             />
           </div>
@@ -67,13 +67,13 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
           <div className='grid' style={{ gridTemplateColumns: '1fr 50px' }}>
             <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target='_blank'>
               <div style={{ maxWidth: '264px' }}>
-                <div className='text-lg font-medium text-white truncate' style={{ textShadow }}>
+                <div className='truncate text-lg font-medium text-white' style={{ textShadow }}>
                   {beatmapset.title}
                 </div>
-                <div className='text-sm font-medium text-gray-100 truncate' style={{ textShadow }}>
+                <div className='truncate text-sm font-medium text-gray-100' style={{ textShadow }}>
                   {beatmapset.artist}
                 </div>
-                <div className='text-sm font-medium text-gray-100 truncate'>
+                <div className='truncate text-sm font-medium text-gray-100'>
                   <span
                     className='text-slate-200'
                     style={{
@@ -97,7 +97,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
       <div>
         <div className='rounded-b bg-slate-800'>
           {beatmaps.map((beatmap) => (
-            <div key={beatmap.id} className='relative flex items-center gap-1 border-t border-slate-700 group'>
+            <div key={beatmap.id} className='group relative flex items-center gap-1 border-t border-slate-700'>
               <div className='flex gap-1 pl-1'>
                 <div className={cn('hidden sm:block', chipClass)} style={bpmChipStyle(beatmap.bpm)}>
                   {Math.floor(beatmap.bpm)} bpm
@@ -120,18 +120,18 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
                 />
               )}
 
-              <b className='py-1 truncate'>{beatmap.version}</b>
+              <b className='truncate py-1'>{beatmap.version}</b>
 
               <div
                 className={cn(
-                  'absolute h-full right-0 pl-2 hidden sm:flex',
-                  'transition-[opacity] opacity-0 group-hover:opacity-100',
+                  'absolute right-0 hidden h-full pl-2 sm:flex',
+                  'opacity-0 transition-[opacity] group-hover:opacity-100',
                 )}
               >
-                <div className='w-8 h-full bg-gradient-to-l from-slate-950 to-transparent' />
-                <div className='h-full right-0 pl-2 flex items-center gap-1 bg-slate-950 pr-1'>
+                <div className='h-full w-8 bg-gradient-to-l from-slate-950 to-transparent' />
+                <div className='right-0 flex h-full items-center gap-1 bg-slate-950 pl-2 pr-1'>
                   <a
-                    className='px-2 py-1 text-sm transition rounded ms-auto hover:bg-slate-600'
+                    className='ms-auto rounded px-2 py-1 text-sm transition hover:bg-slate-600'
                     href={`osu://b/${beatmap.id}`}
                   >
                     Direct
@@ -139,13 +139,13 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
                   <Popover open={showCopiedToClipboard.includes(beatmap.id)}>
                     <PopoverTrigger>
                       <div
-                        className='p-2 transition rounded cursor-pointer hover:bg-slate-600'
+                        className='cursor-pointer rounded p-2 transition hover:bg-slate-600'
                         onClick={() => copyToClipboard(beatmap.id)}
                       >
                         <Clipboard size={12} />
                       </div>
                     </PopoverTrigger>
-                    <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+                    <PopoverContent side='top' align='center' className='w-38 py-2 text-xs'>
                       copied beatmap ID!
                     </PopoverContent>
                   </Popover>

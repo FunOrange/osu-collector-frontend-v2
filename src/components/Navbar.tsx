@@ -38,7 +38,7 @@ export default function Navbar() {
   return (
     <div
       className={cn(
-        'fixed top-0 z-40 flex flex-colshadow-xl justify-between w-full px-1 md:px-4 md:pr-2',
+        'flex-colshadow-xl fixed top-0 z-40 flex w-full justify-between px-1 md:px-4 md:pr-2',
         navbarHeight,
       )}
       style={glass}
@@ -47,7 +47,7 @@ export default function Navbar() {
         <div className='block md:hidden'>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className='px-2 py-1 text-sm transition rounded hover:bg-slate-600'>
+              <button className='rounded px-2 py-1 text-sm transition hover:bg-slate-600'>
                 <List size={30} />
               </button>
             </AlertDialogTrigger>
@@ -69,12 +69,12 @@ export default function Navbar() {
           </AlertDialog>
         </div>
         <Link href='/'>
-          <div className='flex items-center px-2 py-3 cursor-pointer'>
+          <div className='flex cursor-pointer items-center px-2 py-3'>
             osu!
             <span className='font-semibold text-gray-50'>Collector</span>
           </div>
         </Link>
-        <nav className='items-center hidden mx-6 space-x-4 lg:space-x-6 md:flex'>
+        <nav className='mx-6 hidden items-center space-x-4 md:flex lg:space-x-6'>
           {navItems.map(({ label, href }, i) => (
             <Link href={href} className='text-sm font-medium transition-colors hover:text-primary' key={i}>
               {label}

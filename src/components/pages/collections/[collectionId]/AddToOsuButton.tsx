@@ -42,7 +42,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
     <div className='flex w-full items-stretch'>
       {user?.paidFeaturesAccess ? (
         <Button
-          className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+          className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
           onClick={() => {
             const url = new URL(`osucollector://collections/${collection.id}` + window.location.search);
             // url.search = window.location.search;
@@ -63,7 +63,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
       ) : (
         <Link
           href='/client'
-          className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+          className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
         >
           Add to osu!
         </Link>
@@ -72,7 +72,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
       <DropdownMenu>
         <DropdownMenuTrigger
           asChild
-          className='h-full hidden sm:flex transition rounded rounded-l-none cursor-pointer bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+          className='hidden h-full cursor-pointer rounded rounded-l-none bg-slate-600 transition hover:bg-slate-500 hover:shadow-xl sm:flex'
         >
           <div className='flex items-center'>
             <ThreeDotsVertical className='mx-2' />

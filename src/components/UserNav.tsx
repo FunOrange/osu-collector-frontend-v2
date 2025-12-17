@@ -29,7 +29,7 @@ export function UserNav() {
   const searchParams = useSearchParams();
 
   if (isLoading) {
-    return <div className='w-32 h-10 p-5 rounded-full bg-slate-400 animate-pulse'></div>;
+    return <div className='h-10 w-32 animate-pulse rounded-full bg-slate-400 p-5'></div>;
   }
   if (!user) {
     const clientId = process.env.NEXT_PUBLIC_OSU_CLIENT_ID;
@@ -48,7 +48,7 @@ export function UserNav() {
     };
     return (
       <a
-        className='flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded-lg cursor-pointer text-indigo-50 hover:bg-indigo-600'
+        className='flex cursor-pointer items-center gap-2 rounded-lg bg-indigo-500 py-1 pl-2 pr-4 font-semibold text-indigo-50 transition hover:bg-indigo-600'
         {...match(process.env.NODE_ENV)
           .with('production', () => ({
             href: oauthUrl,
@@ -59,8 +59,8 @@ export function UserNav() {
           }))}
       >
         <Image width={32} height={32} src='/icons/osu-32x32.png' alt='osu!' />
-        <div className='hidden xl:block whitespace-nowrap'>Log in with osu!</div>
-        <div className='block xl:hidden whitespace-nowrap'>Log in</div>
+        <div className='hidden whitespace-nowrap xl:block'>Log in with osu!</div>
+        <div className='block whitespace-nowrap xl:hidden'>Log in</div>
       </a>
     );
   }
@@ -69,11 +69,11 @@ export function UserNav() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className={`relative flex items-center gap-2 p-1 pr-4 transition rounded-full text-gray-50 font-semibold ${
+          className={`relative flex items-center gap-2 rounded-full p-1 pr-4 font-semibold text-gray-50 transition ${
             user.paidFeaturesAccess ? 'bg-pink-500 hover:bg-pink-400' : 'bg-slate-600 hover:bg-slate-600'
           }`}
         >
-          <Avatar className='w-8 h-8'>
+          <Avatar className='h-8 w-8'>
             <AvatarImage src={user.osuweb.avatar_url} alt='avatar' />
             <AvatarFallback>{user.osuweb.username[0].toLocaleUpperCase()}</AvatarFallback>
           </Avatar>
@@ -91,7 +91,7 @@ export function UserNav() {
         <DropdownMenuGroup>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <Upload className='w-4 h-4 mr-2' />
+              <Upload className='mr-2 h-4 w-4' />
               <span>My uploads</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
@@ -107,7 +107,7 @@ export function UserNav() {
           </DropdownMenuSub>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
-              <Heart className='w-4 h-4 mr-2' />
+              <Heart className='mr-2 h-4 w-4' />
               <span>Favourites</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
@@ -124,7 +124,7 @@ export function UserNav() {
 
           <Link href='/billing'>
             <DropdownMenuItem>
-              <CreditCard className='w-4 h-4 mr-2' />
+              <CreditCard className='mr-2 h-4 w-4' />
               Billing
             </DropdownMenuItem>
           </Link>

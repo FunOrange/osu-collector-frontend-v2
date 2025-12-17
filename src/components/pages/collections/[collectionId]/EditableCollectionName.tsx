@@ -33,7 +33,7 @@ export default function EditableCollectionName({ collection, className }: Editab
   if (isOwner && editing) {
     return (
       <Input
-        className='py-1 mb-2 text-4xl'
+        className='mb-2 py-1 text-4xl'
         value={value}
         onChange={(e) => setUserInput(e.target.value)}
         autoFocus
@@ -46,13 +46,13 @@ export default function EditableCollectionName({ collection, className }: Editab
   } else if (isOwner && !editing) {
     return (
       <h1
-        className='px-2 py-1 mb-2 text-2xl sm:text-4xl rounded cursor-pointer hover:bg-slate-700'
+        className='mb-2 cursor-pointer rounded px-2 py-1 text-2xl hover:bg-slate-700 sm:text-4xl'
         onClick={() => setEditing(true)}
       >
         {collectionName}
       </h1>
     );
   } else if (!isOwner) {
-    return <h1 className={cn('mb-2 text-2xl sm:text-4xl text-gray-100', className)}>{collection.name}</h1>;
+    return <h1 className={cn('mb-2 text-2xl text-gray-100 sm:text-4xl', className)}>{collection.name}</h1>;
   }
 }

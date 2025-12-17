@@ -65,18 +65,18 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
           <DialogTitle>Upload your collection</DialogTitle>
         </DialogHeader>
 
-        <div className='grid mt-4' style={{ gridTemplateRows: 'auto auto 1fr auto', height: '85vh' }}>
+        <div className='mt-4 grid' style={{ gridTemplateRows: 'auto auto 1fr auto', height: '85vh' }}>
           <div className={cn('flex flex-col gap-2', localCollections === undefined ? undefined : 'opacity-60')}>
             <h2 className='text-2xl font-semibold'>1. Open collection.db</h2>
             <div>
               collection.db is a file that contains all of your osu! collections. It is located in your osu! install
               folder. Example:
             </div>
-            <code className='inline-flex items-center p-4 pl-6 space-x-4 text-sm text-left text-white bg-gray-800 rounded-lg sm:text-base'>
+            <code className='inline-flex items-center space-x-4 rounded-lg bg-gray-800 p-4 pl-6 text-left text-sm text-white sm:text-base'>
               <span>C:\Users\jun\AppData\Local\osu!\collection.db</span>
             </code>
             <div
-              className='p-8 mb-8 text-center transition border border-dashed rounded cursor-pointer border-slate-700 bg-slate-900 hover:bg-slate-600'
+              className='mb-8 cursor-pointer rounded border border-dashed border-slate-700 bg-slate-900 p-8 text-center transition hover:bg-slate-600'
               {...getRootProps()}
             >
               <input {...getInputProps()} />
@@ -87,7 +87,7 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
           {localCollections !== undefined && (
             <>
               <h2 className='mb-2 text-2xl font-semibold'>2. Select a collection to upload or update</h2>
-              <div className='flex flex-col overflow-auto divide-y'>
+              <div className='flex flex-col divide-y overflow-auto'>
                 {localCollections.length === 0 && (
                   <div className='text-red-400'>collection.db file does not contain any collections.</div>
                 )}
@@ -95,7 +95,7 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
                   <div
                     key={i}
                     className={cn(
-                      'px-4 py-2 cursor-pointer bg-slate-700 hover:bg-slate-600',
+                      'cursor-pointer bg-slate-700 px-4 py-2 hover:bg-slate-600',
                       i === 0 ? 'rounded-t-lg' : undefined,
                       i !== 0 ? 'border-t-slate-700' : undefined,
                       i === localCollections.length - 1 ? 'rounded-b-lg' : undefined,
@@ -120,7 +120,7 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
                                 )
                                 .fromNow()}
                             </span>
-                            <div className='px-2 py-1 text-sm rounded bg-cyan-600'>Uploaded</div>
+                            <div className='rounded bg-cyan-600 px-2 py-1 text-sm'>Uploaded</div>
                           </>
                         )}
                         <Checkbox checked={selectedCollection?.name === collection.name} />
@@ -131,7 +131,7 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
               </div>
               <Button
                 variant='important'
-                className='w-full py-8 mt-4 text-xl'
+                className='mt-4 w-full py-8 text-xl'
                 onClick={uploadCollection}
                 disabled={uploadDisabled}
                 loading={uploading}

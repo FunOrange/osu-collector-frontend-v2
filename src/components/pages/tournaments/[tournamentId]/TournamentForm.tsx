@@ -174,11 +174,11 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
 
   return (
     <>
-      <div className='flex justify-center w-full'>
-        <div className='items-end w-full max-w-screen-lg m-5 gap-x-4'>
-          <div className='p-4 rounded border border-slate-900 bg-[#162032] md:p-7'>
+      <div className='flex w-full justify-center'>
+        <div className='m-5 w-full max-w-screen-lg items-end gap-x-4'>
+          <div className='rounded border border-slate-900 bg-[#162032] p-4 md:p-7'>
             <h1 className='mb-6 text-3xl'>{creating ? 'Create tournament' : 'Edit tournament'}</h1>
-            <div className='flex flex-col mb-6 gap-y-4'>
+            <div className='mb-6 flex flex-col gap-y-4'>
               <div>
                 <Label htmlFor='tournament-name'>Tournament name</Label>
                 <Input type='text' id='tournament-name' {...form.inputProps('name')} />
@@ -211,7 +211,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
               <div>
                 <div className='pb-1'>Tournament Organizers</div>
                 <div className='flex items-start'>
-                  <div className='flex items-start mr-4'>
+                  <div className='mr-4 flex items-start'>
                     <Input
                       placeholder='https://osu.ppy.sh/users/.......'
                       className='relative z-10 w-[265px] rounded-none'
@@ -225,13 +225,13 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
                     />
                     <Button
                       // disabled={organizerError}
-                      className='border rounded-none rounded-e rounded-s-0'
+                      className='rounded-s-0 rounded-none rounded-e border'
                       onClick={addOrganizer}
                     >
                       Add
                     </Button>
                   </div>
-                  <div className='flex items-center mr-2'>
+                  <div className='mr-2 flex items-center'>
                     {organizers.map((organizerId, i) => (
                       <TooltipProvider key={i}>
                         <Tooltip delayDuration={0}>
@@ -246,7 +246,7 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
                                 setTouchedOrganizers(organizers.filter((id) => id !== organizerId));
                                 queueSaveDraft();
                               }}
-                              className='transition rounded-full cursor-pointer hover:brightness-50 hover:grayscale'
+                              className='cursor-pointer rounded-full transition hover:brightness-50 hover:grayscale'
                             />
                           </TooltipTrigger>
                           <TooltipContent>Remove</TooltipContent>
@@ -308,9 +308,9 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
         </div>
       </div>
 
-      <div className='fixed flex bottom-4 right-9 2xl:left-[calc(50%+512px+20px)]'>
-        <div className='flex flex-col p-4 border shadow-2xl bg-slate-700 gap-y-2 rounded-xl'>
-          <div className='text-sm cyan-400'>Publish this tournament!</div>
+      <div className='fixed bottom-4 right-9 flex 2xl:left-[calc(50%+512px+20px)]'>
+        <div className='flex flex-col gap-y-2 rounded-xl border bg-slate-700 p-4 shadow-2xl'>
+          <div className='cyan-400 text-sm'>Publish this tournament!</div>
           <Button
             variant='important'
             onClick={creating ? createTournament : updateTournament}

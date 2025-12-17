@@ -77,7 +77,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   const listing = groupBeatmapsets(beatmaps);
 
   return (
-    <div ref={filtersRef} className='flex flex-col mb-16'>
+    <div ref={filtersRef} className='mb-16 flex flex-col'>
       <CollectionBeatmapFilters
         collection={collection}
         filters={filters}
@@ -95,12 +95,12 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
 
       <div
         ref={listingRef}
-        className='min-h-screen sm:p-4 sm:pt-0 rounded-b border-slate-900 shadow-inner bg-[#162032]'
+        className='min-h-screen rounded-b border-slate-900 bg-[#162032] shadow-inner sm:p-4 sm:pt-0'
       >
         <BeatmapsetListing listing={listing ?? []} isLoading={isLoading} />
         {!frontendFilteringEnabled && hasMore && (
           <div
-            className='mt-4 cursor-pointer w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'
+            className='mt-4 w-full cursor-pointer rounded bg-slate-800 p-3 text-center transition hover:bg-slate-600 hover:shadow-xl'
             onClick={() => {
               scrollTo(listingRef, -56);
               setFrontendFilteringEnabled(true);

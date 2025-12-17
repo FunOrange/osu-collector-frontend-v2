@@ -37,18 +37,18 @@ export default async function UserUploadedCollectionsPage({ params }: PageProps)
   const collections = uploads?.collections;
 
   return (
-    <div className='flex justify-center w-full'>
-      <div className='px-2 py-5 md:px-10 w-full max-w-screen-2xl'>
-        <div className='p-4 mb-4 rounded border-slate-900 shadow-inner bg-[#162032] md:p-7'>
-          <h2 className='flex items-center gap-3 mb-6'>
-            <Avatar className='w-10 h-10'>
+    <div className='flex w-full justify-center'>
+      <div className='w-full max-w-screen-2xl px-2 py-5 md:px-10'>
+        <div className='mb-4 rounded border-slate-900 bg-[#162032] p-4 shadow-inner md:p-7'>
+          <h2 className='mb-6 flex items-center gap-3'>
+            <Avatar className='h-10 w-10'>
               <AvatarImage src={pageUser.osuweb.avatar_url} alt='@shadcn' />
               <AvatarFallback>{pageUser.osuweb.username[0].toLocaleUpperCase()}</AvatarFallback>
             </Avatar>
             <div>
               <h1 className='mb-0 text-2xl'>{pageUser.osuweb.username}</h1>
               <a
-                className='block text-xs leading-none transition-colors text-muted-foreground hover:text-blue-500'
+                className='block text-xs leading-none text-muted-foreground transition-colors hover:text-blue-500'
                 href={`https://osu.ppy.sh/users/${pageUser.id}`}
               >
                 {`https://osu.ppy.sh/users/${pageUser.id}`}
@@ -60,7 +60,7 @@ export default async function UserUploadedCollectionsPage({ params }: PageProps)
               ? `${pageUser.osuweb.username} uploaded this collection:`
               : `${pageUser.osuweb.username} uploaded these ${collections.length} collections:`}
           </h1>
-          <div className='grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4'>
             {!collections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (

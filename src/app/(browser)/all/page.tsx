@@ -23,26 +23,26 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
   });
 
   return (
-    <div className='flex justify-center w-full'>
-      <div className='flex flex-col items-center gap-6 px-2 py-5 lg:px-10 max-w-screen-2xl'>
+    <div className='flex w-full justify-center'>
+      <div className='flex max-w-screen-2xl flex-col items-center gap-6 px-2 py-5 lg:px-10'>
         {searchParams.tutorial === 'true' && (
-          <div className='flex flex-col items-center gap-2 w-full p-6 bg-cyan-700 rounded-xl border-2 border-cyan-900 text-cyan-100'>
+          <div className='flex w-full flex-col items-center gap-2 rounded-xl border-2 border-cyan-900 bg-cyan-700 p-6 text-cyan-100'>
             To download a collection, browse for collections here, then look for these buttons!
-            <div className='flex flex-col gap-2 w-full max-w-[200px] pointer-events-none'>
-              <Button className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
+            <div className='pointer-events-none flex w-full max-w-[200px] flex-col gap-2'>
+              <Button className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'>
                 Download maps
               </Button>
               <div className='flex w-full'>
-                <Button className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
+                <Button className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'>
                   Add to osu!
                 </Button>
-                <div className='h-full hidden sm:flex transition rounded rounded-l-none cursor-pointer bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
+                <div className='hidden h-full cursor-pointer rounded rounded-l-none bg-slate-600 transition hover:bg-slate-500 hover:shadow-xl sm:flex'>
                   <div className='flex items-center'>
                     <ThreeDotsVertical className='mx-2' />
                   </div>
                 </div>
               </div>
-              <Button className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500 opacity-40'>
+              <Button className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center opacity-40 transition hover:bg-slate-500 hover:shadow-xl'>
                 Favorite (0)
               </Button>
             </div>
@@ -55,8 +55,8 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
             {results} results
           </div>
         </div>
-        <div className='p-4 mb-4 rounded border-slate-900 shadow-inner bg-[#162032] md:p-7'>
-          <div className='flex flex-wrap items-center gap-2 mb-6'>
+        <div className='mb-4 rounded border-slate-900 bg-[#162032] p-4 shadow-inner md:p-7'>
+          <div className='mb-6 flex flex-wrap items-center gap-2'>
             {[
               searchParams.search ? { label: 'Relevance', sortBy: '_text_match', orderBy: 'desc' } : undefined,
               { label: 'Popular', sortBy: 'favourites', orderBy: 'desc' },
@@ -73,9 +73,9 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
                   key={i}
                   href={`/all?${formatQueryParams(mergeRight(searchParams, { sortBy, orderBy, cursor: undefined }))}`}
                   className={cn(
-                    'px-3 py-1 text-center transition border rounded border-slate-700 bg-slate-900 hover:shadow-xl hover:bg-slate-600',
+                    'rounded border border-slate-700 bg-slate-900 px-3 py-1 text-center transition hover:bg-slate-600 hover:shadow-xl',
                     isMatching({ sortBy, orderBy })(searchParams)
-                      ? 'text-indigo-200 bg-indigo-800 opacity-90 pointer-events-none border-indigo-800'
+                      ? 'pointer-events-none border-indigo-800 bg-indigo-800 text-indigo-200 opacity-90'
                       : undefined,
                   )}
                 >
@@ -83,7 +83,7 @@ export default async function CollectionsPage({ searchParams }: CollectionsPageP
                 </Link>
               ))}
           </div>
-          <div className='grid grid-cols-1 gap-4 mb-5 lg:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4'>
             {!collections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (

@@ -146,7 +146,7 @@ function CollectionDownloadCard({ collectionDownload }) {
     collectionDownload.downloadStatus !== DownloadStates.Cancelled;
   return (
     <div>
-      <div className='flex items-center justify-between mb-1'>
+      <div className='mb-1 flex items-center justify-between'>
         <div className='px-0'>
           <h5 className='mb-0 text-lg text-slate-100'>
             {collectionDownload.uploader && collectionDownload.uploader + ' - '}
@@ -162,7 +162,9 @@ function CollectionDownloadCard({ collectionDownload }) {
           </div>
         </div>
       </div>
-      {visibleDownloads?.map((mapset) => <BeatmapsetDownloadCard key={mapset.id} mapsetDownload={mapset} />)}
+      {visibleDownloads?.map((mapset) => (
+        <BeatmapsetDownloadCard key={mapset.id} mapsetDownload={mapset} />
+      ))}
     </div>
   );
 }
@@ -176,16 +178,16 @@ function BeatmapsetDownloadCard({ mapsetDownload }) {
     <div className='my-1'>
       <div className='flex items-center rounded bg-slate-700'>
         <div>
-          <Image className='py-2 mx-2' src='/icons/osz.png' alt='osz' width={32} height={32} />
+          <Image className='mx-2 py-2' src='/icons/osz.png' alt='osz' width={32} height={32} />
         </div>
-        <div className='w-full px-2 py-2 border-l border-l-slate-600'>
+        <div className='w-full border-l border-l-slate-600 px-2 py-2'>
           <p className='mb-0'>{mapsetDownload.filename}</p>
           {mapsetDownload.downloadStatus === DownloadStates.Downloading && (
             <>
               <p className='text-slate-500' style={{ fontSize: 13 }}>
                 {megaBytesReceived.toFixed(1)} MB of {megaBytesTotal.toFixed(1)} MB ({Math.round(progress) || 0}%)
               </p>
-              <div className='mb-1 text-xs truncate text-slate-500'>{mapsetDownload.url}</div>
+              <div className='mb-1 truncate text-xs text-slate-500'>{mapsetDownload.url}</div>
               <Progress value={progress} />
             </>
           )}

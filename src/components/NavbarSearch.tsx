@@ -8,12 +8,12 @@ export default function NavbarSearch() {
   const [userInput, setUserInput] = useState('');
   return (
     <div className='relative hidden md:block'>
-      <div className='absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3'>
+      <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3'>
         <Search />
       </div>
       <input
         type='text'
-        className='text-sm rounded-lg block w-full ps-10 p-2.5  bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500'
+        className='block w-full rounded-lg border-gray-600 bg-gray-700 p-2.5 ps-10 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500'
         placeholder='tech, aim, speed...'
         required
         value={userInput}

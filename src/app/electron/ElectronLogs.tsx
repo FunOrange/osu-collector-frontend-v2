@@ -36,7 +36,7 @@ export default function ElectronLogs() {
       <Button
         size='sm'
         variant='link'
-        className='text-white mb-1'
+        className='mb-1 text-white'
         onClick={() => {
           if (path) window.ipc.revealPath(path.replace(/[^\\/]+$/, ''));
         }}
@@ -45,7 +45,7 @@ export default function ElectronLogs() {
       </Button>
       <div
         ref={ref}
-        className='p-2 bg-slate-950 font-mono text-xs whitespace-pre-line min-h-20 max-h-[calc(100vh-140px)] overflow-y-auto'
+        className='min-h-20 max-h-[calc(100vh-140px)] overflow-y-auto whitespace-pre-line bg-slate-950 p-2 font-mono text-xs'
       >
         {lines?.map((line, i) => (
           <div key={i} className={cn(lineColors[i])}>

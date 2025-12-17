@@ -20,7 +20,7 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
 
   return match({ hasComments, isLoggedIn })
     .with({ hasComments: true }, () => (
-      <div className='w-full rounded border-slate-900 shadow-inner bg-[#162032]'>
+      <div className='w-full rounded border-slate-900 bg-[#162032] shadow-inner'>
         <CollectionComment
           collectionId={collection.id}
           comment={collection.comments.sort((a, b) => b.upvotes.length - a.upvotes.length)[0]}
@@ -28,7 +28,7 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
         />
         <CollectionCommentsModal
           collection={collection}
-          className='flex items-center justify-center w-full gap-2 py-3 text-center border-t rounded-b cursor-pointer border-slate-900 shadow-inner bg-[#162032] hover:bg-slate-700'
+          className='flex w-full cursor-pointer items-center justify-center gap-2 rounded-b border-t border-slate-900 bg-[#162032] py-3 text-center shadow-inner hover:bg-slate-700'
         >
           <div>
             View {collection.comments.length === 1 ? '' : 'all'} {collection.comments.length} comment

@@ -51,7 +51,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
 
   return user?.paidFeaturesAccess ? (
     <Button
-      className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+      className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
       onClick={() => {
         window.open(`osucollector://tournaments/${tournament.id}`, '_blank', 'noreferrer');
         toast({
@@ -76,7 +76,7 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
           resetPreviewModalState();
         }}
       >
-        <DialogTrigger className='w-full p-3 text-center transition rounded rounded-r-none bg-slate-600 hover:shadow-xl hover:bg-slate-500'>
+        <DialogTrigger className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'>
           Add mappool to osu!
         </DialogTrigger>
         <DialogContent className='max-w-5xl' onPointerDownOutside={() => setPreviewOpened(false)}>
@@ -121,14 +121,14 @@ export default function AddTournamentToOsuButton({ tournament }: AddTournamentTo
                 </div>
                 {(() => {
                   const row = (collection, i) => (
-                    <div key={i} className='w-full px-4 py-2 rounded bg-slate-700'>
+                    <div key={i} className='w-full rounded bg-slate-700 px-4 py-2'>
                       {collection.name}
                       <span className='ml-3 text-slate-500'>
                         {collection.beatmaps.length} beatmap{s(collection.beatmaps.length)}
                       </span>
                     </div>
                   );
-                  return <div className='flex flex-col gap-2 pr-2 overflow-y-auto'>{previewCollections.map(row)}</div>;
+                  return <div className='flex flex-col gap-2 overflow-y-auto pr-2'>{previewCollections.map(row)}</div>;
                 })()}
               </div>
             </div>

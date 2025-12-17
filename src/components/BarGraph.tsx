@@ -25,7 +25,7 @@ export default function BarGraph({ title, data, onBarClick, className, barClassN
   });
   return (
     <div
-      className={cn('grid w-full px-8 pt-4 pb-1 bg-slate-950', className)}
+      className={cn('grid w-full bg-slate-950 px-8 pb-1 pt-4', className)}
       style={{
         gridTemplateColumns: `repeat(${length}, minmax(0, 1fr))`,
         gridTemplateRows: '1fr auto auto',
@@ -34,13 +34,13 @@ export default function BarGraph({ title, data, onBarClick, className, barClassN
       {data.y.map((y, i) => (
         <div
           key={i}
-          className={cn('flex h-full group px-1', onBarClick && 'cursor-pointer')}
+          className={cn('group flex h-full px-1', onBarClick && 'cursor-pointer')}
           onClick={() => onBarClick?.(data.x[i])}
         >
           <div
             className={cn(
-              'w-full transition-all self-end',
-              onBarClick && 'cursor-pointer group-hover:brightness-125 group-hover:scale-105',
+              'w-full self-end transition-all',
+              onBarClick && 'cursor-pointer group-hover:scale-105 group-hover:brightness-125',
               barClassName,
             )}
             style={barStyle(data.x[i], y, i)}
@@ -51,14 +51,14 @@ export default function BarGraph({ title, data, onBarClick, className, barClassN
         <div
           key={i}
           className={cn(
-            'text-xs justify-self-center text-slate-400',
+            'justify-self-center text-xs text-slate-400',
             data.x.length >= 16 && i % 3 !== 0 && 'invisible lg:visible',
           )}
         >
           {value}
         </div>
       ))}
-      {title && <div className='text-sm col-span-full text-slate-500 justify-self-center'>{title}</div>}
+      {title && <div className='col-span-full justify-self-center text-sm text-slate-500'>{title}</div>}
     </div>
   );
 }

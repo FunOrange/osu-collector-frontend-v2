@@ -95,8 +95,8 @@ export default function CheckoutPage({}: CheckoutPageProps) {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center gap-8 mt-8'>
-      <div className='w-full max-w-xl p-4 text-center rounded shadow m-w-2xl bg-slate-700'>
+    <div className='mt-8 flex flex-col items-center justify-center gap-8'>
+      <div className='m-w-2xl w-full max-w-xl rounded bg-slate-700 p-4 text-center shadow'>
         <h1 className='mb-2 text-3xl font-semibold text-slate-50'>Desktop Client Subscription</h1>
         <p>
           $1.99 per month
@@ -105,17 +105,17 @@ export default function CheckoutPage({}: CheckoutPageProps) {
         </p>
       </div>
 
-      <div className='w-full max-w-xl rounded shadow bg-slate-700'>
-        <div className='px-5 py-4 my-4 text-center shadow-sm'>
+      <div className='w-full max-w-xl rounded bg-slate-700 shadow'>
+        <div className='my-4 px-5 py-4 text-center shadow-sm'>
           <h5 className='mb-4 text-lg text-slate-50'>Pay with card</h5>
           <form onSubmit={handleFormSubmit}>
             <Input type='email' placeholder='Email' />
-            <div className='px-4 py-3 my-2 rounded-lg bg-slate-950'>
+            <div className='my-2 rounded-lg bg-slate-950 px-4 py-3'>
               <CardElement options={cardElementOpts} onChange={handleCardDetailsChange} />
             </div>
             {checkoutError && (
               <>
-                <div className='p-4 mb-4 text-center text-red-200 bg-red-900 rounded'>
+                <div className='mb-4 rounded bg-red-900 p-4 text-center text-red-200'>
                   {checkoutError}
                   <br />
                   If you need help please contact funorange42@yahoo.ca
@@ -123,7 +123,7 @@ export default function CheckoutPage({}: CheckoutPageProps) {
               </>
             )}
             {/* TIP always disable your submit button while processing payments */}
-            <Button type='submit' className='w-full mb-5' disabled={cardError || !stripe} loading={processing > 0}>
+            <Button type='submit' className='mb-5 w-full' disabled={cardError || !stripe} loading={processing > 0}>
               Subscribe
             </Button>
           </form>

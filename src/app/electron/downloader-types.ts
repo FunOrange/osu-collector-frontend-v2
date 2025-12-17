@@ -11,12 +11,7 @@ export enum Status {
   Completed = 'completed',
   Failed = 'failed',
 }
-export const finalizedStatuses = [
-  Status.AlreadyDownloaded,
-  Status.AlreadyInstalled,
-  Status.Completed,
-  Status.Failed,
-];
+export const finalizedStatuses = [Status.AlreadyDownloaded, Status.AlreadyInstalled, Status.Completed, Status.Failed];
 
 export enum Mirror {
   Beatconnect = 'beatconnect',
@@ -31,11 +26,11 @@ export interface DownloadMetadata {
       id: number;
       username: string;
     };
-  },
+  };
   tournament?: {
     id: number;
     name: string;
-  },
+  };
 }
 
 interface DownloadBase<S extends Status> {
@@ -91,7 +86,7 @@ export interface DownloadType {
   [Status.Failed]: DownloadBase<Status.Failed> & DownloadExtended[Status.Failed];
 }
 
-export type Download = 
+export type Download =
   | DownloadType[Status.Pending]
   | DownloadType[Status.CheckingLocalFiles]
   | DownloadType[Status.AlreadyDownloaded]
@@ -103,4 +98,3 @@ export type Download =
   | DownloadType[Status.Downloading]
   | DownloadType[Status.Completed]
   | DownloadType[Status.Failed];
-

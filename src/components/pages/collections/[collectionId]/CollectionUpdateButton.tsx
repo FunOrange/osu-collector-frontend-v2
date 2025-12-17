@@ -79,7 +79,7 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
   }
   return (
     <Dialog open={showModal} onOpenChange={(open) => setShowModal(open)}>
-      <DialogTrigger className='w-full p-2 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-cyan-700'>
+      <DialogTrigger className='w-full rounded bg-slate-600 p-2 text-center transition hover:bg-cyan-700 hover:shadow-xl'>
         <div>
           Reupload collection
           <div className='text-xs text-slate-400'>
@@ -100,7 +100,7 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
             })
               .with({ loaded: false }, () => (
                 <div
-                  className='p-8 text-center transition border border-dashed rounded cursor-pointer border-slate-700 hover:bg-slate-600'
+                  className='cursor-pointer rounded border border-dashed border-slate-700 p-8 text-center transition hover:bg-slate-600'
                   {...getRootProps()}
                 >
                   <input {...getInputProps()} />
@@ -108,7 +108,7 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
                 </div>
               ))
               .with({ loaded: true, hasCollection: true }, () => (
-                <div className='p-4 rounded bg-slate-700'>
+                <div className='rounded bg-slate-700 p-4'>
                   {' '}
                   <div>
                     {localCount} beatmaps {isIdentical && <span className='ml-1 text-slate-500'>(no change)</span>}
@@ -118,7 +118,7 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
                 </div>
               ))
               .with({ loaded: true, hasCollection: false }, () => (
-                <div className='p-4 rounded bg-slate-700'>
+                <div className='rounded bg-slate-700 p-4'>
                   <div className='mb-4 font-semibold text-red-500'>
                     You do not have a collection named {remoteCollection.name}
                   </div>
@@ -139,7 +139,7 @@ export default function CollectionUpdateButton({ collection: remoteCollection }:
           </div>
           <div>
             <div className='mb-1 text-lg font-semibold'>On osu!Collector:</div>
-            <div className='p-4 rounded bg-slate-700'>
+            <div className='rounded bg-slate-700 p-4'>
               <span className='mr-2'>{remoteCount} beatmaps</span>
               <span className='text-slate-500'>
                 (updated {moment(remoteCollection?.dateLastModified?._seconds * 1000).fromNow()})

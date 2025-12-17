@@ -22,9 +22,9 @@ export function Toaster() {
             {title && (
               <ToastTitle>
                 {props.variant === 'destructive' ? (
-                  <XCircleFill className='inline-block mb-[2px] mr-2 text-lg text-red-500' />
+                  <XCircleFill className='mb-[2px] mr-2 inline-block text-lg text-red-500' />
                 ) : (
-                  <CheckCircleFill className='inline-block mb-[2px] mr-2 text-lg text-green-500' />
+                  <CheckCircleFill className='mb-[2px] mr-2 inline-block text-lg text-green-500' />
                 )}{' '}
                 {title}
               </ToastTitle>

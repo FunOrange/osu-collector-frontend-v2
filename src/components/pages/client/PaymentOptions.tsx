@@ -63,7 +63,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
       }}
     >
       <div className='w-full'>
-        <div className='p-6 rounded-t bg-slate-600' style={{ minHeight: '286px' }}>
+        <div className='rounded-t bg-slate-600 p-6' style={{ minHeight: '286px' }}>
           <div className='mb-5 text-xl'>$1.99 monthly subscription</div>
           <div className='flex flex-col gap-3'>
             <section id='option-2-paypal'>
@@ -102,7 +102,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
               ) : (
                 <YouMustBeLoggedIn>
                   <div className='cursor-pointer'>
-                    <div className='relative z-0 pointer-events-none' style={{ height: '46px' }}>
+                    <div className='pointer-events-none relative z-0' style={{ height: '46px' }}>
                       <PayPalButtons
                         style={{ shape: 'rect', color: 'gold', height: 46, layout: 'vertical' }}
                         fundingSource='paypal'
@@ -113,9 +113,9 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
               )}
             </section>
 
-            <div className='flex items-center my-2'>
+            <div className='my-2 flex items-center'>
               <div className='w-full border-b border-slate-400' />
-              <span className='mx-3 text-center text-slate-400 min-w-[140px]'>or pay with card</span>
+              <span className='mx-3 min-w-[140px] text-center text-slate-400'>or pay with card</span>
               <div className='w-full border-b border-slate-400' />
             </div>
 
@@ -124,7 +124,7 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                 <Link href='/payments/checkout'>
                   <Button
                     variant='important'
-                    className='w-full py-6 text-lg bg-cyan-700'
+                    className='w-full bg-cyan-700 py-6 text-lg'
                     disabled={paypalOrStripeSubscriptionActive}
                   >
                     Pay with credit card
@@ -132,16 +132,16 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
                 </Link>
               ) : (
                 <YouMustBeLoggedIn>
-                  <Button variant='important' className='w-full py-6 text-lg bg-cyan-700'>
+                  <Button variant='important' className='w-full bg-cyan-700 py-6 text-lg'>
                     Pay with credit card
                   </Button>
                 </YouMustBeLoggedIn>
               )}
             </section>
 
-            <div className='flex items-center my-2'>
+            <div className='my-2 flex items-center'>
               <div className='w-full border-b border-slate-400' />
-              <span className='mx-3 text-center text-slate-400 whitespace-nowrap'>or pay with crypto:</span>
+              <span className='mx-3 whitespace-nowrap text-center text-slate-400'>or pay with crypto:</span>
               <div className='w-full border-b border-slate-400' />
             </div>
 
@@ -150,10 +150,10 @@ export default function PaymentOptions({}: PaymentOptionsProps) {
             </section>
           </div>
         </div>
-        <div className='flex items-center gap-3 px-4 py-3 rounded-b bg-slate-900'>
+        <div className='flex items-center gap-3 rounded-b bg-slate-900 px-4 py-3'>
           <div className='font-semibold text-slate-50'>Current status:</div>
           {isPaypalOrStripeSubscriptionActive(user, paypalSubscription, stripeSubscription) ? (
-            <div className='px-3 py-1 text-sm font-semibold bg-green-600 rounded text-slate-50'>Active</div>
+            <div className='rounded bg-green-600 px-3 py-1 text-sm font-semibold text-slate-50'>Active</div>
           ) : (
             <div className='text-slate-500'>Not active</div>
           )}

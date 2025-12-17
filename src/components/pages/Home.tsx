@@ -12,10 +12,10 @@ export interface HomeProps {
 }
 export default function Home({ metadata, popularCollections, recentCollections }: HomeProps) {
   return (
-    <div className='flex justify-center w-full'>
-      <div className='px-2 py-5 md:px-10 w-full max-w-screen-2xl'>
-        <div className='p-4 mb-4 text-center rounded bg-sky-900 text-sky-200'>
-          <Discord className='inline mb-1 mr-2' size={20} />
+    <div className='flex w-full justify-center'>
+      <div className='w-full max-w-screen-2xl px-2 py-5 md:px-10'>
+        <div className='mb-4 rounded bg-sky-900 p-4 text-center text-sky-200'>
+          <Discord className='mb-1 mr-2 inline' size={20} />
           Join the{' '}
           <a href='https://discord.gg/WZMQjwF5Vr' className='text-blue-500'>
             osu!Collector discord
@@ -23,9 +23,9 @@ export default function Home({ metadata, popularCollections, recentCollections }
           ! Feel free to message FunOrange about any issues you have or suggestions for the site.
         </div>
 
-        <div className='items-center justify-between gap-6 mb-4 md:flex'>
+        <div className='mb-4 items-center justify-between gap-6 md:flex'>
           <div className='my-2'>
-            <div className='flex items-end gap-3 mb-1'>
+            <div className='mb-1 flex items-end gap-3'>
               <h1 className='text-3xl'>Welcome to osu!Collector!</h1>
             </div>
             <p>
@@ -46,25 +46,25 @@ export default function Home({ metadata, popularCollections, recentCollections }
             </p>
           </div>
 
-          <div className='grid grid-cols-2 md:flex flex-row justify-center gap-4 mb-3'>
-            <div className='px-4 py-3 rounded md:px-6 border-slate-900 shadow-inner bg-[#162032]'>
+          <div className='mb-3 grid grid-cols-2 flex-row justify-center gap-4 md:flex'>
+            <div className='rounded border-slate-900 bg-[#162032] px-4 py-3 shadow-inner md:px-6'>
               <div className='text-xl'>{metadata.userCount.toLocaleString()}</div>
-              <div className='text-sm whitespace-nowrap'>Total users</div>
+              <div className='whitespace-nowrap text-sm'>Total users</div>
             </div>
 
-            <div className='px-4 py-3 rounded md:px-6 border-slate-900 shadow-inner bg-[#162032]'>
+            <div className='rounded border-slate-900 bg-[#162032] px-4 py-3 shadow-inner md:px-6'>
               <div className='text-xl'>{metadata.totalCollections.toLocaleString()}</div>
-              <div className='text-sm whitespace-nowrap'>Total collections</div>
+              <div className='whitespace-nowrap text-sm'>Total collections</div>
             </div>
           </div>
         </div>
 
-        <div className='p-2 pt-4 mb-4 rounded md:pt-7 border-slate-900 shadow-inner bg-[#162032] md:p-7'>
+        <div className='mb-4 rounded border-slate-900 bg-[#162032] p-2 pt-4 shadow-inner md:p-7 md:pt-7'>
           <h2 className='mb-3 text-2xl md:mb-6 md:text-3xl'>
-            <Fire className='inline mb-2 mr-3 text-orange-400' size={32} />
+            <Fire className='mb-2 mr-3 inline text-orange-400' size={32} />
             Popular this month
           </h2>
-          <div className='grid grid-cols-1 gap-4 mb-5 lg:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4'>
             {!popularCollections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (
@@ -72,18 +72,18 @@ export default function Home({ metadata, popularCollections, recentCollections }
             )}
           </div>
           <Link href='/popular?range=month'>
-            <div className='w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'>
+            <div className='w-full rounded bg-slate-800 p-3 text-center transition hover:bg-slate-600 hover:shadow-xl'>
               See all popular
             </div>
           </Link>
         </div>
 
-        <div className='p-2 pt-4 mb-4 rounded md:pt-7 border-slate-900 shadow-inner bg-[#162032] md:p-7'>
+        <div className='mb-4 rounded border-slate-900 bg-[#162032] p-2 pt-4 shadow-inner md:p-7 md:pt-7'>
           <h2 className='mb-3 text-2xl md:mb-6 md:text-3xl'>
-            <Stars className='inline mb-1 mr-3 text-yellow-400' size={24} />
+            <Stars className='mb-1 mr-3 inline text-yellow-400' size={24} />
             Recently Uploaded
           </h2>
-          <div className='grid grid-cols-1 gap-4 mb-5 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <div className='mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4'>
             {!recentCollections ? (
               <div className='text-red-500'>There was an error retrieving collections.</div>
             ) : (
@@ -91,7 +91,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
             )}
           </div>
           <Link href='/recent'>
-            <div className='w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'>
+            <div className='w-full rounded bg-slate-800 p-3 text-center transition hover:bg-slate-600 hover:shadow-xl'>
               See all recent
             </div>
           </Link>

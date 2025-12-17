@@ -34,9 +34,9 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
   };
 
   return (
-    <div className='w-full max-w-6xl p-6 rounded bg-slate-600'>
+    <div className='w-full max-w-6xl rounded bg-slate-600 p-6'>
       <div className='mb-2'>
-        <h2 className='text-2xl font-semibold text-slate-50 whitespace-nowrap' id='download-links'>
+        <h2 className='whitespace-nowrap text-2xl font-semibold text-slate-50' id='download-links'>
           Download osu!Collector Desktop
         </h2>
         {user?.paidFeaturesAccess && <div className='text-pink-400'>Thank you for supporting us! You are awesome.</div>}
@@ -56,14 +56,14 @@ export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
           Mac Silicon
         </Button>
       </div>
-      <hr className='border-slate-500 my-2' />
+      <hr className='my-2 border-slate-500' />
       <div className='flex gap-2'>
         <Button {...buttonProps} onClick={downloadDeb} loading={downloadingDeb}>
           {!downloadingDeb && <Ubuntu className='mr-2' />}
           Linux x64 .deb
         </Button>
         <Button {...buttonProps} onClick={downloadFlatpak} loading={downloadingFlatpak}>
-          {!downloadingFlatpak && <div className='mr-2 w-3 h-3'>{flatpak}</div>}
+          {!downloadingFlatpak && <div className='mr-2 h-3 w-3'>{flatpak}</div>}
           Linux x64 Flatpak
         </Button>
       </div>

@@ -12,10 +12,10 @@ import useClientValue from '@/hooks/useClientValue';
 export default function ElectronHome() {
   const isClient = useClientValue(() => true, false);
   return (
-    <main className='w-full h-full relative'>
-      <SidebarTrigger className='absolute top-[6px] left-2' />
-      <Tabs defaultValue='downloads' className='w-full h-full flex flex-col'>
-        <div className='p-1 bg-slate-900'>
+    <main className='relative h-full w-full'>
+      <SidebarTrigger className='absolute left-2 top-[6px]' />
+      <Tabs defaultValue='downloads' className='flex h-full w-full flex-col'>
+        <div className='bg-slate-900 p-1'>
           <TabsList className='ml-12 gap-1 bg-slate-800 shadow-[inset_0_0_4px_rgba(0,0,0,0.25)]'>
             <TabsTrigger value='downloads'>Downloads</TabsTrigger>
             <TabsTrigger value='logs'>Logs</TabsTrigger>

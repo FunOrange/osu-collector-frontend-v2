@@ -32,15 +32,15 @@ export default async function TournamentsPage({ searchParams }: TournamentsPageP
   })();
 
   return (
-    <div className='flex justify-center w-full'>
-      <div className='flex flex-col items-center w-full gap-6 px-2 py-5 md:px-10'>
-        <div className='w-full p-4 mb-4 rounded max-w-screen-2xl bg-[#162032] md:p-7'>
+    <div className='flex w-full justify-center'>
+      <div className='flex w-full flex-col items-center gap-6 px-2 py-5 md:px-10'>
+        <div className='mb-4 w-full max-w-screen-2xl rounded bg-[#162032] p-4 md:p-7'>
           <div className='mb-6 flex items-center justify-between'>
-            <h1 className='text-3xl whitespace-nowrap'>
-              <TrophyFill className='inline mb-1 mr-3 text-yellow-400' size={24} />
+            <h1 className='whitespace-nowrap text-3xl'>
+              <TrophyFill className='mb-1 mr-3 inline text-yellow-400' size={24} />
               Tournaments
             </h1>
-            <div className='flex flex-col w-full gap-3 ml-6'>
+            <div className='ml-6 flex w-full flex-col gap-3'>
               <SearchInput searchParams={searchParams} withIcon className='bg-slate-800' />
             </div>
             <Link href='/tournaments/upload'>
@@ -50,7 +50,7 @@ export default async function TournamentsPage({ searchParams }: TournamentsPageP
               </Button>
             </Link>
           </div>
-          <div className='grid grid-cols-1 gap-4 mb-5 md:gap-8 lg:grid-cols-2'>
+          <div className='mb-5 grid grid-cols-1 gap-4 md:gap-8 lg:grid-cols-2'>
             {!tournaments ? (
               <div className='text-red-500'>There was an error retrieving tournaments.</div>
             ) : (

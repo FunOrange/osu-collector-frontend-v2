@@ -39,7 +39,7 @@ export default function CollectionCommentLikeButton({ collectionId, comment }: C
 
   if (user) {
     return (
-      <div className='flex items-center gap-1 text-sm cursor-pointer' onClick={onClick}>
+      <div className='flex cursor-pointer items-center gap-1 text-sm' onClick={onClick}>
         <HandThumbsUpFill
           size={14}
           className={
@@ -54,7 +54,7 @@ export default function CollectionCommentLikeButton({ collectionId, comment }: C
   } else {
     return (
       <YouMustBeLoggedIn>
-        <div className='flex items-center gap-1 text-sm cursor-pointer'>
+        <div className='flex cursor-pointer items-center gap-1 text-sm'>
           <HandThumbsUpFill size={14} />
           {comment.upvotes.length}
         </div>

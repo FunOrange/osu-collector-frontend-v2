@@ -21,24 +21,24 @@ function UserCard({ user }: UserCardProps) {
 
   return (
     <TooltipProvider>
-      <div className='relative bg-slate-800 rounded-3xl overflow-hidden hover:brightness-110 transition-all'>
+      <div className='relative overflow-hidden rounded-3xl bg-slate-800 transition-all hover:brightness-110'>
         <ImageWithFallback
           src={banner}
           fallbackSrc='/images/slimcoverfallback.jpg'
           fill
           sizes='(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (min-width: 1024px) 472px'
           alt='User profile banner'
-          className='w-full h-full object-cover absolute brightness-30'
+          className='brightness-30 absolute h-full w-full object-cover'
         />
-        <div className='absolute w-full h-full brightness-30 bg-slate-700 opacity-70' />
+        <div className='brightness-30 absolute h-full w-full bg-slate-700 opacity-70' />
 
-        <div className='relative h-full p-4 grid grid-cols-[96px_1fr] gap-x-4 z-10'>
+        <div className='relative z-10 grid h-full grid-cols-[96px_1fr] gap-x-4 p-4'>
           <div className='self-center'>
             <Image src={pfp} width={96} height={96} alt='User profile picture' className='rounded-full' />
           </div>
 
-          <div className='w-full flex flex-col items-start'>
-            <div className='w-full flex justify-between'>
+          <div className='flex w-full flex-col items-start'>
+            <div className='flex w-full justify-between'>
               <a href={`https://osu.ppy.sh/users/${user.id}`} className='text-xl text-white hover:text-blue-300'>
                 {user.osuweb.username}
               </a>
@@ -48,13 +48,13 @@ function UserCard({ user }: UserCardProps) {
               <TooltipTrigger>
                 <div className='text-sm'>Global #{user.osuweb.statistics.global_rank}</div>
               </TooltipTrigger>
-              <TooltipContent className='flex gap-1 items-center'>
+              <TooltipContent className='flex items-center gap-1'>
                 <InfoCircle />
                 At time of last login
               </TooltipContent>
             </Tooltip>
             <div className='text-sm'>Country #{user.osuweb.statistics.country_rank}</div>
-            <div className='flex flex-wrap gap-2 mt-2'>
+            <div className='mt-2 flex flex-wrap gap-2'>
               {user.uploads?.length > 0 && (
                 <Link
                   href={`/users/${user.id}/uploads/collections`}

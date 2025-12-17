@@ -77,7 +77,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
       return (
         <div className='flex items-center gap-2'>
           <HeartFill
-            className='transition cursor-pointer fill-current'
+            className='cursor-pointer fill-current transition'
             size={18}
             style={{ marginTop: '2px', color: heartIconColor }}
             onClick={onClick}
@@ -97,7 +97,7 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
         .exhaustive();
       return (
         <button
-          className='w-full p-3 text-center transition rounded hover:shadow-xl'
+          className='w-full rounded p-3 text-center transition hover:shadow-xl'
           style={{ background: bg, color: fg }}
           onClick={onClick}
           onMouseEnter={() => setHovered(true)}

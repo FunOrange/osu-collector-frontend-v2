@@ -35,14 +35,16 @@ export default function CollectionCommentsModal({ collection, children, classNam
   return (
     <Dialog>
       <DialogTrigger className={className}>{children}</DialogTrigger>
-      <DialogContent className='flex flex-col max-w-4xl gap-0'>
+      <DialogContent className='flex max-w-4xl flex-col gap-0'>
         <DialogHeader>
           <DialogTitle className='mb-2'>Comments ({collection.comments?.length || 0})</DialogTitle>
         </DialogHeader>
         <div className='flex flex-col gap-3' style={{ height: '60vh', overflow: 'auto' }}>
           {collection.comments
             ?.sort((a, b) => b.date._seconds - a.date._seconds)
-            ?.map((comment, i) => <CollectionComment comment={comment} collectionId={collection.id} key={i} />)}
+            ?.map((comment, i) => (
+              <CollectionComment comment={comment} collectionId={collection.id} key={i} />
+            ))}
         </div>
         <div className='mt-4'>
           <h3 className='mb-3 text-xl font-semibold'>Leave a comment</h3>
@@ -51,7 +53,7 @@ export default function CollectionCommentsModal({ collection, children, classNam
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
           />
-          <div className='flex justify-end mt-2'>
+          <div className='mt-2 flex justify-end'>
             {user ? (
               <Button onClick={submit} loading={submitting} disabled={!userInput.trim()}>
                 Submit

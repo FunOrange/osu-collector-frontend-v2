@@ -81,11 +81,11 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
     `${pathname}?${formatQueryParams(mergeRight(searchParams, newParams))}`;
 
   return (
-    <div className='flex justify-center w-full'>
-      <div className='flex flex-col w-full max-w-screen-xl gap-2 px-2 py-5 lg:px-10'>
+    <div className='flex w-full justify-center'>
+      <div className='flex w-full max-w-screen-xl flex-col gap-2 px-2 py-5 lg:px-10'>
         <div className='rounded border-slate-900 bg-[#162032] shadow-inner'>
           <div className='relative h-[120px] sm:h-[330px]'>
-            <div className='absolute w-full overflow-hidden rounded-t-lg h-[120px] sm:h-[330px]'>
+            <div className='absolute h-[120px] w-full overflow-hidden rounded-t-lg sm:h-[330px]'>
               <ImageWithFallback
                 src={tournament.banner}
                 fallbackSrc={'/images/slimcoverfallback.jpg'}
@@ -97,23 +97,23 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
               />
             </div>
           </div>
-          <div className='flex flex-col gap-4 sm:gap-0 p-2 sm:p-6'>
-            <h1 className='text-lg md:text-4xl rounded'>{tournament.name}</h1>
+          <div className='flex flex-col gap-4 p-2 sm:gap-0 sm:p-6'>
+            <h1 className='rounded text-lg md:text-4xl'>{tournament.name}</h1>
             <div className='flex flex-col-reverse sm:grid' style={{ gridTemplateColumns: '2fr 1fr' }}>
               <div className='pr-4'>
                 <Popover>
                   <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
                     Uploaded {moment.unix(tournament.dateUploaded._seconds).fromNow()}
                   </PopoverTrigger>
-                  <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+                  <PopoverContent side='top' align='center' className='w-38 py-2 text-xs'>
                     {moment.unix(tournament.dateUploaded._seconds).format('LLL')}
                   </PopoverContent>
                 </Popover>
                 <div
-                  className='grid items-center w-full pt-2 gap-x-4 gap-y-1'
+                  className='grid w-full items-center gap-x-4 gap-y-1 pt-2'
                   style={{ gridTemplateColumns: 'auto 1fr' }}
                 >
-                  <div className='py-2 pr-6 border-r border-slate-700 text-slate-200'>Uploader</div>
+                  <div className='border-r border-slate-700 py-2 pr-6 text-slate-200'>Uploader</div>
                   <div className='flex items-center gap-1'>
                     <UserChip
                       user={tournament.uploader}
@@ -122,7 +122,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   </div>
                   {tournament.organizers.length > 0 && (
                     <>
-                      <div className='py-2 pr-6 border-r border-slate-700 text-slate-200'>Organizers</div>
+                      <div className='border-r border-slate-700 py-2 pr-6 text-slate-200'>Organizers</div>
                       <div className='flex items-center gap-1'>
                         {tournament.organizers.map((organizer, i) => (
                           <UserChip key={i} user={organizer} href={`https://osu.ppy.sh/users/${organizer.id}`} />
@@ -131,9 +131,9 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                     </>
                   )}
                 </div>
-                <div className='flex flex-col sm:grid mt-2 gap-x-3 gap-y-1' style={{ gridTemplateColumns: 'auto 1fr' }}>
+                <div className='mt-2 flex flex-col gap-x-3 gap-y-1 sm:grid' style={{ gridTemplateColumns: 'auto 1fr' }}>
                   <div>Forum post:</div>
-                  <a target='_blank' href={tournament.link} className='underline truncate'>
+                  <a target='_blank' href={tournament.link} className='truncate underline'>
                     {tournament.link}
                   </a>
                   {/* <div>Spreadsheet:</div>
@@ -146,7 +146,7 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   )} */}
                   <div>Mappool download:</div>
                   {tournament?.downloadUrl ? (
-                    <a target='_blank' href={tournament.downloadUrl} className='underline truncate'>
+                    <a target='_blank' href={tournament.downloadUrl} className='truncate underline'>
                       {tournament.downloadUrl}
                     </a>
                   ) : (
@@ -154,13 +154,13 @@ export default async function TournamentPage({ params, searchParams }: Tournamen
                   )}
 
                   <div className='relative col-span-full'>
-                    <div className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800 mt-2')}>
+                    <div className={cn('mt-2 whitespace-pre-wrap rounded bg-slate-800 px-3 py-2')}>
                       {tournament.description || 'No description provided.'}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className='flex flex-col justify-end gap-2 sm:pl-4 sm:border-l border-slate-700'>
+              <div className='flex flex-col justify-end gap-2 border-slate-700 sm:border-l sm:pl-4'>
                 <TournamentDeleteButton tournament={tournament} />
                 <TournamentEditButton tournament={tournament} />
                 <DownloadMapsButton tournament={tournament} />

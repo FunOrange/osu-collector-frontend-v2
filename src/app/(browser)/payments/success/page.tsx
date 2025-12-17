@@ -11,7 +11,7 @@ export default function SuccessPage({}: SuccessPageProps) {
     setIsClient(true);
   }, []);
   return (
-    <div className='w-full text-center h-[calc(100vh-56px)] justify-center flex items-center'>
+    <div className='flex h-[calc(100vh-56px)] w-full items-center justify-center text-center'>
       <div>
         <h1 className='mb-5 text-4xl'>Success!</h1>
         <Link href='/client#download-links'>

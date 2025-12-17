@@ -52,28 +52,28 @@ export default function EditableCollectionDescription({ collection }: EditableCo
       >
         <div
           ref={commentRef}
-          className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800', !descriptionExpanded && 'line-clamp-6')}
+          className={cn('whitespace-pre-wrap rounded bg-slate-800 px-3 py-2', !descriptionExpanded && 'line-clamp-6')}
           style={{ minHeight: '106px' }}
         >
           {collection.description}
         </div>
         {isOverflowing && !descriptionExpanded && (
           <div className='absolute bottom-0 left-0 right-0 flex flex-col justify-end'>
-            <div className='absolute w-full flex justify-center text-white pb-3'>Read more...</div>
+            <div className='absolute flex w-full justify-center pb-3 text-white'>Read more...</div>
             <div className='h-10 bg-gradient-to-t from-[#000000dd] to-transparent'></div>
-            <div className='bg-[#000000dd] rounded-b h-8'></div>
+            <div className='h-8 rounded-b bg-[#000000dd]'></div>
           </div>
         )}
       </div>
     ))
     .with({ isUploader: false, hasDescription: false }, () => (
-      <div className='p-4 rounded bg-slate-800' style={{ minHeight: '106px' }}>
+      <div className='rounded bg-slate-800 p-4' style={{ minHeight: '106px' }}>
         <div className='text-sm text-slate-500'>No description</div>
       </div>
     ))
     .with({ isUploader: true, editing: false, hasDescription: true }, () => (
       <div
-        className={cn('px-3 py-2 whitespace-pre-wrap rounded bg-slate-800', 'cursor-pointer hover:bg-slate-700')}
+        className={cn('whitespace-pre-wrap rounded bg-slate-800 px-3 py-2', 'cursor-pointer hover:bg-slate-700')}
         style={{ minHeight: '208px' }}
         onClick={() => setEditing(true)}
       >
@@ -82,7 +82,7 @@ export default function EditableCollectionDescription({ collection }: EditableCo
     ))
     .with({ isUploader: true, editing: false, hasDescription: false }, () => (
       <div
-        className={cn('p-4 rounded bg-slate-800', 'cursor-pointer hover:bg-slate-700')}
+        className={cn('rounded bg-slate-800 p-4', 'cursor-pointer hover:bg-slate-700')}
         style={{ minHeight: '208px' }}
         onClick={() => setEditing(true)}
       >

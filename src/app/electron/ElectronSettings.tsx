@@ -89,7 +89,7 @@ export default function ElectronSettings() {
 
   return (
     <main className='w-full'>
-      <section className='h-12 flex justify-between items-center gap-2 px-2 py-1 bg-slate-900'>
+      <section className='flex h-12 items-center justify-between gap-2 bg-slate-900 px-2 py-1'>
         <SidebarTrigger />
         <div className='flex items-center gap-1 p-1'>
           <Button
@@ -106,20 +106,20 @@ export default function ElectronSettings() {
         </div>
       </section>
 
-      <div className='p-4 flex flex-col gap-4 max-w-screen-md w-full'>
+      <div className='flex w-full max-w-screen-md flex-col gap-4 p-4'>
         <div>
-          <h3 className='text-white mb-1'>File Paths</h3>
+          <h3 className='mb-1 text-white'>File Paths</h3>
           <hr className='border-white/20' />
         </div>
 
         <div className='flex flex-col gap-1'>
-          <div className='flex gap-2 items-center'>
+          <div className='flex items-center gap-2'>
             <div className='text-sm text-white'>osu! install folder</div>
-            <div className={cn('transition-colors text-xs', !fields.osuInstallDirectory && 'text-red-400')}>
+            <div className={cn('text-xs transition-colors', !fields.osuInstallDirectory && 'text-red-400')}>
               required
             </div>
           </div>
-          <div className='w-full flex'>
+          <div className='flex w-full'>
             <Input {...pathInputProps('osuInstallDirectory')} />
             <Button variant='outline' className='rounded-l-none' onClick={() => selectFolder('osuInstallDirectory')}>
               Browse
@@ -132,11 +132,11 @@ export default function ElectronSettings() {
         </div>
 
         <div className='flex flex-col gap-1'>
-          <div className='flex gap-2 items-center'>
+          <div className='flex items-center gap-2'>
             <div className='text-sm text-white'>osu! songs folder</div>
             <div className='text-xs text-slate-500'>optional</div>
           </div>
-          <div className='w-full flex'>
+          <div className='flex w-full'>
             <Input placeholder={computedFields('osuSongsDirectory')} {...pathInputProps('osuSongsDirectory')} />
             <Button variant='outline' className='rounded-l-none' onClick={() => selectFolder('osuSongsDirectory')}>
               Browse
@@ -149,7 +149,7 @@ export default function ElectronSettings() {
         </div>
 
         <div className='flex flex-col gap-1'>
-          <div className='flex gap-2 items-center'>
+          <div className='flex items-center gap-2'>
             <div className='text-sm text-white'>download folder override</div>
             <div className='text-xs text-slate-500'>
               optional for osu! stable,{' '}
@@ -158,7 +158,7 @@ export default function ElectronSettings() {
               </span>
             </div>
           </div>
-          <div className='w-full flex'>
+          <div className='flex w-full'>
             <Input
               placeholder={computedFields('downloadDirectoryOverride')}
               {...pathInputProps('downloadDirectoryOverride')}
@@ -175,12 +175,12 @@ export default function ElectronSettings() {
         </div>
 
         <div className='mt-4'>
-          <h3 className='text-white mb-1'>Importing Collections</h3>
+          <h3 className='mb-1 text-white'>Importing Collections</h3>
           <hr className='border-white/20' />
         </div>
 
         <div className='flex flex-col gap-1'>
-          <div className='flex gap-2 items-center'>
+          <div className='flex items-center gap-2'>
             <div className='text-sm text-white'>imported collection name</div>
             <div className='text-xs text-slate-500'>optional</div>
           </div>
@@ -199,15 +199,15 @@ export default function ElectronSettings() {
         </div>
 
         <div className='mt-4'>
-          <h3 className='text-white mb-1'>Operating System Integration</h3>
+          <h3 className='mb-1 text-white'>Operating System Integration</h3>
           <hr className='border-white/20' />
         </div>
 
         <label
           htmlFor='minimize-to-system-tray-checkbox'
           className={cn(
-            'flex flex-col gap-1 self-start p-2 rounded',
-            'transition-colors cursor-pointer hover:bg-slate-700',
+            'flex flex-col gap-1 self-start rounded p-2',
+            'cursor-pointer transition-colors hover:bg-slate-700',
           )}
         >
           <div className='flex items-center gap-2'>

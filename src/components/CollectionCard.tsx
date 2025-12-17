@@ -25,7 +25,7 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
   const href = `/collections/${collection.id}/${getUrlSlug(collection.name)}`;
 
   return (
-    <div className='flex flex-col h-full overflow-hidden transition rounded-lg shadow-lg bg-slate-800 hover:shadow-xl hover:brightness-125'>
+    <div className='flex h-full flex-col overflow-hidden rounded-lg bg-slate-800 shadow-lg transition hover:shadow-xl hover:brightness-125'>
       <Link href={href} className='overflow-hidden'>
         {/* Difficulty Spread Graph */}
         <BarGraph
@@ -46,28 +46,28 @@ export default function CollectionCard({ collection }: CollectionCardProps) {
         </div>
       </div>
       <Link href={href} className='flex-grow p-4'>
-        <div className='text-lg truncate'>{collection.name}</div>
+        <div className='truncate text-lg'>{collection.name}</div>
         {collection.description ? (
-          <div className='text-sm line-clamp-3'>{collection.description}</div>
+          <div className='line-clamp-3 text-sm'>{collection.description}</div>
         ) : (
           <small className='text-slate-500'>
             <i>no description</i>
           </small>
         )}
       </Link>
-      <div className='flex items-end justify-between px-4 pb-2 '>
+      <div className='flex items-end justify-between px-4 pb-2'>
         <UserChip
           user={collection.uploader}
-          className='hover:bg-slate-700 ml-[-8px]'
+          className='ml-[-8px] hover:bg-slate-700'
           href={`/users/${collection.uploader.id}/uploads/collections`}
         />
         <Popover open={isDateHovered}>
           <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
-            <small className='pb-2 truncate text-slate-400' ref={dateUploadedRef}>
+            <small className='truncate pb-2 text-slate-400' ref={dateUploadedRef}>
               {moment.unix(collection.dateUploaded?._seconds).fromNow()}
             </small>
           </PopoverTrigger>
-          <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+          <PopoverContent side='top' align='center' className='w-38 py-2 text-xs'>
             <div>
               {wasUpdated && (
                 <>

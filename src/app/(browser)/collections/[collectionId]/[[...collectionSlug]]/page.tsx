@@ -50,11 +50,11 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
   }
 
   return (
-    <div className='flex justify-center w-full bg-[#162032] sm:bg-transparent'>
-      <div className='flex flex-col px-2 py-5 md:px-10 gap-4 md:gap-7 w-full max-w-screen-xl'>
-        <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
-          <div className='flex flex-col gap-y-2 gap-x-4 sm:p-4'>
-            <div className='flex flex-col xl:flex-row justify-between gap-2'>
+    <div className='flex w-full justify-center bg-[#162032] sm:bg-transparent'>
+      <div className='flex w-full max-w-screen-xl flex-col gap-4 px-2 py-5 md:gap-7 md:px-10'>
+        <div className='rounded border-slate-900 bg-[#162032] shadow-inner'>
+          <div className='flex flex-col gap-x-4 gap-y-2 sm:p-4'>
+            <div className='flex flex-col justify-between gap-2 xl:flex-row'>
               <EditableCollectionName collection={collection} className='pl-2' />
               <ModeCounters variant='full' collection={collection} />
             </div>
@@ -70,7 +70,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                     <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
                       Uploaded {moment.unix(collection.dateUploaded._seconds).fromNow()}
                     </PopoverTrigger>
-                    <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+                    <PopoverContent side='top' align='center' className='w-38 py-2 text-xs'>
                       {moment.unix(collection.dateUploaded._seconds).format('LLL')}
                     </PopoverContent>
                   </Popover>
@@ -79,13 +79,13 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                       <PopoverTrigger className='text-sm text-slate-400 hover:text-slate-200'>
                         , last updated {moment.unix(collection.dateLastModified._seconds).fromNow()}
                       </PopoverTrigger>
-                      <PopoverContent side='top' align='center' className='py-2 text-xs w-38'>
+                      <PopoverContent side='top' align='center' className='w-38 py-2 text-xs'>
                         {moment.unix(collection.dateLastModified._seconds).format('LLL')}
                       </PopoverContent>
                     </Popover>
                   )}
                 </div>
-                <div className='w-full sm:pt-4 sm:pr-4'>
+                <div className='w-full sm:pr-4 sm:pt-4'>
                   <EditableCollectionDescription collection={collection} />
                 </div>
               </div>

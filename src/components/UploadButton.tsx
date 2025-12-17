@@ -43,19 +43,19 @@ export default function UploadButton({ className }: UploadButtonProps) {
 
             <div className='grid grid-cols-2 gap-x-4'>
               <button
-                className='px-4 transition-colors border py-14 rounded-xl hover:bg-slate-600'
+                className='rounded-xl border px-4 py-14 transition-colors hover:bg-slate-600'
                 onClick={() => {
                   setMakingSelection(false);
                   setUploadingCollection(true);
                 }}
               >
-                <MusicNoteList className='inline mb-2' size={48} />
+                <MusicNoteList className='mb-2 inline' size={48} />
                 <h2 className='text-xl font-semibold'>Collection</h2>
               </button>
 
               <Link href='/tournaments/upload' onClick={() => setMakingSelection(false)}>
-                <button className='w-full px-4 transition-colors border py-14 rounded-xl hover:bg-slate-600'>
-                  <Trophy className='inline mb-2' size={48} />
+                <button className='w-full rounded-xl border px-4 py-14 transition-colors hover:bg-slate-600'>
+                  <Trophy className='mb-2 inline' size={48} />
                   <h2 className='text-xl font-semibold'>Tournament Mappool</h2>
                 </button>
               </Link>

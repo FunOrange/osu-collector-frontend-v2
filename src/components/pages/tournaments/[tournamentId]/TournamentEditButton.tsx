@@ -14,7 +14,7 @@ export default function TournamentEditButton({ tournament }: TournamentEditButto
     (tournament.organizers.map(prop('id')).includes(user?.id!) || tournament.uploader.id === user?.id) && (
       <Link
         href={`/tournaments/${tournament.id}/${getUrlSlug(tournament.name)}/edit`}
-        className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-blue-800'
+        className='w-full rounded bg-slate-600 p-3 text-center transition hover:bg-blue-800 hover:shadow-xl'
       >
         Edit tournament
       </Link>

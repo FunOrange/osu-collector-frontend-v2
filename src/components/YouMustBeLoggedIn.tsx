@@ -51,7 +51,7 @@ export default function YouMustBeLoggedIn({ children }: YouMustBeLoggedInProps) 
               Cancel
             </Button>
             <a
-              className='flex items-center gap-2 py-1 pl-2 pr-4 font-semibold transition bg-indigo-500 rounded cursor-pointer text-indigo-50 hover:bg-indigo-600'
+              className='flex cursor-pointer items-center gap-2 rounded bg-indigo-500 py-1 pl-2 pr-4 font-semibold text-indigo-50 transition hover:bg-indigo-600'
               {...match(process.env.NODE_ENV)
                 .with('production', () => ({
                   href: oauthUrl,

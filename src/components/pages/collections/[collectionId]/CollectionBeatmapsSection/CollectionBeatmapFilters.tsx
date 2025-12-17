@@ -84,8 +84,8 @@ export default function CollectionBeatmapFilters({
 
   return (
     <>
-      <div className={cn('grid sm:p-2 sm:pb-0 rounded-t-lg sm:grid-cols-2 gap-y-2 gap-x-2 sm:bg-slate-950/30')}>
-        <div className='relative bg-slate-950 rounded-lg'>
+      <div className={cn('grid gap-x-2 gap-y-2 rounded-t-lg sm:grid-cols-2 sm:bg-slate-950/30 sm:p-2 sm:pb-0')}>
+        <div className='relative rounded-lg bg-slate-950'>
           <div className={className.graphTitle}>Filter by Star Rating</div>
           <div
             className={cn(equals(filters.stars, [0, 11]) && 'hidden', className.resetButton)}
@@ -118,7 +118,7 @@ export default function CollectionBeatmapFilters({
           </div>
         </div>
 
-        <div className='relative bg-slate-950 rounded-lg'>
+        <div className='relative rounded-lg bg-slate-950'>
           <div className={className.graphTitle}>Filter by BPM</div>
           <div
             className={cn(equals(filters.bpm, [150, 310]) && 'hidden', className.resetButton)}
@@ -154,8 +154,8 @@ export default function CollectionBeatmapFilters({
 
       <div ref={ref} className='sticky top-0 z-20'>
         {totalPages >= 2 && (
-          <div className={`absolute w-full ${screenHeightMinusNavbar} flex flex-col justify-end pointer-events-none`}>
-            <div className='w-full px-4 pb-2 pt-4 flex flex-col gap-y-2 bg-slate-950/80 backdrop-blur-sm rounded-lg pointer-events-auto'>
+          <div className={`absolute w-full ${screenHeightMinusNavbar} pointer-events-none flex flex-col justify-end`}>
+            <div className='pointer-events-auto flex w-full flex-col gap-y-2 rounded-lg bg-slate-950/80 px-4 pb-2 pt-4 backdrop-blur-sm'>
               <Slider
                 variant='white'
                 min={1}
@@ -168,15 +168,15 @@ export default function CollectionBeatmapFilters({
                 <PaginationContent>
                   <PaginationItem
                     className={cn(
-                      'hidden sm:block transition-[opacity]',
-                      !showPreviousPage && 'opacity-20 pointer-events-none',
+                      'hidden transition-[opacity] sm:block',
+                      !showPreviousPage && 'pointer-events-none opacity-20',
                     )}
                   >
                     <PaginationFirst onClick={() => setPage(1)} />
                   </PaginationItem>
 
                   <PaginationItem
-                    className={cn('transition-[opacity]', !showPreviousPage && 'opacity-20 pointer-events-none')}
+                    className={cn('transition-[opacity]', !showPreviousPage && 'pointer-events-none opacity-20')}
                   >
                     <PaginationPrevious onClick={() => setPage((prev) => prev - 1)} />
                   </PaginationItem>
@@ -190,15 +190,15 @@ export default function CollectionBeatmapFilters({
                   ))}
 
                   <PaginationItem
-                    className={cn('transition-[opacity]', !showNextPage && 'opacity-20 pointer-events-none')}
+                    className={cn('transition-[opacity]', !showNextPage && 'pointer-events-none opacity-20')}
                   >
                     <PaginationNext onClick={() => setPage((prev) => prev + 1)} />
                   </PaginationItem>
 
                   <PaginationItem
                     className={cn(
-                      'hidden sm:block transition-[opacity]',
-                      !showNextPage && 'opacity-20 pointer-events-none',
+                      'hidden transition-[opacity] sm:block',
+                      !showNextPage && 'pointer-events-none opacity-20',
                     )}
                   >
                     <PaginationLast onClick={() => setPage(totalPages)} />
@@ -210,15 +210,15 @@ export default function CollectionBeatmapFilters({
         )}
         <div
           className={cn(
-            'p-2 gap-y-2 gap-x-2 lg:gap-x-4 sm:bg-slate-950/30',
+            'gap-x-2 gap-y-2 p-2 sm:bg-slate-950/30 lg:gap-x-4',
             'flex items-center',
-            isSticky && 'bg-slate-950/30 backdrop-blur-sm rounded-b-lg',
+            isSticky && 'rounded-b-lg bg-slate-950/30 backdrop-blur-sm',
           )}
         >
           <DropdownMenu>
             <DropdownMenuTrigger
               asChild
-              className='h-full ml-2 py-1 px-3 hidden sm:flex text-sm whitespace-nowrap transition rounded cursor-pointer bg-pink-600 hover:shadow-xl hover:bg-pink-500'
+              className='ml-2 hidden h-full cursor-pointer whitespace-nowrap rounded bg-pink-600 px-3 py-1 text-sm transition hover:bg-pink-500 hover:shadow-xl sm:flex'
             >
               <span>
                 {match(filters.status)
@@ -242,11 +242,11 @@ export default function CollectionBeatmapFilters({
           </DropdownMenu>
 
           <div className='relative w-full'>
-            <div className='absolute inset-y-0 flex items-center pointer-events-none start-0 ps-4'>
+            <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4'>
               <Search size={20} />
             </div>
             <input
-              className='w-full px-2 py-2 text border rounded-full pl-11 border-slate-900 bg-slate-950 ring-offset-background placeholder:text-muted-foreground'
+              className='text w-full rounded-full border border-slate-900 bg-slate-950 px-2 py-2 pl-11 ring-offset-background placeholder:text-muted-foreground'
               placeholder='Search beatmaps...'
               value={pendingFilters.search}
               onChange={(e) => {

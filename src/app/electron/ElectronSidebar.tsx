@@ -28,12 +28,12 @@ const items = [
   {
     title: 'Home',
     page: ElectronAppPage.Home,
-    icon: <House className='w-4 h-4' />,
+    icon: <House className='h-4 w-4' />,
   },
   {
     title: 'Settings',
     page: ElectronAppPage.Settings,
-    icon: <Gear className='w-4 h-4' />,
+    icon: <Gear className='h-4 w-4' />,
   },
 ];
 
@@ -70,16 +70,16 @@ export default function ElectronSidebar({ page, setPage }: ElectronSidebarProps)
       <SidebarFooter className='flex flex-col items-center'>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Skeleton loading={isLoading} className='w-full h-10'>
+            <Skeleton loading={isLoading} className='h-10 w-full'>
               {user ? (
                 <Button
                   variant='ghost'
                   className={cn(
-                    'w-full px-2 py-2 gap-2 justify-start cursor-default',
-                    user.paidFeaturesAccess && 'bg-pink-500/90 hover:bg-pink-500 text-white',
+                    'w-full cursor-default justify-start gap-2 px-2 py-2',
+                    user.paidFeaturesAccess && 'bg-pink-500/90 text-white hover:bg-pink-500',
                   )}
                 >
-                  <Avatar className='w-6 h-6'>
+                  <Avatar className='h-6 w-6'>
                     <AvatarImage src={user.osuweb.avatar_url} alt='avatar' />
                     <AvatarFallback>{user.osuweb.username[0].toLocaleUpperCase()}</AvatarFallback>
                   </Avatar>

@@ -37,12 +37,12 @@ const modeCountersSmall = ({ collection }: Omit<ModeCountersProps, 'variant'>) =
 );
 
 const modeCountersFull = ({ collection }: Omit<ModeCountersProps, 'variant'>) => (
-  <div className='flex divide-x divide-gray-600 items-center'>
+  <div className='flex items-center divide-x divide-gray-600'>
     {(['osu', 'taiko', 'mania', 'fruits'] as const).map((mode, i) => (
       <div
         key={mode}
         className={cn(
-          'flex items-center px-4 gap-2',
+          'flex items-center gap-2 px-4',
           i === 0 && 'pl-2',
           !collection.modes?.[mode] && 'pointer-events-none',
         )}
@@ -53,13 +53,13 @@ const modeCountersFull = ({ collection }: Omit<ModeCountersProps, 'variant'>) =>
           width={32}
           height={32}
           alt={mode}
-          className={cn('mr-1 invert hidden sm:block', !collection.modes?.[mode] && 'opacity-20')}
+          className={cn('mr-1 hidden invert sm:block', !collection.modes?.[mode] && 'opacity-20')}
         />
         <div>
           <div className={cn('leading-4', collection.modes?.[mode] ? 'text-gray-300' : 'text-gray-600')}>
             {modeName(mode)}
           </div>
-          <div className={cn(collection.modes?.[mode] ? 'text-white font-bold' : 'text-gray-600')}>
+          <div className={cn(collection.modes?.[mode] ? 'font-bold text-white' : 'text-gray-600')}>
             {collection.modes?.[mode] ?? 0}
           </div>
         </div>

@@ -27,7 +27,7 @@ export default function SearchInput({ searchParams, withIcon, className }: Searc
   const input = (
     <input
       className={cn(
-        'px-3 py-3 text-xl border rounded-md border-slate-900 bg-[#162032] ring-offset-background placeholder:text-muted-foreground',
+        'rounded-md border border-slate-900 bg-[#162032] px-3 py-3 text-xl ring-offset-background placeholder:text-muted-foreground',
         withIcon && 'pl-11',
         className,
       )}
@@ -41,7 +41,7 @@ export default function SearchInput({ searchParams, withIcon, className }: Searc
   if (withIcon) {
     return (
       <div className='relative'>
-        <div className='absolute inset-y-0 flex items-center pointer-events-none start-0 ps-4'>
+        <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4'>
           <Search size={20} />
         </div>
         {input}

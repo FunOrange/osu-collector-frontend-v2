@@ -24,12 +24,12 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
   });
 
   return (
-    <div className='flex justify-center w-full'>
-      <div className='flex flex-col items-center w-full gap-6 px-2 py-5 md:px-10'>
-        <div className='w-full p-4 mb-4 rounded max-w-screen-2xl border-slate-900 shadow-inner bg-[#162032] md:p-7'>
+    <div className='flex w-full justify-center'>
+      <div className='flex w-full flex-col items-center gap-6 px-2 py-5 md:px-10'>
+        <div className='mb-4 w-full max-w-screen-2xl rounded border-slate-900 bg-[#162032] p-4 shadow-inner md:p-7'>
           <div className='mb-6 flex items-center gap-6'>
-            <h1 className='text-3xl whitespace-nowrap'>
-              <PersonFill className='inline mb-1 mr-3 text-blue-200' size={24} />
+            <h1 className='whitespace-nowrap text-3xl'>
+              <PersonFill className='mb-1 mr-3 inline text-blue-200' size={24} />
               Users
             </h1>
             <div className='flex flex-col gap-3'>
@@ -37,7 +37,7 @@ export default async function UsersPage({ searchParams }: UsersPageProps) {
             </div>
           </div>
 
-          <div className='grid gap-2 mb-5 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'>
+          <div className='xs:grid-cols-1 mb-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-3'>
             {!users ? (
               <div className='text-red-500'>There was an error retrieving users.</div>
             ) : (

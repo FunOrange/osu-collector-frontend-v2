@@ -43,7 +43,7 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId, duration }: Bea
     filter: 'drop-shadow(0 1px 2px rgb(0 0 0)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06))',
   };
   return (
-    <button className='flex flex-col items-center p-1 media-play-button' onClick={onPlayClick}>
+    <button className='media-play-button flex flex-col items-center p-1' onClick={onPlayClick}>
       {playing ? (
         <StopFill className='text-white' style={style} size={40} />
       ) : (

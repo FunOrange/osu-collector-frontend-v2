@@ -20,10 +20,10 @@ export const metadata: Metadata = {
 export default function DesktopClientPage() {
   return (
     <div className='flex flex-col gap-12'>
-      <div className='w-full py-20 text-4xl text-center bg-black'>Support us to gain access to these features!</div>
+      <div className='w-full bg-black py-20 text-center text-4xl'>Support us to gain access to these features!</div>
 
-      <div className='flex justify-center w-full py-16'>
-        <div className='flex flex-col-reverse items-center justify-center w-full gap-4 lg:gap-16 lg:flex-row'>
+      <div className='flex w-full justify-center py-16'>
+        <div className='flex w-full flex-col-reverse items-center justify-center gap-4 lg:flex-row lg:gap-16'>
           <div className='max-w-xl text-center'>
             <div className='text-4xl font-semibold text-slate-50'>Download entire collections</div>
             <div className='mb-4 text-lg text-slate-400'>osu!Collector Desktop feature</div>
@@ -38,8 +38,8 @@ export default function DesktopClientPage() {
         </div>
       </div>
 
-      <div className='flex justify-center w-full py-16'>
-        <div className='flex flex-col items-center justify-center w-full gap-4 lg:gap-16 lg:flex-row'>
+      <div className='flex w-full justify-center py-16'>
+        <div className='flex w-full flex-col items-center justify-center gap-4 lg:flex-row lg:gap-16'>
           <Image width={624} height={345} src='/images/import.png' alt='Download collections' />
           <div className='max-w-xl text-center'>
             <div className='text-4xl font-semibold text-slate-50'>Import collections</div>
@@ -49,11 +49,11 @@ export default function DesktopClientPage() {
         </div>
       </div>
 
-      <div className='flex justify-center w-full py-16'>
-        <div className='flex flex-col-reverse items-center justify-center w-full gap-4 lg:gap-24 lg:flex-row'>
+      <div className='flex w-full justify-center py-16'>
+        <div className='flex w-full flex-col-reverse items-center justify-center gap-4 lg:flex-row lg:gap-24'>
           <div className='max-w-xl text-center'>
-            <div className='mb-2 text-4xl font-semibold text-slate-50 whitespace-nowrap'>Offload server costs</div>
-            <div className='text-lg text-slate-400 '>
+            <div className='mb-2 whitespace-nowrap text-4xl font-semibold text-slate-50'>Offload server costs</div>
+            <div className='text-lg text-slate-400'>
               I had to find some way to monetize this project so that it could continue running on its own. I figured
               something in similar vein to osu! supporter would be the best approach. Any support you give us is greatly
               appreciated!
@@ -63,10 +63,10 @@ export default function DesktopClientPage() {
         </div>
       </div>
 
-      <div className='flex flex-col w-full'>
-        <div className='flex flex-col items-center w-full text-black font-semibold'>
+      <div className='flex w-full flex-col'>
+        <div className='flex w-full flex-col items-center font-semibold text-black'>
           {yellowStripes}
-          <div className='text-center w-full gap-8 px-2 py-4 bg-yellow-500 text-sm text-yellow-900'>
+          <div className='w-full gap-8 bg-yellow-500 px-2 py-4 text-center text-sm text-yellow-900'>
             Collection integration with osu! Lazer is not currently supported. For workarounds{' '}
             <Dialog>
               <DialogTrigger className='inline underline'>click here</DialogTrigger>.
@@ -75,15 +75,15 @@ export default function DesktopClientPage() {
                   <DialogTitle>About osu! Lazer</DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
-                  <h2 className='text-lg font-semibold mb-1 text-slate-100'>Why is osu! Lazer not supported?</h2>
+                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>Why is osu! Lazer not supported?</h2>
                   <div className='mb-3'>
-                    <a href='https://github.com/ppy/osu/wiki/User-file-storage' className='underline text-blue-500'>
+                    <a href='https://github.com/ppy/osu/wiki/User-file-storage' className='text-blue-500 underline'>
                       The way osu! lazer stores its files
                     </a>{' '}
                     makes it difficult for third-party programs to read/write to the game files.
                   </div>
 
-                  <h2 className='text-lg font-semibold mb-1 text-slate-100'>
+                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>
                     How can I add my missing maps and collections to osu! Lazer?
                   </h2>
                   <div className='mb-3'>
@@ -98,12 +98,12 @@ export default function DesktopClientPage() {
           </div>
           {yellowStripes}
         </div>
-        <div className='flex justify-center w-full px-2 py-16 bg-slate-700'>
-          <div className='w-full flex flex-col items-center gap-8 max-w-[520px]'>
+        <div className='flex w-full justify-center bg-slate-700 px-2 py-16'>
+          <div className='flex w-full max-w-[520px] flex-col items-center gap-8'>
             <DownloadDesktopClient />
 
-            <div className='flex flex-col items-center w-full max-w-6xl py-6 rounded gap-4'>
-              <h2 id='buy-now' className='text-2xl text-center text-white'>
+            <div className='flex w-full max-w-6xl flex-col items-center gap-4 rounded py-6'>
+              <h2 id='buy-now' className='text-center text-2xl text-white'>
                 Buy osu!Collector Desktop now!
               </h2>
               <PaymentOptions />
@@ -117,7 +117,7 @@ export default function DesktopClientPage() {
 
 const yellowStripes = (
   <div
-    className='flex flex-col items-center w-full bg-yellow-500 h-2'
+    className='flex h-2 w-full flex-col items-center bg-yellow-500'
     style={{
       background: `repeating-linear-gradient(45deg, #fde047, #fde047 14px, #eab308 14px, #eab308 28px)`,
     }}

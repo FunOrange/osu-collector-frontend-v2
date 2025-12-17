@@ -31,7 +31,7 @@ export default function CollectionComment({ comment, collectionId, preview }: Co
   });
   return (
     <div className='flex'>
-      <div className='flex items-start justify-start gap-3 px-4 py-1 mt-1'>
+      <div className='mt-1 flex items-start justify-start gap-3 px-4 py-1'>
         <Image
           className='mt-2 rounded-full'
           src={`https://a.ppy.sh/${comment.userId}`}
@@ -40,7 +40,7 @@ export default function CollectionComment({ comment, collectionId, preview }: Co
           alt={'Collection uploader avatar'}
         />
         <div className='flex flex-col items-start'>
-          <div className='text-sm text-slate-500 whitespace-nowrap'>
+          <div className='whitespace-nowrap text-sm text-slate-500'>
             {comment.username} - {moment.unix(comment.date._seconds).fromNow()}
             {user?.id === comment.userId && (
               <>
@@ -52,7 +52,7 @@ export default function CollectionComment({ comment, collectionId, preview }: Co
               </>
             )}
           </div>
-          <div className={cn('text-sm whitespace-pre-wrap', preview && 'line-clamp-1')}>{comment.message}</div>
+          <div className={cn('whitespace-pre-wrap text-sm', preview && 'line-clamp-1')}>{comment.message}</div>
           <div className='mt-1'>
             <CollectionCommentLikeButton collectionId={collectionId} comment={comment} />
           </div>

@@ -33,17 +33,17 @@ function TournamentCard({ tournament }: TournamentCardProps) {
           sizes='100vw'
         />
       </Link>
-      <div className='relative z-10 py-2 pl-3 pr-1 bg-opacity-50 rounded-b-lg bg-gray-950'>
+      <div className='relative z-10 rounded-b-lg bg-gray-950 bg-opacity-50 py-2 pl-3 pr-1'>
         <div className='flex justify-between'>
           <div
-            className='text-sm font-medium text-white truncate'
+            className='truncate text-sm font-medium text-white'
             style={{
               textShadow: '2px 2px 4px #000, 2px 2px 4px #000, 2px 2px 4px #000',
             }}
           >
             {tournament.name}
           </div>
-          <div className='text-sm font-medium text-gray-100 truncate'>
+          <div className='truncate text-sm font-medium text-gray-100'>
             <span className='text-slate-200'>
               Uploaded {dateUploaded.fromNow()} by {tournament.uploader.username}
             </span>

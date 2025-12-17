@@ -34,7 +34,7 @@ export default function TwitchSubEndOfSupportModal() {
           The reason for this is that 6 months ago, Twitch suspended all payouts for my channel for some unexplained
           reason. I have tried for months to contact them, but I was only able to receive this automated response:
         </p>
-        <div className='px-4 py-3 text-slate-400 bg-slate-800 rounded'>
+        <div className='rounded bg-slate-800 px-4 py-3 text-slate-400'>
           One or more transactions associated with your account were flagged as fraudulent. Specifically, your account
           was flagged as having received subscriptions from accounts abusing the Prime trial offer. We cannot reinstate
           this portion of the payout. Moreover, our fraud team is continuing to monitor your account for suspicious

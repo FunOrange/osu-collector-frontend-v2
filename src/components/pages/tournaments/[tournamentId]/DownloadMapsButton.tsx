@@ -26,7 +26,7 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
   if (user?.paidFeaturesAccess) {
     return (
       <Button
-        className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+        className='w-full rounded bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
         onClick={() => {
           window.open(`osucollector://tournaments/${tournament.id}`, '_blank', 'noreferrer');
           toast({
@@ -47,7 +47,7 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
     return (
       <Dialog open={previewOpen}>
         <DialogTrigger
-          className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+          className='w-full rounded bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
           onClick={() => setPreviewOpen(true)}
         >
           Download maps

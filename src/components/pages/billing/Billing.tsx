@@ -108,7 +108,7 @@ export default function Billing() {
   const coinbaseSubscriptionIsActive = Boolean(coinbaseActiveUntil?.isAfter(dayjs()));
 
   return (
-    <div className='flex justify-center w-full mt-8 mb-16'>
+    <div className='mb-16 mt-8 flex w-full justify-center'>
       <div className='flex flex-col gap-10'>
         <div>
           <div className='mb-1 text-lg text-white'>Billing</div>
@@ -130,7 +130,7 @@ export default function Billing() {
             <h1 className='text-2xl'>PayPal</h1>
           </div>
 
-          <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
+          <div className='rounded border-slate-900 bg-[#162032] shadow-inner'>
             <div className='border-b border-slate-600'>
               <div className='flex items-center justify-between px-5 py-3'>
                 <div className='text-lg'>Current Plan</div>
@@ -170,13 +170,13 @@ export default function Billing() {
                         </Dialog>
                       )}
                       {user && !user?.paidFeaturesAccess && (
-                        <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600' asChild>
+                        <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white' asChild>
                           <Link href='/client#option-2-credit-card'>Subscribe</Link>
                         </Button>
                       )}
                       {!user && (
                         <YouMustBeLoggedIn>
-                          <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
+                          <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white'>
                             Subscribe
                           </Button>
                         </YouMustBeLoggedIn>
@@ -187,7 +187,7 @@ export default function Billing() {
               </div>
             </div>
             <div className='px-5 py-6'>
-              <div className='grid grid-cols-3 gap-y-5 gap-x-4'>
+              <div className='grid grid-cols-3 gap-x-4 gap-y-5'>
                 <Skeleton loading={paypalLoading}>
                   <div>
                     <div className='mb-1 text-xs text-slate-400'>PAYPAL EMAIL</div>
@@ -256,7 +256,7 @@ export default function Billing() {
             <h1 className='text-2xl'>Credit Card</h1>
           </div>
 
-          <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
+          <div className='rounded border-slate-900 bg-[#162032] shadow-inner'>
             <div className='border-b border-slate-600'>
               <div className='flex items-center justify-between px-5 py-3'>
                 <div className='text-lg'>Current Plan</div>
@@ -296,13 +296,13 @@ export default function Billing() {
                         </Dialog>
                       )}
                       {user && !user?.paidFeaturesAccess && (
-                        <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600' asChild>
+                        <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white' asChild>
                           <Link href='/payments/checkout'>Subscribe</Link>
                         </Button>
                       )}
                       {!user && (
                         <YouMustBeLoggedIn>
-                          <Button size='sm' variant='important' className='font-bold text-white h-7 bg-cyan-600'>
+                          <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white'>
                             Subscribe
                           </Button>
                         </YouMustBeLoggedIn>
@@ -313,7 +313,7 @@ export default function Billing() {
               </div>
             </div>
             <div className='px-5 py-6'>
-              <div className='grid grid-cols-3 gap-y-5 gap-x-4'>
+              <div className='grid grid-cols-3 gap-x-4 gap-y-5'>
                 <Skeleton loading={stripeLoading}>
                   <div>
                     <div className='mb-1 text-xs text-slate-400'>STATUS</div>
@@ -364,11 +364,11 @@ export default function Billing() {
             </div>
           </div>
           {showStripePaymentMethod && (
-            <div className='rounded border-slate-900 shadow-inner bg-[#162032]'>
+            <div className='rounded border-slate-900 bg-[#162032] shadow-inner'>
               <div className='border-b border-slate-600'>
                 <div className='px-5 py-3 text-lg'>Payment Method</div>
               </div>
-              <div className='flex justify-between w-full p-5'>
+              <div className='flex w-full justify-between p-5'>
                 <div className='flex items-start gap-3'>
                   {(() => {
                     const { brand, display_brand, last4, exp_month, exp_year } =
@@ -432,19 +432,19 @@ export default function Billing() {
             month.
           </div>
           {coinbaseActiveUntil?.isAfter(dayjs()) && (
-            <div className='border border-green-400 bg-green-500/20 px-4 py-2 rounded-md text-sm text-green-400'>
+            <div className='rounded-md border border-green-400 bg-green-500/20 px-4 py-2 text-sm text-green-400'>
               Your crypto subscription is active until {coinbaseActiveUntil.format('MMM DD, YYYY')}
             </div>
           )}
           {coinbaseActiveUntil?.isBefore(dayjs()) && (
-            <div className='border border-gray-400 bg-gray-500/20 px-4 py-2 rounded-md text-sm text-gray-400'>
+            <div className='rounded-md border border-gray-400 bg-gray-500/20 px-4 py-2 text-sm text-gray-400'>
               Your crypto subscription was active until {coinbaseActiveUntil.format('MMM DD, YYYY')}
             </div>
           )}
-          <div className='relative overflow-x-auto bg-slate-900 shadow-sm rounded-md border border-slate-700'>
+          <div className='relative overflow-x-auto rounded-md border border-slate-700 bg-slate-900 shadow-sm'>
             <Skeleton loading={!user || coinbaseChargesLoading}>
-              <table className='w-full text-sm text-left rtl:text-right text-slate-300'>
-                <thead className='text-sm  border-b rounded-md text-slate-200 bg-slate-800 border-slate-700'>
+              <table className='w-full text-left text-sm text-slate-300 rtl:text-right'>
+                <thead className='rounded-md border-b border-slate-700 bg-slate-800 text-sm text-slate-200'>
                   <tr>
                     <th scope='col' className='px-6 py-3 font-medium'>
                       Transaction Date
@@ -462,18 +462,18 @@ export default function Billing() {
                   {!!coinbaseCharges?.length ? (
                     coinbaseCharges.map((coinbaseCharge) => (
                       <tr key={coinbaseCharge.id} className='border-b border-slate-600 last:border-b-0'>
-                        <th scope='row' className='px-6 py-4 font-medium text-slate-100 whitespace-nowrap'>
+                        <th scope='row' className='whitespace-nowrap px-6 py-4 font-medium text-slate-100'>
                           {dayjs(coinbaseCharge.date_paid).format('MMM DD, YYYY [at] h:mm A')}
                         </th>
-                        <td className='px-6 py-4 flex'>
-                          <div className='text-xs bg-green-500 text-white px-2 py-[2px] rounded-sm'>Paid</div>
+                        <td className='flex px-6 py-4'>
+                          <div className='rounded-sm bg-green-500 px-2 py-[2px] text-xs text-white'>Paid</div>
                         </td>
                         <td className='px-6 py-4 font-medium'>1.99 USDC</td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td className='text-slate-600 px-8 py-4'>
+                      <td className='px-8 py-4 text-slate-600'>
                         <Skeleton>No transactions</Skeleton>
                       </td>
                     </tr>
@@ -489,7 +489,7 @@ export default function Billing() {
             <h1 className='text-2xl text-slate-400'>
               Twitch Sub <span className='text-red-400'> - DEPRECATED</span>
             </h1>
-            <div className='text-sm text-slate-400 mb-1'>
+            <div className='mb-1 text-sm text-slate-400'>
               An osu!Collector subscription can be obtained by subbing to FunOrange on Twitch. Existing Twitch Prime
               users can use a <span className='text-white'>prime sub</span> for no additional cost.
             </div>
@@ -498,12 +498,12 @@ export default function Billing() {
             </div>
           </div>
 
-          <div className='flex gap-16 px-5 py-6 rounded border-slate-900 shadow-inner bg-[#162032]'>
+          <div className='flex gap-16 rounded border-slate-900 bg-[#162032] px-5 py-6 shadow-inner'>
             <Skeleton loading={twitchLoading}>
               <div>
                 <div className='mb-1 text-xs text-slate-400'>TWITCH ACCOUNT</div>
                 {!user && (
-                  <Button size='sm' disabled className='font-bold text-white h-7 bg-cyan-600'>
+                  <Button size='sm' disabled className='h-7 bg-cyan-600 font-bold text-white'>
                     Link Twitch account
                   </Button>
                 )}
@@ -520,7 +520,7 @@ export default function Billing() {
                 )}
                 {user?.private?.linkedTwitchAccount && (
                   <div className='flex'>
-                    <Button size='sm' className='w-full h-8 rounded-r-none bg-background' variant='outline' disabled>
+                    <Button size='sm' className='h-8 w-full rounded-r-none bg-background' variant='outline' disabled>
                       {user.private.linkedTwitchAccount.displayName}
                     </Button>
                     <Button
@@ -546,7 +546,7 @@ export default function Billing() {
                 ) : !isSubbedToFunOrange ? (
                   <div className='text-slate-500'>Not subbed to FunOrange</div>
                 ) : isSubbedToFunOrange ? (
-                  <div className='px-3 py-1 text-sm font-semibold bg-green-600 rounded text-slate-50'>Subbed</div>
+                  <div className='rounded bg-green-600 px-3 py-1 text-sm font-semibold text-slate-50'>Subbed</div>
                 ) : undefined}
               </div>
             </Skeleton>

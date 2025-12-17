@@ -19,7 +19,7 @@ export default function BeatmapsetListing({ listing, isLoading }: BeatmapsetList
         }}
       >
         {isLoading && !listing?.length && (
-          <div className='w-full py-3 flex justify-center items-center'>Loading...</div>
+          <div className='flex w-full items-center justify-center py-3'>Loading...</div>
         )}
         {listing?.map(({ beatmapset, beatmaps }, i) => (
           <BeatmapsetCard key={i} beatmapset={beatmapset} beatmaps={beatmaps} />

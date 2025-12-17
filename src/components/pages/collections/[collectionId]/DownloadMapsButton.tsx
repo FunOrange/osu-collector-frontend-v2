@@ -27,7 +27,7 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
   if (user?.paidFeaturesAccess) {
     return (
       <Button
-        className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+        className='w-full rounded bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
         onClick={() => {
           const url = new URL(`osucollector://collections/${collection.id}` + window.location.search);
           // url.search = window.location.search;
@@ -50,7 +50,7 @@ export default function DownloadMapsButton({ collection }: DownloadMapsButtonPro
     return (
       <Dialog open={previewOpen}>
         <DialogTrigger
-          className='w-full p-3 text-center transition rounded bg-slate-600 hover:shadow-xl hover:bg-slate-500'
+          className='w-full rounded bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
           onClick={() => setPreviewOpen(true)}
         >
           Download maps

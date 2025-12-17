@@ -39,8 +39,8 @@ export default function EnterOtpPage() {
   };
 
   return (
-    <div className='flex items-center justify-center w-full h-[90vh]'>
-      <div className='flex flex-col items-center gap-4 p-12 rounded bg-slate-700'>
+    <div className='flex h-[90vh] w-full items-center justify-center'>
+      <div className='flex flex-col items-center gap-4 rounded bg-slate-700 p-12'>
         <div className='text-5xl'>One time password</div>
         <div className='text-lg'>
           After authenticating through the osu! website, osu!Collector should show you a one time password. Please enter
@@ -49,7 +49,7 @@ export default function EnterOtpPage() {
         <input
           type='text'
           id='simple-search'
-          className='text-2xl rounded-lg block p-2.5  bg-slate-800 placeholder-slate-600 text-white focus:ring-blue-500 focus:border-blue-500 w-[100px] text-center'
+          className='block w-[100px] rounded-lg bg-slate-800 p-2.5 text-center text-2xl text-white placeholder-slate-600 focus:border-blue-500 focus:ring-blue-500'
           placeholder='1234'
           required
           onChange={onOtpChanged}

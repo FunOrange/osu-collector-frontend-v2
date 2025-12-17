@@ -10,11 +10,11 @@ export default function NotFound() {
         ? 'user'
         : 'other';
   return (
-    <div className='flex justify-center items-center w-full h-[calc(100vh-14px*4)]'>
-      <div className='flex flex items-center gap-4'>
+    <div className='flex h-[calc(100vh-14px*4)] w-full items-center justify-center'>
+      <div className='flex items-center gap-4'>
         <div className='text-bold text-lg'>404</div>
-        <div className='border-r border-slate-500 h-12' />
-        <div className='flex flex-col justify-center text-sm whitespace-pre-line'>
+        <div className='h-12 border-r border-slate-500' />
+        <div className='flex flex-col justify-center whitespace-pre-line text-sm'>
           {match(type)
             .with('collection', () => 'This collection could not be found.')
             .with('tournament', () => 'This tournament could not be found.')

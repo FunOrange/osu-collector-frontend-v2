@@ -126,9 +126,9 @@ export function ElectronImportCollectionDialog() {
   };
 
   const oszFile = (
-    <div className='flex flex-col gap-1 items-center'>
-      <File className='w-8 h-8' />
-      <div className='text-white text-xs'>.osz</div>
+    <div className='flex flex-col items-center gap-1'>
+      <File className='h-8 w-8' />
+      <div className='text-xs text-white'>.osz</div>
     </div>
   );
 
@@ -236,12 +236,12 @@ export function ElectronImportCollectionDialog() {
               {collection?.beatmapCount} beatmaps, uploaded by {collection?.uploader.username}
             </div>
           </Skeleton>
-          <DialogDescription className='flex flex-col gap-4 max-h-[calc(100vh-200px)] overflow-y-auto'>
+          <DialogDescription className='flex max-h-[calc(100vh-200px)] flex-col gap-4 overflow-y-auto'>
             <label
               htmlFor='modify-collection-db-checkbox'
               className={cn(
-                'w-full flex flex-col items-start gap-1 self-start p-2 rounded',
-                'transition-colors cursor-pointer hover:bg-slate-700/50',
+                'flex w-full flex-col items-start gap-1 self-start rounded p-2',
+                'cursor-pointer transition-colors hover:bg-slate-700/50',
               )}
             >
               <div className='flex items-center gap-2'>
@@ -259,7 +259,7 @@ export function ElectronImportCollectionDialog() {
               </div>
               <div>
                 <div className='text-xs'>This will allow the collection to appear in osu! stable</div>
-                <div className='text-xs text-red-400 whitespace-pre-line'>
+                <div className='whitespace-pre-line text-xs text-red-400'>
                   {options.modifyCollectionDb && mergeDisabledReason}
                 </div>
               </div>
@@ -267,8 +267,8 @@ export function ElectronImportCollectionDialog() {
                 addressBar={preferences?.osuInstallDirectory}
                 className={cn('mt-2', fadeOutStyle(Boolean(skipping.modifyCollectionDb)))}
               >
-                <div className='flex flex-col gap-1 items-center text-white'>
-                  <File className='w-8 h-8' />
+                <div className='flex flex-col items-center gap-1 text-white'>
+                  <File className='h-8 w-8' />
                   <div className='text-xs'>collection.db</div>
                   <div className='text-xs text-green-400'>+{formatBytes(32 * (collection?.beatmapCount ?? 0), 1)}</div>
                 </div>
@@ -278,8 +278,8 @@ export function ElectronImportCollectionDialog() {
             <label
               htmlFor='queue-downloads-checkbox'
               className={cn(
-                'w-full flex flex-col items-start gap-1 self-start p-2 rounded',
-                'transition-colors cursor-pointer hover:bg-slate-700/50',
+                'flex w-full flex-col items-start gap-1 self-start rounded p-2',
+                'cursor-pointer transition-colors hover:bg-slate-700/50',
               )}
             >
               <div className='flex items-center gap-2'>
@@ -300,7 +300,7 @@ export function ElectronImportCollectionDialog() {
                   Estimated size of all items: {formatBytes(collection?.beatmapsets?.length * 10 * ONE_MEGABYTE)}
                 </div>
                 <div className='text-xs'>osu!Collector will skip the maps you already have</div>
-                <div className='text-xs text-red-400 whitespace-pre-line'>
+                <div className='whitespace-pre-line text-xs text-red-400'>
                   {options.queueDownloads && downloadsDisabledReason}
                 </div>
               </div>
@@ -321,12 +321,12 @@ export function ElectronImportCollectionDialog() {
             </label>
 
             {options.queueDownloads && !skipping.queueDownloads && (
-              <div className='w-full flex flex-col gap-1 self-start p-2 rounded'>
+              <div className='flex w-full flex-col gap-1 self-start rounded p-2'>
                 Maps matching these filters will be downloaded:
                 {equals(filters, defaultFilters) ? (
-                  <div className='text-green-500 text-xs'>all maps will be downloaded</div>
+                  <div className='text-xs text-green-500'>all maps will be downloaded</div>
                 ) : (
-                  <div className='cursor-pointer hover:underline text-blue-500 text-xs' onClick={resetFilters}>
+                  <div className='cursor-pointer text-xs text-blue-500 hover:underline' onClick={resetFilters}>
                     click here to download all maps
                   </div>
                 )}
@@ -399,8 +399,8 @@ export function ElectronImportCollectionDialog() {
         <DialogContent onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
           <DialogTitle>Modifying collection.db...</DialogTitle>
 
-          <DialogDescription className='flex flex-col items-center gap-2 max-h-[calc(100vh-200px)] overflow-y-auto'>
-            <RefreshCw className='w-8 h-8 animate-spin' />
+          <DialogDescription className='flex max-h-[calc(100vh-200px)] flex-col items-center gap-2 overflow-y-auto'>
+            <RefreshCw className='h-8 w-8 animate-spin' />
             Please wait...
           </DialogDescription>
         </DialogContent>
@@ -416,17 +416,17 @@ interface WindowsFileExplorerProps {
 }
 function WindowsFileExplorer({ addressBar, children, className }: WindowsFileExplorerProps) {
   return (
-    <div className={cn('border border-black/50 bg-[#1F1F1F] rounded', className)}>
-      <div className='flex items-center gap-2 text-white px-2 py-2'>
+    <div className={cn('rounded border border-black/50 bg-[#1F1F1F]', className)}>
+      <div className='flex items-center gap-2 px-2 py-2 text-white'>
         <ArrowLeft className='text-md' />
         <ArrowRight className='text-md text-gray-400' />
         <ArrowUp className='text-md' />
-        <div className='flex justify-between gap-4 items-center bg-slate px-2 py-1 bg-[#2D2C2C] text-xs rounded line-clamp-1'>
+        <div className='bg-slate line-clamp-1 flex items-center justify-between gap-4 rounded bg-[#2D2C2C] px-2 py-1 text-xs'>
           {addressBar}
           <ArrowClockwise className='text-md text-gray-400' />
         </div>
       </div>
-      <div className='p-4 flex flex-col items-start bg-[#191919]'>{children}</div>
+      <div className='flex flex-col items-start bg-[#191919] p-4'>{children}</div>
     </div>
   );
 }

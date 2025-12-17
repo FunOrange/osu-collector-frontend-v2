@@ -70,10 +70,10 @@ export default function ElectronLogin() {
         <Button
           variant='important'
           size='lg'
-          className='w-full text-md h-10 gap-2 justify-start'
+          className='text-md h-10 w-full justify-start gap-2'
           onClick={initiateOtpLogin}
         >
-          <User2 className='w-5 h-5' />
+          <User2 className='h-5 w-5' />
           Login
         </Button>
       </DialogTrigger>
@@ -86,17 +86,17 @@ export default function ElectronLogin() {
           After authenticating through the osu! website, osu!Collector should show you a one time password. Please enter
           it here to finish logging in.
         </DialogDescription>
-        <div className='w-full flex justify-center'>
+        <div className='flex w-full justify-center'>
           <div className='relative'>
-            <div className='absolute z-10 w-full h-full flex justify-evenly gap-1 px-2 py-2 pointer-events-none'>
-              <div className='w-full bg-slate-500/20 rounded' />
-              <div className='w-full bg-slate-500/20 rounded' />
-              <div className='w-full bg-slate-500/20 rounded' />
-              <div className='w-full bg-slate-500/20 rounded' />
+            <div className='pointer-events-none absolute z-10 flex h-full w-full justify-evenly gap-1 px-2 py-2'>
+              <div className='w-full rounded bg-slate-500/20' />
+              <div className='w-full rounded bg-slate-500/20' />
+              <div className='w-full rounded bg-slate-500/20' />
+              <div className='w-full rounded bg-slate-500/20' />
             </div>
             <Input
               disabled={loading}
-              className='text-4xl py-2 pl-3 pr-0 font-mono tracking-[0.34em] w-[150px] overflow-hidden'
+              className='w-[150px] overflow-hidden py-2 pl-3 pr-0 font-mono text-4xl tracking-[0.34em]'
               value={otpInput}
               onChange={(e) => {
                 setOtpInput(e.target.value.slice(0, 4));

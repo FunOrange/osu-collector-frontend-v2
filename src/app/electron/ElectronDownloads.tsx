@@ -111,7 +111,7 @@ export default function ElectronDownloads() {
             .otherwise(() => []);
           const download = row.original as DownloadType[Status.Downloading];
           return (
-            <div className='flex items-center min-h-[36px]'>
+            <div className='flex min-h-[36px] items-center'>
               <div>
                 <div className='line-clamp-1 break-all'>{name}</div>
                 {outputPath && (
@@ -176,7 +176,7 @@ export default function ElectronDownloads() {
                           {statusCode && statusText ? `${statusCode} - ${statusText}` : 'Reason:'}
                         </DialogTitle>
                       </DialogHeader>
-                      <DialogDescription className='whitespace-pre-wrap break-all overflow-y-auto max-h-[calc(100vh-200px)]'>
+                      <DialogDescription className='max-h-[calc(100vh-200px)] overflow-y-auto whitespace-pre-wrap break-all'>
                         {message?.join(' - ') || download.error}
                       </DialogDescription>
                     </DialogContent>
@@ -237,17 +237,17 @@ export default function ElectronDownloads() {
               key={channel}
               variant='outline'
               size='icon'
-              className='text-slate-400 bg-slate-900 hover:bg-slate-700/40'
+              className='bg-slate-900 text-slate-400 hover:bg-slate-700/40'
               onClick={() => tryCatch(mutate((window.ipc[channel] as any)(beatmapsetId).then(window.ipc.getDownloads)))}
             >
               {icon}
             </Button>
           );
 
-          const clearButton = button(Channel.ClearDownload, <X className='w-5 h-5 text-red-400' />);
-          const cancelButton = button(Channel.CancelDownload, <X className='w-5 h-5' />);
+          const clearButton = button(Channel.ClearDownload, <X className='h-5 w-5 text-red-400' />);
+          const cancelButton = button(Channel.CancelDownload, <X className='h-5 w-5' />);
           const stopButton = button(Channel.CancelDownload, <StopCircle className='text-red-400' />);
-          const retryButton = button(Channel.RetryDownload, <RefreshCw className='text-yellow-200 w-4 h-4' />);
+          const retryButton = button(Channel.RetryDownload, <RefreshCw className='h-4 w-4 text-yellow-200' />);
           const visibleButtons = row.original.cancelled
             ? [retryButton, clearButton]
             : match(row.original.status)
@@ -263,7 +263,7 @@ export default function ElectronDownloads() {
                 .with(Status.Completed, () => [])
                 .with(Status.Failed, () => [retryButton, clearButton])
                 .exhaustive();
-          return <div className='w-full flex justify-center items-center gap-1'>{visibleButtons}</div>;
+          return <div className='flex w-full items-center justify-center gap-1'>{visibleButtons}</div>;
         },
       },
     ],
@@ -290,7 +290,7 @@ export default function ElectronDownloads() {
     className: 'text-slate-400 hover:bg-slate-500/30',
   };
   return (
-    <div className='flex flex-col h-full gap-2 p-4'>
+    <div className='flex h-full flex-col gap-2 p-4'>
       <div className='flex flex-wrap items-center gap-2'>
         <Button
           {...buttonProps}
@@ -305,7 +305,7 @@ export default function ElectronDownloads() {
           <Button
             {...buttonProps}
             onClick={() => mutate(window.ipc.stopAllDownloads().then(window.ipc.getDownloads))}
-            icon={<StopCircle className='transition-colors text-red-400 group-hover:text-white mr-2' />}
+            icon={<StopCircle className='mr-2 text-red-400 transition-colors group-hover:text-white' />}
           >
             Stop all
           </Button>
@@ -327,11 +327,11 @@ export default function ElectronDownloads() {
         )}
       </div>
 
-      <div ref={tableContainerRef} className='overflow-auto w-full relative h-full'>
+      <div ref={tableContainerRef} className='relative h-full w-full overflow-auto'>
         <table className='grid rounded-lg'>
-          <TableHeader className='grid rounded-t sticky bg-slate-900/80 backdrop-blur-md p-1 top-0 z-[1] shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_4px_10px_rgba(0,0,0,0.1)]'>
+          <TableHeader className='sticky top-0 z-[1] grid rounded-t bg-slate-900/80 p-1 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_4px_10px_rgba(0,0,0,0.1)] backdrop-blur-md'>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className='flex w-full hover:bg-transparent !border-b-0'>
+              <TableRow key={headerGroup.id} className='flex w-full !border-b-0 hover:bg-transparent'>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
@@ -339,7 +339,7 @@ export default function ElectronDownloads() {
                     className={cn(
                       'flex items-center',
                       (header.column.getCanSort() || header.column.getCanFilter()) &&
-                        'cursor-pointer select-none transition-colors rounded-lg hover:bg-slate-600/50',
+                        'cursor-pointer select-none rounded-lg transition-colors hover:bg-slate-600/50',
                       header.column.getCanFilter() && 'px-0',
                       (header.column.columnDef as any).meta?.className,
                       '!min-h-0',
@@ -349,7 +349,7 @@ export default function ElectronDownloads() {
                     <StatusFilter column={header.column} statusCounts={statusCounts}>
                       <div
                         className={cn(
-                          'w-full h-full flex items-center',
+                          'flex h-full w-full items-center',
                           header.column.getCanFilter() && 'px-4',
                           !!header.column.getFilterValue() && 'text-yellow-400',
                         )}
@@ -370,12 +370,12 @@ export default function ElectronDownloads() {
           {isElectron && downloads?.length ? (
             <VirtualizedTableBody table={table} tableContainerRef={tableContainerRef} />
           ) : (
-            <TableBody className='flex col-span-full'>
+            <TableBody className='col-span-full flex'>
               <TableRow className='flex w-full'>
                 <TableCell className='w-full text-center text-slate-400'>
                   <Button
                     onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com/all?tutorial=true')}
-                    className='text-3xl text-white w-full p-10 border-dashed border rounded-xl border-4 border-teal-600'
+                    className='w-full rounded-xl border border-4 border-dashed border-teal-600 p-10 text-3xl text-white'
                   >
                     <Plus className='text-6xl' />
                     Click here to add a collection!
@@ -411,7 +411,7 @@ function VirtualizedTableBody({ table, tableContainerRef }: TableBodyProps) {
   });
 
   return (
-    <TableBody className='grid relative' style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
+    <TableBody className='relative grid' style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
       {rowVirtualizer.getVirtualItems().map((virtualRow) => {
         const row = rows[virtualRow.index] as Row<Download>;
         return (
@@ -445,7 +445,7 @@ function VirtualizedTableBodyRow({ row, virtualRow, rowVirtualizer }: Virtualize
       data-index={virtualRow.index} //needed for dynamic row height measurement
       ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
       key={row.id}
-      className='flex absolute w-full'
+      className='absolute flex w-full'
       style={{ transform: `translateY(${virtualRow.start}px)` }}
     >
       {cells.map((cell) => (
@@ -526,15 +526,15 @@ const statusChip = (
   return (
     <div
       className={cn(
-        'transition-colors flex items-center pl-1 pr-2 py-1 gap-1 border shadow-md rounded-full',
+        'flex items-center gap-1 rounded-full border py-1 pl-1 pr-2 shadow-md transition-colors',
         style,
-        onClear && 'group cursor-pointer hover:bg-red-500/20 hover:border-red-500 hover:text-red-200',
+        onClear && 'group cursor-pointer hover:border-red-500 hover:bg-red-500/20 hover:text-red-200',
       )}
       onClick={onClear}
     >
       <div className='relative'>
-        <Icon className={cn('w-4 h-4', iconStyle, onClear && 'absolute group-hover:opacity-0')} />
-        {onClear && <XCircle className='w-4 h-4 opacity-0 group-hover:opacity-100' />}
+        <Icon className={cn('h-4 w-4', iconStyle, onClear && 'absolute group-hover:opacity-0')} />
+        {onClear && <XCircle className='h-4 w-4 opacity-0 group-hover:opacity-100' />}
       </div>
       <div className='text-xs'>
         {status} {count}

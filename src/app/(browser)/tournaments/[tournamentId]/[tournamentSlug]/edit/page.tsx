@@ -9,7 +9,7 @@ export default async function Page({ params }) {
   } catch (error) {
     if (error.response?.status === 404) {
       return (
-        <div className='w-full h-full flex justify-center items-center flex-grow'>
+        <div className='flex h-full w-full flex-grow items-center justify-center'>
           <div>
             Tournament with ID <b>{params.tournamentId}</b> not found.
           </div>

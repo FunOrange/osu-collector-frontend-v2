@@ -5,8 +5,9 @@
 @layer base {
   :root {
     --max-width: 1100px;
-    --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono',
-      'Ubuntu Monospace', 'Source Code Pro', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+    --font-mono:
+      ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace',
+      'Source Code Pro', 'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
     --foreground-rgb: #cbd5e1;
     --foreground: 210 40% 98%;

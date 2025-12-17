@@ -15,8 +15,8 @@ export default function MoreResultsButton({ children }: MoreResultsButtonProps) 
     <button
       className={
         loading
-          ? 'flex gap-4 justify-center items-center w-full p-3 text-center transition rounded bg-slate-800 opacity-60'
-          : 'w-full p-3 text-center transition rounded bg-slate-800 hover:shadow-xl hover:bg-slate-600'
+          ? 'flex w-full items-center justify-center gap-4 rounded bg-slate-800 p-3 text-center opacity-60 transition'
+          : 'w-full rounded bg-slate-800 p-3 text-center transition hover:bg-slate-600 hover:shadow-xl'
       }
       onClick={() => setLoading(true)}
       disabled={loading}
