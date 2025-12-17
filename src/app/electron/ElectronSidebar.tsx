@@ -13,7 +13,6 @@ import {
   SidebarMenuItem,
 } from '@/components/shadcn/sidebar';
 import { Skeleton } from '@/components/shadcn/skeleton';
-import useClientValue from '@/hooks/useClientValue';
 import { useUser } from '@/services/osu-collector-api-hooks';
 import { cn } from '@/utils/shadcn-utils';
 import { useEffect, useState } from 'react';

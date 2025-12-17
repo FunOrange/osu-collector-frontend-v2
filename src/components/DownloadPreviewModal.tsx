@@ -50,7 +50,6 @@ function DownloadPreviewModal({ collection, open, close }: DownloadPreviewModalP
       intervalRef.current = setInterval(simulateDownload, 200);
     }
     return () => clearInterval(intervalRef.current!);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, v3.data?.beatmapsets]);
   const simulateDownload = () => {
     // progress currently downloading beatmapset

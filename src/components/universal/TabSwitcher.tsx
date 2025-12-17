@@ -1,4 +1,5 @@
 import { cn } from '@/utils/shadcn-utils';
+import React from 'react';
 
 export interface TabSwitcherProps {
   items: { label: string; value: string }[];
@@ -8,10 +9,10 @@ export interface TabSwitcherProps {
 export default function TabSwitcher({ items, value, onChange }: TabSwitcherProps) {
   return (
     <div className='flex flex-row flex-wrap items-center'>
-      {items.map((item) => {
+      {items.map((item, i) => {
         const isActive = item.value === value;
         return (
-          <>
+          <React.Fragment key={i}>
             <button
               key={item.value}
               onClick={() => onChange(item.value)}
@@ -27,7 +28,7 @@ export default function TabSwitcher({ items, value, onChange }: TabSwitcherProps
             <button className='border-b-4 pb-3 pt-4 text-sm font-medium' style={{ width: 0, opacity: 0 }}>
               a {/* hack to make the height consistent during border width changes */}
             </button>
-          </>
+          </React.Fragment>
         );
       })}
     </div>

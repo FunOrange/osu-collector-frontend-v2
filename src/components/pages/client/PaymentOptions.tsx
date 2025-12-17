@@ -86,7 +86,6 @@ export default function PaymentOptions() {
                         // plan_id: 'P-1YN01180390590643MGZNV3Y' // test: $0.05 per day
                       });
                     }}
-                    // eslint-disable-next-line no-unused-vars
                     onApprove={async (data, actions) => {
                       await api.linkPaypalSubscription(data.subscriptionID);
                       mutateUser();

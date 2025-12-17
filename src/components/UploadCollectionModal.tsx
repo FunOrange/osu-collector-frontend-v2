@@ -30,9 +30,9 @@ export default function UploadCollectionModal({ children, open, onOpenChange }: 
   // #region local collection.db
   const [filename, setFilename] = useState('');
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    let file = acceptedFiles[0];
+    const file = acceptedFiles[0];
     setFilename(file.name);
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = () => {
       setLocalCollections(parseCollectionDb(reader.result));
     };

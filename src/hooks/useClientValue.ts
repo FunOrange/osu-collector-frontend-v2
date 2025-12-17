@@ -9,7 +9,6 @@ export default function useClientValue<TClient>(
   const [value, setValue] = useState<TClient | undefined>(serverValue);
   useEffect(() => {
     setValue(clientValue());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return value;
 }

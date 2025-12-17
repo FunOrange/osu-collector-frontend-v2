@@ -251,7 +251,7 @@ export default function ElectronDownloads() {
           const cancelButton = button(Channel.CancelDownload, <X className='h-5 w-5' color='currentColor' />);
           const stopButton = button(
             Channel.CancelDownload,
-            <StopCircle className='text-red-400' color='currentColor' />,
+            <StopCircle className='h-5 w-5 text-red-400' color='currentColor' />,
           );
           const retryButton = button(Channel.RetryDownload, <RefreshCw className='h-4 w-4 text-yellow-200' />);
           const visibleButtons = row.original.cancelled
@@ -384,7 +384,7 @@ export default function ElectronDownloads() {
                     onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com/all?tutorial=true')}
                     className='w-full rounded-xl border border-4 border-dashed border-teal-600 p-10 text-3xl text-white'
                   >
-                    <Plus className='text-6xl' color='currentColor' />
+                    <Plus className='h-14 w-14' color='currentColor' />
                     Click here to add a collection!
                   </Button>
                 </TableCell>

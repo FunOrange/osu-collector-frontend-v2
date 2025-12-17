@@ -47,7 +47,6 @@ export default function TournamentsForm({ tournament = null }: TournamentsFormPr
       setTournamentDraft(tournamentDraft);
       setTouchedMappoolText(tournamentDraft?.mappoolText ?? mappoolTemplate);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

@@ -54,7 +54,6 @@ export function ElectronImportTournamentDialog() {
 
   useEffect(() => {
     window.ipc?.onURI(() => mutateURI());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { data: tournament, isLoading } = useTournament(tournamentId);
@@ -381,9 +380,9 @@ function WindowsFileExplorer({ addressBar, children, className }: WindowsFileExp
   return (
     <div className={cn('rounded border border-black/50 bg-[#1F1F1F]', className)}>
       <div className='flex items-center gap-2 px-2 py-2 text-white'>
-        <ArrowLeft className='text-md' color='currentColor' />
-        <ArrowRight className='text-md text-gray-400' color='currentColor' />
-        <ArrowUp className='text-md' color='currentColor' />
+        <ArrowLeft className='text-md h-3 w-3' color='currentColor' />
+        <ArrowRight className='text-md h-3 w-3 text-gray-400' color='currentColor' />
+        <ArrowUp className='text-md h-3 w-3' color='currentColor' />
         <div className='bg-slate line-clamp-1 flex items-center justify-between gap-4 rounded bg-[#2D2C2C] px-2 py-1 text-xs'>
           {addressBar}
           <ArrowClockwise className='text-md text-gray-400' color='currentColor' />

@@ -39,7 +39,7 @@ export default async function CollectionsPage(props: CollectionsPageProps) {
                 </Button>
                 <div className='hidden h-full cursor-pointer rounded rounded-l-none bg-slate-600 transition hover:bg-slate-500 hover:shadow-xl sm:flex'>
                   <div className='flex items-center'>
-                    <ThreeDotsVertical className='mx-2' color='currentColor' />
+                    <ThreeDotsVertical className='mx-2 h-4 w-4' color='currentColor' />
                   </div>
                 </div>
               </div>
@@ -51,9 +51,9 @@ export default async function CollectionsPage(props: CollectionsPageProps) {
         )}
         <div className='flex flex-col items-center gap-3'>
           <SearchInput searchParams={searchParams} className='text-center' />
-          <div className='flex gap-2 text-2xl'>
-            <Search className='mt-1' color='currentColor' />
-            {results} results
+          <div className='text-nowrap flex gap-2 text-2xl'>
+            <Search className='mt-1 h-6' color='currentColor' />
+            <div className='text-nowrap'>{results} results</div>
           </div>
         </div>
         <div className='mb-4 rounded border-slate-900 bg-[#162032] p-4 shadow-inner md:p-7'>

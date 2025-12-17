@@ -9,7 +9,7 @@ export default function NavbarSearch() {
   return (
     <div className='relative hidden md:block'>
       <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3'>
-        <Search color='currentColor' />
+        <Search color='currentColor' width={16} height={16} />
       </div>
       <input
         type='text'

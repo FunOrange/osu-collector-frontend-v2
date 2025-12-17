@@ -6,7 +6,7 @@ import useSticky from '@/hooks/useSticky';
 import { Slider } from '@/components/shadcn/slider';
 import { useState } from 'react';
 import { assoc, equals, range } from 'ramda';
-import { Search, ThreeDotsVertical } from 'react-bootstrap-icons';
+import { Search } from 'react-bootstrap-icons';
 import useDebouncedFunction from '@/hooks/useDebounce';
 import {
   Pagination,

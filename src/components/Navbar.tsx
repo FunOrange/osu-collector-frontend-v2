@@ -84,13 +84,11 @@ export default function Navbar() {
         </nav>
       </div>
       <div className='flex items-center gap-2'>
-        {/* <NavbarSearch /> */}
+        <NavbarSearch />
+        <UploadButton className='hidden sm:flex' />
         <Suspense>
-          <UploadButton className='hidden sm:flex' />
+          <UserNav />
         </Suspense>
-        {/* <Suspense> */}
-        {/*   <UserNav /> */}
-        {/* </Suspense> */}
       </div>
     </div>
   );

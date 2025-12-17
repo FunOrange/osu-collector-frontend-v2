@@ -20,7 +20,6 @@ export default function BeatmapsetCardPlayButton({ beatmapsetId, duration }: Bea
       audio.addEventListener('ended', onAudioEnd);
     }
     return () => audio?.removeEventListener('ended', onAudioEnd);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onPlayClick = () => {
