@@ -61,7 +61,7 @@ export default function OsuCollectorAppDemo() {
         Add to osu!
       </button>
       <div
-        className='animate-arrow-nudge absolute z-10 flex items-center'
+        className='animate-arrow-nudge z-5 absolute flex items-center'
         style={{ top: '38%', left: '50%', width: '45%', height: '4.7%', fontSize: '5%' }}
       >
         <div className='sm:text-md absolute flex w-full items-center gap-2 text-xs lg:text-xl'>
