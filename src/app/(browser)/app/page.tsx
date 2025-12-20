@@ -68,10 +68,10 @@ export default function DesktopAppPage() {
             <Dialog>
               <DialogTrigger className='inline underline'>click here</DialogTrigger>.
               <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>About osu! Lazer</DialogTitle>
+                <DialogHeader className='hidden'>
+                  <DialogTitle>About osu! Lazer support</DialogTitle>
                 </DialogHeader>
-                <DialogDescription>
+                <div className='text-[14px]'>
                   <h2 className='mb-1 text-lg font-semibold text-slate-100'>
                     Why does osu! Lazer have limited support?
                   </h2>
@@ -121,7 +121,7 @@ export default function DesktopAppPage() {
                       osu! Lazer
                     </div>
                   </div>
-                </DialogDescription>
+                </div>
               </DialogContent>
             </Dialog>
           </div>
