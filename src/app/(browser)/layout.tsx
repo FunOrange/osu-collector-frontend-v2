@@ -4,7 +4,7 @@ import { cn } from '@/utils/shadcn-utils';
 import { Toaster } from '@/components/shadcn/toaster';
 import { PostHogProvider } from '@/providers/posthog';
 import TwitchSubEndOfSupportModal from '@/components/TwitchSubEndOfSupportModal';
-import Navbar from '@/components/Navbar';
+import Navbar, { navbarHeightPx } from '@/components/Navbar';
 import '../globals.css';
 import { Suspense } from 'react';
 
@@ -19,11 +19,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <PostHogProvider>
-        <body id='app-root' className={cn('mt-14 h-[calc(100vh-56px)]', inter.className)}>
+        <body
+          id='app-root'
+          className={inter.className}
+          style={{ marginTop: navbarHeightPx, height: `calc(100vh - ${navbarHeightPx}px)` }}
+        >
           <Navbar />
 
           <div id='page-content' className={cn('flex flex-col')}>
-            <Suspense>{children}</Suspense>
+            {children}
           </div>
 
           <Toaster />

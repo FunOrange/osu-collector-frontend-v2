@@ -6,6 +6,7 @@ import { match } from 'ts-pattern';
 import CollectionComment from '@/components/pages/collections/[collectionId]/CollectionComment';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import CollectionCommentsModal from '@/components/pages/collections/[collectionId]/CollectionCommentsModal';
+import { Suspense } from 'react';
 
 export interface CollectionCommentsSectionProps {
   collection: Collection;
@@ -44,12 +45,14 @@ export default function CollectionCommentsSection({ collection }: CollectionComm
       </CollectionCommentsModal>
     ))
     .with({ hasComments: false, isLoggedIn: false }, () => (
-      <YouMustBeLoggedIn>
-        <div className={noCommentsClassName}>
-          <ChatFill size={20} color='currentColor' />
-          No comments. Be the first to leave a comment!
-        </div>
-      </YouMustBeLoggedIn>
+      <Suspense>
+        <YouMustBeLoggedIn>
+          <div className={noCommentsClassName}>
+            <ChatFill size={20} color='currentColor' />
+            No comments. Be the first to leave a comment!
+          </div>
+        </YouMustBeLoggedIn>
+      </Suspense>
     ))
     .exhaustive();
 }

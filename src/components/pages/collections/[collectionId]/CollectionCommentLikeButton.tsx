@@ -1,7 +1,7 @@
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import { Comment } from '@/shared/entities/v1/Collection';
 import { useUser } from '@/services/osu-collector-api-hooks';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { HandThumbsUpFill } from 'react-bootstrap-icons';
 import { match } from 'ts-pattern';
 import * as api from '@/services/osu-collector-api';
@@ -54,12 +54,14 @@ export default function CollectionCommentLikeButton({ collectionId, comment }: C
     );
   } else {
     return (
-      <YouMustBeLoggedIn>
-        <div className='flex cursor-pointer items-center gap-1 text-sm'>
-          <HandThumbsUpFill size={14} color='currentColor' />
-          {comment.upvotes.length}
-        </div>
-      </YouMustBeLoggedIn>
+      <Suspense>
+        <YouMustBeLoggedIn>
+          <div className='flex cursor-pointer items-center gap-1 text-sm'>
+            <HandThumbsUpFill size={14} color='currentColor' />
+            {comment.upvotes.length}
+          </div>
+        </YouMustBeLoggedIn>
+      </Suspense>
     );
   }
 }

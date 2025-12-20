@@ -3,7 +3,7 @@ import { useUser } from '@/services/osu-collector-api-hooks';
 import { HeartFill } from 'react-bootstrap-icons';
 import * as api from '@/services/osu-collector-api';
 import { assocPath, concat, without } from 'ramda';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { match } from 'ts-pattern';
 import YouMustBeLoggedIn from '@/components/YouMustBeLoggedIn';
 import { Collection } from '@/shared/entities/v1/Collection';
@@ -114,6 +114,10 @@ export default function FavouriteButton({ collection, tournament, variant }: Fav
   if (user) {
     return favouriteButton;
   } else if (!user) {
-    return <YouMustBeLoggedIn>{favouriteButton}</YouMustBeLoggedIn>;
+    return (
+      <Suspense>
+        <YouMustBeLoggedIn>{favouriteButton}</YouMustBeLoggedIn>
+      </Suspense>
+    );
   }
 }

@@ -98,16 +98,18 @@ export default function PaymentOptions() {
                   />
                 </div>
               ) : (
-                <YouMustBeLoggedIn>
-                  <div className='cursor-pointer'>
-                    <div className='pointer-events-none relative z-0' style={{ height: '46px' }}>
-                      <PayPalButtons
-                        style={{ shape: 'rect', color: 'gold', height: 46, layout: 'vertical' }}
-                        fundingSource='paypal'
-                      />
+                <Suspense>
+                  <YouMustBeLoggedIn>
+                    <div className='cursor-pointer'>
+                      <div className='pointer-events-none relative z-0' style={{ height: '46px' }}>
+                        <PayPalButtons
+                          style={{ shape: 'rect', color: 'gold', height: 46, layout: 'vertical' }}
+                          fundingSource='paypal'
+                        />
+                      </div>
                     </div>
-                  </div>
-                </YouMustBeLoggedIn>
+                  </YouMustBeLoggedIn>
+                </Suspense>
               )}
             </section>
 

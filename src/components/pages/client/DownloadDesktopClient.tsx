@@ -14,8 +14,7 @@ const flatpak = (
   </svg>
 );
 
-export interface DownloadDesktopClientProps {}
-export default function DownloadDesktopClient({}: DownloadDesktopClientProps) {
+export default function DownloadDesktopClient() {
   const { user } = useUser();
 
   const downloadInstaller = (platform: api.Platform) => async () => {

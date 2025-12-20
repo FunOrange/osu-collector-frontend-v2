@@ -14,7 +14,7 @@ import { Textarea } from '@/components/shadcn/textarea';
 import { Collection } from '@/shared/entities/v1/Collection';
 import useSubmit from '@/hooks/useSubmit';
 import { useUser } from '@/services/osu-collector-api-hooks';
-import { ReactNode, useState } from 'react';
+import { ReactNode, Suspense, useState } from 'react';
 import * as api from '@/services/osu-collector-api';
 import { useRouter } from 'next/navigation';
 
@@ -59,9 +59,11 @@ export default function CollectionCommentsModal({ collection, children, classNam
                 Submit
               </Button>
             ) : (
-              <YouMustBeLoggedIn>
-                <Button>Submit</Button>
-              </YouMustBeLoggedIn>
+              <Suspense>
+                <YouMustBeLoggedIn>
+                  <Button>Submit</Button>
+                </YouMustBeLoggedIn>
+              </Suspense>
             )}
           </div>
         </div>
