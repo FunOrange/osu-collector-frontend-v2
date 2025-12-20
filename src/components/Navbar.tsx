@@ -37,11 +37,8 @@ const glass = {
 
 export default function Navbar() {
   return (
-    <div
-      className={cn(
-        'flex-colshadow-xl fixed top-0 z-40 flex w-full justify-between px-1 md:px-4 md:pr-2',
-        navbarHeight,
-      )}
+    <header
+      className={cn('fixed top-0 z-40 flex w-full justify-between px-1 md:px-4 md:pr-2', navbarHeight)}
       style={glass}
     >
       <div className='flex items-center'>
@@ -90,6 +87,6 @@ export default function Navbar() {
           <UserNav />
         </Suspense>
       </div>
-    </div>
+    </header>
   );
 }
