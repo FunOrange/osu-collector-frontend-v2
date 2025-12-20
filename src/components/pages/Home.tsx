@@ -38,7 +38,7 @@ export default function Home({ metadata, popularCollections, recentCollections }
                 mahloola
               </a>
               . If you like the project, consider supporting us to get access to{' '}
-              <Link href='/client' className='text-blue-500'>
+              <Link href='/app' className='text-blue-500'>
                 extra features
               </Link>
               .

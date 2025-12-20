@@ -171,7 +171,7 @@ export default function Billing() {
                       )}
                       {user && !user?.paidFeaturesAccess && (
                         <Button size='sm' variant='important' className='h-7 bg-cyan-600 font-bold text-white' asChild>
-                          <Link href='/client#option-2-credit-card'>Subscribe</Link>
+                          <Link href='/app#option-2-credit-card'>Subscribe</Link>
                         </Button>
                       )}
                       {!user && (

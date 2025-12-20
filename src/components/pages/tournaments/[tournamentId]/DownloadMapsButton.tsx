@@ -34,7 +34,7 @@ export default function DownloadMapsButton({ tournament }: DownloadMapsButtonPro
             description: "Don't have it installed?",
             action: (
               <ToastAction altText='osu!Collector app download link'>
-                <Link href='/client#download-links'>Download App</Link>
+                <Link href='/app#download-links'>Download App</Link>
               </ToastAction>
             ),
           });

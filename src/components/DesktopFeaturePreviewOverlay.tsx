@@ -18,7 +18,7 @@ export default function DesktopFeaturePreviewOverlay({ visible, onCancel }) {
               Cancel
             </Button>
           </DialogClose>
-          <Link href='/client'>
+          <Link href='/app'>
             <Button>Get osu!Collector Desktop</Button>
           </Link>
         </div>

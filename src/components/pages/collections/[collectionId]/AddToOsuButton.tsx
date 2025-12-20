@@ -52,7 +52,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
               description: "Don't have it installed?",
               action: (
                 <ToastAction altText='osu!Collector app download link'>
-                  <Link href='/client#download-links'>Download App</Link>
+                  <Link href='/app#download-links'>Download App</Link>
                 </ToastAction>
               ),
             });
@@ -62,7 +62,7 @@ export default function AddToOsuButton({ collection }: AddToOsuButtonProps) {
         </Button>
       ) : (
         <Link
-          href='/client'
+          href='/app'
           className='w-full rounded rounded-r-none bg-slate-600 p-3 text-center transition hover:bg-slate-500 hover:shadow-xl'
         >
           Add to osu!

@@ -24,7 +24,7 @@ export const navbarSpacer = 'pt-14';
 const navItems = [
   { label: 'Collections', href: '/all' },
   { label: 'Tournaments', href: '/tournaments' },
-  { label: 'App', href: '/client' },
+  { label: 'App', href: '/app' },
   { label: 'Users', href: '/users' },
 ];
 
