@@ -34,19 +34,17 @@ export default function OsuCollectorAppDemo() {
         <div />
         <div className='flex flex-col justify-between'>
           <div />
-          <div className='animate-arrow-nudge flex items-center gap-2 pt-10 text-xl'>
-            <ArrowLeft />
-            Click the &quot;Add to osu!&quot; button to see a demo!
-          </div>
-          <div className='p-10'>
-            <h1 className='text-shadow-lg text-shadow-white text-5xl font-medium text-white'>osu!Collector App</h1>
-            <div className='text-xl'>The best way to collect beatmaps.</div>
+          <div className='p-2 sm:p-4 md:p-6 lg:p-10'>
+            <h1 className='text-shadow-lg text-shadow-white text-lg font-medium text-white lg:text-5xl'>
+              osu!Collector App
+            </h1>
+            <div className='hidden sm:block lg:text-xl'>The best way to collect beatmaps.</div>
           </div>
         </div>
       </div>
       <button
         className='absolute z-10 rounded-sm bg-slate-600 text-white transition-all hover:scale-110 hover:brightness-125'
-        style={{ top: '38%', left: '32.2%', width: '12.7%', height: '4.7%', fontSize: '5%' }}
+        style={{ top: '38%', left: '32.2%', width: '12.7%', height: '4.7%', minHeight: '20px', fontSize: '5%' }}
         onClick={() => {
           setIsPlaying(true);
           videoRef.current?.play();
@@ -54,6 +52,15 @@ export default function OsuCollectorAppDemo() {
       >
         Add to osu!
       </button>
+      <div
+        className='animate-arrow-nudge absolute z-10 flex items-center'
+        style={{ top: '38%', left: '50%', width: '40%', height: '4.7%', fontSize: '5%' }}
+      >
+        <div className='absolute flex w-full items-center gap-2 text-sm sm:text-xl'>
+          <ArrowLeft />
+          Click the &quot;Add to osu!&quot; button to see a demo!
+        </div>
+      </div>
       <Image
         fill
         className='brightness-50'
