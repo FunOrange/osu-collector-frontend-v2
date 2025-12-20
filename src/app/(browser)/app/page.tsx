@@ -72,7 +72,9 @@ export default function DesktopAppPage() {
                   <DialogTitle>About osu! Lazer</DialogTitle>
                 </DialogHeader>
                 <DialogDescription>
-                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>Why is osu! Lazer not supported?</h2>
+                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>
+                    Why does osu! Lazer have limited support?
+                  </h2>
                   <div className='mb-3'>
                     <a href='https://github.com/ppy/osu/wiki/User-file-storage' className='text-blue-500 underline'>
                       The way osu! lazer stores its files
@@ -80,7 +82,19 @@ export default function DesktopAppPage() {
                     makes it difficult for third-party programs to read/write to the game files.
                   </div>
 
-                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>
+                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>What still works with osu! Lazer?</h2>
+                  <div className='mb-3'>
+                    <ul className='flex flex-col gap-2'>
+                      <li>
+                        • Downloading maps ✅ <br />{' '}
+                        <span className='pl-5'>The .osz files will just download to a folder that you specify</span>
+                      </li>
+                      <li>• Intelligently skipping maps you already have downloaded ❌</li>
+                      <li>• Importing collection into game ❌</li>
+                    </ul>
+                  </div>
+
+                  <h2 className='text-md mb-1 font-semibold text-slate-100'>
                     How can I add my missing maps and collections to osu! Lazer?
                   </h2>
                   <div className='mb-3'>
@@ -88,6 +102,24 @@ export default function DesktopAppPage() {
                     importing the collections/maps from osu! stable to osu!lazer by using the{' '}
                     <b className='text-slate-300'>Import function</b> in{' '}
                     <b className='text-slate-300'>Run setup wizard</b> on the settings.
+                  </div>
+                  <div className='mb-5 flex items-center gap-2'>
+                    <div className='rounded-lg border border-slate-500 bg-slate-700 px-3 py-2 text-white'>
+                      osu!Collector App
+                    </div>
+                    <div className='text-xl'> → </div>
+                    <div className='rounded-lg border border-slate-500 bg-slate-700 px-3 py-2 text-white'>
+                      osu! Stable
+                    </div>
+                    <div className='relative flex justify-center'>
+                      <span className='text-xl'>→</span>
+                      <div className='absolute top-10 whitespace-nowrap text-xs text-white'>
+                        via Lazer&apos;s Run Setup Wizard
+                      </div>
+                    </div>
+                    <div className='rounded-lg border border-slate-500 bg-slate-700 px-3 py-2 text-white'>
+                      osu! Lazer
+                    </div>
                   </div>
                 </DialogDescription>
               </DialogContent>
