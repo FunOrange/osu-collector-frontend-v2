@@ -43,15 +43,15 @@ export default function OsuCollectorAppDemo() {
         </div>
       </div>
       <button
-        className='absolute z-10 rounded-sm bg-slate-600 text-white transition-all hover:scale-110 hover:brightness-125'
+        className='absolute z-10 rounded-sm bg-slate-600 text-white transition-[transform,filter] hover:scale-110 hover:brightness-125'
         style={{
           top: '38%',
-          left: '32.2%',
+          right: '55.2%',
           width: '12.7%',
-          minWidth: '60px',
+          minWidth: '68px',
           height: '4.7%',
           minHeight: '20px',
-          fontSize: '5%',
+          fontSize: 'calc(max(0.7vw,11px))',
         }}
         onClick={() => {
           setIsPlaying(true);
