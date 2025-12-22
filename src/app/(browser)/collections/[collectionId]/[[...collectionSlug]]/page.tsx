@@ -16,12 +16,16 @@ import UserChip from '@/components/UserChip';
 import { notFound } from 'next/navigation';
 import CollectionBeatmapsSection from '@/components/pages/collections/[collectionId]/CollectionBeatmapsSection';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
-import { defaultTo } from 'ramda';
 
 export async function generateMetadata(props): Promise<Metadata> {
   const params = await props.params;
   const collection = await api.getCollection(params.collectionId).catch(() => null);
-  if (!collection) return {};
+  if (!collection) {
+    return {
+      title: 'Collection not found | osu!Collector',
+      description: 'The collection you are looking for does not exist.',
+    };
+  }
 
   const title = `${collection.name} | osu!Collector`;
   const description = collection.description || `Collection uploaded by ${collection.uploader.username}`;

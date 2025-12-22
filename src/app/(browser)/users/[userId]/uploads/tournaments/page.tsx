@@ -7,7 +7,12 @@ import { Metadata } from 'next';
 export async function generateMetadata(props): Promise<Metadata> {
   const params = await props.params;
   const pageUser = await api.getUser(params.userId).catch(() => null);
-  if (!pageUser) return {};
+  if (!pageUser) {
+    return {
+      title: 'User not found | osu!Collector',
+      description: 'The user you are looking for does not exist.',
+    };
+  }
 
   const title = `${pageUser.osuweb.username}'s Tournaments | osu!Collector`;
   const description = `Tournaments uploaded by ${pageUser.osuweb.username}`;

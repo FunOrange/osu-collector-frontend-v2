@@ -23,7 +23,12 @@ import { AxiosError } from 'axios';
 export async function generateMetadata(props): Promise<Metadata> {
   const params = await props.params;
   const tournament = await api.getTournament(params.tournamentId).catch(() => null);
-  if (!tournament) return {};
+  if (!tournament) {
+    return {
+      title: 'Tournament not found | osu!Collector',
+      description: 'The tournament you are looking for does not exist.',
+    };
+  }
 
   const title = `${tournament.name} | osu!Collector`;
   const description = tournament.description || `Tournament uploaded by ${tournament?.uploader.username}`;

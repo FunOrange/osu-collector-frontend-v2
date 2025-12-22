@@ -52,7 +52,7 @@ export default function EditableCollectionName({ collection, className }: Editab
         {collectionName}
       </h1>
     );
-  } else if (!isOwner) {
+  } else {
     return <h1 className={cn('mb-2 text-2xl text-gray-100 sm:text-4xl', className)}>{collection.name}</h1>;
   }
 }

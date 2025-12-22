@@ -8,7 +8,12 @@ import { notFound } from 'next/navigation';
 export async function generateMetadata(props): Promise<Metadata> {
   const params = await props.params;
   const pageUser = await api.getUser(params.userId).catch(() => null);
-  if (!pageUser) return {};
+  if (!pageUser) {
+    return {
+      title: 'User not found | osu!Collector',
+      description: 'The user you are looking for does not exist.',
+    };
+  }
 
   const title = `${pageUser.osuweb.username}'s Collections | osu!Collector`;
   const description = `Collections uploaded by ${pageUser.osuweb.username}`;
