@@ -382,10 +382,15 @@ export default function ElectronDownloads() {
                 <TableCell className='w-full text-center text-slate-400'>
                   <Button
                     onClick={() => window.ipc.openLinkInBrowser('https://osucollector.com/all?tutorial=true')}
-                    className='w-full rounded-xl border border-4 border-dashed border-teal-600 p-10 text-3xl text-white'
+                    className='w-full flex-col rounded-xl border border-4 border-dashed border-teal-600 p-10 text-3xl text-white'
                   >
-                    <Plus className='h-14 w-14' color='currentColor' />
-                    Click here to add a collection!
+                    <div className='flex items-center gap-2'>
+                      <Plus className='h-14 w-14' color='currentColor' />
+                      Click here to add a collection!
+                    </div>
+                    <div className='text-xs text-muted-foreground'>
+                      This will open {`https://osucollector.com/all?tutorial=true`}
+                    </div>
                   </Button>
                 </TableCell>
               </TableRow>
