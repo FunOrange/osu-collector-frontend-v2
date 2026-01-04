@@ -26,6 +26,7 @@ export default function ElectronLogin() {
   const [open, setOpen] = useState(false);
   const [authX, setAuthX] = useState('');
   const [otpInput, setOtpInput] = useState('');
+  const [loginUrl, setLoginUrl] = useState('');
 
   const initiateOtpLogin = () => {
     setOtpInput('');
@@ -35,6 +36,7 @@ export default function ElectronLogin() {
     const x = md5(Date.now());
     setAuthX(x);
     const url = `https://osu.ppy.sh/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${callback}&state=${x}`;
+    setLoginUrl(url);
     window.ipc.openLinkInBrowser(url);
   };
 
@@ -106,6 +108,12 @@ export default function ElectronLogin() {
               }}
             />
           </div>
+        </div>
+        <div>
+          <div className='flex w-full gap-1 pt-2 text-xs text-muted-foreground/50'>
+            Browser didn&apos;t open? Visit this url:
+          </div>
+          <div className='break-all text-xs text-muted-foreground/50'>{loginUrl}</div>
         </div>
       </DialogContent>
     </Dialog>
