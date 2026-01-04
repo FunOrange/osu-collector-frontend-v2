@@ -388,7 +388,7 @@ export default function ElectronDownloads() {
                       <Plus className='h-14 w-14' color='currentColor' />
                       Click here to add a collection!
                     </div>
-                    <div className='text-xs text-muted-foreground'>
+                    <div className='text-xs font-normal text-muted-foreground/50'>
                       This will open {`https://osucollector.com/all?tutorial=true`}
                     </div>
                   </Button>
