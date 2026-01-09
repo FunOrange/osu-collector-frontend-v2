@@ -45,13 +45,7 @@ export default function UploadButton({ className }: UploadButtonProps) {
 
             <div className='grid grid-cols-2 gap-x-4'>
               <UploadCollectionModal open={uploadingCollection} onOpenChange={setUploadingCollection}>
-                <div
-                  className='rounded-xl border px-4 py-14 transition-colors hover:bg-slate-600'
-                  onClick={() => {
-                    setMakingSelection(false);
-                    setUploadingCollection(true);
-                  }}
-                >
+                <div className='rounded-xl border px-4 py-14 transition-colors hover:bg-slate-600'>
                   <MusicNoteList className='mb-2 inline' size={48} color='currentColor' />
                   <h2 className='text-xl font-semibold'>Collection</h2>
                 </div>
