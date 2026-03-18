@@ -257,7 +257,9 @@ export function ElectronImportCollectionDialog() {
                 </span>
               </div>
               <div>
-                <div className='text-xs'>This will allow the collection to appear in osu! stable</div>
+                <div className='text-xs'>
+                  This will allow the collection to appear in osu! stable. PLEASE restart your game after!!!
+                </div>
                 <div className='whitespace-pre-line text-xs text-red-400'>
                   {options.modifyCollectionDb && mergeDisabledReason}
                 </div>
