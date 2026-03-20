@@ -42,7 +42,7 @@
     "md5": "^2.3.0",
     "moment": "^2.29.4",
     "next": "16.0.10",
-    "posthog-js": "^1.224.1",
+    "posthog-js": "^1.362.0",
     "ramda": "^0.29.1",
     "react": "19.2.3",
     "react-bootstrap-icons": "^1.10.3",
