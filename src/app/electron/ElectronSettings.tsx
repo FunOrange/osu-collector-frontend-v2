@@ -174,6 +174,37 @@ export default function ElectronSettings() {
           <div className='text-xs text-slate-400'>You can use this to download .osz files to a different location</div>
         </div>
 
+        <div>
+          <h3 className='mb-1 text-white'>Downloads</h3>
+          <hr className='border-white/20' />
+        </div>
+
+        <div className='flex flex-col gap-1'>
+          <div className='text-sm text-white'>max parallel downloads</div>
+          <Input
+            className='max-w-40 w-full'
+            type='number'
+            placeholder='5'
+            min={1}
+            max={30}
+            step={1}
+            value={fields.maxParallelDownloads ?? ''}
+            onChange={(e) => setTouchedFields(assoc('maxParallelDownloads', e.target.value))}
+            onBlur={(e) => {
+              const raw = e.target.value?.trim();
+              const parsed = Number(raw);
+              const value = raw === '' || !Number.isFinite(parsed) ? undefined : Math.min(32, Math.max(1, parsed));
+              setPreference('maxParallelDownloads', value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                (e.target as HTMLInputElement).blur();
+              }
+            }}
+          />
+          <div className='text-xs text-slate-400'>Limits how many beatmaps download at the same time.</div>
+        </div>
+
         <div className='mt-4'>
           <h3 className='mb-1 text-white'>Importing Collections</h3>
           <hr className='border-white/20' />
@@ -223,25 +254,23 @@ export default function ElectronSettings() {
           </span>
         </label>
 
-        {/* <label */}
-        {/*   htmlFor='desktop-notifications-checkbox' */}
-        {/*   className={cn( */}
-        {/*     'flex flex-col gap-1 self-start p-2 rounded', */}
-        {/*     'transition-colors cursor-pointer hover:bg-slate-700', */}
-        {/*   )} */}
-        {/* > */}
-        {/*   <div className='flex items-center gap-2'> */}
-        {/*     <Checkbox */}
-        {/*       id='desktop-notifications-checkbox' */}
-        {/*       checked={preferences?.notifyOnDownloadsComplete ?? false} */}
-        {/*       onCheckedChange={(checked) => setPreference('notifyOnDownloadsComplete', checked as boolean)} */}
-        {/*     /> */}
-        {/*     <span className='text-sm text-white'>desktop notifications</span> */}
-        {/*   </div> */}
-        {/*   <div className='text-xs text-slate-400'> */}
-        {/*     When a collection has been completely downloaded, a desktop notification will be shown. */}
-        {/*   </div> */}
-        {/* </label> */}
+        <label
+          htmlFor='desktop-notifications-checkbox'
+          className={cn(
+            'flex flex-col gap-1 self-start rounded p-2',
+            'cursor-pointer transition-colors hover:bg-slate-700',
+          )}
+        >
+          <div className='flex items-center gap-2'>
+            <Checkbox
+              id='desktop-notifications-checkbox'
+              checked={preferences?.notifyOnDownloadsComplete ?? false}
+              onCheckedChange={(checked) => setPreference('notifyOnDownloadsComplete', checked as boolean)}
+            />
+            <span className='text-sm text-white'>desktop notifications</span>
+          </div>
+          <div className='text-xs text-slate-400'>Show a desktop notification when downloads are complete.</div>
+        </label>
       </div>
     </main>
   );

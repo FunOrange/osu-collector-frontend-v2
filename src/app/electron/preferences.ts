@@ -5,4 +5,5 @@ export interface Preferences {
   importedCollectionNameFormat?: string;
   minimizeToTray?: boolean;
   notifyOnDownloadsComplete?: boolean;
+  maxParallelDownloads?: number;
 }
