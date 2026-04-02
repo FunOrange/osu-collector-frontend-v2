@@ -74,9 +74,25 @@ export default function ElectronDownloads() {
   }, []);
 
   const { data: _downloads, mutate } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
-    refreshInterval: 2000,
+    refreshInterval: 1000,
   });
-  const downloads = useMemo(() => _downloads ?? [], [_downloads]);
+  const downloads = useMemo(() => {
+    const items = _downloads ?? [];
+    const rank = (d: Download) => {
+      if (d.cancelled) return 3;
+      if (downloadPatterns.downloading(d)) return 0;
+      if (downloadPatterns.completed(d)) return 1;
+      return 2; // pending/queued/fetching/etc.
+    };
+    return [...items]
+      .map((download, index) => ({ download, index }))
+      .sort((a, b) => {
+        const rankDiff = rank(a.download) - rank(b.download);
+        if (rankDiff !== 0) return rankDiff;
+        return a.index - b.index; // stable tie-breaker within same priority group
+      })
+      .map(({ download }) => download);
+  }, [_downloads]);
   const statusCounts = {
     all: downloads?.length,
     cancelled: downloads?.filter(downloadPatterns.cancelled).length,
