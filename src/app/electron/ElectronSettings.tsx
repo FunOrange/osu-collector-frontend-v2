@@ -235,6 +235,24 @@ export default function ElectronSettings() {
         </div>
 
         <label
+          htmlFor='launch-on-startup-checkbox'
+          className={cn(
+            'flex flex-col gap-1 self-start rounded p-2',
+            'cursor-pointer transition-colors hover:bg-slate-700',
+          )}
+        >
+          <div className='flex items-center gap-2'>
+            <Checkbox
+              id='launch-on-startup-checkbox'
+              checked={preferences?.launchOnStartup ?? false}
+              onCheckedChange={(checked) => setPreference('launchOnStartup', checked as boolean)}
+            />
+            <span className='text-sm text-white'>launch on startup</span>
+          </div>
+          <span className='text-xs text-slate-400'>Launch the app when the system starts up.</span>
+        </label>
+
+        <label
           htmlFor='minimize-to-system-tray-checkbox'
           className={cn(
             'flex flex-col gap-1 self-start rounded p-2',
