@@ -235,7 +235,7 @@ export function ElectronImportCollectionDialog() {
               {collection?.beatmapCount} beatmaps, uploaded by {collection?.uploader.username}
             </div>
           </Skeleton>
-          <DialogDescription className='flex max-h-[calc(100vh-200px)] flex-col gap-4 overflow-y-auto'>
+          <div className='flex max-h-[calc(100vh-200px)] flex-col gap-4 overflow-y-auto'>
             <label
               htmlFor='modify-collection-db-checkbox'
               className={cn(
@@ -379,7 +379,7 @@ export function ElectronImportCollectionDialog() {
                 </div>
               </div>
             )}
-          </DialogDescription>
+          </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button>Cancel</Button>
