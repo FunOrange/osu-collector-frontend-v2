@@ -128,12 +128,7 @@ export default function CheckoutPage({}: CheckoutPageProps) {
             </Button>
           </form>
           <div className='flex justify-center'>
-            <Image
-              src='https://cdn.brandfolder.io/KGT2DTA4/at/rvgw5pc69nhv9wkh7rw8ckv/Powered_by_Stripe_-_blurple.svg'
-              alt='Powered by Stripe'
-              width={128}
-              height={29}
-            />
+            <Image src='/stripe.svg' alt='Powered by Stripe' width={128} height={29} />
           </div>
         </div>
       </div>
