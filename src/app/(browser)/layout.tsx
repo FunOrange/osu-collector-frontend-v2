@@ -19,14 +19,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <PostHogProvider>
-        <body
-          id='app-root'
-          className={inter.className}
-          style={{ marginTop: navbarHeightPx, height: `calc(100vh - ${navbarHeightPx}px)` }}
-        >
+        <body id='app-root' className={inter.className}>
           <Navbar />
 
-          <div id='page-content' className={cn('flex flex-col')}>
+          <div
+            id='page-content'
+            className={cn('flex flex-col')}
+            style={{ marginTop: navbarHeightPx, minHeight: `calc(100vh - ${navbarHeightPx}px)` }}
+          >
             {children}
           </div>
 
