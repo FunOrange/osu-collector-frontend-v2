@@ -6,8 +6,9 @@ import { Provider } from 'jotai';
 export interface BeatmapsetListingProps {
   listing: ReturnType<typeof groupBeatmapsets>;
   isLoading?: boolean;
+  collectionId?: number;
 }
-export default function BeatmapsetListing({ listing, isLoading }: BeatmapsetListingProps) {
+export default function BeatmapsetListing({ listing, isLoading, collectionId }: BeatmapsetListingProps) {
   return (
     <Provider>
       <div
@@ -22,7 +23,7 @@ export default function BeatmapsetListing({ listing, isLoading }: BeatmapsetList
           <div className='flex w-full items-center justify-center py-3'>Loading...</div>
         )}
         {listing?.map(({ beatmapset, beatmaps }, i) => (
-          <BeatmapsetCard key={i} beatmapset={beatmapset} beatmaps={beatmaps} />
+          <BeatmapsetCard key={i} beatmapset={beatmapset} beatmaps={beatmaps} collectionId={collectionId} />
         ))}
       </div>
     </Provider>

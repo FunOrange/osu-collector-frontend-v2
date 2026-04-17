@@ -2,7 +2,7 @@ import { cn } from '@/utils/shadcn-utils';
 import BarGraphStars from '@/components/pages/collections/[collectionId]/BarGraphStars';
 import BarGraphBpm from '@/components/pages/collections/[collectionId]/BarGraphBpm';
 import { Collection } from '@/shared/entities/v1/Collection';
-import useSticky from '@/hooks/useSticky';
+
 import { Slider } from '@/components/shadcn/slider';
 import { useState } from 'react';
 import { assoc, equals, range } from 'ramda';
@@ -19,7 +19,7 @@ import {
   PaginationLast,
   PaginationFirst,
 } from '@/components/shadcn/pagination';
-import { screenHeightMinusNavbar } from '@/components/Navbar';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,12 +27,15 @@ import {
   DropdownMenuTrigger,
 } from '@/components/shadcn/dropdown-menu';
 import { match } from 'ts-pattern';
+import useSWR from 'swr';
+import { Checkbox } from '@/components/shadcn/checkbox';
 
 export interface BeatmapFilters {
   search: string;
   stars: [number, number];
   bpm: [number, number];
   status: 'any' | 'ranked' | 'qualified' | 'loved' | 'pending' | 'graveyard';
+  uncompleted?: boolean;
 }
 
 export interface CollectionBeatmapFiltersProps {
@@ -49,7 +52,10 @@ export default function CollectionBeatmapFilters({
   pagination,
   setPage,
 }: CollectionBeatmapFiltersProps) {
-  const { isSticky, ref } = useSticky();
+  const { data: showCollectionCompletion } = useSWR(
+    'localstorage.showCollectionCompletion',
+    (key) => localStorage.getItem(key) === 'true',
+  );
 
   const className = {
     graphTitle: cn('absolute left-3 top-2', 'font-semibold text-white text-lg'),
@@ -151,9 +157,9 @@ export default function CollectionBeatmapFilters({
           </div>
         </div>
       </div>
-      <div ref={ref} className='sticky top-0 z-20'>
+      <div className='sticky top-0 z-20'>
         {totalPages >= 2 && (
-          <div className={`absolute w-full ${screenHeightMinusNavbar} pointer-events-none flex flex-col justify-end`}>
+          <div className='pointer-events-none fixed bottom-0 left-0 right-0 z-30'>
             <div className='pointer-events-auto flex w-full flex-col gap-y-2 rounded-lg bg-slate-950/80 px-4 pb-2 pt-4 backdrop-blur-sm'>
               <Slider
                 variant='white'
@@ -211,7 +217,7 @@ export default function CollectionBeatmapFilters({
           className={cn(
             'gap-x-2 gap-y-2 p-2 sm:bg-slate-950/30 lg:gap-x-4',
             'flex items-center',
-            isSticky && 'rounded-b-lg bg-slate-950/30 backdrop-blur-sm',
+            'rounded-b-lg bg-slate-950/30 backdrop-blur-sm',
           )}
         >
           <DropdownMenu>
@@ -239,6 +245,16 @@ export default function CollectionBeatmapFilters({
               <DropdownMenuItem onClick={() => setRankedStatusFilter('graveyard')}>Graveyard</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {showCollectionCompletion && (
+            <div
+              className='flex items-center gap-2 rounded border border-slate-700 py-1 pl-2'
+              onClick={() => setFilters(assoc('uncompleted', !filters.uncompleted))}
+            >
+              <label className='text-sm'>Uncompleted</label>
+              <Checkbox checked={filters.uncompleted} className='mr-2' />
+            </div>
+          )}
 
           <div className='relative w-full'>
             <div className='pointer-events-none absolute inset-y-0 start-0 flex items-center ps-4'>

@@ -26,6 +26,15 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
   const filtersRef = useRef<HTMLDivElement>(null);
   const listingRef = useRef<HTMLDivElement>(null);
 
+  const { data: showCollectionCompletion } = useSWR(
+    'localstorage.showCollectionCompletion',
+    (key) => localStorage.getItem(key) === 'true',
+  );
+  const { data: completedBeatmapsetIds } = useSWR(
+    showCollectionCompletion && endpoints.collections.id(collection.id).completion.GET,
+    (url) => axios.get<number[]>(url).then((res) => res.data),
+  );
+
   const scrollTo = (divRef: React.RefObject<HTMLDivElement | null>, offset = 0) => {
     const root = document.getElementById('app-root')!;
     root.scrollTo({ top: divRef.current?.offsetTop! - navbarHeightPx + offset, behavior: 'smooth' });
@@ -67,6 +76,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
     sort: undefined,
     page,
     perPage,
+    excludedBeatmapsetIds: filters.uncompleted ? completedBeatmapsetIds : undefined,
   });
   // #endregion frontend filtering and sorting
 
@@ -97,7 +107,7 @@ export default function CollectionBeatmapsSection({ collection }: CollectionBeat
         ref={listingRef}
         className='min-h-screen rounded-b border-slate-900 bg-[#162032] shadow-inner sm:p-4 sm:pt-0'
       >
-        <BeatmapsetListing listing={listing ?? []} isLoading={isLoading} />
+        <BeatmapsetListing listing={listing ?? []} isLoading={isLoading} collectionId={collection.id} />
         {!frontendFilteringEnabled && hasMore && (
           <div
             className='mt-4 w-full cursor-pointer rounded bg-slate-800 p-3 text-center transition hover:bg-slate-600 hover:shadow-xl'
@@ -128,7 +138,14 @@ function frontendFilterSortPaginate(
     sort,
     page,
     perPage,
-  }: { filters: BeatmapFilters; sort: string | undefined; page: number; perPage: number },
+    excludedBeatmapsetIds = [],
+  }: {
+    filters: BeatmapFilters;
+    sort: string | undefined;
+    page: number;
+    perPage: number;
+    excludedBeatmapsetIds: number[] | undefined;
+  },
 ): { beatmaps: BeatmapWithBeatmapset[] | undefined; pagination: PaginationProps } {
   const _filters = clone(filters);
   if (filters.stars[0] === 0) _filters.stars[0] = -Infinity;
@@ -138,6 +155,8 @@ function frontendFilterSortPaginate(
   _filters.search = filters.search.trim();
 
   const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value < max;
+  const excludeBeatmapsetIds = (beatmap: BeatmapWithBeatmapset) =>
+    !excludedBeatmapsetIds?.includes(beatmap.beatmapset_id);
   const byRankedStatus = (beatmap: BeatmapWithBeatmapset) =>
     match(filters.status)
       .with('any', () => true)
@@ -161,6 +180,7 @@ function frontendFilterSortPaginate(
   const end = start + perPage;
 
   const results = beatmaps
+    ?.filter(excludeBeatmapsetIds)
     ?.filter(withinStarRange)
     ?.filter(withinBpmRange)
     ?.filter(matchesKeyword)

@@ -21,12 +21,19 @@ import { match } from 'ts-pattern';
 import Link from 'next/link';
 import { formatQueryParams } from '@/utils/string-utils';
 import { CreditCard, Heart, Upload } from 'lucide-react';
+import { Checkbox } from '@/components/shadcn/checkbox';
+import useSWR from 'swr';
 
 export function UserNav() {
   const { user, morphed, morph, unmorph, isLoading, logout } = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const { data: showCollectionCompletion, mutate: mutateshowCollectionCompletion } = useSWR(
+    'localstorage.showCollectionCompletion',
+    (key) => localStorage.getItem(key) === 'true',
+  );
 
   if (isLoading) {
     return <div className='h-10 w-32 animate-pulse rounded-full bg-slate-400 p-5'></div>;
@@ -128,6 +135,27 @@ export function UserNav() {
               Billing
             </DropdownMenuItem>
           </Link>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Extras</DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  onClick={() =>
+                    mutateshowCollectionCompletion(() => {
+                      localStorage.setItem(
+                        'localstorage.showCollectionCompletion',
+                        showCollectionCompletion ? 'false' : 'true',
+                      );
+                      return !showCollectionCompletion;
+                    })
+                  }
+                >
+                  <Checkbox checked={showCollectionCompletion} className='mr-2' />
+                  Show collection completion checkboxes
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {user.id === 2051389 && !morphed && (

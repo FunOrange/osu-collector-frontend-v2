@@ -10,12 +10,41 @@ import * as V2 from '@/shared/entities/v2';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/shadcn/popover';
 import BeatmapsetCardPlayButton from '@/components/pages/collections/[collectionId]/BeatmapsetCardPlayButton';
 import { cn } from '@/utils/shadcn-utils';
+import useSWR from 'swr';
+import { Checkbox } from '@/components/shadcn/checkbox';
+import { endpoints } from '@/shared/endpoints';
+import axios from 'axios';
 
 export interface BeatmapsetCardCardProps {
   beatmapset: V1.Beatmapset | V2.Beatmapset;
   beatmaps: V1.Beatmap[];
+  collectionId?: number;
 }
-export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardCardProps) {
+export default function BeatmapsetCard({ beatmapset, beatmaps, collectionId }: BeatmapsetCardCardProps) {
+  const { data: showCollectionCompletion } = useSWR(
+    'localstorage.showCollectionCompletion',
+    (key) => localStorage.getItem(key) === 'true',
+  );
+  const { data: completedBeatmapsetIds, mutate: mutateCompletedBeatmapsetIds } = useSWR(
+    collectionId && showCollectionCompletion ? endpoints.collections.id(collectionId).completion.GET : null,
+    (url) => axios.get<number[]>(url).then((res) => res.data),
+  );
+  const toggleBeatmapsetCompleted = (beatmapsetId: number) => {
+    if (!collectionId) return;
+    if (!completedBeatmapsetIds) return;
+    if (completedBeatmapsetIds.includes(beatmapsetId)) {
+      mutateCompletedBeatmapsetIds(async () => {
+        await axios.delete(endpoints.collections.id(collectionId).completion.beatmapsetId(beatmapsetId).DELETE!);
+        return completedBeatmapsetIds.filter((id) => id !== beatmapsetId);
+      });
+    } else {
+      mutateCompletedBeatmapsetIds(async () => {
+        await axios.post(endpoints.collections.id(collectionId).completion.beatmapsetId(beatmapsetId).POST!);
+        return [...completedBeatmapsetIds, beatmapsetId];
+      });
+    }
+  };
+
   const [showCopiedToClipboard, setShowCopiedToClipboard] = useState<number[]>([]);
   const copyToClipboard = (beatmapId: number) => {
     navigator.clipboard.writeText(beatmapId.toString());
@@ -65,7 +94,7 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
         </div>
         <div className='relative z-10 pb-3 pl-3 pr-1'>
           <div className='grid' style={{ gridTemplateColumns: '1fr 50px' }}>
-            <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target='_blank'>
+            <a href={`https://osu.ppy.sh/beatmapsets/${beatmapset.id}`} target='_blank' rel='noreferrer'>
               <div style={{ maxWidth: '264px' }}>
                 <div className='truncate text-lg font-medium text-white' style={{ textShadow }}>
                   {beatmapset.title}
@@ -120,6 +149,13 @@ export default function BeatmapsetCard({ beatmapset, beatmaps }: BeatmapsetCardC
                 />
               )}
 
+              {showCollectionCompletion && (
+                <Checkbox
+                  checked={!!completedBeatmapsetIds?.includes(beatmapset.id)}
+                  onCheckedChange={() => toggleBeatmapsetCompleted(beatmapset.id)}
+                  className='mr-1 border-slate-400 data-[state=checked]:bg-green-500 data-[state=checked]:text-white'
+                />
+              )}
               <b className='truncate py-1'>{beatmap.version}</b>
 
               <div
