@@ -156,7 +156,7 @@ export function ElectronImportCollectionDialog() {
       }
       toast({
         title: 'collection.db successfully modified!',
-        description: 'You should now see this collection in osu!',
+        description: 'Please restart osu!',
       });
     }
 
