@@ -36,7 +36,7 @@ export default function DownloadDesktopClient() {
     <div className='w-full max-w-6xl rounded bg-slate-600 p-6'>
       <div className='mb-2'>
         <h2 className='whitespace-nowrap text-2xl font-semibold text-slate-50' id='download-links'>
-          Download osu!Collector Desktop
+          Download osu!Collector App
         </h2>
         {user?.paidFeaturesAccess && <div className='text-pink-400'>Thank you for supporting us! You are awesome.</div>}
         {!user?.paidFeaturesAccess && (

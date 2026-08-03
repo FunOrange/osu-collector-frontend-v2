@@ -3,11 +3,14 @@ import Image from 'next/image';
 import { navbarHeightPx } from '@/components/Navbar';
 import { useRef, useState } from 'react';
 import { cn } from '@/utils/shadcn-utils';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowDown, ArrowLeft } from 'lucide-react';
+import useViewportWidth from '@/hooks/useViewportWidth';
 
 export default function OsuCollectorAppDemo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { upsm } = useViewportWidth();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isArrowVisible, setIsArrowVisible] = useState(false);
 
   const background = (
     <div
@@ -55,13 +58,14 @@ export default function OsuCollectorAppDemo() {
         }}
         onClick={() => {
           setIsPlaying(true);
+          setTimeout(() => setIsArrowVisible(true), 10000);
           videoRef.current?.play();
         }}
       >
         Add to osu!
       </button>
       <div
-        className='animate-arrow-nudge absolute z-10 flex items-center'
+        className='absolute z-10 flex animate-arrow-nudge items-center'
         style={{ top: '38%', left: '50%', width: '45%', height: '4.7%', fontSize: '5%' }}
       >
         <div className='sm:text-md absolute flex w-full items-center gap-2 text-xs lg:text-xl'>
@@ -103,13 +107,20 @@ export default function OsuCollectorAppDemo() {
       {background}
       <div className='flex aspect-video max-h-full w-full items-center justify-center'>
         <div className='relative flex aspect-video h-full items-center justify-center'>
-          <div
-            className='absolute relative col-span-full flex h-full w-full items-center justify-center'
-            style={{ left: -1 }}
-          >
+          {upsm && isPlaying && (
+            <div className='absolute top-8 flex w-full flex-col items-center justify-center text-center text-3xl font-light text-white duration-1000 animate-in fade-in'>
+              Subscribe to download and import collections with ease!
+            </div>
+          )}
+          <div className='absolute col-span-full flex h-full w-full items-center justify-center' style={{ left: -1 }}>
             {previewImage}
             {videoPlayer}
           </div>
+          {upsm && isArrowVisible && (
+            <div className='absolute bottom-5 flex w-full items-center justify-center text-center font-light text-white animate-in fade-in'>
+              <ArrowDown className='h-14 w-14 animate-bounce' />
+            </div>
+          )}
         </div>
       </div>
     </div>

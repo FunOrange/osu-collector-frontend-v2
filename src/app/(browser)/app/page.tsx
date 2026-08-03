@@ -132,8 +132,8 @@ export default function DesktopAppPage() {
             <DownloadDesktopClient />
 
             <div className='flex w-full max-w-6xl flex-col items-center gap-4 rounded py-6'>
-              <h2 id='buy-now' className='text-center text-2xl text-white'>
-                Buy osu!Collector Desktop now!
+              <h2 id='buy-now' className='text-center text-xl text-neutral-100'>
+                Subscribe to osu!Collector for only <span className='font-bold text-white'>$1.99</span> / month!
               </h2>
               <PaymentOptions />
             </div>

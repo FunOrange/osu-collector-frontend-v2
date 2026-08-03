@@ -63,7 +63,6 @@ export default function PaymentOptions() {
     >
       <div className='w-full'>
         <div className='rounded-t bg-slate-600 p-6' style={{ minHeight: '286px' }}>
-          <div className='mb-5 text-xl'>$1.99 monthly subscription</div>
           <div className='flex flex-col gap-3'>
             <section id='option-2-paypal'>
               {user ? (
