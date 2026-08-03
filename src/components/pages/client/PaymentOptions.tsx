@@ -62,7 +62,7 @@ export default function PaymentOptions() {
       }}
     >
       <div className='w-full'>
-        <div className='rounded-t bg-slate-600 p-6' style={{ minHeight: '286px' }}>
+        <div className='rounded-t bg-slate-600 p-6'>
           <div className='flex flex-col gap-3'>
             <section id='option-2-paypal'>
               {user ? (
@@ -140,15 +140,15 @@ export default function PaymentOptions() {
               )}
             </section>
 
-            <div className='my-2 flex items-center'>
+            {/*<div className='my-2 flex items-center'>
               <div className='w-full border-b border-slate-400' />
               <span className='mx-3 whitespace-nowrap text-center text-slate-400'>or pay with crypto:</span>
               <div className='w-full border-b border-slate-400' />
-            </div>
+            </div>*/}
 
-            <section id='option-3-crypto'>
+            {/*<section id='option-3-crypto'>
               <CoinbaseCheckoutButton />
-            </section>
+            </section>*/}
           </div>
         </div>
         <div className='flex items-center gap-3 rounded-b bg-slate-900 px-4 py-3'>
