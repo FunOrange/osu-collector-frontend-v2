@@ -8,6 +8,7 @@ import { defaultTo, isNotNil, mergeRight } from 'ramda';
 import { cn } from '@/utils/shadcn-utils';
 import { isMatching } from 'ts-pattern';
 import SearchInput from '@/components/pages/all/SearchInput';
+import UploaderRankFilter from '@/components/pages/all/UploaderRankFilter';
 import { Button } from '@/components/shadcn/button';
 
 interface CollectionsPageProps {
@@ -20,6 +21,8 @@ export default async function CollectionsPage(props: CollectionsPageProps) {
     cursor: defaultTo(undefined, Number(searchParams.cursor)),
     sortBy: searchParams.sortBy ?? '_text_match',
     orderBy: searchParams.orderBy ?? 'desc',
+    uploaderRankMin: defaultTo(undefined, Number(searchParams.uploaderRankMin)),
+    uploaderRankMax: defaultTo(undefined, Number(searchParams.uploaderRankMax)),
     perPage: 48,
   });
 
@@ -83,6 +86,7 @@ export default async function CollectionsPage(props: CollectionsPageProps) {
                   {label}
                 </Link>
               ))}
+            <UploaderRankFilter searchParams={searchParams} />
           </div>
           <div className='mb-5 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4'>
             {!collections ? (

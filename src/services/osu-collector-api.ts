@@ -85,9 +85,27 @@ interface SearchCollectionsParams {
   perPage?: number | undefined;
   sortBy?: string | undefined;
   orderBy?: string | undefined;
+  uploaderRankMin?: number | undefined;
+  uploaderRankMax?: number | undefined;
 }
-export async function searchCollections({ search, cursor, perPage, sortBy, orderBy }: SearchCollectionsParams) {
-  const params = { search, cursor, perPage, sortBy, orderBy };
+export async function searchCollections({
+  search,
+  cursor,
+  perPage,
+  sortBy,
+  orderBy,
+  uploaderRankMin,
+  uploaderRankMax,
+}: SearchCollectionsParams) {
+  const params = {
+    search,
+    cursor,
+    perPage,
+    sortBy,
+    orderBy,
+    'uploaderRank[gte]': uploaderRankMin,
+    'uploaderRank[lte]': uploaderRankMax,
+  };
   return api
     .get('/collections/search', {
       params,
