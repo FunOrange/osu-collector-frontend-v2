@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/shadcn/skeleton';
 import { Button } from '@/components/shadcn/button';
 import { cn } from '@/utils/shadcn-utils';
 import { Checkbox } from '@/components/shadcn/checkbox';
-import { assoc, sum } from 'ramda';
+import { assoc, sum, uniq } from 'ramda';
 import { ArrowClockwise, ArrowLeft, ArrowRight, ArrowUp, ThreeDots } from 'react-bootstrap-icons';
 import { File, RefreshCw } from 'lucide-react';
 import { formatBytes } from '@/utils/string-utils';
@@ -369,7 +369,7 @@ const getCollectionsSchema = (tournament: Tournament | undefined, method: Tourna
 };
 
 const getBeatmapsetIds = (tournament: Tournament | undefined) =>
-  tournament?.rounds.flatMap((r) => r.mods.flatMap((m) => m.maps.map((map) => map.beatmapset.id))) ?? [];
+  uniq(tournament?.rounds.flatMap((r) => r.mods.flatMap((m) => m.maps.map((map) => map.beatmapset.id))) ?? []);
 
 interface WindowsFileExplorerProps {
   addressBar: string | undefined;

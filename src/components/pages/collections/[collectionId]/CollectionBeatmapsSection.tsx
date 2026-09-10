@@ -14,7 +14,7 @@ import { Beatmap, BeatmapWithBeatmapset } from '@/shared/entities/v2/Beatmap';
 import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
 import { PaginationProps } from '@/components/shadcn/pagination';
 import { navbarHeightPx } from '@/components/Navbar';
-import { match } from 'ts-pattern';
+import { filterBeatmaps } from '@/utils/beatmap-filter-utils';
 
 const perPage = 50;
 
@@ -147,49 +147,17 @@ function frontendFilterSortPaginate(
     excludedBeatmapsetIds: number[] | undefined;
   },
 ): { beatmaps: BeatmapWithBeatmapset[] | undefined; pagination: PaginationProps } {
-  const _filters = clone(filters);
-  if (filters.stars[0] === 0) _filters.stars[0] = -Infinity;
-  if (filters.stars[1] === 11) _filters.stars[1] = Infinity;
-  if (filters.bpm[0] === 150) _filters.bpm[0] = -Infinity;
-  if (filters.bpm[1] === 310) _filters.bpm[1] = Infinity;
-  _filters.search = filters.search.trim();
+  if (!beatmaps) return { beatmaps: undefined, pagination: { total: 0, page, perPage } };
 
-  const isWithinRange = ([min, max]: [number, number], value: number) => value >= min && value < max;
-  const excludeBeatmapsetIds = (beatmap: BeatmapWithBeatmapset) =>
-    !excludedBeatmapsetIds?.includes(beatmap.beatmapset_id);
-  const byRankedStatus = (beatmap: BeatmapWithBeatmapset) =>
-    match(filters.status)
-      .with('any', () => true)
-      .with('ranked', () => beatmap.status === 'ranked')
-      .with('qualified', () => beatmap.status === 'qualified')
-      .with('loved', () => beatmap.status === 'loved')
-      .with('pending', () => beatmap.status === 'pending')
-      .with('graveyard', () => beatmap.status === 'graveyard')
-      .exhaustive();
-  const withinStarRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.stars, beatmap.difficulty_rating);
-  const withinBpmRange = (beatmap: BeatmapWithBeatmapset) => isWithinRange(_filters.bpm, beatmap.bpm);
-  const matchesKeyword = (beatmap: BeatmapWithBeatmapset) => {
-    if (!_filters.search) return true;
-    const caseInsensitiveMatch = (field: string) => field.toLowerCase().includes(_filters.search.toLowerCase());
-    if (caseInsensitiveMatch(beatmap.beatmapset?.title)) return true;
-    if (caseInsensitiveMatch(beatmap.beatmapset?.artist)) return true;
-    if (caseInsensitiveMatch(beatmap.beatmapset?.creator)) return true;
-    if (caseInsensitiveMatch(beatmap.version)) return true;
-  };
   const start = (page - 1) * perPage;
   const end = start + perPage;
 
-  const results = beatmaps
-    ?.filter(excludeBeatmapsetIds)
-    ?.filter(withinStarRange)
-    ?.filter(withinBpmRange)
-    ?.filter(matchesKeyword)
-    ?.filter(byRankedStatus)
-    ?.sort((a, b) => {
-      if (a.beatmapset?.title !== b.beatmapset?.title) return a.beatmapset?.title.localeCompare(b.beatmapset?.title);
-      if (a.beatmapset?.id !== b.beatmapset?.id) return b.beatmapset?.id - a.beatmapset?.id;
-      return b.difficulty_rating - a.difficulty_rating;
-    });
+  const results = filterBeatmaps(beatmaps, filters, excludedBeatmapsetIds)?.sort((a, b) => {
+    if (a.beatmapset?.title !== b.beatmapset?.title)
+      return (a.beatmapset?.title ?? '').localeCompare(b.beatmapset?.title ?? '');
+    if (a.beatmapset?.id !== b.beatmapset?.id) return (b.beatmapset?.id ?? 0) - (a.beatmapset?.id ?? 0);
+    return b.difficulty_rating - a.difficulty_rating;
+  });
 
   return {
     beatmaps: results?.slice(start, end),

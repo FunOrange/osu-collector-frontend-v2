@@ -30,10 +30,10 @@ import { match } from 'ts-pattern';
 import useSWR from 'swr';
 import { Checkbox } from '@/components/shadcn/checkbox';
 
-export interface BeatmapFilters {
+import { BeatmapFilters as GenericBeatmapFilters } from '@/utils/beatmap-filter-utils';
+
+export interface BeatmapFilters extends GenericBeatmapFilters {
   search: string;
-  stars: [number, number];
-  bpm: [number, number];
   status: 'any' | 'ranked' | 'qualified' | 'loved' | 'pending' | 'graveyard';
   uncompleted?: boolean;
 }
