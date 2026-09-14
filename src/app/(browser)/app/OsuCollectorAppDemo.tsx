@@ -58,7 +58,7 @@ export default function OsuCollectorAppDemo() {
         }}
         onClick={() => {
           setIsPlaying(true);
-          setTimeout(() => setIsArrowVisible(true), 10000);
+          setTimeout(() => setIsArrowVisible(true), 5000);
           videoRef.current?.play();
         }}
       >
