@@ -41,6 +41,7 @@ import {
 import useSWR from 'swr';
 import useClientValue from '@/hooks/useClientValue';
 import { Channel } from '@/app/electron/ipc-types';
+import ElectronOpenURLForm from '@/app/electron/ElectronOpenURLForm';
 import { tryCatch } from '@/utils/try-catch';
 import {
   DropdownMenu,
@@ -333,6 +334,9 @@ export default function ElectronDownloads() {
             {statusChip('queued', statusCounts.queued)}
           </>
         )}
+        <div className='ml-auto'>
+          <ElectronOpenURLForm />
+        </div>
       </div>
       <div ref={tableContainerRef} className='relative h-full w-full overflow-auto'>
         <table className='grid rounded-lg'>
