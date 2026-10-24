@@ -33,6 +33,7 @@ import { Beatmap, BeatmapWithBeatmapset } from '@/shared/entities/v2/Beatmap';
 import { Beatmapset } from '@/shared/entities/v2/Beatmapset';
 import { joinBeatmapsets } from '@/components/pages/collections/[collectionId]/CollectionBeatmapsSection';
 import { BeatmapFilters, filterBeatmaps } from '@/utils/beatmap-filter-utils';
+import { useOsuCollectionsFile } from '@/app/electron/useOsuCollectionsFile';
 
 const defaultFilters: BeatmapFilters = { stars: [0, 11], bpm: [150, 310] };
 
@@ -103,14 +104,11 @@ export function ElectronImportCollectionDialog() {
     }
   })();
 
-  const collectionDbPath = preferences?.osuInstallDirectory! + pathSep + 'collection.db';
-  const { data: collectionDbExists } = useSWR([Channel.PathExists, collectionDbPath], ([_, path]) =>
-    window.ipc?.pathExists(path!),
-  );
+  const collectionsFile = useOsuCollectionsFile(preferences?.osuInstallDirectory, pathSep);
   const mergeDisabledReason = (() => {
     if (!preferences?.osuInstallDirectory) return 'Please set your osu! install folder in settings!';
-    if (!collectionDbExists)
-      return `File not found: ${collectionDbPath}\nPlease fix your osu! install folder in settings!`;
+    if (!collectionsFile.exists)
+      return `File not found: ${collectionsFile.path}\nPlease fix your osu! install folder in settings!`;
     return false;
   })();
 
@@ -152,7 +150,8 @@ export function ElectronImportCollectionDialog() {
       return;
     }
 
-    const isOsuRunning = await window.ipc.checkIfOsuIsRunning();
+    // for osu!lazer, the app decides whether collections can be added while the game is running
+    const isOsuRunning = !collectionsFile.isLazer && (await window.ipc.checkIfOsuIsRunning());
     if (isOsuRunning) {
       throw new DisplayableError('osu! is currently running! Please close it and try again.');
     }
@@ -164,10 +163,14 @@ export function ElectronImportCollectionDialog() {
       if (collectionDbError) {
         throw new DisplayableError(collectionDbError.message);
       }
-      toast({
-        title: 'collection.db successfully modified!',
-        description: 'Please restart osu!',
-      });
+      toast(
+        collectionsFile.isLazer
+          ? {
+              title: 'Collection added to osu!lazer!',
+              description: 'If osu!lazer is open, it should appear right away',
+            }
+          : { title: 'collection.db successfully modified!', description: 'Please restart osu!' },
+      );
     }
 
     if (!skipping.queueDownloads) {
@@ -222,7 +225,7 @@ export function ElectronImportCollectionDialog() {
                   onCheckedChange={(checked) => setOptions(assoc('modifyCollectionDb', checked))}
                 />
                 <span className={cn('text-sm', !skipping.modifyCollectionDb && 'text-white')}>
-                  modify collection.db file{' '}
+                  modify {collectionsFile.filename} file{' '}
                   {skipping.modifyCollectionDb && (
                     <span className={cn(options.modifyCollectionDb && 'text-red-400')}>(skipping)</span>
                   )}
@@ -230,7 +233,9 @@ export function ElectronImportCollectionDialog() {
               </div>
               <div>
                 <div className='text-xs'>
-                  This will allow the collection to appear in osu! stable. PLEASE restart your game after!!!
+                  {collectionsFile.isLazer
+                    ? 'This will add the collection to osu!lazer.'
+                    : 'This will allow the collection to appear in osu! stable. PLEASE restart your game after!!!'}
                 </div>
                 <div className='whitespace-pre-line text-xs text-red-400'>
                   {options.modifyCollectionDb && mergeDisabledReason}
@@ -242,7 +247,7 @@ export function ElectronImportCollectionDialog() {
               >
                 <div className='flex flex-col items-center gap-1 text-white'>
                   <File className='h-8 w-8' />
-                  <div className='text-xs'>collection.db</div>
+                  <div className='text-xs'>{collectionsFile.filename}</div>
                   <div className='text-xs text-green-400'>+{formatBytes(32 * (collection?.beatmapCount ?? 0), 1)}</div>
                 </div>
               </WindowsFileExplorer>
@@ -273,6 +278,9 @@ export function ElectronImportCollectionDialog() {
                   Estimated size of all items: {formatBytes(filteredBeatmapsetIds.length * 10 * ONE_MEGABYTE)}
                 </div>
                 <div className='text-xs'>osu!Collector will skip the maps you already have</div>
+                {collectionsFile.isLazer && (
+                  <div className='text-xs'>Downloaded maps will be imported into osu!lazer automatically</div>
+                )}
                 <div className='whitespace-pre-line text-xs text-red-400'>
                   {options.queueDownloads && downloadsDisabledReason}
                 </div>
@@ -369,7 +377,7 @@ export function ElectronImportCollectionDialog() {
       </Dialog>
       <Dialog open={modifyingCollectionDb}>
         <DialogContent onInteractOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
-          <DialogTitle>Modifying collection.db...</DialogTitle>
+          <DialogTitle>Modifying {collectionsFile.filename}...</DialogTitle>
 
           <DialogDescription className='flex max-h-[calc(100vh-200px)] flex-col items-center gap-2 overflow-y-auto'>
             <RefreshCw className='h-8 w-8 animate-spin' />

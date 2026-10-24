@@ -126,8 +126,9 @@ export default function ElectronSettings() {
             </Button>
           </div>
           <div className='text-xs text-slate-400'>
-            This is where osu! stable is installed. This folder should contain osu!.exe. You <i>can</i> set it to an
-            osu!lazer install folder, but please note that in-game collection management will not work.
+            For osu! stable, this is where osu! is installed (the folder containing osu!.exe). For osu!lazer, this is
+            the osu!lazer data folder (the folder containing client.realm). You can find it in osu!lazer under Settings
+            → General → Open osu! folder.
           </div>
         </div>
 
@@ -171,7 +172,10 @@ export default function ElectronSettings() {
               Browse
             </Button>
           </div>
-          <div className='text-xs text-slate-400'>You can use this to download .osz files to a different location</div>
+          <div className='text-xs text-slate-400'>
+            You can use this to download .osz files to a different location. For osu!lazer, downloaded .osz files are
+            imported into the game automatically.
+          </div>
         </div>
 
         <div className='mt-4'>
