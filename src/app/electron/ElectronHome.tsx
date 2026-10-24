@@ -3,6 +3,7 @@ import ElectronLogs from '@/app/electron/ElectronLogs';
 import { SidebarTrigger } from '@/components/shadcn/sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/shadcn/tabs';
 import useClientValue from '@/hooks/useClientValue';
+import { LazerSuggestionBanner } from '@/app/electron/ElectronChooseGame';
 
 // TODO: When adding a new collection, review the following steps:
 // 1. Close osu! if it's open
@@ -21,6 +22,7 @@ export default function ElectronHome() {
             <TabsTrigger value='logs'>Logs</TabsTrigger>
           </TabsList>
         </div>
+        {isClient && <LazerSuggestionBanner />}
         {(() => {
           if (!isClient) return null;
           return (

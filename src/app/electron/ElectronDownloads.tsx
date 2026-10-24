@@ -27,6 +27,7 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/compon
 import { Progress } from '@/components/shadcn/progress';
 import { isMatching, match, P } from 'ts-pattern';
 import { cn } from '@/utils/shadcn-utils';
+import { useOsuClients } from '@/app/electron/useOsuClients';
 import { Filter, Plus, StopCircle, X } from 'react-bootstrap-icons';
 import {
   CircleEllipsis,
@@ -73,6 +74,11 @@ export default function ElectronDownloads() {
   useEffect(() => {
     window.ipc?.getDownloadDirectory().then(setDownloadDirectory);
   }, []);
+  const { info: osuClients } = useOsuClients();
+  // downloads for osu!lazer are only kept until osu!lazer has imported them
+  const lazerImportsMaps = Boolean(osuClients?.lazer.executableFound);
+  const lazerChosen = osuClients?.osuClient === 'lazer';
+  const sentToLazer = (d: Download) => d.osuClient === 'lazer' && lazerImportsMaps;
 
   const { data: _downloads, mutate } = useSWR(window.ipc && Channel.GetDownloads, window.ipc?.getDownloads, {
     refreshInterval: 2000,
@@ -101,25 +107,45 @@ export default function ElectronDownloads() {
             .with({ status: Status.Pending }, (d) => [null, null, osuwebUrl])
             .with({ status: Status.CheckingLocalFiles }, (d) => [null, null, osuwebUrl])
             .with({ status: Status.AlreadyInstalled }, (d) => [null, d.installLocation])
-            .with({ status: Status.AlreadyDownloaded }, (d) => [null, d.downloadPath])
+            .with({ status: Status.AlreadyDownloaded }, (d) => [
+              null,
+              sentToLazer(d) ? 'sent to osu!lazer' : d.downloadPath,
+            ])
             .with({ status: Status.Queued }, (d) => [null, null, osuwebUrl])
             .with({ status: Status.Fetching }, (d) => [null, null, osuwebUrl])
             .with({ status: Status.Fetched }, (d) => [d.filename, null])
             .with({ status: Status.StartingDownload }, (d) => [d.filename, null])
-            .with({ status: Status.Downloading }, (d) => [d.filename, d.outputPath])
-            .with({ status: Status.Completed }, (d) => [d.filename, d.outputPath])
+            .with({ status: Status.Downloading }, (d) => [d.filename, sentToLazer(d) ? null : d.outputPath])
+            .with({ status: Status.Completed }, (d) => [
+              d.filename,
+              sentToLazer(d) ? 'sent to osu!lazer' : d.outputPath,
+            ])
             .with({ status: Status.Failed }, (d) => [d.filename, d.outputPath, !d.outputPath ? osuwebUrl : null])
             .otherwise(() => []);
           const download = row.original as DownloadType[Status.Downloading];
+          const osuDirectUrl = row.original.status === Status.Completed ? `osu://s/${row.original.beatmapsetId}` : null;
           return (
             <div className='flex min-h-[36px] items-center'>
               <div>
-                <div className='line-clamp-1 break-all'>{name}</div>
-                {outputPath && (
-                  <div className={linkStyle} onClick={() => window.ipc.revealPath(download.downloadDirectory)}>
-                    {outputPath}
+                {osuDirectUrl ? (
+                  <div
+                    className='line-clamp-1 cursor-pointer break-all transition-colors hover:text-blue-500'
+                    title={osuDirectUrl}
+                    onClick={() => window.ipc.openLinkInBrowser(osuDirectUrl)}
+                  >
+                    {name}
                   </div>
+                ) : (
+                  <div className='line-clamp-1 break-all'>{name}</div>
                 )}
+                {outputPath &&
+                  (sentToLazer(row.original) ? (
+                    <div className='text-xs text-slate-400'>{outputPath}</div>
+                  ) : (
+                    <div className={linkStyle} onClick={() => window.ipc.revealPath(download.downloadDirectory)}>
+                      {outputPath}
+                    </div>
+                  ))}
                 {link && (
                   <div className={linkStyle} onClick={() => window.ipc.openLinkInBrowser(link)}>
                     {link}
@@ -274,7 +300,7 @@ export default function ElectronDownloads() {
         },
       },
     ],
-    [mutate],
+    [mutate, lazerImportsMaps],
   );
 
   const tableContainerRef = React.useRef<HTMLDivElement>(null);
@@ -299,15 +325,17 @@ export default function ElectronDownloads() {
   return (
     <div className='flex h-full flex-col gap-2 p-4'>
       <div className='flex flex-wrap items-center gap-2'>
-        <Button
-          {...buttonProps}
-          disabled={!downloadDirectory}
-          onClick={() => {
-            if (downloadDirectory) window.ipc.revealPath(downloadDirectory);
-          }}
-        >
-          Open Downloads Folder
-        </Button>
+        {!(lazerChosen && lazerImportsMaps) && (
+          <Button
+            {...buttonProps}
+            disabled={!downloadDirectory}
+            onClick={() => {
+              if (downloadDirectory) window.ipc.revealPath(downloadDirectory);
+            }}
+          >
+            Open Downloads Folder
+          </Button>
+        )}
         {showStopAllButton && (
           <Button
             {...buttonProps}

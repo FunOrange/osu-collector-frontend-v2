@@ -64,62 +64,36 @@ export default function DesktopAppPage() {
         <div className='flex w-full flex-col items-center font-semibold text-black'>
           {yellowStripes}
           <div className='w-full gap-8 bg-yellow-500 px-2 py-4 text-center text-sm text-yellow-900'>
-            Collection integration with osu! Lazer is not currently supported. For workarounds{' '}
+            osu!lazer is now supported! Update the osu!Collector app to add collections and maps straight to osu!lazer.{' '}
             <Dialog>
-              <DialogTrigger className='inline underline'>click here</DialogTrigger>.
+              <DialogTrigger className='inline underline'>Learn more</DialogTrigger>.
               <DialogContent>
                 <DialogHeader className='hidden'>
-                  <DialogTitle>About osu! Lazer support</DialogTitle>
+                  <DialogTitle>About osu!lazer support</DialogTitle>
                 </DialogHeader>
                 <div className='text-[14px]'>
-                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>
-                    Why does osu! Lazer have limited support?
-                  </h2>
-                  <div className='mb-3'>
-                    <a href='https://github.com/ppy/osu/wiki/User-file-storage' className='text-blue-500 underline'>
-                      The way osu! lazer stores its files
-                    </a>{' '}
-                    makes it difficult for third-party programs to read/write to the game files.
-                  </div>
-
-                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>What still works with osu! Lazer?</h2>
+                  <h2 className='mb-1 text-lg font-semibold text-slate-100'>What works with osu!lazer?</h2>
                   <div className='mb-3'>
                     <ul className='flex flex-col gap-2'>
-                      <li>
-                        • Downloading maps ✅ <br />{' '}
-                        <span className='pl-5'>The .osz files will just download to a folder that you specify</span>
-                      </li>
-                      <li>• Intelligently skipping maps you already have downloaded ❌</li>
-                      <li>• Importing collection into game ❌</li>
+                      <li>• Adding collections and tournament mappools to osu!lazer ✅</li>
+                      <li>• Downloading maps and importing them into osu!lazer automatically ✅</li>
+                      <li>• Skipping maps you already have in osu!lazer ✅</li>
                     </ul>
                   </div>
 
+                  <h2 className='text-md mb-1 font-semibold text-slate-100'>Do I need to set anything up?</h2>
+                  <div className='mb-3'>
+                    No, osu!Collector finds osu!lazer automatically. When you open the app, choose{' '}
+                    <b className='text-slate-300'>osu!lazer</b> as the game you play. You can change this at any time in
+                    the app&apos;s settings, or when importing a collection.
+                  </div>
+
                   <h2 className='text-md mb-1 font-semibold text-slate-100'>
-                    How can I add my missing maps and collections to osu! Lazer?
+                    I used to add collections to osu! stable, then import them into osu!lazer
                   </h2>
                   <div className='mb-3'>
-                    So far, the fastest way to get both your collections and maps from osu!Collector to osu!lazer is by
-                    importing the collections/maps from osu! stable to osu!lazer by using the{' '}
-                    <b className='text-slate-300'>Import function</b> in{' '}
-                    <b className='text-slate-300'>Run setup wizard</b> on the settings.
-                  </div>
-                  <div className='mb-5 flex items-center gap-2'>
-                    <div className='rounded-lg border border-slate-500 bg-slate-700 px-3 py-2 text-white'>
-                      osu!Collector App
-                    </div>
-                    <div className='text-xl'> → </div>
-                    <div className='rounded-lg border border-slate-500 bg-slate-700 px-3 py-2 text-white'>
-                      osu! Stable
-                    </div>
-                    <div className='relative flex justify-center'>
-                      <span className='text-xl'>→</span>
-                      <div className='absolute top-10 whitespace-nowrap text-xs text-white'>
-                        via Lazer&apos;s Run Setup Wizard
-                      </div>
-                    </div>
-                    <div className='rounded-lg border border-slate-500 bg-slate-700 px-3 py-2 text-white'>
-                      osu! Lazer
-                    </div>
+                    That&apos;s no longer necessary. Switch to osu!lazer in the app&apos;s settings, and collections you
+                    have already imported will be updated instead of duplicated.
                   </div>
                 </div>
               </DialogContent>

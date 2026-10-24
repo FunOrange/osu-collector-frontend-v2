@@ -11,6 +11,7 @@ import ElectronSettings from '@/app/electron/ElectronSettings';
 import useClientValue from '@/hooks/useClientValue';
 import { ElectronImportCollectionDialog } from '@/app/electron/ElectronImportCollectionDialog';
 import { ElectronImportTournamentDialog } from '@/app/electron/ElectronImportTournamentDialog';
+import { ElectronChooseGameDialog } from '@/app/electron/ElectronChooseGame';
 
 export default function ElectronApp() {
   const isClient = useClientValue(() => true, false);
@@ -44,8 +45,9 @@ export default function ElectronApp() {
         if (!isClient) return null;
         return (
           <>
-            <ElectronImportCollectionDialog />
-            <ElectronImportTournamentDialog />
+            <ElectronChooseGameDialog />
+            <ElectronImportCollectionDialog onOpenSettings={() => setPage(ElectronAppPage.Settings)} />
+            <ElectronImportTournamentDialog onOpenSettings={() => setPage(ElectronAppPage.Settings)} />
           </>
         );
       })()}

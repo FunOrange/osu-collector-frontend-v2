@@ -1,3 +1,5 @@
+import { OsuClient } from '@/app/electron/preferences';
+
 export enum Status {
   Pending = 'pending',
   CheckingLocalFiles = 'checking-local-files',
@@ -38,6 +40,7 @@ interface DownloadBase<S extends Status> {
   metadata: DownloadMetadata;
   beatmapsetId: number;
   downloadDirectory: string;
+  osuClient?: OsuClient; // undefined on older app versions
   cancelled: boolean;
 }
 
