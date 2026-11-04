@@ -35,7 +35,7 @@ export default function DownloadDesktopClient() {
   return (
     <div className='w-full max-w-6xl rounded bg-slate-600 p-6'>
       <div className='mb-2'>
-        <h2 className='whitespace-nowrap text-2xl font-semibold text-slate-50' id='download-links'>
+        <h2 className='text-2xl font-semibold text-slate-50' id='download-links'>
           Download osu!Collector App
         </h2>
         {user?.paidFeaturesAccess && <div className='text-pink-400'>Thank you for supporting us! You are awesome.</div>}
@@ -45,7 +45,7 @@ export default function DownloadDesktopClient() {
           </div>
         )}
       </div>
-      <div className='flex gap-2'>
+      <div className='flex flex-wrap gap-2'>
         <Button {...buttonProps} onClick={downloadExe} loading={downloadingExe}>
           {!downloadingExe && <Windows className='mr-2 h-[14px] w-[14px]' color='currentColor' />}
           Windows x64
@@ -56,7 +56,7 @@ export default function DownloadDesktopClient() {
         </Button>
       </div>
       <hr className='my-2 border-slate-500' />
-      <div className='flex gap-2'>
+      <div className='flex flex-wrap gap-2'>
         <Button {...buttonProps} onClick={downloadDeb} loading={downloadingDeb}>
           {!downloadingDeb && <Ubuntu className='mr-2 h-[14px] w-[14px]' color='currentColor' />}
           Linux x64 .deb

@@ -3,14 +3,83 @@ import Image from 'next/image';
 import { navbarHeightPx } from '@/components/Navbar';
 import { useRef, useState } from 'react';
 import { cn } from '@/utils/shadcn-utils';
-import { ArrowDown, ArrowLeft } from 'lucide-react';
-import useViewportWidth from '@/hooks/useViewportWidth';
+import { ArrowLeft, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/shadcn/button';
+
+const demoAspectRatio = '1906 / 802';
+
+export const getTheAppSectionId = 'get-the-app';
+export const featuresSectionId = 'features';
+
+const scrollToSection = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export default function OsuCollectorAppDemo() {
+  return (
+    <>
+      <MobileHero />
+      <DesktopHero />
+    </>
+  );
+}
+
+function CallToAction({ className }: { className?: string }) {
+  return (
+    <div className={cn('flex flex-col items-center gap-4', className)}>
+      <div className='flex flex-wrap justify-center gap-3'>
+        <Button variant='important' size='lg' onClick={() => scrollToSection(getTheAppSectionId)}>
+          Get the app
+        </Button>
+        <Button
+          variant='outline'
+          size='lg'
+          className='text-slate-200'
+          onClick={() => scrollToSection(featuresSectionId)}
+        >
+          See features
+        </Button>
+      </div>
+      <div className='text-sm text-slate-400'>
+        Only <span className='font-semibold text-slate-200'>$1.99</span> / month. Windows, Mac and Linux.
+      </div>
+      <button
+        className='flex flex-col items-center text-sm text-slate-400 transition-colors hover:text-slate-200'
+        onClick={() => scrollToSection(featuresSectionId)}
+      >
+        Scroll for features, downloads and pricing
+        <ChevronDown className='h-8 w-8 animate-bounce' />
+      </button>
+    </div>
+  );
+}
+
+/** Small screens: a plain video player the user controls, followed by the CTA. */
+function MobileHero() {
+  return (
+    <section className='flex flex-col items-center gap-6 px-4 pb-4 pt-8 md:hidden'>
+      <div className='text-center'>
+        <h1 className='text-3xl font-semibold text-slate-50'>osu!Collector App</h1>
+        <div className='text-slate-400'>The best way to collect beatmaps.</div>
+      </div>
+      <video
+        controls
+        playsInline
+        muted
+        loop
+        preload='metadata'
+        poster='/images/osu-collector-demo.png'
+        className='w-full rounded bg-black shadow-lg'
+        style={{ aspectRatio: demoAspectRatio }}
+        src='/images/osu-collector-demo.mp4'
+      />
+      <CallToAction />
+    </section>
+  );
+}
+
+/** Larger screens: interactive "Add to osu!" demo, followed by the CTA. */
+function DesktopHero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { upsm } = useViewportWidth();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isArrowVisible, setIsArrowVisible] = useState(false);
 
   const background = (
     <div
@@ -27,21 +96,18 @@ export default function OsuCollectorAppDemo() {
 
   const previewImage = (
     <div
-      className={cn(
-        'absolute relative h-auto w-full transition-[opacity]',
-        isPlaying && 'pointer-events-none opacity-0',
-      )}
-      style={{ aspectRatio: '1906 / 802' }}
+      className={cn('relative h-auto w-full transition-[opacity]', isPlaying && 'pointer-events-none opacity-0')}
+      style={{ aspectRatio: demoAspectRatio }}
     >
       <div className='absolute z-10 grid h-full w-full grid-cols-2'>
         <div />
         <div className='flex flex-col justify-between'>
           <div />
-          <div className='p-2 sm:p-4 md:p-6 lg:p-10'>
-            <h1 className='text-shadow-lg text-shadow-white text-xs font-medium text-white sm:text-lg lg:text-5xl'>
+          <div className='p-6 lg:p-10'>
+            <h1 className='text-shadow-lg text-shadow-white text-lg font-medium text-white lg:text-5xl'>
               osu!Collector App
             </h1>
-            <div className='hidden sm:block lg:text-xl'>The best way to collect beatmaps.</div>
+            <div className='lg:text-xl'>The best way to collect beatmaps.</div>
           </div>
         </div>
       </div>
@@ -58,7 +124,6 @@ export default function OsuCollectorAppDemo() {
         }}
         onClick={() => {
           setIsPlaying(true);
-          setTimeout(() => setIsArrowVisible(true), 5000);
           videoRef.current?.play();
         }}
       >
@@ -68,15 +133,14 @@ export default function OsuCollectorAppDemo() {
         className='absolute z-10 flex animate-arrow-nudge items-center'
         style={{ top: '38%', left: '50%', width: '45%', height: '4.7%', fontSize: '5%' }}
       >
-        <div className='sm:text-md absolute flex w-full items-center gap-2 text-xs lg:text-xl'>
+        <div className='absolute flex w-full items-center gap-2 text-sm lg:text-xl'>
           <ArrowLeft />
           Click the &quot;Add to osu!&quot; button to see a demo!
         </div>
       </div>
       <Image
         fill
-        className='brightness-50'
-        objectFit='contain'
+        className='object-contain brightness-50'
         sizes='100vw'
         src='/images/osu-collector-demo.png'
         alt='osu!Collector demo'
@@ -91,38 +155,37 @@ export default function OsuCollectorAppDemo() {
         style={{
           borderLeft: '1px solid #0f172a',
           boxShadow: 'inset 0 0 20px 1px #0f172a',
-          aspectRatio: '1906 / 802',
+          aspectRatio: demoAspectRatio,
         }}
       />
-      <div className={cn('absolute', !isPlaying && 'hidden')} style={{ aspectRatio: '1906 / 802' }}>
+      <div className={cn('absolute', !isPlaying && 'hidden')} style={{ aspectRatio: demoAspectRatio }}>
         <video ref={videoRef} loop muted playsInline className='w-full' src='/images/osu-collector-demo.mp4' />
       </div>
     </>
   );
+
   return (
-    <div
-      className='relative flex w-full items-center justify-center'
+    <section
+      className='relative hidden w-full flex-col md:flex'
       style={{ height: `calc(100vh - ${navbarHeightPx}px)` }}
     >
       {background}
-      <div className='flex aspect-video max-h-full w-full items-center justify-center'>
-        <div className='relative flex aspect-video h-full items-center justify-center'>
-          {upsm && isPlaying && (
-            <div className='absolute top-8 flex w-full flex-col items-center justify-center text-center text-3xl font-light text-white duration-1000 animate-in fade-in'>
-              Subscribe to download and import collections with ease!
+      <div className='relative flex min-h-0 w-full flex-1 items-center justify-center'>
+        <div className='flex aspect-video max-h-full w-full items-center justify-center'>
+          <div className='relative flex aspect-video h-full items-center justify-center'>
+            {isPlaying && (
+              <div className='absolute top-8 flex w-full flex-col items-center justify-center text-center text-3xl font-light text-white duration-1000 animate-in fade-in'>
+                Subscribe to download and import collections with ease!
+              </div>
+            )}
+            <div className='absolute col-span-full flex h-full w-full items-center justify-center' style={{ left: -1 }}>
+              {previewImage}
+              {videoPlayer}
             </div>
-          )}
-          <div className='absolute col-span-full flex h-full w-full items-center justify-center' style={{ left: -1 }}>
-            {previewImage}
-            {videoPlayer}
           </div>
-          {upsm && isArrowVisible && (
-            <div className='absolute bottom-5 flex w-full items-center justify-center text-center font-light text-white animate-in fade-in'>
-              <ArrowDown className='h-14 w-14 animate-bounce' />
-            </div>
-          )}
         </div>
       </div>
-    </div>
+      <CallToAction className='relative z-10 pb-4 pt-2' />
+    </section>
   );
 }
