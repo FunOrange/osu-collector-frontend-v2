@@ -83,6 +83,9 @@ export default function PaymentOptions() {
                       return actions.subscription.create({
                         plan_id: 'P-5DC05698WC351562JMGZFV6Y', // production: $1.99 per month
                         // plan_id: 'P-1YN01180390590643MGZNV3Y' // test: $0.05 per day
+                        // used by the BILLING.SUBSCRIPTION.ACTIVATED webhook to link the subscription
+                        // to this user if the onApprove -> /paypalSubscription/link call never happens
+                        custom_id: String(user.id),
                       });
                     }}
                     onApprove={async (data, actions) => {
